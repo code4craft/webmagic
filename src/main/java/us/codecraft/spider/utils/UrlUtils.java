@@ -91,4 +91,15 @@ public class UrlUtils {
         return stringBuilder.toString();
     }
 
+    private static final Pattern patternForCharset = Pattern.compile("charset=([^\\s;]*)");
+
+    public static String getCharset(String contentType) {
+        Matcher matcher = patternForCharset.matcher(contentType);
+        if (matcher.find()) {
+            return matcher.group(1);
+        } else {
+            return null;
+        }
+    }
+
 }

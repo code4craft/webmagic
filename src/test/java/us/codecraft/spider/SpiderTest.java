@@ -25,14 +25,14 @@ public class SpiderTest {
 
     @Test
     public void testGlobalSpider(){
-        SimplePageProcessor pageProcessor = new SimplePageProcessor("http://2012guang.diandian.com/", "http://2012guang.diandian.com/post/*");
+        SimplePageProcessor pageProcessor = new SimplePageProcessor("http://blog.163.com/", "http://blog.163.com/*/blog/static/*");
+        pageProcessor.getSite().setEncoding("gbk");
         Spider.me().pipeline(new FilePipeline()).schedular(new FileCacheQueueSchedular(pageProcessor.getSite(),"/data/temp/spider/cache/")).
-                processor(pageProcessor).thread().start();
-        SimplePageProcessor pageProcessor2 = new SimplePageProcessor("http://lol.duowan.com/", "http://lol.duowan.com/*.html");
-        Spider.me().pipeline(new FilePipeline()).schedular(new FileCacheQueueSchedular(pageProcessor2.getSite(),"/data/temp/spider/cache/")).
-                processor(pageProcessor2).run();
+                processor(pageProcessor).run();
+//        SimplePageProcessor pageProcessor2 = new SimplePageProcessor("http://lol.duowan.com/", "http://lol.duowan.com/*.html");
+//        Spider.me().pipeline(new FilePipeline()).schedular(new FileCacheQueueSchedular(pageProcessor2.getSite(),"/data/temp/spider/cache/")).
+//                processor(pageProcessor2).run();
 
-        Spider.me().processor(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*/blog/*")).run();
 
     }
 

@@ -32,7 +32,7 @@ public class HttpClientDownloader implements Downloader {
             int statusCode = httpResponse.getStatusLine().getStatusCode();
             if (site.getAcceptStatCode().contains(statusCode)) {
                 String content = IOUtils.toString(httpResponse.getEntity().getContent(),
-                        site.getEncoding() == null ? site.getEncoding() : httpResponse.getEntity().getContentType().getValue());
+                        site.getEncoding() == null ? httpResponse.getEntity().getContentType().getValue() : site.getEncoding());
                 Page page = new Page();
                 page.setHtml(new Html(UrlUtils.fixAllRelativeHrefs(content, request.getUrl())));
                 page.setUrl(new PlainText(request.getUrl()));
