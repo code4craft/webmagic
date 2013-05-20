@@ -2,11 +2,10 @@ package us.codecraft.spider;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import us.codecraft.spider.pipeline.ConsolePipeline;
 import us.codecraft.spider.pipeline.FilePipeline;
-import us.codecraft.spider.processor.SimplePageProcessor;
-import us.codecraft.spider.samples.DianpingBlogProcessor;
+import us.codecraft.spider.processor.PageProcessor;
 import us.codecraft.spider.samples.HuxiuProcessor;
+import us.codecraft.spider.samples.MeicanProcessor;
 import us.codecraft.spider.schedular.FileCacheQueueSchedular;
 
 /**
@@ -25,8 +24,7 @@ public class SpiderTest {
 
     @Test
     public void testGlobalSpider(){
-        SimplePageProcessor pageProcessor = new SimplePageProcessor("http://blog.163.com/", "http://blog.163.com/*/blog/static/*");
-        pageProcessor.getSite().setEncoding("gbk");
+        PageProcessor pageProcessor = new MeicanProcessor();
         Spider.me().pipeline(new FilePipeline()).schedular(new FileCacheQueueSchedular(pageProcessor.getSite(),"/data/temp/spider/cache/")).
                 processor(pageProcessor).run();
 //        SimplePageProcessor pageProcessor2 = new SimplePageProcessor("http://lol.duowan.com/", "http://lol.duowan.com/*.html");
