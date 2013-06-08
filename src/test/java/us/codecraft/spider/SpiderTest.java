@@ -3,9 +3,8 @@ package us.codecraft.spider;
 import org.junit.Ignore;
 import org.junit.Test;
 import us.codecraft.spider.pipeline.FilePipeline;
-import us.codecraft.spider.processor.PageProcessor;
+import us.codecraft.spider.processor.SimplePageProcessor;
 import us.codecraft.spider.samples.HuxiuProcessor;
-import us.codecraft.spider.samples.MeicanProcessor;
 import us.codecraft.spider.schedular.FileCacheQueueSchedular;
 
 /**
@@ -24,12 +23,14 @@ public class SpiderTest {
 
     @Test
     public void testGlobalSpider(){
-        PageProcessor pageProcessor = new MeicanProcessor();
-        Spider.me().pipeline(new FilePipeline()).schedular(new FileCacheQueueSchedular(pageProcessor.getSite(),"/data/temp/spider/cache/")).
-                processor(pageProcessor).run();
-//        SimplePageProcessor pageProcessor2 = new SimplePageProcessor("http://lol.duowan.com/", "http://lol.duowan.com/*.html");
-//        Spider.me().pipeline(new FilePipeline()).schedular(new FileCacheQueueSchedular(pageProcessor2.getSite(),"/data/temp/spider/cache/")).
-//                processor(pageProcessor2).run();
+//        PageProcessor pageProcessor = new MeicanProcessor();
+//        Spider.me().pipeline(new FilePipeline()).schedular(new FileCacheQueueSchedular(pageProcessor.getSite(),"/data/temp/spider/cache/")).
+//                processor(pageProcessor).run();
+        SimplePageProcessor pageProcessor2 = new SimplePageProcessor("http://www.diaoyuweng.com/home.php?mod=space&uid=88304&do=thread&view=me&type=thread&from=space", "http://www.diaoyuweng.com/thread-*-1-1.html");
+        pageProcessor2.getSite().setEncoding("GBK");
+        System.out.println(pageProcessor2.getSite().getEncoding());
+        Spider.me().pipeline(new FilePipeline()).schedular(new FileCacheQueueSchedular(pageProcessor2.getSite(),"/data/temp/spider/cache/")).
+                processor(pageProcessor2).run();
 
 
     }
