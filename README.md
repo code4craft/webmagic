@@ -61,27 +61,7 @@ webmagic定制的核心是PageProcessor接口。一个最简单的webmagic爬虫
         }
     }
 
----
+### 示例
 
-TODO
-
-
-		public class OschinaBlogPageProcesser implements PageProcessor {
-
-        @Override
-        public void process(Page page) {
-            List<String> strings = page.getHtml().rs("<a[^<>]*href=[\"']{1}(http://my\\.oschina\\.net/\\w+/blog/\\d+)[\"']{1}").toStrings();
-            page.addTargetRequests(strings);
-            page.putField("title", page.getHtml().xs("//div[@class='BlogEntity']/div[@class='BlogTitle']/h1"));
-            page.putField("content", page.getHtml().sc());
-            page.putField("author", page.getUrl().r("my\\.oschina\\.net/(\\w+)/blog/\\d+"));
-        }
-
-        @Override
-        public Site getSite() {
-            return Site.me().setDomain("my.oschina.net").setStartUrl("http://www.oschina.net/").
-                    setUserAgent("Mozilla/5.0 (Macintosh; Chrome/26.0.1410.65 Safari/537.31");
-        	}
-    	}
-
+可参考作者博客[使用webmagic抓取页面并保存为wordpress文件](http://my.oschina.net/flashsword/blog/136846)
 
