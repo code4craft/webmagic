@@ -10,6 +10,9 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.schedular.QueueSchedular;
 import us.codecraft.webmagic.schedular.Schedular;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * User: cairne
  * Date: 13-4-21
@@ -19,7 +22,7 @@ public class Spider implements Runnable {
 
     private Downloader downloader = new HttpClientDownloader();
 
-    private Pipeline pipeline = new ConsolePipeline();
+    private List<Pipeline> pipelines = new ArrayList<Pipeline>();
 
     private PageProcessor pageProcessor;
 
@@ -47,7 +50,7 @@ public class Spider implements Runnable {
     }
 
     public Spider pipeline(Pipeline pipeline) {
-        this.pipeline = pipeline;
+        this.pipelines.add(pipeline);
         return this;
     }
 
@@ -56,6 +59,9 @@ public class Spider implements Runnable {
     public void run() {
         Site site = pageProcessor.getSite();
         Request request = schedular.poll(site);
+        if (pipelines.isEmpty()){
+            pipelines.add(new ConsolePipeline());
+        }
         while (request != null) {
             Page page = downloader.download(request,site);
             if (page == null) {
@@ -64,7 +70,9 @@ public class Spider implements Runnable {
             }
             pageProcessor.process(page);
             addRequest(page);
-            pipeline.process(page,site);
+            for (Pipeline pipeline : pipelines) {
+                pipeline.process(page,site);
+            }
             sleep(site.getSleepTime());
             request = schedular.poll(site);
         }

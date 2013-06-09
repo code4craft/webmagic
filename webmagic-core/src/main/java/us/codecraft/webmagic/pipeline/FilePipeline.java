@@ -1,10 +1,10 @@
 package us.codecraft.webmagic.pipeline;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.selector.Selectable;
+import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -21,7 +21,7 @@ public class FilePipeline implements Pipeline {
 
     private String path = "/data/temp/webmagic/";
 
-    public FilePipeline(){
+    public FilePipeline() {
 
     }
 
@@ -30,11 +30,9 @@ public class FilePipeline implements Pipeline {
     }
 
     @Override
-    public void process(Page page,Site site) {
+    public void process(Page page, Site site) {
         String domain = site.getDomain();
-        domain = StringUtils.removeStart(domain, "http://");
-        domain = StringUtils.removeStart(domain, "https://");
-        domain = StringUtils.replace(domain, "/", "");
+        domain = UrlUtils.getDomain(domain);
         String path = this.path + "" + domain + "/";
         File file = new File(path);
         if (!file.exists()) {
