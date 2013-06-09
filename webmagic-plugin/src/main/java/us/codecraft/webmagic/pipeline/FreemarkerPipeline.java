@@ -49,9 +49,7 @@ public class FreemarkerPipeline implements Pipeline {
             template.process(page.getFields(), printWriter);
             printWriter.close();
         } catch (TemplateException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
 }

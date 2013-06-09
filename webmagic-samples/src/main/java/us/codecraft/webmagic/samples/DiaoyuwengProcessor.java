@@ -13,6 +13,9 @@ import java.util.List;
  * Time: 下午8:08
  */
 public class DiaoyuwengProcessor implements PageProcessor {
+
+    private Site site;
+
     @Override
     public void process(Page page) {
         List<String> requests = page.getHtml().as().rs("(http://www\\.diaoyuweng\\.com/home\\.php\\?mod=space&uid=88304&do=thread&view=me&type=thread&order=dateline&from=space&page=\\d+)").toStrings();
@@ -29,7 +32,10 @@ public class DiaoyuwengProcessor implements PageProcessor {
 
     @Override
     public Site getSite() {
-        return Site.me().setDomain("www.diaoyuweng.com").setStartUrl("http://www.diaoyuweng.com/home.php?mod=space&uid=88304&do=thread&view=me&type=thread&from=space").
-                setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31").setEncoding("GBK").setSleepTime(500);
+        if (site==null){
+            site= Site.me().setDomain("www.diaoyuweng.com").setStartUrl("http://www.diaoyuweng.com/home.php?mod=space&uid=88304&do=thread&view=me&type=thread&from=space").
+                    setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31").setEncoding("GBK").setSleepTime(500);
+        }
+        return site;
     }
 }
