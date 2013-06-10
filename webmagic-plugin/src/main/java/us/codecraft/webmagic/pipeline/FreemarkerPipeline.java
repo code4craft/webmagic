@@ -44,6 +44,10 @@ public class FreemarkerPipeline implements Pipeline {
         String domain = site.getDomain();
         domain = UrlUtils.getDomain(domain);
         String path = this.path + "" + domain + "/";
+        File file = new File(path);
+        if (!file.exists()) {
+            file.mkdir();
+        }
         try {
             PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(page.getUrl().toString()) + ".html"));
             template.process(page.getFields(), printWriter);
