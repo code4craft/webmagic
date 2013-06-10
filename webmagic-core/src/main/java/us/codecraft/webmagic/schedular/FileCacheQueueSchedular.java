@@ -59,6 +59,10 @@ public class FileCacheQueueSchedular implements Schedular {
     }
 
     private void init() {
+        File file = new File(filePath);
+        if (!file.exists()){
+            file.mkdirs();
+        }
         readFile();
         initWriter();
         initFlushThread();

@@ -29,9 +29,6 @@ public class FreemarkerPipeline implements Pipeline {
         this.template = configuration.getTemplate(template);
         this.path = path;
         File file = new File(path);
-        if (!file.exists()) {
-            file.mkdir();
-        }
     }
 
     public FreemarkerPipeline(String template) throws IOException {
@@ -46,7 +43,7 @@ public class FreemarkerPipeline implements Pipeline {
         String path = this.path + "" + domain + "/";
         File file = new File(path);
         if (!file.exists()) {
-            file.mkdir();
+            file.mkdirs();
         }
         try {
             PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(page.getUrl().toString()) + ".html"));
@@ -54,6 +51,7 @@ public class FreemarkerPipeline implements Pipeline {
             printWriter.close();
         } catch (TemplateException e) {
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

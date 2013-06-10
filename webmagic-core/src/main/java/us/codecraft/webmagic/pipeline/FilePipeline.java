@@ -36,7 +36,7 @@ public class FilePipeline implements Pipeline {
         String path = this.path + "" + domain + "/";
         File file = new File(path);
         if (!file.exists()) {
-            file.mkdir();
+            file.mkdirs();
         }
         try {
             PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(page.getUrl().toString()) + ".html"));
