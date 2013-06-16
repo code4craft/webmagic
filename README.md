@@ -29,11 +29,9 @@ webmagic的功能覆盖整个爬虫的生命周期(链接提取、页面下载�
 
 ###Get Started
 	
-webmagic定制的核心是PageProcessor接口。一个最简单的webmagic爬虫例子是这样的：
-
-	Spider.me().processor(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*/blog/*")).run();
+webmagic定制的核心是PageProcessor接口。
 	
-其中SimplePageProcessor实现如下：
+例如，我们要实现一个简单的通用爬虫SimplePageProcessor，代码如下：
 
     public class SimplePageProcessor implements PageProcessor {
 
@@ -53,16 +51,25 @@ webmagic定制的核心是PageProcessor接口。一个最简单的webmagic爬虫
         @Override
         public void process(Page page) {
             List<String> requests = page.getHtml().as().rs(urlPattern).toStrings();
+            //调用page.addTargetRequests()方法添加待抓取链接
             page.addTargetRequests(requests);
+            //xpath方式抽取
             page.putField("title", page.getHtml().x("//title"));
+            //sc表示使用Readability技术抽取正文
             page.putField("content", page.getHtml().sc());
         }
 
         @Override
         public Site getSite() {
+            //定义抽取站点的相关参数
             return site;
         }
     }
+        
+调用这个爬虫的代码如下：
+
+	Spider.me().processor(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*/blog/*")).run();
+
 
 ### 示例
 

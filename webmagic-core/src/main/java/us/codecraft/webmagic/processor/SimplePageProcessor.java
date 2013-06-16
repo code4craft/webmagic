@@ -29,13 +29,17 @@ public class SimplePageProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         List<String> requests = page.getHtml().as().rs(urlPattern).toStrings();
+        //调用page.addTargetRequests()方法添加待抓取链接
         page.addTargetRequests(requests);
+        //xpath方式抽取
         page.putField("title", page.getHtml().x("//title"));
+        //sc表示使用Readability技术抽取正文
         page.putField("content", page.getHtml().sc());
     }
 
     @Override
     public Site getSite() {
+        //定义抽取站点的相关参数
         return site;
     }
 }
