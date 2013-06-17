@@ -1,7 +1,7 @@
 package us.codecraft.webmagic.selector;
 
 /**
- * User: cairne
+ * Author: code4crafter@gmail.com
  * Date: 13-4-21
  * Time: 上午7:39
  */

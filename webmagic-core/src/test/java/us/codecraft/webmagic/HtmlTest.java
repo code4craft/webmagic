@@ -5,7 +5,7 @@ import org.junit.Test;
 import us.codecraft.webmagic.selector.Html;
 
 /**
- * User: cairne
+ * Author: code4crafter@gmail.com
  * Date: 13-4-21
  * Time: 上午8:42
  */

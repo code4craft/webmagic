@@ -4,7 +4,7 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 
 /**
- * User: cairne
+ * Author: code4crafter@gmail.com
  * Date: 13-4-21
  * Time: 下午1:12
  */

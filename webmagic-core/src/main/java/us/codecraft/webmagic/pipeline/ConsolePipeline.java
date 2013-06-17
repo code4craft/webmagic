@@ -7,7 +7,7 @@ import us.codecraft.webmagic.selector.Selectable;
 import java.util.Map;
 
 /**
- * User: cairne
+ * Author: code4crafter@gmail.com
  * Date: 13-4-21
  * Time: 下午1:45
  */

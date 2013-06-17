@@ -7,7 +7,7 @@ import us.codecraft.webmagic.utils.UrlUtils;
 import java.util.List;
 
 /**
- * User: cairne
+ * Author: code4crafter@gmail.com
  * Date: 13-4-22
  * Time: 下午9:15
  */
