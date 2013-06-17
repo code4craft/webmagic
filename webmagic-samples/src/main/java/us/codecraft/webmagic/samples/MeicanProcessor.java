@@ -7,7 +7,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import java.util.List;
 
 /**
- * User: cairne
+ * Author: code4crafter@gmail.com
  * Date: 13-5-20
  * Time: 下午5:31
  */

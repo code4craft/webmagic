@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * User: cairne
+ * Author: code4crafter@gmail.com
  * Date: 13-4-21
  * Time: 上午11:22
  */

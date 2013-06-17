@@ -5,7 +5,7 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
- * User: cairne
+ * Author: code4crafter@gmail.com
  * Date: 13-4-21
  * Time: 下午1:48
  */

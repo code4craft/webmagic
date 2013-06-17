@@ -6,7 +6,7 @@ import us.codecraft.webmagic.pipeline.FreemarkerPipeline;
 import java.io.IOException;
 
 /**
- * User: cairne
+ * Author: code4crafter@gmail.com
  * Date: 13-6-9
  * Time: 上午7:14
  */

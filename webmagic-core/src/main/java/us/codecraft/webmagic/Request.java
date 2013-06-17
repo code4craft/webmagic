@@ -1,7 +1,8 @@
 package us.codecraft.webmagic;
 
 /**
- * User: cairne
+ * Request对象是
+ * Author: code4crafter@gmail.com
  * Date: 13-4-21
  * Time: 上午11:37
  */

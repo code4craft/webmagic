@@ -11,7 +11,7 @@ import us.codecraft.webmagic.schedular.FileCacheQueueSchedular;
 import java.io.IOException;
 
 /**
- * User: cairne
+ * Author: code4crafter@gmail.com
  * Date: 13-6-9
  * Time: 上午8:02
  */

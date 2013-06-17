@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * User: cairne
+ * Author: code4crafter@gmail.com
  * Date: 13-4-21
  * Time: 上午7:09
  */

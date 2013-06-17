@@ -3,7 +3,7 @@ package us.codecraft.webmagic.selector;
 import java.util.List;
 
 /**
- * User: cairne
+ * Author: code4crafter@gmail.com
  * Date: 13-4-20
  * Time: 下午7:51
  */

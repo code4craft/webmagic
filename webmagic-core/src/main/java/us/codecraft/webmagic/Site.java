@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * User: cairne
+ * Author: code4crafter@gmail.com
  * Date: 13-4-21
  * Time: 下午12:13
  */

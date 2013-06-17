@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * readability算法，基础是找到所有p标签的父节点
  * 写的比较乱，最终效果还在尝试中
- * User: cairne
+ * Author: code4crafter@gmail.com
  * Date: 13-4-21
  * Time: 下午4:42
  */
