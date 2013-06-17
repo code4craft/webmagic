@@ -1,5 +1,8 @@
 webmagic
 ---------
+
+[![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
+
 ####*一个网络爬虫工具包*
 
 webmagic的发起源于工作中的需要，其定位是帮助开发者更便捷的开发一个垂直的网络爬虫。
