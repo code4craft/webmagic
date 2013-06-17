@@ -82,3 +82,12 @@ webmagic定制的核心是PageProcessor接口。
 
 webmagic遵循[Apache 2.0协议](http://opensource.org/licenses/Apache-2.0)
 
+### 致谢
+
+webmagic的架构和设计参考了以下两个项目，感谢以下两个项目的作者：
+
+python爬虫**scrapy**[https://github.com/scrapy/scrapy](https://github.com/scrapy/scrapy)
+
+Java爬虫**Spiderman**[https://gitcafe.com/laiweiwei/Spiderman](https://gitcafe.com/laiweiwei/Spiderman)
+
+
