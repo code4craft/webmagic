@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.processor;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
@@ -16,6 +17,7 @@ import java.io.IOException;
  */
 public class DiandianProcessorTest {
 
+    @Ignore
     @Test
     public void test() throws IOException {
         DiandianBlogProcessor diaoyuwengProcessor = new DiandianBlogProcessor();
