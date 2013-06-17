@@ -35,14 +35,14 @@ public interface Selectable {
     /**
      * select a link
      *
-     * @return
+     * @return first link
      */
     public Selectable a();
 
     /**
      * select all links
      *
-     * @return
+     * @return all links
      */
     public Selectable as();
 

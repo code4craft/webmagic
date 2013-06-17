@@ -18,7 +18,7 @@ public interface PageProcessor {
 
     /**
      * the site the processor for
-     * @return
+     * @return site
      */
     public Site getSite();
 }

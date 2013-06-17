@@ -15,12 +15,14 @@ import us.codecraft.webmagic.schedular.FileCacheQueueSchedular;
 public class SpiderTest {
 
 
+    @Ignore
     @Test
     public void testSpider() throws InterruptedException {
         Spider me = Spider.me().pipeline(new FilePipeline()).processor(new HuxiuProcessor());
         me.run();
     }
 
+    @Ignore
     @Test
     public void testGlobalSpider(){
 //        PageProcessor pageProcessor = new MeicanProcessor();
@@ -35,6 +37,7 @@ public class SpiderTest {
 
     }
 
+    @Ignore
     @Test
     public void test(){
         System.out.println(System.getProperty("java.io.tmpdir"));
