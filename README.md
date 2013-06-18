@@ -9,6 +9,10 @@ webmagic的发起源于工作中的需要，其定位是帮助开发者更便捷
 
 webmagic的功能覆盖整个爬虫的生命周期(链接提取、页面下载、内容抽取、持久化)，开发者可以便捷的使用xpath和正则表达式进行链接和内容的提取，只需编写少量代码即可完成一个定制爬虫。
 
+#### 请注意
+
+webmagic正处于开发阶段，目前还没有稳定版本。欢迎开发者参与到webmagic的试用和修改中来。** 如果只是想以外部jar包的方式，引用webmagic并进行自己的业务开发，建议你等待webmagic的第一个稳定版本。**
+
 ###特色###
 
 * ####垂直爬虫####
@@ -86,8 +90,8 @@ webmagic遵循[Apache 2.0协议](http://opensource.org/licenses/Apache-2.0)
 
 webmagic的架构和设计参考了以下两个项目，感谢以下两个项目的作者：
 
-python爬虫** scrapy **[https://github.com/scrapy/scrapy](https://github.com/scrapy/scrapy)
+python爬虫 ** scrapy **[https://github.com/scrapy/scrapy](https://github.com/scrapy/scrapy)
 
-Java爬虫** Spiderman **[https://gitcafe.com/laiweiwei/Spiderman](https://gitcafe.com/laiweiwei/Spiderman)
+Java爬虫 ** Spiderman **[https://gitcafe.com/laiweiwei/Spiderman](https://gitcafe.com/laiweiwei/Spiderman)
 
 
