@@ -33,7 +33,7 @@ public class FilePipeline implements Pipeline {
     public void process(Page page, Site site) {
         String domain = site.getDomain();
         domain = UrlUtils.getDomain(domain);
-        String path = this.path + "" + domain + "/";
+        String path = this.path + "" + domain + "#" + site.getIdentifier() + "/";
         File file = new File(path);
         if (!file.exists()) {
             file.mkdirs();
@@ -46,7 +46,7 @@ public class FilePipeline implements Pipeline {
             }
             printWriter.close();
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
 
     }

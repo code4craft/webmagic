@@ -85,7 +85,6 @@ public class Spider implements Runnable {
             Thread.sleep(time);
         } catch (InterruptedException e) {
             e.printStackTrace();
-            ;
         }
     }
 
