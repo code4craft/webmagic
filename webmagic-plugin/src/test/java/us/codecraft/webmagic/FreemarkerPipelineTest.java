@@ -13,7 +13,7 @@ import java.io.IOException;
 public class FreemarkerPipelineTest {
 
     @Test
-    public void test() throws IOException {
+    public void testTemplateLoad() throws IOException {
         FreemarkerPipeline freemarkerPipeline = new FreemarkerPipeline("wordpress.ftl");
     }
 }
