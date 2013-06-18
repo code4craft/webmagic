@@ -31,7 +31,7 @@ public class SpiderTest {
         SimplePageProcessor pageProcessor2 = new SimplePageProcessor("http://www.diaoyuweng.com/home.php?mod=space&uid=88304&do=thread&view=me&type=thread&from=space", "http://www.diaoyuweng.com/thread-*-1-1.html");
         System.out.println(pageProcessor2.getSite().getEncoding());
         pageProcessor2.getSite().setSleepTime(500);
-        Spider.me().pipeline(new FilePipeline()).schedular(new FileCacheQueueSchedular(pageProcessor2.getSite(),"/data/temp/webmagic/cache/")).
+        Spider.me().pipeline(new FilePipeline()).schedular(new FileCacheQueueSchedular("/data/temp/webmagic/cache/")).
                 processor(pageProcessor2).run();
 
 

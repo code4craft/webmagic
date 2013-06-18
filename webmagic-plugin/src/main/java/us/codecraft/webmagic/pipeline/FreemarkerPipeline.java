@@ -5,10 +5,12 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.apache.commons.codec.digest.DigestUtils;
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.utils.UrlUtils;
+import us.codecraft.webmagic.Task;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Author: code4crafter@gmail.com
@@ -37,10 +39,8 @@ public class FreemarkerPipeline implements Pipeline {
 
 
     @Override
-    public void process(Page page, Site site) {
-        String domain = site.getDomain();
-        domain = UrlUtils.getDomain(domain);
-        String path = this.path + "" + domain + "/";
+    public void process(Page page, Task task) {
+        String path = this.path + "" + task.getUUID() + "/";
         File file = new File(path);
         if (!file.exists()) {
             file.mkdirs();
