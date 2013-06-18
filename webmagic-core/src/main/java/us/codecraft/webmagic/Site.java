@@ -12,11 +12,6 @@ public class Site {
 
     private String domain;
 
-    /**
-     * for identify a task
-     */
-    private String identifier;
-
     private String userAgent;
 
     private Map<String, String> cookies = new LinkedHashMap<String, String>();
@@ -66,15 +61,6 @@ public class Site {
         return this;
     }
 
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public Site setIdentifier(String identifier) {
-        this.identifier = identifier;
-        return this;
-    }
-
     public String getEncoding() {
         return encoding;
     }
@@ -97,7 +83,7 @@ public class Site {
         return startUrls;
     }
 
-    public Site setStartUrl(String startUrl) {
+    public Site addStartUrl(String startUrl) {
         this.startUrls.add(startUrl);
         return this;
     }

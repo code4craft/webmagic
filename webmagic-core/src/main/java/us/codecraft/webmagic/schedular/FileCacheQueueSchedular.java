@@ -2,8 +2,8 @@ package us.codecraft.webmagic.schedular;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
-import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.Task;
 
 import java.io.*;
 import java.util.LinkedHashSet;
@@ -28,7 +28,7 @@ public class FileCacheQueueSchedular implements Schedular {
 
     private String fileUrlAllName = ".urls.txt";
 
-    private Site site;
+    private Task task;
 
     private String fileCursor = ".cursor.txt";
 
@@ -44,13 +44,13 @@ public class FileCacheQueueSchedular implements Schedular {
 
     private Set<String> urls;
 
-    public FileCacheQueueSchedular(Site site) {
-        this.site = site;
+    public FileCacheQueueSchedular(Task task) {
+        this.task = task;
     }
 
-    public FileCacheQueueSchedular(Site site, String filePath) {
+    public FileCacheQueueSchedular(Task task, String filePath) {
         this.filePath = filePath;
-        this.site = site;
+        this.task = task;
     }
 
     private void flush() {
@@ -106,7 +106,7 @@ public class FileCacheQueueSchedular implements Schedular {
             urls.add(line.trim());
             lineReaded++;
             if (lineReaded > cursor.get()) {
-                queue.add(new Request(line, site));
+                queue.add(new Request(line));
             }
         }
     }
@@ -121,11 +121,11 @@ public class FileCacheQueueSchedular implements Schedular {
     }
 
     private String getFileName(String filename) {
-        return filePath + site.getDomain() + "#" + site.getIdentifier() + filename;
+        return filePath + task.getUUID() + "/" + filename;
     }
 
     @Override
-    public synchronized void push(Request request, Site site) {
+    public synchronized void push(Request request, Task task) {
         if (!inited.get()) {
             init();
         }
@@ -140,7 +140,7 @@ public class FileCacheQueueSchedular implements Schedular {
     }
 
     @Override
-    public synchronized Request poll(Site site) {
+    public synchronized Request poll(Task task) {
         if (!inited.get()) {
             init();
         }

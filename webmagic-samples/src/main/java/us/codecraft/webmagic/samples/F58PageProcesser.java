@@ -23,6 +23,6 @@ public class F58PageProcesser implements PageProcessor {
 
     @Override
     public Site getSite() {
-        return Site.me().setDomain("sh.58.com").setStartUrl("http://sh.58.com/");  //To change body of implemented methods use File | Settings | File Templates.
+        return Site.me().setDomain("sh.58.com").addStartUrl("http://sh.58.com/");  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

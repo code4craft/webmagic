@@ -2,7 +2,7 @@ package us.codecraft.webmagic.schedular;
 
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Task;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +23,7 @@ public class QueueSchedular implements Schedular {
     private Set<String> urls = new HashSet<String>();
 
     @Override
-    public synchronized void push(Request request,Site site) {
+    public synchronized void push(Request request,Task task) {
         if (logger.isDebugEnabled()){
             logger.debug("push to queue "+request.getUrl());
         }
@@ -34,7 +34,7 @@ public class QueueSchedular implements Schedular {
     }
 
     @Override
-    public synchronized Request poll(Site site) {
+    public synchronized Request poll(Task task) {
         return queue.poll();
     }
 }

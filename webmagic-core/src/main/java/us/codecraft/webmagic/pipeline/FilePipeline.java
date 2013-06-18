@@ -2,9 +2,8 @@ package us.codecraft.webmagic.pipeline;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.selector.Selectable;
-import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -30,10 +29,8 @@ public class FilePipeline implements Pipeline {
     }
 
     @Override
-    public void process(Page page, Site site) {
-        String domain = site.getDomain();
-        domain = UrlUtils.getDomain(domain);
-        String path = this.path + "" + domain + "#" + site.getIdentifier() + "/";
+    public void process(Page page, Task task) {
+        String path = this.path + "/" + task.getUUID() + "/";
         File file = new File(path);
         if (!file.exists()) {
             file.mkdirs();
