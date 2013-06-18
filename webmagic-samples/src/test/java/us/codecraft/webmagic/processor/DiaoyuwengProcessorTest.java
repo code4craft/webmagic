@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.processor;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.pipeline.FilePipeline;
@@ -16,11 +17,12 @@ import java.io.IOException;
  */
 public class DiaoyuwengProcessorTest {
 
+    @Ignore
     @Test
     public void test() throws IOException {
         DiaoyuwengProcessor diaoyuwengProcessor = new DiaoyuwengProcessor();
         FreemarkerPipeline pipeline = new FreemarkerPipeline("wordpress.ftl");
-        Spider.me().pipeline(new FilePipeline()).pipeline(pipeline).schedular(new FileCacheQueueSchedular(diaoyuwengProcessor.getSite(), "/data/temp/webmagic/cache/")).
+        Spider.me().pipeline(new FilePipeline()).pipeline(pipeline).schedular(new FileCacheQueueSchedular("/data/temp/webmagic/cache/")).
                 processor(diaoyuwengProcessor).run();
     }
 }

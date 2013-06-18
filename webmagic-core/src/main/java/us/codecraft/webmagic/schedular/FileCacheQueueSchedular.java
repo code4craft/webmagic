@@ -44,13 +44,8 @@ public class FileCacheQueueSchedular implements Schedular {
 
     private Set<String> urls;
 
-    public FileCacheQueueSchedular(Task task) {
-        this.task = task;
-    }
-
-    public FileCacheQueueSchedular(Task task, String filePath) {
+    public FileCacheQueueSchedular(String filePath) {
         this.filePath = filePath;
-        this.task = task;
     }
 
     private void flush() {
@@ -58,7 +53,8 @@ public class FileCacheQueueSchedular implements Schedular {
         fileCursorWriter.flush();
     }
 
-    private void init() {
+    private void init(Task task) {
+        this.task = task;
         File file = new File(filePath);
         if (!file.exists()) {
             file.mkdirs();
@@ -127,7 +123,7 @@ public class FileCacheQueueSchedular implements Schedular {
     @Override
     public synchronized void push(Request request, Task task) {
         if (!inited.get()) {
-            init();
+            init(task);
         }
         if (logger.isDebugEnabled()) {
             logger.debug("push to queue " + request.getUrl());
@@ -142,7 +138,7 @@ public class FileCacheQueueSchedular implements Schedular {
     @Override
     public synchronized Request poll(Task task) {
         if (!inited.get()) {
-            init();
+            init(task);
         }
         fileCursorWriter.println(cursor.incrementAndGet());
         return queue.poll();
