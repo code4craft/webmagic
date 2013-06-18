@@ -1,16 +1,21 @@
 package us.codecraft.webmagic.downloader;
 
 import org.apache.http.HttpVersion;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.params.*;
 import us.codecraft.webmagic.Site;
+
+import java.util.Map;
 
 /**
  * Author: code4crafter@gmail.com
@@ -50,15 +55,23 @@ public class HttpClientPool {
         schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
 
         PoolingClientConnectionManager connectionManager = new PoolingClientConnectionManager(schemeRegistry);
-        connectionManager.setMaxTotal(100);
+        connectionManager.setMaxTotal(poolSize);
         connectionManager.setDefaultMaxPerRoute(100);
-        HttpClient httpClient = new DefaultHttpClient(connectionManager, params);
+        DefaultHttpClient httpClient = new DefaultHttpClient(connectionManager, params);
+        generateCookie(httpClient, site);
         httpClient.getParams().setIntParameter("http.socket.timeout", 60000);
         httpClient.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BEST_MATCH);
         return httpClient;
     }
 
-    public void pushBack(HttpClient httpClient) {
-
+    private void generateCookie(DefaultHttpClient httpClient, Site site) {
+        CookieStore cookieStore = new BasicCookieStore();
+        for (Map.Entry<String, String> cookieEntry : site.getCookies().entrySet()) {
+            BasicClientCookie cookie = new BasicClientCookie(cookieEntry.getKey(), cookieEntry.getValue());
+            cookie.setDomain(site.getDomain());
+            cookieStore.addCookie(cookie);
+        }
+        httpClient.setCookieStore(cookieStore);
     }
+
 }

@@ -36,7 +36,9 @@ public class Spider implements Runnable {
 
     public Spider processor(PageProcessor pageProcessor) {
         this.pageProcessor = pageProcessor;
-        schedular.push(new Request(pageProcessor.getSite().getStartUrl()), pageProcessor.getSite());
+        for (String startUrl : pageProcessor.getSite().getStartUrls()) {
+            schedular.push(new Request(startUrl), pageProcessor.getSite());
+        }
         return this;
     }
 

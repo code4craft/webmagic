@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * Page保存了抓取的结果，并可定义下一次抓取的链接内容。
  * Author: code4crafter@gmail.com
  * Date: 13-4-21
  * Time: 上午11:22
@@ -65,13 +66,19 @@ public class Page {
         }
     }
 
-    public void addTargetRequests(String requestString) {
+    public void addTargetRequest(String requestString) {
         if (StringUtils.isBlank(requestString) || requestString.equals("#")) {
             return;
         }
         synchronized (targetRequests) {
             requestString = UrlUtils.fixRelativeUrl(requestString, url.toString());
             targetRequests.add(new Request(requestString));
+        }
+    }
+
+    public void addTargetRequest(Request request) {
+        synchronized (targetRequests) {
+            targetRequests.add(request);
         }
     }
 
