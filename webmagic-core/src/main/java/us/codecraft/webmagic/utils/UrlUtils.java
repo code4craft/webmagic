@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Author: code4crafter@gmail.com
+ * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 下午1:52
  */

@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * Author: code4crafter@gmail.com
+ * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 上午7:09
  */

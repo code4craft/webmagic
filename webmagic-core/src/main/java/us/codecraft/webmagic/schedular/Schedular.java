@@ -4,7 +4,7 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 
 /**
- * Author: code4crafter@gmail.com
+ * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 下午1:12
  */

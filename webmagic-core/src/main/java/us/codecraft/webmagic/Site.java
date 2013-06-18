@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * Site定义一个待抓取的站点的各种信息。
- * Author: code4crafter@gmail.com
+ * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 下午12:13
  */

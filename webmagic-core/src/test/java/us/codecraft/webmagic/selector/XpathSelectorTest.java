@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Author: code4crafter@gmail.com Date: 13-4-21 Time: 上午10:06
+ * @author code4crafter@gmail.com <br> Date: 13-4-21 Time: 上午10:06
  */
 public class XpathSelectorTest {
 

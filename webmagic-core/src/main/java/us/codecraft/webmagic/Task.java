@@ -1,7 +1,7 @@
 package us.codecraft.webmagic;
 
 /**
- * Author: code4crafer@gmail.com
+ * @author code4crafter@gmail.com <br>
  * Date: 13-6-18
  * Time: 下午2:57
  */

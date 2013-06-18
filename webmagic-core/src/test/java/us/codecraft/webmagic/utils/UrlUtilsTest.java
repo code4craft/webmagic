@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Author: code4crafter@gmail.com
+ * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 下午2:22
  */

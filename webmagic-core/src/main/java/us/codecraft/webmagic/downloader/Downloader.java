@@ -6,7 +6,7 @@ import us.codecraft.webmagic.Site;
 
 /**
  * Downloader是webmagic下载页面的接口。webmagic默认使用了HttpComponent作为下载器，一般情况，你无需自己实现这个接口。
- * Author: code4crafter@gmail.com
+ * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 下午12:14
  */
@@ -17,7 +17,7 @@ public interface Downloader {
      *
      * @param request
      * @param site
-     * @return
+     * @return page
      */
     public Page download(Request request, Site site);
 }

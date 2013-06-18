@@ -8,7 +8,7 @@ import us.codecraft.webmagic.samples.HuxiuProcessor;
 import us.codecraft.webmagic.schedular.FileCacheQueueSchedular;
 
 /**
- * Author: code4crafter@gmail.com
+ * @author code4crafter@gmail.com <br>
  * Date: 13-4-20
  * Time: 下午7:46
  */
