@@ -60,7 +60,7 @@ public class FileCacheQueueSchedular implements Schedular {
 
     private void init() {
         File file = new File(filePath);
-        if (!file.exists()){
+        if (!file.exists()) {
             file.mkdirs();
         }
         readFile();
@@ -81,8 +81,8 @@ public class FileCacheQueueSchedular implements Schedular {
 
     private void initWriter() {
         try {
-            fileUrlWriter = new PrintWriter(new FileWriter(filePath + site.getDomain() + fileUrlAllName, true));
-            fileCursorWriter = new PrintWriter(new FileWriter(filePath + site.getDomain() + fileCursor, false));
+            fileUrlWriter = new PrintWriter(new FileWriter(getFileName(fileUrlAllName), true));
+            fileCursorWriter = new PrintWriter(new FileWriter(getFileName(fileCursor), false));
         } catch (IOException e) {
             throw new RuntimeException("init cache schedular error", e);
         }
@@ -100,7 +100,7 @@ public class FileCacheQueueSchedular implements Schedular {
 
     private void readUrlFile() throws IOException {
         String line;
-        BufferedReader fileUrlReader = new BufferedReader(new FileReader(filePath + site.getDomain() + fileUrlAllName));
+        BufferedReader fileUrlReader = new BufferedReader(new FileReader(getFileName(fileUrlAllName)));
         int lineReaded = 0;
         while ((line = fileUrlReader.readLine()) != null) {
             urls.add(line.trim());
@@ -112,7 +112,7 @@ public class FileCacheQueueSchedular implements Schedular {
     }
 
     private void readCursorFile() throws IOException {
-        BufferedReader fileCursorReader = new BufferedReader(new FileReader(filePath + site.getDomain() + fileCursor));
+        BufferedReader fileCursorReader = new BufferedReader(new FileReader(getFileName(fileCursor)));
         String line = null;
         //read the last number
         while ((line = fileCursorReader.readLine()) != null) {
@@ -120,8 +120,12 @@ public class FileCacheQueueSchedular implements Schedular {
         }
     }
 
+    private String getFileName(String filename) {
+        return filePath + site.getDomain() + "#" + site.getIdentifier() + filename;
+    }
+
     @Override
-    public synchronized void push(Request request,Site site) {
+    public synchronized void push(Request request, Site site) {
         if (!inited.get()) {
             init();
         }

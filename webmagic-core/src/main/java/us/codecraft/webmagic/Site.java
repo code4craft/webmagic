@@ -12,13 +12,18 @@ public class Site {
 
     private String domain;
 
+    /**
+     * for identify a task
+     */
+    private String identifier;
+
     private String userAgent;
 
-    private Map<String,String> cookies = new LinkedHashMap<String, String>();
+    private Map<String, String> cookies = new LinkedHashMap<String, String>();
 
     private String encoding;
 
-    private List<String> startUrls;
+    private List<String> startUrls = new ArrayList<String>();
 
     private int sleepTime = 3000;
 
@@ -34,8 +39,8 @@ public class Site {
         return new Site();
     }
 
-    public Site setCookie(String name,String value) {
-        cookies.put(name,value);
+    public Site setCookie(String name, String value) {
+        cookies.put(name, value);
         return this;
     }
 
@@ -44,7 +49,7 @@ public class Site {
         return this;
     }
 
-    public Map<String,String> getCookies() {
+    public Map<String, String> getCookies() {
         return cookies;
     }
 
@@ -58,6 +63,15 @@ public class Site {
 
     public Site setDomain(String domain) {
         this.domain = domain;
+        return this;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public Site setIdentifier(String identifier) {
+        this.identifier = identifier;
         return this;
     }
 
