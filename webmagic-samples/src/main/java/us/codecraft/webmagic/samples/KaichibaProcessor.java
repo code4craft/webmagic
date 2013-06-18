@@ -14,7 +14,7 @@ public class KaichibaProcessor implements PageProcessor {
     public void process(Page page) {
         //http://progressdaily.diandian.com/post/2013-01-24/40046867275
         int i = Integer.valueOf(page.getUrl().r("shop/(\\d+)").toString()) + 1;
-        page.addTargetRequests("http://kaichiba.com/shop/"+i);
+        page.addTargetRequest("http://kaichiba.com/shop/" + i);
         page.putField("title",page.getHtml().x("//Title"));
         page.putField("items", page.getHtml().xs("//li[@class=\"foodTitle\"]").rp("^\\s+", "").rp("\\s+$", "").rp("<span>.*?</span>", ""));
     }

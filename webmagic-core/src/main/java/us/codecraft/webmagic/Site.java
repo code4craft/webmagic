@@ -1,9 +1,9 @@
 package us.codecraft.webmagic;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
+ * Site定义一个待抓取的站点的各种信息。
  * Author: code4crafter@gmail.com
  * Date: 13-4-21
  * Time: 下午12:13
@@ -14,11 +14,11 @@ public class Site {
 
     private String userAgent;
 
-    private String cookie;
+    private Map<String,String> cookies = new LinkedHashMap<String, String>();
 
     private String encoding;
 
-    private String startUrl;
+    private List<String> startUrls;
 
     private int sleepTime = 3000;
 
@@ -34,8 +34,8 @@ public class Site {
         return new Site();
     }
 
-    public Site setCookie(String cookie) {
-        this.cookie = cookie;
+    public Site setCookie(String name,String value) {
+        cookies.put(name,value);
         return this;
     }
 
@@ -44,8 +44,8 @@ public class Site {
         return this;
     }
 
-    public String getCookie() {
-        return cookie;
+    public Map<String,String> getCookies() {
+        return cookies;
     }
 
     public String getUserAgent() {
@@ -79,12 +79,12 @@ public class Site {
         return this;
     }
 
-    public String getStartUrl() {
-        return startUrl;
+    public List<String> getStartUrls() {
+        return startUrls;
     }
 
     public Site setStartUrl(String startUrl) {
-        this.startUrl = startUrl;
+        this.startUrls.add(startUrl);
         return this;
     }
 
@@ -106,8 +106,8 @@ public class Site {
 
         if (acceptStatCode != null ? !acceptStatCode.equals(site.acceptStatCode) : site.acceptStatCode != null)
             return false;
-        if (cookie != null ? !cookie.equals(site.cookie) : site.cookie != null) return false;
         if (!domain.equals(site.domain)) return false;
+        if (!startUrls.equals(site.startUrls)) return false;
         if (encoding != null ? !encoding.equals(site.encoding) : site.encoding != null) return false;
         if (userAgent != null ? !userAgent.equals(site.userAgent) : site.userAgent != null) return false;
 
@@ -117,8 +117,8 @@ public class Site {
     @Override
     public int hashCode() {
         int result = domain.hashCode();
+        result = 31 * result + (startUrls != null ? startUrls.hashCode() : 0);
         result = 31 * result + (userAgent != null ? userAgent.hashCode() : 0);
-        result = 31 * result + (cookie != null ? cookie.hashCode() : 0);
         result = 31 * result + (encoding != null ? encoding.hashCode() : 0);
         result = 31 * result + (acceptStatCode != null ? acceptStatCode.hashCode() : 0);
         return result;
