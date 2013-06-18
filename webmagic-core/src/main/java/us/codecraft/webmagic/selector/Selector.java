@@ -3,7 +3,7 @@ package us.codecraft.webmagic.selector;
 import java.util.List;
 
 /**
- * Author: code4crafter@gmail.com
+ * @author code4crafter@gmail.com <br>
  * Date: 13-4-20
  * Time: 下午8:02
  */

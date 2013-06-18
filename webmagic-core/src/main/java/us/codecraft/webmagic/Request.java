@@ -17,7 +17,7 @@ package us.codecraft.webmagic;
  *          String linktext =  (String)page.getRequest().getExtra()[0];
  *      }
  * </pre>
- * Author: code4crafter@gmail.com
+ * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 上午11:37
  */

@@ -10,10 +10,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Page保存了抓取的结果，并可定义下一次抓取的链接内容。
- * Author: code4crafter@gmail.com
- * Date: 13-4-21
- * Time: 上午11:22
+ * <pre>
+ *Page保存了上一次抓取的结果，并可定义待抓取的链接内容。
+ *
+ *     主要方法：
+ *     {@link #getUrl()} 获取页面的Url
+ *     {@link #getHtml()}  获取页面的html内容
+ *     {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} 添加待抓取的链接
+ *
+ * </pre>
+ * @author code4crafter@gmail.com <br>
  */
 public class Page {
 
@@ -34,6 +40,10 @@ public class Page {
     public Page() {
     }
 
+    /**
+     *
+     * @return fields
+     */
     public Map<String, Selectable> getFields() {
         return fields;
     }

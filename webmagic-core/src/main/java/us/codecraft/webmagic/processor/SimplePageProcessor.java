@@ -7,7 +7,7 @@ import us.codecraft.webmagic.utils.UrlUtils;
 import java.util.List;
 
 /**
- * Author: code4crafter@gmail.com
+ * @author code4crafter@gmail.com <br>
  * Date: 13-4-22
  * Time: 下午9:15
  */
