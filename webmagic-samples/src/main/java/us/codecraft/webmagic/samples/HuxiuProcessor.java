@@ -23,7 +23,7 @@ public class HuxiuProcessor implements PageProcessor {
 
     @Override
     public Site getSite() {
-        return Site.me().setDomain("www.huxiu.com").setStartUrl("http://www.huxiu.com/").
+        return Site.me().setDomain("www.huxiu.com").addStartUrl("http://www.huxiu.com/").
                 setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
     }
 }

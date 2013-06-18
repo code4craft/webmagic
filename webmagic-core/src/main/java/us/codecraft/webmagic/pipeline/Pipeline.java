@@ -1,7 +1,7 @@
 package us.codecraft.webmagic.pipeline;
 
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Task;
 
 /**
  * Author: code4crafter@gmail.com
@@ -10,5 +10,5 @@ import us.codecraft.webmagic.Site;
  */
 public interface Pipeline {
 
-    public void process(Page page,Site site);
+    public void process(Page page,Task task);
 }

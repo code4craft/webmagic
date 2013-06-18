@@ -1,7 +1,7 @@
 package us.codecraft.webmagic.schedular;
 
 import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Task;
 
 /**
  * Author: code4crafter@gmail.com
@@ -10,8 +10,8 @@ import us.codecraft.webmagic.Site;
  */
 public interface Schedular {
 
-    public void push(Request request,Site site);
+    public void push(Request request,Task task);
 
-    public Request poll(Site site);
+    public Request poll(Task task);
 
 }

@@ -1,13 +1,13 @@
 <item>
     <title>${title}</title>
-    <link>http://127.0.0.1/wordpress/?p=${id}</link>
+    <link>http://127.0.0.1/wordpress/?p=${uuid}</link>
     <pubDate>${date}</pubDate>
     <dc:creator>admin</dc:creator>
-    <guid isPermaLink="false">http://127.0.0.1/wordpress/?p=${id}</guid>
+    <guid isPermaLink="false">http://127.0.0.1/wordpress/?p=${uuid}</guid>
     <description></description>
     <content:encoded><![CDATA[${content}]]></content:encoded>
     <excerpt:encoded><![CDATA[]]></excerpt:encoded>
-    <wp:post_id>${id}</wp:post_id>
+    <wp:post_id>${uuid}</wp:post_id>
     <wp:post_date>${date}</wp:post_date>
     <wp:post_date_gmt>${date}</wp:post_date_gmt>
     <wp:comment_status>open</wp:comment_status>

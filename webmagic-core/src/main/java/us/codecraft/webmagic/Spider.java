@@ -18,13 +18,19 @@ import java.util.List;
  * Date: 13-4-21
  * Time: 上午6:53
  */
-public class Spider implements Runnable {
+public class Spider implements Runnable, Task {
 
     private Downloader downloader = new HttpClientDownloader();
 
     private List<Pipeline> pipelines = new ArrayList<Pipeline>();
 
     private PageProcessor pageProcessor;
+
+    private List<String> startUrls;
+
+    private Site site;
+
+    private String uuid;
 
     private Schedular schedular = new QueueSchedular();
 
@@ -36,9 +42,18 @@ public class Spider implements Runnable {
 
     public Spider processor(PageProcessor pageProcessor) {
         this.pageProcessor = pageProcessor;
-        for (String startUrl : pageProcessor.getSite().getStartUrls()) {
-            schedular.push(new Request(startUrl), pageProcessor.getSite());
-        }
+        this.site = pageProcessor.getSite();
+        return this;
+    }
+
+    public Spider startUrls(List<String> startUrls) {
+        this.startUrls = startUrls;
+        return this;
+    }
+
+    public Spider startUrl(String startUrl) {
+        startUrls = new ArrayList<String>();
+        startUrls.add(startUrl);
         return this;
     }
 
@@ -59,13 +74,15 @@ public class Spider implements Runnable {
 
     @Override
     public void run() {
-        Site site = pageProcessor.getSite();
-        Request request = schedular.poll(site);
-        if (pipelines.isEmpty()){
+        for (String startUrl : pageProcessor.getSite().getStartUrls()) {
+            schedular.push(new Request(startUrl), this);
+        }
+        Request request = schedular.poll(this);
+        if (pipelines.isEmpty()) {
             pipelines.add(new ConsolePipeline());
         }
         while (request != null) {
-            Page page = downloader.download(request,site);
+            Page page = downloader.download(request, site);
             if (page == null) {
                 sleep(site.getSleepTime());
                 continue;
@@ -73,12 +90,18 @@ public class Spider implements Runnable {
             pageProcessor.process(page);
             addRequest(page);
             for (Pipeline pipeline : pipelines) {
-                pipeline.process(page,site);
+                pipeline.process(page, this);
             }
             sleep(site.getSleepTime());
-            request = schedular.poll(site);
+            request = schedular.poll(this);
         }
     }
+
+    public Spider setUUID(String uuid) {
+        this.uuid = uuid;
+        return this;
+    }
+
 
     private void sleep(int time) {
         try {
@@ -91,8 +114,19 @@ public class Spider implements Runnable {
     private void addRequest(Page page) {
         if (CollectionUtils.isNotEmpty(page.getTargetRequests())) {
             for (Request request : page.getTargetRequests()) {
-                schedular.push(request,pageProcessor.getSite());
+                schedular.push(request, this);
             }
         }
+    }
+
+    @Override
+    public String getUUID() {
+        if (uuid != null) {
+            return uuid;
+        }
+        if (site != null) {
+            return site.getDomain();
+        }
+        return null;
     }
 }
