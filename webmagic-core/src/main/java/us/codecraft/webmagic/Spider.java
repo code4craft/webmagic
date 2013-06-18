@@ -57,10 +57,6 @@ public class Spider implements Runnable, Task {
         return this;
     }
 
-    public Thread thread() {
-        return new Thread(this);
-    }
-
     public Spider schedular(Schedular schedular) {
         this.schedular = schedular;
         return this;
@@ -74,7 +70,7 @@ public class Spider implements Runnable, Task {
 
     @Override
     public void run() {
-        for (String startUrl : pageProcessor.getSite().getStartUrls()) {
+        for (String startUrl : startUrls) {
             schedular.push(new Request(startUrl), this);
         }
         Request request = schedular.poll(this);

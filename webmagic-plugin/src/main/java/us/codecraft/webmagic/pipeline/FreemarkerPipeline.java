@@ -30,7 +30,7 @@ public class FreemarkerPipeline implements Pipeline {
         configuration.setDirectoryForTemplateLoading(new File(this.getClass().getClassLoader().getResource("ftl/").getFile()));
         this.template = configuration.getTemplate(template);
         this.path = path;
-        File file = new File(path);
+        new File(path);
     }
 
     public FreemarkerPipeline(String template) throws IOException {
