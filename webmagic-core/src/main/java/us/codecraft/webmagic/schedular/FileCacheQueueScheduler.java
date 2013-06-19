@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Date: 13-4-21
  * Time: 下午1:13
  */
-public class FileCacheQueueSchedular implements Schedular {
+public class FileCacheQueueScheduler implements Scheduler {
 
     private Logger logger = Logger.getLogger(getClass());
 
@@ -44,7 +44,7 @@ public class FileCacheQueueSchedular implements Schedular {
 
     private Set<String> urls;
 
-    public FileCacheQueueSchedular(String filePath) {
+    public FileCacheQueueScheduler(String filePath) {
         this.filePath = filePath;
     }
 

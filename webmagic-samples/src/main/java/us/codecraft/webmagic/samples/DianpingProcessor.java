@@ -33,6 +33,6 @@ public class DianpingProcessor implements PageProcessor {
 
     public static void main(String[] args) {
         DianpingProcessor dianpingProcessor = new DianpingProcessor();
-        Spider.me().processor(dianpingProcessor).startUrl("http://www.dianping.com/shanghai/food").run();
+        Spider.create(dianpingProcessor).startUrl("http://www.dianping.com/shanghai/food").run();
     }
 }

@@ -6,7 +6,7 @@ import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.FreemarkerPipeline;
 import us.codecraft.webmagic.samples.DiandianBlogProcessor;
-import us.codecraft.webmagic.schedular.FileCacheQueueSchedular;
+import us.codecraft.webmagic.schedular.FileCacheQueueScheduler;
 
 import java.io.IOException;
 
@@ -30,7 +30,7 @@ public class DiandianProcessorTest {
         //ConsolePipeline输出结果到控制台
         //FileCacheQueueSchedular保存url，支持断点续传，临时文件输出到/data/temp/webmagic/cache目录
         //Spider.run()执行
-        Spider.me().pipeline(new ConsolePipeline()).pipeline(pipeline).schedular(new FileCacheQueueSchedular("/data/temp/webmagic/cache/")).
-                processor(diaoyuwengProcessor).run();
+        Spider.create(diaoyuwengProcessor).pipeline(new ConsolePipeline()).pipeline(pipeline).schedular(new FileCacheQueueScheduler("/data/temp/webmagic/cache/")).
+                run();
     }
 }

@@ -24,6 +24,10 @@ public class PlainText implements Selectable {
         this.strings = results;
     }
 
+    public static PlainText create(String text) {
+        return new PlainText(text);
+    }
+
     @Override
     public Selectable xpath(String xpath) {
         throw new UnsupportedOperationException();
