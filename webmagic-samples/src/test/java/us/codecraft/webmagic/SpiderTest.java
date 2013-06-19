@@ -51,7 +51,7 @@ public class SpiderTest {
 
         /**
          *
-         * _hrefs = rs("<a[^<>]*href=[\"']{1}(/yewu/.*?)[\"']{1}")
+         * _hrefs = regex("<a[^<>]*href=[\"']{1}(/yewu/.*?)[\"']{1}")
          * title = r(""<title>(.*)</title>"")
          * body = x("//dd[@class='w133']")
          *
@@ -72,7 +72,7 @@ public class SpiderTest {
          *      body[r(_currentUrl).g(1)] = body[r(_currentUrl).g(1)] + (x("").r("",1,2).c())
          *
          *      body=body[r(_currentUrl).g(1)]
-         *      tags[%] = (tags[%] + xs('')) . r('')
+         *      tags[%] = (tags[%] + xpath('')) . r('')
          *
          *      _targetUrls.add('' + x('').r(''))
          *      _sourceUrls.add()
@@ -114,7 +114,7 @@ public class SpiderTest {
          *      content = t(_html) > c()
          *      title = x(_html, 'asd@asd') > r('',1)
          *      body[r(_currentUrl).g(1)] = body[r(_currentUrl).g(1)] + (x('') > r('',1,2) > c()) | x('')
-         *      tags[%] = tags + xs('') > r('')
+         *      tags[%] = tags + xpath('') > r('')
          *      model.setTargetUrl();
          *
          *      _targetUrl = '' + x('') & r('')

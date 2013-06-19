@@ -33,7 +33,7 @@ public class HttpClientDownloader implements Downloader {
             if (site.getAcceptStatCode().contains(statusCode)) {
                 if (site.getEncoding() == null){
                     String value = httpResponse.getEntity().getContentType().getValue();
-                    site.setEncoding(new PlainText(value).r("charset=([^\\s]+)").toString());
+                    site.setEncoding(new PlainText(value).regex("charset=([^\\s]+)").toString());
                 }
                 String content = IOUtils.toString(httpResponse.getEntity().getContent(),
                          site.getEncoding());

@@ -15,12 +15,12 @@ public class SinaBlogProcesser implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        page.addTargetRequests(page.getHtml().as().rs("(http://blog\\.sina\\.com\\.cn/s/blog_.*)").toStrings());
-        page.putField("title", page.getHtml().x("//div[@class='articalTitle']/h2"));
-        page.putField("content",page.getHtml().x("//div[@id='articlebody']//div[@class='articalContent']"));
-        page.putField("id",page.getUrl().r("http://blog\\.sina\\.com\\.cn/s/blog_(\\w+)"));
-        page.putField("date",page.getHtml().x("//div[@id='articlebody']//span[@class='time SG_txtc']").r("\\((.*)\\)"));
-//        page.putField("tags",page.getHtml().xs("//td[@class='blog_tag']/h3/a"));
+        page.addTargetRequests(page.getHtml().links().regex("(http://blog\\.sina\\.com\\.cn/s/blog_.*)").toStrings());
+        page.putField("title", page.getHtml().xpath("//div[@class='articalTitle']/h2"));
+        page.putField("content",page.getHtml().xpath("//div[@id='articlebody']//div[@class='articalContent']"));
+        page.putField("id",page.getUrl().regex("http://blog\\.sina\\.com\\.cn/s/blog_(\\w+)"));
+        page.putField("date",page.getHtml().xpath("//div[@id='articlebody']//span[@class='time SG_txtc']").regex("\\((.*)\\)"));
+//        page.putField("tags",page.getHtml().xpath("//td[@class='blog_tag']/h3/a"));
     }
 
     @Override

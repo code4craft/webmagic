@@ -15,10 +15,10 @@ public class OschinaPageProcesser implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        List<String> strings = page.getHtml().rs("<a[^<>]*href=[\"']{1}(http://www\\.oschina\\.net/question/[\\w]+)[\"']{1}").toStrings();
+        List<String> strings = page.getHtml().regex("<a[^<>]*href=[\"']{1}(http://www\\.oschina\\.net/question/[\\w]+)[\"']{1}").toStrings();
         page.addTargetRequests(strings);
-        page.putField("title", page.getHtml().x("//div[@class='QTitle']/h1/a"));
-        page.putField("content", page.getHtml().xs("//div[@class='Question']//div[@class='Content']/div[@class='detail']"));
+        page.putField("title", page.getHtml().xpath("//div[@class='QTitle']/h1/a"));
+        page.putField("content", page.getHtml().xpath("//div[@class='Question']//div[@class='Content']/div[@class='detail']"));
     }
 
     @Override

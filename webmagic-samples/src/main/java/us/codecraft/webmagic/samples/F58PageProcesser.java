@@ -15,10 +15,10 @@ public class F58PageProcesser implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        List<String> strings = page.getHtml().rs("<a[^<>]*href=[\"']{1}(/yewu/.*?)[\"']{1}").toStrings();
+        List<String> strings = page.getHtml().regex("<a[^<>]*href=[\"']{1}(/yewu/.*?)[\"']{1}").toStrings();
         page.addTargetRequests(strings);
-        page.putField("title",page.getHtml().r("<title>(.*)</title>"));
-        page.putField("body",page.getHtml().x("//dd[@class='w133']"));
+        page.putField("title",page.getHtml().regex("<title>(.*)</title>"));
+        page.putField("body",page.getHtml().xpath("//dd[@class='w133']"));
     }
 
     @Override

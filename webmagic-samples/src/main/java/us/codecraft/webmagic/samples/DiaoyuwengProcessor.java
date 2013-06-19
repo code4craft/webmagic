@@ -18,15 +18,15 @@ public class DiaoyuwengProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        List<String> requests = page.getHtml().as().rs("(http://www\\.diaoyuweng\\.com/home\\.php\\?mod=space&uid=88304&do=thread&view=me&type=thread&order=dateline&from=space&page=\\d+)").toStrings();
+        List<String> requests = page.getHtml().links().regex("(http://www\\.diaoyuweng\\.com/home\\.php\\?mod=space&uid=88304&do=thread&view=me&type=thread&order=dateline&from=space&page=\\d+)").toStrings();
         page.addTargetRequests(requests);
-        requests = page.getHtml().as().rs("(http://www\\.diaoyuweng\\.com/thread-\\d+-1-1.html)").toStrings();
+        requests = page.getHtml().links().regex("(http://www\\.diaoyuweng\\.com/thread-\\d+-1-1.html)").toStrings();
         page.addTargetRequests(requests);
         if (page.getUrl().toString().contains("thread")){
-            page.putField("title", page.getHtml().x("//a[@id='thread_subject']"));
-            page.putField("content", page.getHtml().x("//div[@class='pcb']//tbody"));
-            page.putField("date",page.getHtml().r("发表于 (\\d{4}-\\d+-\\d+ \\d+:\\d+:\\d+)"));
-            page.putField("id",new PlainText("1000"+page.getUrl().r("http://www\\.diaoyuweng\\.com/thread-(\\d+)-1-1.html").toString()));
+            page.putField("title", page.getHtml().xpath("//a[@id='thread_subject']"));
+            page.putField("content", page.getHtml().xpath("//div[@class='pcb']//tbody"));
+            page.putField("date",page.getHtml().regex("发表于 (\\d{4}-\\d+-\\d+ \\d+:\\d+:\\d+)"));
+            page.putField("id",new PlainText("1000"+page.getUrl().regex("http://www\\.diaoyuweng\\.com/thread-(\\d+)-1-1.html").toString()));
         }
     }
 

@@ -19,12 +19,6 @@ public class Html extends PlainText {
     }
 
     @Override
-    public Selectable x(String xpath) {
-        XpathSelector xpathSelector = SelectorFactory.getInstatnce().newXpathSelector(xpath);
-        return select(xpathSelector,strings);
-    }
-
-    @Override
     protected Selectable select(Selector selector, List<String> strings) {
         List<String> results = new ArrayList<String>();
         for (String string : strings) {
@@ -47,25 +41,19 @@ public class Html extends PlainText {
     }
 
     @Override
-    public Selectable sc() {
+    public Selectable smartContent() {
         SmartContentSelector smartContentSelector = SelectorFactory.getInstatnce().newSmartContentSelector();
         return select(smartContentSelector,strings);
     }
 
     @Override
-    public Selectable a() {
-        XpathSelector xpathSelector = SelectorFactory.getInstatnce().newXpathSelector("//a/@href");
-        return select(xpathSelector,strings);
-    }
-
-    @Override
-    public Selectable as() {
+    public Selectable links() {
         XpathSelector xpathSelector = SelectorFactory.getInstatnce().newXpathSelector("//a/@href");
         return selectList(xpathSelector,strings);
     }
 
     @Override
-    public Selectable xs(String xpath) {
+    public Selectable xpath(String xpath) {
         XpathSelector xpathSelector = SelectorFactory.getInstatnce().newXpathSelector(xpath);
         return selectList(xpathSelector, strings);
     }
