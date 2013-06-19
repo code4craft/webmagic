@@ -7,13 +7,18 @@ import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.schedular.QueueSchedular;
-import us.codecraft.webmagic.schedular.Schedular;
+import us.codecraft.webmagic.schedular.QueueScheduler;
+import us.codecraft.webmagic.schedular.Scheduler;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <pre>
+ * webmagic爬虫的入口类。
+ *      示例：
+ *      Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*blog/*")).run();
+ * </pre>
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 上午6:53
@@ -32,18 +37,17 @@ public class Spider implements Runnable, Task {
 
     private String uuid;
 
-    private Schedular schedular = new QueueSchedular();
+    private Scheduler scheduler = new QueueScheduler();
 
     private Logger logger = Logger.getLogger(getClass());
 
-    public static Spider me() {
-        return new Spider();
-    }
-
-    public Spider processor(PageProcessor pageProcessor) {
+    public Spider(PageProcessor pageProcessor){
         this.pageProcessor = pageProcessor;
         this.site = pageProcessor.getSite();
-        return this;
+    }
+
+    public static Spider create(PageProcessor pageProcessor) {
+        return new Spider(pageProcessor);
     }
 
     public Spider startUrls(List<String> startUrls) {
@@ -57,8 +61,13 @@ public class Spider implements Runnable, Task {
         return this;
     }
 
-    public Spider schedular(Schedular schedular) {
-        this.schedular = schedular;
+    public Spider setUUID(String uuid) {
+        this.uuid = uuid;
+        return this;
+    }
+
+    public Spider schedular(Scheduler scheduler) {
+        this.scheduler = scheduler;
         return this;
     }
 
@@ -71,9 +80,9 @@ public class Spider implements Runnable, Task {
     @Override
     public void run() {
         for (String startUrl : startUrls) {
-            schedular.push(new Request(startUrl), this);
+            scheduler.push(new Request(startUrl), this);
         }
-        Request request = schedular.poll(this);
+        Request request = scheduler.poll(this);
         if (pipelines.isEmpty()) {
             pipelines.add(new ConsolePipeline());
         }
@@ -89,15 +98,9 @@ public class Spider implements Runnable, Task {
                 pipeline.process(page, this);
             }
             sleep(site.getSleepTime());
-            request = schedular.poll(this);
+            request = scheduler.poll(this);
         }
     }
-
-    public Spider setUUID(String uuid) {
-        this.uuid = uuid;
-        return this;
-    }
-
 
     private void sleep(int time) {
         try {
@@ -110,7 +113,7 @@ public class Spider implements Runnable, Task {
     private void addRequest(Page page) {
         if (CollectionUtils.isNotEmpty(page.getTargetRequests())) {
             for (Request request : page.getTargetRequests()) {
-                schedular.push(request, this);
+                scheduler.push(request, this);
             }
         }
     }

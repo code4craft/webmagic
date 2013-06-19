@@ -14,7 +14,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Date: 13-4-21
  * Time: 下午1:13
  */
-public class QueueSchedular implements Schedular {
+public class QueueScheduler implements Scheduler {
 
     private Logger logger = Logger.getLogger(getClass());
 

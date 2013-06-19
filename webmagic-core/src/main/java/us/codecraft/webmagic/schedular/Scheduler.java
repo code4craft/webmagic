@@ -8,7 +8,7 @@ import us.codecraft.webmagic.Task;
  * Date: 13-4-21
  * Time: 下午1:12
  */
-public interface Schedular {
+public interface Scheduler {
 
     public void push(Request request,Task task);
 

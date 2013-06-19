@@ -6,14 +6,14 @@ import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.pipeline.FreemarkerPipeline;
 import us.codecraft.webmagic.samples.DiaoyuwengProcessor;
-import us.codecraft.webmagic.schedular.FileCacheQueueSchedular;
+import us.codecraft.webmagic.schedular.FileCacheQueueScheduler;
 
 import java.io.IOException;
 
 /**
  * @author code4crafter@gmail.com <br>
- * Date: 13-6-9
- * Time: 上午8:02
+ *         Date: 13-6-9
+ *         Time: 上午8:02
  */
 public class DiaoyuwengProcessorTest {
 
@@ -22,7 +22,7 @@ public class DiaoyuwengProcessorTest {
     public void test() throws IOException {
         DiaoyuwengProcessor diaoyuwengProcessor = new DiaoyuwengProcessor();
         FreemarkerPipeline pipeline = new FreemarkerPipeline("wordpress.ftl");
-        Spider.me().pipeline(new FilePipeline()).pipeline(pipeline).schedular(new FileCacheQueueSchedular("/data/temp/webmagic/cache/")).
-                processor(diaoyuwengProcessor).run();
+        Spider.create(diaoyuwengProcessor).pipeline(new FilePipeline()).pipeline(pipeline).schedular(new FileCacheQueueScheduler("/data/temp/webmagic/cache/")).
+                run();
     }
 }
