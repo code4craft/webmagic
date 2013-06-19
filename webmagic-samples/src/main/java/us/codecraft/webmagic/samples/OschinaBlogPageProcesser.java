@@ -15,11 +15,11 @@ public class OschinaBlogPageProcesser implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        List<String> strings = page.getHtml().as().r("(http://my\\.oschina\\.net)").toStrings();
+        List<String> strings = page.getHtml().links().regex("(http://my\\.oschina\\.net)").toStrings();
         page.addTargetRequests(strings);
-        page.putField("title", page.getHtml().xs("//div[@class='BlogEntity']/div[@class='BlogTitle']/h1"));
-        page.putField("content", page.getHtml().sc());
-        page.putField("author", page.getUrl().r("my\\.oschina\\.net/(\\w+)/blog/\\d+"));
+        page.putField("title", page.getHtml().xpath("//div[@class='BlogEntity']/div[@class='BlogTitle']/h1"));
+        page.putField("content", page.getHtml().smartContent());
+        page.putField("author", page.getUrl().regex("my\\.oschina\\.net/(\\w+)/blog/\\d+"));
     }
 
     @Override

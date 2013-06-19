@@ -25,38 +25,22 @@ public class PlainText implements Selectable {
     }
 
     @Override
-    public Selectable x(String xpath) {
+    public Selectable xpath(String xpath) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Selectable xs(String xpath) {
+    public Selectable smartContent() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Selectable sc() {
+    public Selectable links() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Selectable a() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Selectable as() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Selectable r(String regex) {
-        RegexSelector regexSelector = SelectorFactory.getInstatnce().newRegexSelector(regex);
-        return select(regexSelector, strings);
-    }
-
-    @Override
-    public Selectable rs(String regex) {
+    public Selectable regex(String regex) {
         RegexSelector regexSelector = SelectorFactory.getInstatnce().newRegexSelector(regex);
         return selectList(regexSelector, strings);
     }
@@ -82,7 +66,7 @@ public class PlainText implements Selectable {
     }
 
     @Override
-    public Selectable rp(String regex, String replacement) {
+    public Selectable replace(String regex, String replacement) {
         ReplaceSelector replaceSelector = SelectorFactory.getInstatnce().newReplaceSelector(regex, replacement);
         return select(replaceSelector, strings);
     }

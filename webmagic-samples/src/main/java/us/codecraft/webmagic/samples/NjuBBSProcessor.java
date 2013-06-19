@@ -14,10 +14,10 @@ import java.util.List;
 public class NjuBBSProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
-        List<String> requests = page.getHtml().rs("<a[^<>]*href=(bbstcon\\?board=Pictures&file=[^>]*)").toStrings();
+        List<String> requests = page.getHtml().regex("<a[^<>]*href=(bbstcon\\?board=Pictures&file=[^>]*)").toStrings();
         page.addTargetRequests(requests);
-        page.putField("title",page.getHtml().x("//div[@id='content']//h2/a"));
-        page.putField("content",page.getHtml().sc());
+        page.putField("title",page.getHtml().xpath("//div[@id='content']//h2/a"));
+        page.putField("content",page.getHtml().smartContent());
     }
 
     @Override

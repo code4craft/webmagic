@@ -15,13 +15,13 @@ import java.util.List;
 public class DianpingProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
-        List<String> requests = page.getHtml().as().rs(".*shop.*").toStrings();
+        List<String> requests = page.getHtml().links().regex(".*shop.*").toStrings();
         page.addTargetRequests(requests);
-        requests = page.getHtml().rs(".*search/category/.*").toStrings();
+        requests = page.getHtml().regex(".*search/category/.*").toStrings();
         page.addTargetRequests(requests);
         if (page.getUrl().toString().contains("shop")) {
-            page.putField("title", page.getHtml().x("//h1[@class='shop-title']"));
-            page.putField("content", page.getHtml().sc());
+            page.putField("title", page.getHtml().xpath("//h1[@class='shop-title']"));
+            page.putField("content", page.getHtml().smartContent());
         }
     }
 

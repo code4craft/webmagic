@@ -14,7 +14,7 @@ public class HtmlTest {
     @Test
     public void testRegexSelector() {
         Html selectable = new Html("aaaaaaab");
-        Assert.assertEquals("abbabbab", (selectable.r("(.*)").rp("aa(a)", "$1bb").toString()));
+        Assert.assertEquals("abbabbab", (selectable.regex("(.*)").replace("aa(a)", "$1bb").toString()));
 
     }
 }
