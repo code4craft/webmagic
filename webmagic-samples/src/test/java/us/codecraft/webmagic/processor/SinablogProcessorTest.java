@@ -30,7 +30,7 @@ public class SinablogProcessorTest {
         //ConsolePipeline输出结果到控制台
         //FileCacheQueueSchedular保存url，支持断点续传，临时文件输出到/data/temp/webmagic/cache目录
         //Spider.run()执行
-        Spider.create(sinaBlogProcesser).pipeline(new FilePipeline()).pipeline(pipeline).schedular(new FileCacheQueueScheduler("/data/temp/webmagic/cache/")).
+        Spider.create(sinaBlogProcesser).pipeline(new FilePipeline()).pipeline(pipeline).scheduler(new FileCacheQueueScheduler("/data/temp/webmagic/cache/")).
                 run();
     }
 }

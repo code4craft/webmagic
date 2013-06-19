@@ -22,7 +22,7 @@ public class DiaoyuwengProcessorTest {
     public void test() throws IOException {
         DiaoyuwengProcessor diaoyuwengProcessor = new DiaoyuwengProcessor();
         FreemarkerPipeline pipeline = new FreemarkerPipeline("wordpress.ftl");
-        Spider.create(diaoyuwengProcessor).pipeline(new FilePipeline()).pipeline(pipeline).schedular(new FileCacheQueueScheduler("/data/temp/webmagic/cache/")).
+        Spider.create(diaoyuwengProcessor).pipeline(new FilePipeline()).pipeline(pipeline).scheduler(new FileCacheQueueScheduler("/data/temp/webmagic/cache/")).
                 run();
     }
 }
