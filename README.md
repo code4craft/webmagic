@@ -18,7 +18,7 @@ webmagic正处于开发阶段，目前还没有稳定版本。欢迎开发者参
 * ####垂直爬虫####
 	webmagic着重于页面抽取的工作。开发者可以使用xpath和正则表达式进行链接和内容的提取，支持链式API调用，以及单复数转换。
 
-		String content = page.getHtml().x("//div[@class='body']").r("这段话比较重要(.*)").toString();
+		String content = page.getHtml().xpath("//div[@class='body']").regex("这段话比较重要(.*)").toString();
 	
 * ####嵌入式&无配置####
 	webmagic与其他Full-Stack的框架不同，没有配置文件，大部分功能都通过简单的API调用完成。webmagic以jar包的形式存在，并且不依赖任何框架，在程序可以随处进行调用。
@@ -57,13 +57,13 @@ webmagic定制的核心是PageProcessor接口。
 
         @Override
         public void process(Page page) {
-            List<String> requests = page.getHtml().as().rs(urlPattern).toStrings();
+            List<String> requests = page.getHtml().links().regex(urlPattern).toStrings();
             //调用page.addTargetRequests()方法添加待抓取链接
             page.addTargetRequests(requests);
             //xpath方式抽取
-            page.putField("title", page.getHtml().x("//title"));
+            page.putField("title", page.getHtml().xpath("//title"));
             //sc表示使用Readability技术抽取正文
-            page.putField("content", page.getHtml().sc());
+            page.putField("content", page.getHtml().smartContent());
         }
 
         @Override
