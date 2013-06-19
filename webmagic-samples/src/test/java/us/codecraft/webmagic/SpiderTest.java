@@ -26,12 +26,12 @@ public class SpiderTest {
     @Test
     public void testGlobalSpider(){
 //        PageProcessor pageProcessor = new MeicanProcessor();
-//        Spider.me().pipeline(new FilePipeline()).schedular(new FileCacheQueueScheduler(pageProcessor.getSite(),"/data/temp/webmagic/cache/")).
+//        Spider.me().pipeline(new FilePipeline()).scheduler(new FileCacheQueueScheduler(pageProcessor.getSite(),"/data/temp/webmagic/cache/")).
 //                processor(pageProcessor).run();
         SimplePageProcessor pageProcessor2 = new SimplePageProcessor("http://www.diaoyuweng.com/home.php?mod=space&uid=88304&do=thread&view=me&type=thread&from=space", "http://www.diaoyuweng.com/thread-*-1-1.html");
         System.out.println(pageProcessor2.getSite().getEncoding());
         pageProcessor2.getSite().setSleepTime(500);
-        Spider.create(pageProcessor2).pipeline(new FilePipeline()).schedular(new FileCacheQueueScheduler("/data/temp/webmagic/cache/")).
+        Spider.create(pageProcessor2).pipeline(new FilePipeline()).scheduler(new FileCacheQueueScheduler("/data/temp/webmagic/cache/")).
                 run();
 
 

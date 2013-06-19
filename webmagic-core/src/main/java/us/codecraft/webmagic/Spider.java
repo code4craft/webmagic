@@ -66,7 +66,7 @@ public class Spider implements Runnable, Task {
         return this;
     }
 
-    public Spider schedular(Scheduler scheduler) {
+    public Spider scheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
         return this;
     }

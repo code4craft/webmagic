@@ -63,7 +63,7 @@ public class FileCacheQueueScheduler implements Scheduler {
         initWriter();
         initFlushThread();
         inited.set(true);
-        logger.info("init cache schedular success");
+        logger.info("init cache scheduler success");
     }
 
     private void initFlushThread() {
@@ -80,7 +80,7 @@ public class FileCacheQueueScheduler implements Scheduler {
             fileUrlWriter = new PrintWriter(new FileWriter(getFileName(fileUrlAllName), true));
             fileCursorWriter = new PrintWriter(new FileWriter(getFileName(fileCursor), false));
         } catch (IOException e) {
-            throw new RuntimeException("init cache schedular error", e);
+            throw new RuntimeException("init cache scheduler error", e);
         }
     }
 
