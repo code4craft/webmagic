@@ -17,6 +17,7 @@ import java.io.IOException;
  */
 public class DiandianProcessorTest {
 
+    @Ignore
     @Test
     public void test() throws IOException {
         DiandianBlogProcessor diaoyuwengProcessor = new DiandianBlogProcessor();
