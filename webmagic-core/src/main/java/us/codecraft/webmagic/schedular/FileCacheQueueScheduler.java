@@ -117,7 +117,7 @@ public class FileCacheQueueScheduler implements Scheduler {
     }
 
     private String getFileName(String filename) {
-        return filePath + task.getUUID() + "/" + filename;
+        return filePath + task.getUUID()  + filename;
     }
 
     @Override
