@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.downloader;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
@@ -13,6 +14,7 @@ import us.codecraft.webmagic.Site;
  */
 public class HttpClientDownloaderTest {
 
+    @Ignore
     @Test
     public void testCookie() {
         Site site = Site.me().setDomain("www.diandian.com").addCookie("t", "yct7q7e6v319wpg4cpxqduu5m77lcgix");
