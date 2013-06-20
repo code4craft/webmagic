@@ -25,7 +25,7 @@ webmagic正处于开发阶段，目前还没有稳定版本。欢迎开发者参
 
 	以下是爬取oschina博客的一段代码：
 	
-		Spider.me().processor(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*/blog/*")).run();
+		Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*/blog/*")).run();
 		
 * ####可扩展####
 	参考[`scrapy`](https://github.com/scrapy/scrapy)的设计，webmagic将爬虫的扩展点分为Processor、Schedular、Downloader、Pipeline三个模块，可以通过扩展这些接口实现强大的扩展功能。如可以通过多个Spider实现多线程抓取；可以通过扩展Schedular实现断点续传乃至于分布式爬虫；可以通过扩展Pipeline实现业务可定制的持久化功能。
@@ -75,7 +75,7 @@ webmagic定制的核心是PageProcessor接口。
         
 调用这个爬虫的代码如下：
 
-	Spider.me().processor(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*/blog/*")).run();
+	Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*/blog/*")).run();
 
 
 ### 示例
