@@ -70,7 +70,7 @@ public class SelectorFactory {
             } else {
                 throw new UnsupportedOperationException();
             }
-        } catch (ReflectiveOperationException e) {
+        } catch (Exception e) {
             throw new IllegalArgumentException("init object error", e);
         }
     }
