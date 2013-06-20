@@ -85,7 +85,7 @@ public class Site {
     /**
      * 获取已设置的domain
      *
-     * @return
+     * @return 已设置的domain
      */
     public String getDomain() {
         return domain;

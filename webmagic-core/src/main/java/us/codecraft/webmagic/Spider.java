@@ -15,9 +15,19 @@ import java.util.List;
 
 /**
  * <pre>
- * webmagic爬虫的入口类。
- *      示例：
+ *webmagic爬虫的入口类。
+ *
+ *示例：
+ *定义一个最简单的爬虫：
  *      Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*blog/*")).run();
+ *
+ *使用FilePipeline保存结果到文件:
+ *      Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*blog/*"))
+ *          .pipeline(new FilePipeline("/data/temp/webmagic/")).run();
+ *
+ *使用FileCacheQueueScheduler缓存URL，关闭爬虫后下次自动从停止的页面继续抓取:
+ *      Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*blog/*"))
+ *          .scheduler(new FileCacheQueueScheduler("/data/temp/webmagic/cache/")).run();
  * </pre>
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
@@ -41,36 +51,60 @@ public class Spider implements Runnable, Task {
 
     private Logger logger = Logger.getLogger(getClass());
 
-    public Spider(PageProcessor pageProcessor){
+    /**
+     * 使用已定义的抽取规则新建一个Spider。
+     * @param pageProcessor 已定义的抽取规则
+     */
+    public Spider(PageProcessor pageProcessor) {
         this.pageProcessor = pageProcessor;
         this.site = pageProcessor.getSite();
+        this.startUrls = pageProcessor.getSite().getStartUrls();
     }
 
+    /**
+     * 使用已定义的抽取规则新建一个Spider。
+     * @param pageProcessor 已定义的抽取规则
+     * @return 新建的Spider
+     */
     public static Spider create(PageProcessor pageProcessor) {
         return new Spider(pageProcessor);
     }
 
+    /**
+     * 重新设置startUrls，会覆盖Site本身的startUrls。
+     * @param startUrls
+     * @return this
+     */
     public Spider startUrls(List<String> startUrls) {
         this.startUrls = startUrls;
         return this;
     }
 
-    public Spider startUrl(String startUrl) {
-        startUrls = new ArrayList<String>();
-        startUrls.add(startUrl);
-        return this;
-    }
-
+    /**
+     * 为爬虫设置一个唯一ID，用于标志任务，默认情况下使用domain作为uuid，对于单domain多任务的情况，请为重复任务设置不同的ID。
+     * @param uuid 唯一ID
+     * @return this
+     */
     public Spider setUUID(String uuid) {
         this.uuid = uuid;
         return this;
     }
 
+    /**
+     * 设置调度器。调度器用于保存待抓取URL，并可以进行去重、同步、持久化等工作。默认情况下使用内存中的阻塞队列进行调度。
+     * @param scheduler 调度器
+     * @return this
+     */
     public Spider scheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
         return this;
     }
 
+    /**
+     * 设置处理管道。处理管道用于最终抽取结果的后处理，例如：保存到文件、保存到数据库等。默认情况下会输出到控制台。
+     * @param pipeline 处理管道
+     * @return this
+     */
     public Spider pipeline(Pipeline pipeline) {
         this.pipelines.add(pipeline);
         return this;
@@ -79,8 +113,10 @@ public class Spider implements Runnable, Task {
 
     @Override
     public void run() {
-        for (String startUrl : startUrls) {
-            scheduler.push(new Request(startUrl), this);
+        if (startUrls != null) {
+            for (String startUrl : startUrls) {
+                scheduler.push(new Request(startUrl), this);
+            }
         }
         Request request = scheduler.poll(this);
         if (pipelines.isEmpty()) {

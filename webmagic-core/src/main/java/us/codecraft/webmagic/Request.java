@@ -3,6 +3,7 @@ package us.codecraft.webmagic;
 /**
  * Request对象封装了待抓取的url信息。<br/>
  * 在PageProcessor中，Request对象可以通过{@link us.codecraft.webmagic.Page#getRequest()} 获取。<br/>
+ * <br/>
  * Request对象包含一个extra属性，可以写入一些必须的上下文，这个特性在某些场合会有用。<br/>
  * <pre>
  *      Example:
