@@ -14,8 +14,8 @@ import java.io.PrintWriter;
 
 /**
  * @author code4crafter@gmail.com <br>
- * Date: 13-6-8
- * Time: 下午9:00
+ *         Date: 13-6-8
+ *         Time: 下午9:00
  */
 public class FreemarkerPipeline implements Pipeline {
 
@@ -40,6 +40,9 @@ public class FreemarkerPipeline implements Pipeline {
 
     @Override
     public void process(Page page, Task task) {
+        if (page.isSkip()) {
+            return;
+        }
         String path = this.path + "" + task.getUUID() + "/";
         File file = new File(path);
         if (!file.exists()) {
