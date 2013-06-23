@@ -35,6 +35,16 @@ public class Page {
 
     private List<Request> targetRequests = new ArrayList<Request>();
 
+    private boolean skip;
+
+    public boolean isSkip() {
+        return skip;
+    }
+
+    public void setSkip(boolean skip) {
+        this.skip = skip;
+    }
+
     public Page() {
     }
 
