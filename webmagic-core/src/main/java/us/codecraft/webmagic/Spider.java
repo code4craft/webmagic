@@ -215,6 +215,17 @@ public class Spider implements Runnable, Task {
         }
     }
 
+    public void runAsync(){
+        Thread thread = new Thread(){
+            @Override
+            public void run() {
+                Spider.this.run();
+            }
+        };
+        thread.setDaemon(false);
+        thread.start();
+    }
+
     /**
      * 建立多个线程下载
      * @param threadNum 线程数
