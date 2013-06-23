@@ -19,5 +19,8 @@ public class ConsolePipeline implements  Pipeline{
         for (Map.Entry<String, Selectable> entry : page.getFields().entrySet()) {
             System.out.println(entry.getKey()+":\t"+entry.getValue().toStrings());
         }
+        if (page.getExtra()!=null){
+            System.out.println(page.getExtra());
+        }
     }
 }
