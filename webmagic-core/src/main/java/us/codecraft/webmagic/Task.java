@@ -14,4 +14,10 @@ public interface Task {
      */
     public String getUUID();
 
+    /**
+     * 返回任务抓取的站点信息
+     * @return site
+     */
+    public Site getSite();
+
 }

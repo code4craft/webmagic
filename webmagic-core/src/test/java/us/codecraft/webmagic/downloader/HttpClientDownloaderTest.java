@@ -19,7 +19,7 @@ public class HttpClientDownloaderTest {
     public void testCookie() {
         Site site = Site.me().setDomain("www.diandian.com").addCookie("t", "yct7q7e6v319wpg4cpxqduu5m77lcgix");
         HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
-        Page download = httpClientDownloader.download(new Request("http://www.diandian.com"), site);
+        Page download = httpClientDownloader.download(new Request("http://www.diandian.com"), site.toTask());
         Assert.assertTrue(download.getHtml().toString().contains("flashsword30"));
     }
 }
