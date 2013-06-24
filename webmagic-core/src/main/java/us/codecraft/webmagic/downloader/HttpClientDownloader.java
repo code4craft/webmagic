@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.UrlUtils;
@@ -26,24 +27,25 @@ public class HttpClientDownloader implements Downloader {
     private Logger logger = Logger.getLogger(getClass());
 
     @Override
-    public Page download(Request request, Site site) {
+    public Page download(Request request, Task task) {
+        Site site = task.getSite();
         logger.info("downloading page " + request.getUrl());
         HttpClient httpClient = HttpClientPool.getInstance().getClient(site);
-        String encoding = site.getEncoding();
+        String charset = site.getCharset();
         try {
             HttpGet httpGet = new HttpGet(request.getUrl());
             HttpResponse httpResponse = httpClient.execute(httpGet);
             int statusCode = httpResponse.getStatusLine().getStatusCode();
             if (site.getAcceptStatCode().contains(statusCode)) {
                 //charset
-                if (encoding == null){
+                if (charset == null){
                     String value = httpResponse.getEntity().getContentType().getValue();
-                    site.setEncoding(new PlainText(value).regex("charset=([^\\s]+)").toString());
+                    charset = new PlainText(value).regex("charset=([^\\s]+)").toString();
                 }
                 //
                 handleGzip(httpResponse);
                 String content = IOUtils.toString(httpResponse.getEntity().getContent(),
-                         site.getEncoding());
+                        charset);
                 Page page = new Page();
                 page.setHtml(new Html(UrlUtils.fixAllRelativeHrefs(content, request.getUrl())));
                 page.setUrl(new PlainText(request.getUrl()));

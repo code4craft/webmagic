@@ -75,7 +75,7 @@ public class UrlUtils {
         return domain;
     }
 
-    private static Pattern patternForHref = Pattern.compile("(<a[^<>]*href=)[\"']{0,1}([^\"']*)[\"']{0,1}", Pattern.CASE_INSENSITIVE);
+    private static Pattern patternForHref = Pattern.compile("(<a[^<>]*href=)[\"']{0,1}([^\"'<>\\s]*)[\"']{0,1}", Pattern.CASE_INSENSITIVE);
 
     public static String fixAllRelativeHrefs(String html, String url) {
         StringBuilder stringBuilder = new StringBuilder();

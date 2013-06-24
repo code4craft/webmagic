@@ -2,7 +2,7 @@ package us.codecraft.webmagic.downloader;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Task;
 
 /**
  * Downloader是webmagic下载页面的接口。webmagic默认使用了HttpComponent作为下载器，一般情况，你无需自己实现这个接口。
@@ -16,8 +16,8 @@ public interface Downloader {
      * 下载页面，并保存信息到Page对象中。
      *
      * @param request
-     * @param site
+     * @param task
      * @return page
      */
-    public Page download(Request request, Site site);
+    public Page download(Request request, Task task);
 }

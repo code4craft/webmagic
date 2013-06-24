@@ -126,6 +126,12 @@ public class Spider implements Runnable, Task {
         return this;
     }
 
+    public Spider downloader(Downloader downloader) {
+        checkIfNotRunning();
+        this.downloader = downloader;
+        return this;
+    }
+
 
     @Override
     public void run() {
@@ -180,7 +186,7 @@ public class Spider implements Runnable, Task {
     }
 
     private void processRequest(Request request) {
-        Page page = downloader.download(request, site);
+        Page page = downloader.download(request, this);
         if (page == null) {
             sleep(site.getSleepTime());
             return;
@@ -216,12 +222,7 @@ public class Spider implements Runnable, Task {
     }
 
     public void runAsync(){
-        Thread thread = new Thread(){
-            @Override
-            public void run() {
-                Spider.this.run();
-            }
-        };
+        Thread thread = new Thread(this);
         thread.setDaemon(false);
         thread.start();
     }
@@ -251,5 +252,10 @@ public class Spider implements Runnable, Task {
             return site.getDomain();
         }
         return null;
+    }
+
+    @Override
+    public Site getSite() {
+        return site;
     }
 }

@@ -1,15 +1,14 @@
 package us.codecraft.webmagic.pipeline;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.selector.Selectable;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -19,6 +18,8 @@ import java.util.Map;
 public class FilePipeline implements Pipeline {
 
     private String path = "/data/temp/webmagic/";
+
+    private Logger logger = Logger.getLogger(getClass());
 
     public FilePipeline() {
 
@@ -36,15 +37,12 @@ public class FilePipeline implements Pipeline {
             file.mkdirs();
         }
         try {
-            PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(page.getUrl().toString()) + ".html"));
+            PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(page.getUrl().toString())));
             printWriter.println("url:\t" + page.getUrl());
-            for (Map.Entry<String, Selectable> entry : page.getFields().entrySet()) {
-                printWriter.println(entry.getKey() + ":\t" + entry.getValue().toStrings());
-            }
+            printWriter.println("html:\t" + page.getHtml());
             printWriter.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warn("write file error",e);
         }
-
     }
 }
