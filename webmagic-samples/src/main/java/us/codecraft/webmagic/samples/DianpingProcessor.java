@@ -1,7 +1,7 @@
 package us.codecraft.webmagic.samples;
 
-import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 
@@ -9,30 +9,36 @@ import java.util.List;
 
 /**
  * @author code4crafter@gmail.com <br>
- * Date: 13-4-21
- * Time: 下午8:08
+ *         Date: 13-4-21
+ *         Time: 下午8:08
  */
 public class DianpingProcessor implements PageProcessor {
+
+    private Site site;
+
     @Override
     public void process(Page page) {
-        List<String> requests = page.getHtml().links().regex(".*shop.*").toStrings();
+        List<String> requests = page.getHtml().links().regex("http://info-search-web121361\\.alpha\\.dp:8080/search/.*").toStrings();
         page.addTargetRequests(requests);
-        requests = page.getHtml().regex(".*search/category/.*").toStrings();
-        page.addTargetRequests(requests);
-        if (page.getUrl().toString().contains("shop")) {
-            page.putField("title", page.getHtml().xpath("//h1[@class='shop-title']"));
-            page.putField("content", page.getHtml().smartContent());
-        }
     }
 
     @Override
     public Site getSite() {
-        return Site.me().setDomain("www.dianping.com").addStartUrl("http://www.dianping.com/").
-                setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
+        if (site == null) {
+            site = Site.me().setDomain("info-search-web361.alpha.dp:8080").addStartUrl("http://info11-search-web361.alpha.dp:8080/search/category/1/0").
+                    setSleepTime(100).
+                    setUserAgent("I'm a performance tester created by yihua.huang");
+        }
+        return site;
     }
 
     public static void main(String[] args) {
+        int sleepTime = 0;
+        if (args.length > 0) {
+            sleepTime = Integer.parseInt(args[0]);
+        }
         DianpingProcessor dianpingProcessor = new DianpingProcessor();
+        dianpingProcessor.getSite().setSleepTime(sleepTime).setRetryTimes(10);
         Spider.create(dianpingProcessor).run();
     }
 }

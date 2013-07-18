@@ -22,7 +22,7 @@ public class GlobalProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        final List<String> requests = page.getHtml().links().regex(".*book\\.douban\\.com.*").toStrings();
+        final List<String> requests = page.getHtml().links().toStrings();
         page.addTargetRequests(requests);
 
     }
@@ -30,16 +30,19 @@ public class GlobalProcessor implements PageProcessor {
     @Override
     public Site getSite() {
         if (site==null){
-            site = Site.me().setDomain("douban.com").addStartUrl("http://book.douban.com/").setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
+            site = Site.me().setDomain("www.2345.com")
+                    .addStartUrl("http://www.2345.com/").addStartUrl("http://hao.360.cn/")
+                    .addStartUrl("http://www.baidu.com/s?wd=%E7%BD%91%E7%AB%99%E5%AF%BC%E8%88%AA&rsv_spt=1&issp=1&rsv_bp=0&ie=utf-8&tn=80039098_oem_dg&rsv_n=2&rsv_sug3=6&rsv_sug4=698&rsv_sug=0&rsv_sug1=3")
+                    .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
         }
         return site;
     }
 
     public static void main(String[] args) {
         Spider.create(new GlobalProcessor()).thread(10)
-                .scheduler(new FileCacheQueueScheduler("/data/webmagic/github"))
-                .downloader(new FileDownloader("/data/webmagic/douban", new HttpClientDownloader()))
-                .pipeline(new FilePipeline("/data/webmagic/douban"))
+                .scheduler(new FileCacheQueueScheduler("/data/webmagic/test"))
+                .downloader(new FileDownloader("/data/webmagic/test", new HttpClientDownloader()))
+                .pipeline(new FilePipeline("/data/webmagic/test"))
                 .run();
     }
 }

@@ -24,6 +24,8 @@ public class Site {
 
     private int sleepTime = 3000;
 
+    private int retryTimes = 0;
+
     private static final Set<Integer> DEFAULT_STATUS_CODE_SET = new HashSet<Integer>();
 
     private Set<Integer> acceptStatCode = DEFAULT_STATUS_CODE_SET;
@@ -181,6 +183,23 @@ public class Site {
      */
     public int getSleepTime() {
         return sleepTime;
+    }
+
+    /**
+     * 获取重新下载的次数，默认为0
+     * @return 重新下载的次数
+     */
+    public int getRetryTimes() {
+        return retryTimes;
+    }
+
+    /**
+     * 设置获取重新下载的次数，默认为0
+     * @return this
+     */
+    public Site setRetryTimes(int retryTimes) {
+        this.retryTimes = retryTimes;
+        return this;
     }
 
     @Override

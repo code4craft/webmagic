@@ -12,7 +12,7 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.2.1</version>
+            <version>4.2.4</version>
         </dependency>
 
         <dependency>
