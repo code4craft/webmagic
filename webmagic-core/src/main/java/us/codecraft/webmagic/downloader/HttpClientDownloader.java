@@ -16,11 +16,13 @@ import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.UrlUtils;
 
+import java.io.IOException;
+
 
 /**
  * @author code4crafter@gmail.com <br>
- * Date: 13-4-21
- * Time: 下午12:15
+ *         Date: 13-4-21
+ *         Time: 下午12:15
  */
 public class HttpClientDownloader implements Downloader {
 
@@ -34,11 +36,27 @@ public class HttpClientDownloader implements Downloader {
         String charset = site.getCharset();
         try {
             HttpGet httpGet = new HttpGet(request.getUrl());
-            HttpResponse httpResponse = httpClient.execute(httpGet);
+            HttpResponse httpResponse = null;
+            int tried = 0;
+            boolean retry;
+            do {
+                try {
+                    httpResponse = httpClient.execute(httpGet);
+                    retry = false;
+                } catch (IOException e) {
+                    tried++;
+                    if (tried > site.getRetryTimes()) {
+                        logger.warn("download page " + request.getUrl() + " error", e);
+                        return null;
+                    }
+                    logger.info("download page " + request.getUrl() + " error, retry the "+tried+" time!");
+                    retry = true;
+                }
+            } while (retry);
             int statusCode = httpResponse.getStatusLine().getStatusCode();
             if (site.getAcceptStatCode().contains(statusCode)) {
                 //charset
-                if (charset == null){
+                if (charset == null) {
                     String value = httpResponse.getEntity().getContentType().getValue();
                     charset = new PlainText(value).regex("charset=([^\\s]+)").toString();
                 }
@@ -52,7 +70,7 @@ public class HttpClientDownloader implements Downloader {
                 page.setRequest(request);
                 return page;
             } else {
-                logger.warn("code error " + statusCode);
+                logger.warn("code error " + statusCode + "\t" + request.getUrl());
             }
         } catch (Exception e) {
             logger.warn("download page " + request.getUrl() + " error", e);
