@@ -154,9 +154,11 @@ public class Spider implements Runnable, Task {
                 request = scheduler.poll(this);
             }
         } else {
+            //multi thread
             final AtomicInteger threadAlive = new AtomicInteger(0);
             while (true) {
                 if (request == null) {
+                    //when no request found but some thread is alive, sleep a while.
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
