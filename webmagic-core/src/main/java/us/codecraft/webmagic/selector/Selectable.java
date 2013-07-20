@@ -18,6 +18,14 @@ public interface Selectable {
     public Selectable xpath(String xpath);
 
     /**
+     * select list with jquery selector
+     *
+     * @param
+     * @return
+     */
+    public Selectable $(String selector);
+
+    /**
      * select smart content with ReadAbility algorithm
      *
      * @return content

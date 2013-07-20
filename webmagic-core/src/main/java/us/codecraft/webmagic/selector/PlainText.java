@@ -34,6 +34,11 @@ public class PlainText implements Selectable {
     }
 
     @Override
+    public Selectable $(String selector) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Selectable smartContent() {
         throw new UnsupportedOperationException();
     }
