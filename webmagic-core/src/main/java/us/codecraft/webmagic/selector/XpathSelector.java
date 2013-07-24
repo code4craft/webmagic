@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * xpath的选择器。包装了HtmlCleaner。<br>
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 上午9:39
@@ -52,12 +53,12 @@ public class XpathSelector implements Selector {
         try {
             Object[] objects = tagNode.evaluateXPath(xpathStr);
             if (objects != null && objects.length >= 1) {
-                for (int i = 0; i < objects.length; i++) {
-                    if (objects[i] instanceof TagNode) {
-                        TagNode tagNode1 = (TagNode) objects[i];
+                for (Object object : objects) {
+                    if (object instanceof TagNode) {
+                        TagNode tagNode1 = (TagNode) object;
                         results.add(htmlCleaner.getInnerHtml(tagNode1));
                     } else {
-                        results.add(objects[i].toString());
+                        results.add(object.toString());
                     }
                 }
             }

@@ -58,7 +58,7 @@ public class HttpClientDownloader implements Downloader {
                 //charset
                 if (charset == null) {
                     String value = httpResponse.getEntity().getContentType().getValue();
-                    charset = new PlainText(value).regex("charset=([^\\s]+)").toString();
+                    charset = UrlUtils.getCharset(value);
                 }
                 //
                 handleGzip(httpResponse);
@@ -82,8 +82,8 @@ public class HttpClientDownloader implements Downloader {
         Header ceheader = httpResponse.getEntity().getContentEncoding();
         if (ceheader != null) {
             HeaderElement[] codecs = ceheader.getElements();
-            for (int i = 0; i < codecs.length; i++) {
-                if (codecs[i].getName().equalsIgnoreCase("gzip")) {
+            for (HeaderElement codec : codecs) {
+                if (codec.getName().equalsIgnoreCase("gzip")) {
                     httpResponse.setEntity(
                             new GzipDecompressingEntity(httpResponse.getEntity()));
                 }

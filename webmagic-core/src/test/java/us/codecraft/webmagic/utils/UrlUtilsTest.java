@@ -12,18 +12,18 @@ public class UrlUtilsTest {
 
     @Test
     public void testFixRelativeUrl() {
-        String fixrelativeurl = UrlUtils.fixRelativeUrl("aa", "http://www.dianping.com/sh/ss/com");
+        String fixrelativeurl = UrlUtils.canonicalizeUrl("aa", "http://www.dianping.com/sh/ss/com");
         System.out.println("fix: " + fixrelativeurl);
         Assert.assertEquals("http://www.dianping.com/sh/ss/aa", fixrelativeurl);
 
-        fixrelativeurl = UrlUtils.fixRelativeUrl("../aa", "http://www.dianping.com/sh/ss/com");
+        fixrelativeurl = UrlUtils.canonicalizeUrl("../aa", "http://www.dianping.com/sh/ss/com");
         Assert.assertEquals("http://www.dianping.com/sh/aa", fixrelativeurl);
 
-        fixrelativeurl = UrlUtils.fixRelativeUrl("..../aa", "http://www.dianping.com/sh/ss/com");
+        fixrelativeurl = UrlUtils.canonicalizeUrl("..../aa", "http://www.dianping.com/sh/ss/com");
         Assert.assertEquals("http://www.dianping.com/aa", fixrelativeurl);
-        fixrelativeurl = UrlUtils.fixRelativeUrl(".../aa", "http://www.dianping.com/sh/ss/com");
+        fixrelativeurl = UrlUtils.canonicalizeUrl(".../aa", "http://www.dianping.com/sh/ss/com");
         Assert.assertEquals("http://www.dianping.com/aa", fixrelativeurl);
-        fixrelativeurl = UrlUtils.fixRelativeUrl("..aa", "http://www.dianping.com/sh/ss/com");
+        fixrelativeurl = UrlUtils.canonicalizeUrl("..aa", "http://www.dianping.com/sh/ss/com");
         Assert.assertEquals("http://www.dianping.com/sh/ss/..aa", fixrelativeurl);
 //        fixrelativeurl = fixrelativeurl("/aa", "http://www.dianping.com");
 //        System.out.println("fix: " + fixrelativeurl);
@@ -628,7 +628,6 @@ public class UrlUtilsTest {
                 "\t\t\t<script src=\"http://discuz.gtimg.cn/cloud/scripts/discuz_tips.js?v=1\" type=\"text/javascript\" charset=\"UTF-8\"></script></body>\n" +
                 "</html>\n";
         String newHtml = UrlUtils.fixAllRelativeHrefs(html, "http://www.huxiu.com/");
-        String text = "<a class=\"xu_subscribe\" href=\"home.php?mod=spacecp&amp;ac=profile&amp;op=info\" >订阅<span >虎嗅</span></a>";
         Assert.assertTrue(html.contains("<a href=\"article"));
         Assert.assertFalse(newHtml.contains("<a href=\"article"));
     }

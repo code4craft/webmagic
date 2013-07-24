@@ -14,6 +14,6 @@ public class FreemarkerPipelineTest {
 
     @Test
     public void testTemplateLoad() throws IOException {
-        FreemarkerPipeline freemarkerPipeline = new FreemarkerPipeline("wordpress.ftl");
+        new FreemarkerPipeline("wordpress.ftl");
     }
 }

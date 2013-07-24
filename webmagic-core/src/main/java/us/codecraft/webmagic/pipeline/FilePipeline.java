@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
+ * 持久化到文件的接口。
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 下午6:28
@@ -21,10 +22,17 @@ public class FilePipeline implements Pipeline {
 
     private Logger logger = Logger.getLogger(getClass());
 
+    /**
+     * 新建一个FilePipeline，使用默认保存路径"/data/temp/webmagic/"
+     */
     public FilePipeline() {
 
     }
 
+    /**
+     * 新建一个FilePipeline
+     * @param path 文件保存路径
+     */
     public FilePipeline(String path) {
         this.path = path;
     }

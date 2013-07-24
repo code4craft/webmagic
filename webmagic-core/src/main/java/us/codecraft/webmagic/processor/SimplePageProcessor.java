@@ -7,6 +7,7 @@ import us.codecraft.webmagic.utils.UrlUtils;
 import java.util.List;
 
 /**
+ * 非常简单的抽取器。链接抽取使用定义的通配符，并保存抽取整个内容到content字段。<br>
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-22
  * Time: 下午9:15
@@ -22,6 +23,7 @@ public class SimplePageProcessor implements PageProcessor {
     public SimplePageProcessor(String startUrl, String urlPattern) {
         this.site = Site.me().addStartUrl(startUrl).
                 setDomain(UrlUtils.getDomain(startUrl)).setUserAgent(UA);
+        //compile "*" expression to regex
         this.urlPattern = "("+urlPattern.replace(".","\\.").replace("*","[^\"'#]*")+")";
 
     }

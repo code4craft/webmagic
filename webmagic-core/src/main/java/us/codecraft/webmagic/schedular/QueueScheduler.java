@@ -10,6 +10,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
+ * 内存队列实现的线程安全Scheduler。<br>
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 下午1:13
