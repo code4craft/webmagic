@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
+ * 正则表达式抽取器。<br>
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 上午7:09

@@ -6,6 +6,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 线程工具类。<br>
  * @author code4crafer@gmail.com
  *         Date: 13-6-23
  *         Time: 下午7:11
