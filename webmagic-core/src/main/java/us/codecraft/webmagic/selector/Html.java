@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 可抽取的html文本。<br>
  * @author code4crafter@gmail.com <br>
  *         Date: 13-4-21
  *         Time: 上午7:54

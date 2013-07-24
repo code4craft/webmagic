@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
+ * 对文本进行替换。<br>
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 上午7:09

@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * url及html处理工具类。<br>
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 下午1:52
@@ -18,7 +19,7 @@ public class UrlUtils {
      * 将url想对地址转化为绝对地址
      * @param url url地址
      * @param refer url地址来自哪个页面
-     * @return
+     * @return url绝对地址
      */
     public static String canonicalizeUrl(String url, String refer) {
         if (StringUtils.isBlank(url) || StringUtils.isBlank(refer)) {
