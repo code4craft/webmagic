@@ -8,10 +8,8 @@ Release Notes
 
 增加下载的重试机制，支持gzip，支持自定义UA/cookie。
 
+增加多线程抓取功能，只需在初始化的时候指定线程数即可。
+
 增加jquery形式的CSS Selector API，可以通过`page.getHtml().$("div.body")`形式抽取元素。
 
 完善了文档，架构说明：[webmagic的设计机制及原理-如何开发一个Java爬虫](http://my.oschina.net/flashsword/blog/145796)，Javadoc：[http://code4craft.github.io/webmagic/docs](http://code4craft.github.io/webmagic/docs)。
-
-
-
-
