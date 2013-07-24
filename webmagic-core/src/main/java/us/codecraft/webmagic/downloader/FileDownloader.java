@@ -12,6 +12,7 @@ import us.codecraft.webmagic.selector.PlainText;
 import java.io.*;
 
 /**
+ * 使用缓存到本地的文件来模拟下载，可以在Spider框架中仅进行抽取工作。<br>
  * @author code4crafer@gmail.com
  *         Date: 13-6-24
  *         Time: 上午7:24

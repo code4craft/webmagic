@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 磁盘文件实现的安全Scheduler，可以保证在长时间执行的任务中断后，下次启动从中断位置重新开始。<br>
+ * 磁盘文件实现的url管理模块，可以保证在长时间执行的任务中断后，下次启动从中断位置重新开始。<br>
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 下午1:13
