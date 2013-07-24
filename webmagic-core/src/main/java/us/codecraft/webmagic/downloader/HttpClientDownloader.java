@@ -20,6 +20,7 @@ import java.io.IOException;
 
 
 /**
+ * 封装了HttpClient的下载器。已实现指定次数重试、处理gzip、自定义UA/cookie等功能。<br>
  * @author code4crafter@gmail.com <br>
  *         Date: 13-4-21
  *         Time: 下午12:15

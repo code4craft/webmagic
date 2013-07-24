@@ -232,7 +232,7 @@ public class Spider implements Runnable, Task {
     /**
      * 建立多个线程下载
      * @param threadNum 线程数
-     * @return
+     * @return this
      */
     public Spider thread(int threadNum) {
         checkIfNotRunning();
