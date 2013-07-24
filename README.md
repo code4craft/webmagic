@@ -77,10 +77,15 @@ webmagic定制的核心是PageProcessor接口。
 
 	Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*/blog/*")).run();
 
+### 技术架构及原理
+
+见作者的一篇文章：[webmagic的设计机制及原理-如何开发一个Java爬虫](http://my.oschina.net/flashsword/blog/145796)
 
 ### 示例
 
-可参考作者博客[使用webmagic抓取页面并保存为wordpress文件](http://my.oschina.net/flashsword/blog/136846)
+webmagic-samples目录里有一些定制PageProcessor以抽取不同站点的例子。
+
+作者还有一个使用webmagic进行抽取并持久化到数据库的项目[JobHunter](http://git.oschina.net/flashsword20/jobhunter)。这个项目整合了Spring，自定义了Pipeline，使用mybatis进行数据持久化。
 
 ### 协议
 
