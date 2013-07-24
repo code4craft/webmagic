@@ -24,9 +24,9 @@ webmagic的功能覆盖整个爬虫的生命周期(链接提取、页面下载�
 		Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*/blog/*")).run();
 		
 * ####可扩展####
-	参考[`scrapy`](https://github.com/scrapy/scrapy)的设计，webmagic将爬虫的扩展点分为Processor、Schedular、Downloader、Pipeline三个模块，可以通过扩展这些接口实现强大的扩展功能。如可以通过多个Spider实现多线程抓取；可以通过扩展Schedular实现断点续传乃至于分布式爬虫；可以通过扩展Pipeline实现业务可定制的持久化功能。
+	参考[`scrapy`](https://github.com/scrapy/scrapy)的设计，webmagic将爬虫的扩展点分为Processor、Schedular、Downloader、Pipeline三个模块，可以通过扩展这些接口实现强大的扩展功能。如可以通过多个Spider实现多线程抓取；可以通过扩展Schedular实现断点续传乃至于分布式爬虫；可以通过扩展Pipeline实现业务可定制的持久化功能。webmagic的架构原理见作者的一篇文章：[webmagic的设计机制及原理-如何开发一个Java爬虫](http://my.oschina.net/flashsword/blog/145796)
 
-	
+![image](http://code4craft.github.io/images/posts/webmagic.png)
 	
 ------
 
@@ -73,9 +73,6 @@ webmagic定制的核心是PageProcessor接口。
 
 	Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*/blog/*")).run();
 
-### 技术架构及原理
-
-见作者的一篇文章：[webmagic的设计机制及原理-如何开发一个Java爬虫](http://my.oschina.net/flashsword/blog/145796)
 
 ### 示例
 
