@@ -14,7 +14,13 @@ public class UrlUtils {
 
     private static Pattern relativePathPattern = Pattern.compile("^([\\.]+)/");
 
-    public static String fixRelativeUrl(String url, String refer) {
+    /**
+     * 将url想对地址转化为绝对地址
+     * @param url url地址
+     * @param refer url地址来自哪个页面
+     * @return
+     */
+    public static String canonicalizeUrl(String url, String refer) {
         if (StringUtils.isBlank(url) || StringUtils.isBlank(refer)) {
             return url;
         }
@@ -62,12 +68,12 @@ public class UrlUtils {
 
     private static Pattern patternForProtocal = Pattern.compile("[\\w]+://");
 
-    public static String removeProtocal(String url) {
+    public static String removeProtocol(String url) {
         return patternForProtocal.matcher(url).replaceAll("");
     }
 
     public static String getDomain(String url) {
-        String domain = removeProtocal(url);
+        String domain = removeProtocol(url);
         int i = StringUtils.indexOf(domain, "/", 1);
         if (i > 0) {
             domain = StringUtils.substring(domain, 0, i);
@@ -84,7 +90,7 @@ public class UrlUtils {
         while (matcher.find()) {
             stringBuilder.append(StringUtils.substring(html, lastEnd, matcher.start()));
             stringBuilder.append(matcher.group(1));
-            stringBuilder.append("\"" + fixRelativeUrl(matcher.group(2), url) + "\"");
+            stringBuilder.append("\"").append(canonicalizeUrl(matcher.group(2), url)).append("\"");
             lastEnd = matcher.end();
         }
         stringBuilder.append(StringUtils.substring(html, lastEnd));

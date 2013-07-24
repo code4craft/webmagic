@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * css风格的选择器。包装了Jsoup。<br>
  * @author code4crafter@gmail.com <br>
  *         Date: 13-4-21
  *         Time: 上午9:39

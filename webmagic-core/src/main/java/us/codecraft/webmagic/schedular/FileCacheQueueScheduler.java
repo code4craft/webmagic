@@ -16,6 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * 磁盘文件实现的安全Scheduler，可以保证在长时间执行的任务中断后，下次启动从中断位置重新开始。<br>
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 下午1:13
@@ -91,6 +92,7 @@ public class FileCacheQueueScheduler implements Scheduler {
             readCursorFile();
             readUrlFile();
         } catch (IOException e) {
+            logger.error("init file error",e);
         }
     }
 
@@ -109,7 +111,7 @@ public class FileCacheQueueScheduler implements Scheduler {
 
     private void readCursorFile() throws IOException {
         BufferedReader fileCursorReader = new BufferedReader(new FileReader(getFileName(fileCursor)));
-        String line = null;
+        String line;
         //read the last number
         while ((line = fileCursorReader.readLine()) != null) {
             cursor = new AtomicInteger(NumberUtils.toInt(line));

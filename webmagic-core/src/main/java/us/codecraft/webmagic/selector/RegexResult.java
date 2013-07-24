@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.selector;
 
 /**
+ * 封装正则表达式抽取接口的类。<br>
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 上午7:39

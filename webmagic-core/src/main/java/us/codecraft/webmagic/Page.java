@@ -101,7 +101,7 @@ public class Page {
                 if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
                     break;
                 }
-                s = UrlUtils.fixRelativeUrl(s, url.toString());
+                s = UrlUtils.canonicalizeUrl(s, url.toString());
                 targetRequests.add(new Request(s));
             }
         }
@@ -116,7 +116,7 @@ public class Page {
             return;
         }
         synchronized (targetRequests) {
-            requestString = UrlUtils.fixRelativeUrl(requestString, url.toString());
+            requestString = UrlUtils.canonicalizeUrl(requestString, url.toString());
             targetRequests.add(new Request(requestString));
         }
     }

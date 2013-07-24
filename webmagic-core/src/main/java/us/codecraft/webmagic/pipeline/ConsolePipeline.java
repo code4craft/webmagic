@@ -7,6 +7,7 @@ import us.codecraft.webmagic.selector.Selectable;
 import java.util.Map;
 
 /**
+ * 命令行输出抽取结果。可用于测试。<br>
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
  * Time: 下午1:45

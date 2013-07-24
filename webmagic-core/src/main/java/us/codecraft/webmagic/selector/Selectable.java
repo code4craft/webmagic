@@ -18,7 +18,7 @@ public interface Selectable {
     public Selectable xpath(String xpath);
 
     /**
-     * select list with jquery selector
+     * select list with css selector
      *
      * @param
      * @return
