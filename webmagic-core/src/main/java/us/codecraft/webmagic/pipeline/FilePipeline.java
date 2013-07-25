@@ -2,13 +2,14 @@ package us.codecraft.webmagic.pipeline;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
-import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
 /**
  * 持久化到文件的接口。
@@ -38,16 +39,18 @@ public class FilePipeline implements Pipeline {
     }
 
     @Override
-    public void process(Page page, Task task) {
+    public void process(ResultItems resultItems, Task task) {
         String path = this.path + "/" + task.getUUID() + "/";
         File file = new File(path);
         if (!file.exists()) {
             file.mkdirs();
         }
         try {
-            PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(page.getUrl().toString())));
-            printWriter.println("url:\t" + page.getUrl());
-            printWriter.println("html:\t" + page.getHtml());
+            PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(resultItems.getRequest().getUrl())));
+            printWriter.println("url:\t" + resultItems.getRequest().getUrl());
+            for (Map.Entry<String, Object> entry : resultItems.getAll().entrySet()) {
+                printWriter.println(entry.getKey()+":\t"+entry.getValue());
+            }
             printWriter.close();
         } catch (IOException e) {
             logger.warn("write file error",e);

@@ -20,7 +20,7 @@ public class GlobalProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        final List<String> requests = page.getHtml().links().toStrings();
+        final List<String> requests = page.getHtml().links().all();
         page.addTargetRequests(requests);
 
     }

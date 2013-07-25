@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.scheduler;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
@@ -20,6 +21,7 @@ public class RedisSchedulerTest {
         redisScheduler = new RedisScheduler("localhost");
     }
 
+    @Ignore("environment depended")
     @Test
     public void test() {
         Task task = new Task() {
@@ -35,7 +37,6 @@ public class RedisSchedulerTest {
         };
         redisScheduler.push(new Request("http://www.ibm.com/developerworks/cn/java/j-javadev2-22/"), task);
         Request poll = redisScheduler.poll(task);
-        System.out.println(poll.getUrl());
 
     }
 }

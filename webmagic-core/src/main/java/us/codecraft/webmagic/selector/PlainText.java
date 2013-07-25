@@ -82,14 +82,14 @@ public class PlainText implements Selectable {
     }
 
     @Override
-    public List<String> toStrings() {
+    public List<String> all() {
         return strings;
     }
 
     @Override
     public String toString() {
-        if (CollectionUtils.isNotEmpty(toStrings())) {
-            return toStrings().get(0);
+        if (CollectionUtils.isNotEmpty(all())) {
+            return all().get(0);
         } else {
             return null;
         }

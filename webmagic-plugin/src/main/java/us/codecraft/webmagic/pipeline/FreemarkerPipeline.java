@@ -4,7 +4,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.apache.commons.codec.digest.DigestUtils;
-import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 
 import java.io.File;
@@ -39,8 +39,8 @@ public class FreemarkerPipeline implements Pipeline {
 
 
     @Override
-    public void process(Page page, Task task) {
-        if (page.isSkip()) {
+    public void process(ResultItems resultItems, Task task) {
+        if (resultItems.isSkip()) {
             return;
         }
         String path = this.path + "" + task.getUUID() + "/";
@@ -49,8 +49,8 @@ public class FreemarkerPipeline implements Pipeline {
             file.mkdirs();
         }
         try {
-            PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(page.getUrl().toString()) + ".html"));
-            template.process(page.getFields(), printWriter);
+            PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(resultItems.getRequest().getUrl()) + ".html"));
+            template.process(resultItems.getAll(), printWriter);
             printWriter.close();
         } catch (TemplateException e) {
         } catch (IOException e) {

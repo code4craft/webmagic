@@ -15,7 +15,7 @@ public class HuxiuProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         //http://progressdaily.diandian.com/post/2013-01-24/40046867275
-        List<String> requests = page.getHtml().regex("<a[^<>\"']*href=[\"']{1}([/]{0,1}article[^<>#\"']*?)[\"']{1}").toStrings();
+        List<String> requests = page.getHtml().regex("<a[^<>\"']*href=[\"']{1}([/]{0,1}article[^<>#\"']*?)[\"']{1}").all();
         page.addTargetRequests(requests);
         page.putField("title",page.getHtml().xpath("//div[@class='neirong']//h1[@class='ph xs5']"));
         page.putField("content",page.getHtml().smartContent());

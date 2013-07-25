@@ -15,7 +15,7 @@ public class OschinaBlogPageProcesser implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        List<String> strings = page.getHtml().links().regex("(http://my\\.oschina\\.net)").toStrings();
+        List<String> strings = page.getHtml().links().regex("(http://my\\.oschina\\.net)").all();
         page.addTargetRequests(strings);
         page.putField("title", page.getHtml().xpath("//div[@class='BlogEntity']/div[@class='BlogTitle']/h1"));
         page.putField("content", page.getHtml().smartContent());

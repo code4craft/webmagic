@@ -1,8 +1,7 @@
 package us.codecraft.webmagic.pipeline;
 
-import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.selector.Selectable;
 
 import java.util.Map;
 
@@ -15,13 +14,10 @@ import java.util.Map;
 public class ConsolePipeline implements  Pipeline{
 
     @Override
-    public void process(Page page,Task task) {
-        System.out.println("get page: "+page.getUrl());
-        for (Map.Entry<String, Selectable> entry : page.getFields().entrySet()) {
-            System.out.println(entry.getKey()+":\t"+entry.getValue().toStrings());
-        }
-        if (page.getExtra()!=null){
-            System.out.println(page.getExtra());
+    public void process(ResultItems resultItems,Task task) {
+        System.out.println("get page: "+resultItems.getRequest().getUrl());
+        for (Map.Entry<String, Object> entry : resultItems.getAll().entrySet()) {
+            System.out.println(entry.getKey()+":\t"+entry.getValue());
         }
     }
 }
