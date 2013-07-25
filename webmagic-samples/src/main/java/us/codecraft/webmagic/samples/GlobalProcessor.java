@@ -3,11 +3,9 @@ package us.codecraft.webmagic.samples;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.downloader.FileDownloader;
-import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.schedular.FileCacheQueueScheduler;
+import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 import java.util.List;
 
@@ -40,9 +38,12 @@ public class GlobalProcessor implements PageProcessor {
 
     public static void main(String[] args) {
         Spider.create(new GlobalProcessor()).thread(10)
-                .scheduler(new FileCacheQueueScheduler("/data/webmagic/test"))
-                .downloader(new FileDownloader("/data/webmagic/test", new HttpClientDownloader()))
-                .pipeline(new FilePipeline("/data/webmagic/test"))
+                .scheduler(new RedisScheduler("localhost"))
+                .pipeline(new FilePipeline("/data/webmagic/test/"))
+                .runAsync();
+        Spider.create(new GlobalProcessor()).thread(10)
+                .scheduler(new RedisScheduler("localhost"))
+                .pipeline(new FilePipeline("/data/webmagic/test/"))
                 .run();
     }
 }
