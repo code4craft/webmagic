@@ -69,5 +69,5 @@ public interface Selectable {
      *
      * @return multi string result
      */
-    public List<String> toStrings();
+    public List<String> all();
 }

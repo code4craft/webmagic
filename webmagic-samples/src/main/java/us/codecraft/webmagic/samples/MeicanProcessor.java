@@ -15,12 +15,12 @@ public class MeicanProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         //http://progressdaily.diandian.com/post/2013-01-24/40046867275
-        List<String> requests = page.getHtml().xpath("//a[@class=\"area_link flat_btn\"]/@href").toStrings();
+        List<String> requests = page.getHtml().xpath("//a[@class=\"area_link flat_btn\"]/@href").all();
         if (requests.size() > 2) {
             requests = requests.subList(0, 2);
         }
         page.addTargetRequests(requests);
-        page.addTargetRequests(page.getHtml().links().regex("(.*/restaurant/[^#]+)").toStrings());
+        page.addTargetRequests(page.getHtml().links().regex("(.*/restaurant/[^#]+)").all());
         page.putField("items", page.getHtml().xpath("//ul[@class=\"dishes menu_dishes\"]/li/span[@class=\"name\"]"));
         page.putField("prices", page.getHtml().xpath("//ul[@class=\"dishes menu_dishes\"]/li/span[@class=\"price_outer\"]/span[@class=\"price\"]"));
     }

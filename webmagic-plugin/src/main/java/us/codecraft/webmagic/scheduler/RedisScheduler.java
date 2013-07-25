@@ -28,7 +28,9 @@ public class RedisScheduler implements Scheduler{
     @Override
     public synchronized void push(Request request, Task task) {
         Jedis jedis = pool.getResource();
+        //使用SortedSet进行url去重
         if (jedis.zrank(SET_PREFIX+task.getUUID(),request.getUrl())==null){
+            //使用List保存队列
             jedis.rpush(QUEUE_PREFIX+task.getUUID(),request.getUrl());
             jedis.zadd(SET_PREFIX+task.getUUID(),System.currentTimeMillis(),request.getUrl());
         }

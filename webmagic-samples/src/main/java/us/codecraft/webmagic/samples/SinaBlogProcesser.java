@@ -16,7 +16,7 @@ public class SinaBlogProcesser implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        page.addTargetRequests(page.getHtml().xpath("//div[@class='articalfrontback SG_j_linedot1 clearfix']").links().toStrings());
+        page.addTargetRequests(page.getHtml().xpath("//div[@class='articalfrontback SG_j_linedot1 clearfix']").links().all());
         page.putField("title", page.getHtml().xpath("//div[@class='articalTitle']/h2"));
         page.putField("content",page.getHtml().xpath("//div[@id='articlebody']//div[@class='articalContent']"));
         page.putField("id",page.getUrl().regex("http://blog\\.sina\\.com\\.cn/s/blog_(\\w+)"));

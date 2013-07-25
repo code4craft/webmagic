@@ -196,7 +196,7 @@ public class Spider implements Runnable, Task {
         pageProcessor.process(page);
         addRequest(page);
         for (Pipeline pipeline : pipelines) {
-            pipeline.process(page, this);
+            pipeline.process(page.getResultItems(), this);
         }
         sleep(site.getSleepTime());
     }

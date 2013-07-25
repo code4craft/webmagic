@@ -18,7 +18,7 @@ public class DianpingProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        List<String> requests = page.getHtml().links().regex("http://info-search-web121361\\.alpha\\.dp:8080/search/.*").toStrings();
+        List<String> requests = page.getHtml().links().regex("http://info-search-web121361\\.alpha\\.dp:8080/search/.*").all();
         page.addTargetRequests(requests);
     }
 
