@@ -2,6 +2,7 @@ package us.codecraft.webmagic;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
+import us.codecraft.webmagic.downloader.Destroyable;
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
@@ -198,6 +199,22 @@ public class Spider implements Runnable, Task {
             executorService.shutdown();
         }
         stat.compareAndSet(STAT_RUNNING, STAT_STOPPED);
+        //release some resources
+        destroy();
+    }
+
+    private void destroy() {
+        destroyEach(downloader);
+        destroyEach(pageProcessor);
+        for (Pipeline pipeline : pipelines) {
+            destroyEach(pipeline);
+        }
+    }
+
+    private void destroyEach(Object object){
+        if (object instanceof Destroyable) {
+            ((Destroyable)object).destroy();
+        }
     }
 
     private void processRequest(Request request) {

@@ -9,6 +9,7 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.downloader.Destroyable;
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.PlainText;
@@ -17,16 +18,22 @@ import us.codecraft.webmagic.utils.UrlUtils;
 import java.util.Map;
 
 /**
+ * 使用Selenium调用浏览器进行渲染。目前仅支持chrome。<br>
+ * 需要下载Selenium driver支持。<br>
  * @author yihua.huang@dianping.com <br>
  * @date: 13-7-26 <br>
  * Time: 下午1:37 <br>
  */
-public class SeleniumDownloader implements Downloader {
+public class SeleniumDownloader implements Downloader,Destroyable {
 
     private WebDriverPool webDriverPool;
 
     private Logger logger = Logger.getLogger(getClass());
 
+    /**
+     * 新建
+     * @param chromeDriverPath
+     */
     public SeleniumDownloader(String chromeDriverPath) {
         System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);
         webDriverPool = new WebDriverPool();
@@ -65,4 +72,8 @@ public class SeleniumDownloader implements Downloader {
         return page;
     }
 
+    @Override
+    public void destroy() {
+        webDriverPool.closeAll();
+    }
 }
