@@ -53,6 +53,7 @@ public class SeleniumDownloader implements Downloader,Destroyable {
             logger.warn("interrupted", e);
             return null;
         }
+        logger.info("downloading page " + request.getUrl());
         webDriver.get(request.getUrl());
         WebDriver.Options manage = webDriver.manage();
         Site site = task.getSite();

@@ -45,6 +45,9 @@ public class FilePipeline implements Pipeline {
         if (!file.exists()) {
             file.mkdirs();
         }
+        if (resultItems.isSkip()){
+            return;
+        }
         try {
             PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(resultItems.getRequest().getUrl())+".html"));
             printWriter.println("url:\t" + resultItems.getRequest().getUrl());
