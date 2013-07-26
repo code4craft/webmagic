@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.selenium;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,6 +16,7 @@ import java.util.List;
  */
 public class SeleniumTest {
 
+    @Ignore("need chrome driver")
     @Test
     public void test(){
         System.getProperties().setProperty("webdriver.chrome.driver","/Users/yihua/Downloads/chromedriver");
