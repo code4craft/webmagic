@@ -30,13 +30,13 @@ public class HuabanProcessor implements PageProcessor {
     @Override
     public Site getSite() {
         if (site == null) {
-            site = Site.me().setDomain("huaban.com").addStartUrl("http://huaban.com/");
+            site = Site.me().setDomain("huaban.com").addStartUrl("http://huaban.com/").setSleepTime(1000);
         }
         return site;
     }
 
     public static void main(String[] args) {
-        Spider.create(new HuabanProcessor())
+        Spider.create(new HuabanProcessor()).thread(5)
                 .scheduler(new RedisScheduler("localhost"))
                 .pipeline(new FilePipeline("/data/webmagic/test/"))
                 .downloader(new SeleniumDownloader("/Users/yihua/Downloads/chromedriver"))
