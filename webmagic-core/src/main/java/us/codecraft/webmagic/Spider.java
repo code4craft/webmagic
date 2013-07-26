@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Spider implements Runnable, Task {
 
-    private Downloader downloader = new HttpClientDownloader();
+    private Downloader downloader;
 
     private List<Pipeline> pipelines = new ArrayList<Pipeline>();
 
@@ -139,12 +139,18 @@ public class Spider implements Runnable, Task {
         return this;
     }
 
+    protected void checkComponent() {
+        if (downloader == null) {
+            this.downloader = new HttpClientDownloader();
+        }
+    }
 
     @Override
     public void run() {
         if (!stat.compareAndSet(STAT_INIT, STAT_RUNNING)) {
             throw new IllegalStateException("Spider is already running!");
         }
+        checkComponent();
         if (startUrls != null) {
             for (String startUrl : startUrls) {
                 scheduler.push(new Request(startUrl), this);
@@ -247,6 +253,7 @@ public class Spider implements Runnable, Task {
         if (threadNum <= 0) {
             throw new IllegalArgumentException("threadNum should be more than one!");
         }
+        downloader = new HttpClientDownloader(threadNum);
         if (threadNum == 1) {
             return this;
         }

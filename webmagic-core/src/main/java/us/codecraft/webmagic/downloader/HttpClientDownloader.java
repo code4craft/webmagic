@@ -21,6 +21,7 @@ import java.io.IOException;
 
 /**
  * 封装了HttpClient的下载器。已实现指定次数重试、处理gzip、自定义UA/cookie等功能。<br>
+ *
  * @author code4crafter@gmail.com <br>
  *         Date: 13-4-21
  *         Time: 下午12:15
@@ -29,11 +30,21 @@ public class HttpClientDownloader implements Downloader {
 
     private Logger logger = Logger.getLogger(getClass());
 
+    private int poolSize;
+
+    public HttpClientDownloader(int poolSize) {
+        this.poolSize = poolSize;
+    }
+
+    public HttpClientDownloader() {
+        this(5);
+    }
+
     @Override
     public Page download(Request request, Task task) {
         Site site = task.getSite();
         logger.info("downloading page " + request.getUrl());
-        HttpClient httpClient = HttpClientPool.getInstance().getClient(site);
+        HttpClient httpClient = HttpClientPool.getInstance(poolSize).getClient(site);
         String charset = site.getCharset();
         try {
             HttpGet httpGet = new HttpGet(request.getUrl());
@@ -50,7 +61,7 @@ public class HttpClientDownloader implements Downloader {
                         logger.warn("download page " + request.getUrl() + " error", e);
                         return null;
                     }
-                    logger.info("download page " + request.getUrl() + " error, retry the "+tried+" time!");
+                    logger.info("download page " + request.getUrl() + " error, retry the " + tried + " time!");
                     retry = true;
                 }
             } while (retry);
