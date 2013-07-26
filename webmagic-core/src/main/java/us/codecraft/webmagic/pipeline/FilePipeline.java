@@ -13,9 +13,10 @@ import java.util.Map;
 
 /**
  * 持久化到文件的接口。
+ *
  * @author code4crafter@gmail.com <br>
- * Date: 13-4-21
- * Time: 下午6:28
+ *         Date: 13-4-21
+ *         Time: 下午6:28
  */
 public class FilePipeline implements Pipeline {
 
@@ -32,6 +33,7 @@ public class FilePipeline implements Pipeline {
 
     /**
      * 新建一个FilePipeline
+     *
      * @param path 文件保存路径
      */
     public FilePipeline(String path) {
@@ -45,18 +47,26 @@ public class FilePipeline implements Pipeline {
         if (!file.exists()) {
             file.mkdirs();
         }
-        if (resultItems.isSkip()){
+        if (resultItems.isSkip()) {
             return;
         }
         try {
-            PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(resultItems.getRequest().getUrl())+".html"));
+            PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(resultItems.getRequest().getUrl()) + ".html"));
             printWriter.println("url:\t" + resultItems.getRequest().getUrl());
             for (Map.Entry<String, Object> entry : resultItems.getAll().entrySet()) {
-                printWriter.println(entry.getKey()+":\t"+entry.getValue());
+                if (entry.getValue() instanceof Iterable) {
+                    Iterable value = (Iterable) entry.getValue();
+                    printWriter.println(entry.getKey() + ":");
+                    for (Object o : value) {
+                        printWriter.println(o);
+                    }
+                } else {
+                    printWriter.println(entry.getKey() + ":\t" + entry.getValue());
+                }
             }
             printWriter.close();
         } catch (IOException e) {
-            logger.warn("write file error",e);
+            logger.warn("write file error", e);
         }
     }
 }
