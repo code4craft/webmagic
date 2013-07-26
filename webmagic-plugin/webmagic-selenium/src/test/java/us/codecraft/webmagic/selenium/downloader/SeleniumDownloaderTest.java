@@ -20,6 +20,7 @@ public class SeleniumDownloaderTest {
     @Test
     public void test(){
         SeleniumDownloader seleniumDownloader = new SeleniumDownloader(chromeDriverPath);
+
         Page page = seleniumDownloader.download(new Request("http://huaban.com/"), new Task() {
             @Override
             public String getUUID() {
