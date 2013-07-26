@@ -19,14 +19,21 @@ import java.util.Map;
 
 /**
  * @author code4crafter@gmail.com <br>
- * Date: 13-4-21
- * Time: 下午12:29
+ *         Date: 13-4-21
+ *         Time: 下午12:29
  */
 public class HttpClientPool {
 
-    public static final HttpClientPool INSTANCE = new HttpClientPool(5);
+    public static volatile HttpClientPool INSTANCE;
 
-    public static HttpClientPool getInstance() {
+    public static HttpClientPool getInstance(int poolSize) {
+        if (INSTANCE == null) {
+            synchronized (HttpClientPool.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new HttpClientPool(poolSize);
+                }
+            }
+        }
         return INSTANCE;
     }
 
@@ -48,7 +55,7 @@ public class HttpClientPool {
 
         HttpProtocolParamBean paramsBean = new HttpProtocolParamBean(params);
         paramsBean.setVersion(HttpVersion.HTTP_1_1);
-        paramsBean.setContentCharset("UTF-8");
+        paramsBean.setContentCharset(site.getCharset());
         paramsBean.setUseExpectContinue(false);
 
         SchemeRegistry schemeRegistry = new SchemeRegistry();
