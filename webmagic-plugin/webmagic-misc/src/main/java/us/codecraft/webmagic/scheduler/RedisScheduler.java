@@ -7,9 +7,6 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.schedular.Scheduler;
 
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
-
 /**
  * 使用redis管理url，构建一个分布式的爬虫。<br>
  *
@@ -25,10 +22,6 @@ public class RedisScheduler implements Scheduler {
 
     private static final String SET_PREFIX = "set_";
 
-    private ReentrantLock lock = new ReentrantLock();
-
-    private Condition condition = lock.newCondition();
-
     public RedisScheduler(String host) {
         pool = new JedisPool(new JedisPoolConfig(), host);
     }
@@ -38,15 +31,9 @@ public class RedisScheduler implements Scheduler {
         Jedis jedis = pool.getResource();
         //使用SortedSet进行url去重
         if (jedis.zrank(SET_PREFIX + task.getUUID(), request.getUrl()) == null) {
-            try {
-                lock.lock();
-                //使用List保存队列
-                jedis.rpush(QUEUE_PREFIX + task.getUUID(), request.getUrl());
-                jedis.zadd(SET_PREFIX + task.getUUID(), System.currentTimeMillis(), request.getUrl());
-                condition.signal();
-            } finally {
-                lock.unlock();
-            }
+            //使用List保存队列
+            jedis.rpush(QUEUE_PREFIX + task.getUUID(), request.getUrl());
+            jedis.zadd(SET_PREFIX + task.getUUID(), System.currentTimeMillis(), request.getUrl());
         }
         pool.returnResource(jedis);
     }
@@ -55,21 +42,10 @@ public class RedisScheduler implements Scheduler {
     public synchronized Request poll(Task task) {
         Jedis jedis = pool.getResource();
         String url = jedis.lpop(QUEUE_PREFIX + task.getUUID());
-        if (url == null) {
-            try {
-                lock.lock();
-                while (url == null) {
-                    try {
-                        condition.await();
-                        url = jedis.lpop(QUEUE_PREFIX + task.getUUID());
-                    } catch (InterruptedException e) {
-                    }
-                }
-            } finally {
-                lock.unlock();
-            }
-        }
         pool.returnResource(jedis);
+        if (url==null){
+            return null;
+        }
         return new Request(url);
     }
 }
