@@ -10,12 +10,13 @@ import org.openqa.selenium.WebDriver;
  */
 public class WebDriverPoolTest {
 
+    private String chromeDriverPath = "/Users/yihua/Downloads/chromedriver";
+
     @Test
-    public void test(){
-        String  chromeDriverPath = "/Users/yihua/Downloads/chromedriver";
+    public void test() {
         System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);
-        WebDriverPool webDriverPool =new WebDriverPool(5);
-        for (int i=0;i<5;i++){
+        WebDriverPool webDriverPool = new WebDriverPool(5);
+        for (int i = 0; i < 5; i++) {
             try {
                 WebDriver webDriver = webDriverPool.get();
                 System.out.println(i);
