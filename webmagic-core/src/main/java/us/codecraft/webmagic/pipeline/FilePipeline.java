@@ -46,7 +46,7 @@ public class FilePipeline implements Pipeline {
             file.mkdirs();
         }
         try {
-            PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(resultItems.getRequest().getUrl())));
+            PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(resultItems.getRequest().getUrl())+".html"));
             printWriter.println("url:\t" + resultItems.getRequest().getUrl());
             for (Map.Entry<String, Object> entry : resultItems.getAll().entrySet()) {
                 printWriter.println(entry.getKey()+":\t"+entry.getValue());
