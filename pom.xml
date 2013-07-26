@@ -12,7 +12,6 @@
     <module>webmagic-core</module>
     <module>webmagic-plugin/</module>
     <module>webmagic-samples/</module>
-    <module>webmagic-selenium</module>
     </modules>
 
     <dependencyManagement>
