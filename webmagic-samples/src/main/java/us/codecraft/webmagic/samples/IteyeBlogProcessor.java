@@ -26,13 +26,12 @@ public class IteyeBlogProcessor implements PageProcessor {
     public Site getSite() {
         if (site == null) {
             site = Site.me().setDomain("yanghaoli.iteye.com").addStartUrl("http://yanghaoli.iteye.com/").
-                    setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31")
-            .setSleepTime(100).setRetryTimes(3);
+            setSleepTime(100).setRetryTimes(3);
         }
         return site;
     }
 
     public static void main(String[] args) {
-        Spider.create(new IteyeBlogProcessor()).thread(5).pipeline(new FilePipeline()).run();
+        Spider.create(new IteyeBlogProcessor()).thread(5).pipeline(new FilePipeline("/data/webmagic/")).run();
     }
 }

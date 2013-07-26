@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <parent>
         <groupId>us.codecraft</groupId>
         <artifactId>webmagic</artifactId>
         <version>0.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>webmagic-samples</artifactId>
+    <artifactId>webmagic-selenium</artifactId>
 
     <dependencies>
         <dependency>
@@ -26,6 +26,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>2.33.0</version>
+        </dependency>
     </dependencies>
+
 
 </project>
