@@ -27,7 +27,15 @@ class WebDriverPool {
 
     private AtomicInteger stat = new AtomicInteger(STAT_RUNNING);
 
+    /**
+     * store webDrivers created
+     */
     private List<WebDriver> webDriverList = Collections.synchronizedList(new ArrayList<WebDriver>());
+
+    /**
+     * store webDrivers available
+     */
+    private BlockingDeque<WebDriver> innerQueue = new LinkedBlockingDeque<WebDriver>();
 
     public WebDriverPool(int capacity) {
         this.capacity = capacity;
@@ -36,8 +44,6 @@ class WebDriverPool {
     public WebDriverPool() {
         this(DEFAULT_CAPACITY);
     }
-
-    private BlockingDeque<WebDriver> innerQueue = new LinkedBlockingDeque<WebDriver>();
 
     public WebDriver get() throws InterruptedException {
         checkRunning();
