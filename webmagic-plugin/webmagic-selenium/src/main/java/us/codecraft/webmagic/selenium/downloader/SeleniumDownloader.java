@@ -82,7 +82,6 @@ public class SeleniumDownloader implements Downloader, Destroyable {
         }
         WebElement webElement = webDriver.findElement(By.xpath("/html"));
         String content = webElement.getAttribute("outerHTML");
-        //
         Page page = new Page();
         page.setHtml(new Html(UrlUtils.fixAllRelativeHrefs(content, request.getUrl())));
         page.setUrl(new PlainText(request.getUrl()));
