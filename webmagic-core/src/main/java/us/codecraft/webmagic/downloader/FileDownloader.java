@@ -67,6 +67,11 @@ public class FileDownloader implements Downloader {
         return page;
     }
 
+    @Override
+    public void setThread(int thread) {
+
+    }
+
     private String getHtml(BufferedReader bufferedReader) throws IOException {
         String line;
         StringBuilder htmlBuilder= new StringBuilder();
