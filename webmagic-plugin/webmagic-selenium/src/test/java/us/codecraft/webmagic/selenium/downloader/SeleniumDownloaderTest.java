@@ -14,7 +14,7 @@ import us.codecraft.webmagic.Task;
  */
 public class SeleniumDownloaderTest {
 
-    private String chromeDriverPath = "";
+    private String chromeDriverPath = "/Users/yihua/Downloads/chromedriver";
 
     @Ignore("need chrome driver")
     @Test
@@ -37,4 +37,5 @@ public class SeleniumDownloaderTest {
         }
         System.out.println(System.currentTimeMillis() - time1);
     }
+
 }
