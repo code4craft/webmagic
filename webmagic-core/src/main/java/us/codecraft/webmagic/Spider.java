@@ -58,6 +58,8 @@ public class Spider implements Runnable, Task {
 
     private ExecutorService executorService;
 
+    private int threadNum = 1;
+
     private AtomicInteger stat = new AtomicInteger(STAT_INIT);
 
     private final static int STAT_INIT = 0;
@@ -144,6 +146,10 @@ public class Spider implements Runnable, Task {
         if (downloader == null) {
             this.downloader = new HttpClientDownloader();
         }
+        if (pipelines.isEmpty()) {
+            pipelines.add(new ConsolePipeline());
+        }
+        downloader.setThread(threadNum);
     }
 
     @Override
@@ -158,9 +164,6 @@ public class Spider implements Runnable, Task {
             }
         }
         Request request = scheduler.poll(this);
-        if (pipelines.isEmpty()) {
-            pipelines.add(new ConsolePipeline());
-        }
         //singel thread
         if (executorService == null) {
             while (request != null) {
@@ -211,9 +214,9 @@ public class Spider implements Runnable, Task {
         }
     }
 
-    private void destroyEach(Object object){
+    private void destroyEach(Object object) {
         if (object instanceof Destroyable) {
-            ((Destroyable)object).destroy();
+            ((Destroyable) object).destroy();
         }
     }
 
@@ -267,11 +270,9 @@ public class Spider implements Runnable, Task {
      */
     public Spider thread(int threadNum) {
         checkIfNotRunning();
+        this.threadNum = threadNum;
         if (threadNum <= 0) {
             throw new IllegalArgumentException("threadNum should be more than one!");
-        }
-        if (downloader==null || downloader instanceof HttpClientDownloader){
-            downloader = new HttpClientDownloader(threadNum);
         }
         if (threadNum == 1) {
             return this;

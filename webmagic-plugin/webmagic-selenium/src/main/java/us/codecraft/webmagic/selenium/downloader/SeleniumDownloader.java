@@ -27,11 +27,13 @@ import java.util.Map;
  */
 public class SeleniumDownloader implements Downloader, Destroyable {
 
-    private WebDriverPool webDriverPool;
+    private volatile WebDriverPool webDriverPool;
 
     private Logger logger = Logger.getLogger(getClass());
 
     private int sleepTime = 0;
+
+    private int poolSize = 1;
 
     /**
      * 新建
@@ -40,16 +42,11 @@ public class SeleniumDownloader implements Downloader, Destroyable {
      */
     public SeleniumDownloader(String chromeDriverPath) {
         System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);
-        webDriverPool = new WebDriverPool();
-    }
-
-    public SeleniumDownloader(String chromeDriverPath, int poolSize) {
-        System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);
-        webDriverPool = new WebDriverPool(poolSize);
     }
 
     /**
      * set sleep time to wait until load success
+     *
      * @param sleepTime
      * @return this
      */
@@ -60,6 +57,7 @@ public class SeleniumDownloader implements Downloader, Destroyable {
 
     @Override
     public Page download(Request request, Task task) {
+        checkInit();
         WebDriver webDriver;
         try {
             webDriver = webDriverPool.get();
@@ -91,6 +89,19 @@ public class SeleniumDownloader implements Downloader, Destroyable {
         page.setRequest(request);
         webDriverPool.returnToPool(webDriver);
         return page;
+    }
+
+    private void checkInit() {
+        if (webDriverPool == null) {
+            synchronized (this){
+                webDriverPool = new WebDriverPool(poolSize);
+            }
+        }
+    }
+
+    @Override
+    public void setThread(int thread) {
+        this.poolSize = thread;
     }
 
     @Override

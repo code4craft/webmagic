@@ -32,14 +32,6 @@ public class HttpClientDownloader implements Downloader {
 
     private int poolSize;
 
-    public HttpClientDownloader(int poolSize) {
-        this.poolSize = poolSize;
-    }
-
-    public HttpClientDownloader() {
-        this(5);
-    }
-
     @Override
     public Page download(Request request, Task task) {
         Site site = task.getSite();
@@ -88,6 +80,11 @@ public class HttpClientDownloader implements Downloader {
             logger.warn("download page " + request.getUrl() + " error", e);
         }
         return null;
+    }
+
+    @Override
+    public void setThread(int thread) {
+        poolSize=thread;
     }
 
     private void handleGzip(HttpResponse httpResponse) {
