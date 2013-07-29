@@ -270,7 +270,9 @@ public class Spider implements Runnable, Task {
         if (threadNum <= 0) {
             throw new IllegalArgumentException("threadNum should be more than one!");
         }
-        downloader = new HttpClientDownloader(threadNum);
+        if (downloader==null || downloader instanceof HttpClientDownloader){
+            downloader = new HttpClientDownloader(threadNum);
+        }
         if (threadNum == 1) {
             return this;
         }
