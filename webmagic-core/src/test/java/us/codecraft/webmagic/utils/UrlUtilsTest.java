@@ -25,10 +25,7 @@ public class UrlUtilsTest {
         Assert.assertEquals("http://www.dianping.com/aa", fixrelativeurl);
         fixrelativeurl = UrlUtils.canonicalizeUrl("..aa", "http://www.dianping.com/sh/ss/com");
         Assert.assertEquals("http://www.dianping.com/sh/ss/..aa", fixrelativeurl);
-//        fixrelativeurl = fixrelativeurl("/aa", "http://www.dianping.com");
-//        System.out.println("fix: " + fixrelativeurl);
-//        fixrelativeurl = fixrelativeurl("/aa", "http://www.dianping.com/");
-//        System.out.println("fix: " + fixrelativeurl);
+        fixrelativeurl = UrlUtils.canonicalizeUrl("../../aa", "http://www.dianping.com/sh/ss/com");
     }
 
     @Test
