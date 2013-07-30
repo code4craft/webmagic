@@ -33,6 +33,8 @@ webmagic的功能覆盖整个爬虫的生命周期(链接提取、页面下载�
 ###Get Started
 	
 webmagic定制的核心是PageProcessor接口。
+
+项目使用maven托管，如果没用maven的可以去[http://git.oschina.net/flashsword20/webmagic-bin](http://git.oschina.net/flashsword20/webmagic-bin)库下载依赖包(这个仓库代码没有实时同步更新，不过依赖应该不会有变化)。
 	
 例如，我们要实现一个简单的通用爬虫SimplePageProcessor，代码如下：
 
@@ -72,7 +74,6 @@ webmagic定制的核心是PageProcessor接口。
 调用这个爬虫的代码如下：
 
 	Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*/blog/*")).run();
-
 
 ### 示例
 
