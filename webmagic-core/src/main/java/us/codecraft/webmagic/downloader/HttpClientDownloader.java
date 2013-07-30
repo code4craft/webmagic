@@ -30,7 +30,7 @@ public class HttpClientDownloader implements Downloader {
 
     private Logger logger = Logger.getLogger(getClass());
 
-    private int poolSize;
+    private int poolSize = 1;
 
     @Override
     public Page download(Request request, Task task) {
