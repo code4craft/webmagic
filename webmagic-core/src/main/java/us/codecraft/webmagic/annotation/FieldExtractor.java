@@ -9,13 +9,13 @@ import java.lang.reflect.Field;
  * @date: 13-8-1 <br>
  * Time: 下午9:48 <br>
  */
-class FieldFetcher {
+class FieldExtractor {
 
     private final Field field;
 
     private final Selector selector;
 
-    FieldFetcher(Field field, Selector selector) {
+    FieldExtractor(Field field, Selector selector) {
         this.field = field;
         this.selector = selector;
     }
