@@ -8,7 +8,7 @@ import java.util.List;
  * Date: 13-4-20
  * Time: 下午8:02
  */
-interface Selector {
+public interface Selector {
 
     public String select(String text);
 
