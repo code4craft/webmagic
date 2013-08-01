@@ -47,6 +47,7 @@ public class ObjectPageProcessor implements PageProcessor {
     public void process(Page page) {
         for (PageModelExtractor pageModelExtractor : pageModelExtractorList) {
             Object process = pageModelExtractor.process(page);
+            postProcessPageModel(pageModelExtractor.getClazz(), process);
             page.putField(pageModelExtractor.getClazz().getCanonicalName(), process);
         }
         for (String link : page.getHtml().links().all()) {
@@ -56,6 +57,9 @@ public class ObjectPageProcessor implements PageProcessor {
                 }
             }
         }
+    }
+
+    protected void postProcessPageModel(Class clazz, Object object){
     }
 
     @Override

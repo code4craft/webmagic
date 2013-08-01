@@ -6,7 +6,7 @@ package us.codecraft.webmagic.annotation;
  * Time: 下午10:18 <br>
  */
 @TargetUrl("http://my.oschina.net/flashsword/blog/*")
-public class Blog {
+public class OschinaBlog {
 
     @ExtractBy("//title")
     private String title;
@@ -16,7 +16,7 @@ public class Blog {
 
     @Override
     public String toString() {
-        return "Blog{" +
+        return "OschinaBlog{" +
                 "title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 '}';
