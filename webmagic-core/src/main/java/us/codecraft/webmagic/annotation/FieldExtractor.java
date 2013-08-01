@@ -3,6 +3,7 @@ package us.codecraft.webmagic.annotation;
 import us.codecraft.webmagic.selector.Selector;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * @author yihua.huang@dianping.com <br>
@@ -16,6 +17,8 @@ class FieldExtractor {
     private final Selector selector;
 
     private final Source source;
+
+    private Method setterMethod;
 
     static enum Source {Html, Url}
 
@@ -41,5 +44,13 @@ class FieldExtractor {
 
     Source getSource() {
         return source;
+    }
+
+    void setSetterMethod(Method setterMethod) {
+        this.setterMethod = setterMethod;
+    }
+
+    Method getSetterMethod() {
+        return setterMethod;
     }
 }

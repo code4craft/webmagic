@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.annotation;
 
+import org.apache.commons.lang3.StringUtils;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.selector.CssSelector;
 import us.codecraft.webmagic.selector.RegexSelector;
@@ -8,6 +9,8 @@ import us.codecraft.webmagic.selector.XpathSelector;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -54,7 +57,12 @@ class PageModelExtractor {
                     default:
                         selector = new XpathSelector(value);
                 }
-                fieldExtractors.add(new FieldExtractor(field, selector));
+                FieldExtractor fieldExtractor = new FieldExtractor(field, selector);
+                Method setterMethod = getSetterMethod(clazz, field);
+                if (setterMethod != null) {
+                    fieldExtractor.setSetterMethod(setterMethod);
+                }
+                fieldExtractors.add(fieldExtractor);
             }
             ExtractByUrl extractByUrl = field.getAnnotation(ExtractByUrl.class);
             if (extractByUrl != null) {
@@ -62,8 +70,24 @@ class PageModelExtractor {
                 if (regexPattern.trim().equals("")) {
                     regexPattern = ".*";
                 }
-                fieldExtractors.add(new FieldExtractor(field, new RegexSelector(regexPattern), FieldExtractor.Source.Url));
+                FieldExtractor fieldExtractor = new FieldExtractor(field, new RegexSelector(regexPattern), FieldExtractor.Source.Url);
+                Method setterMethod = getSetterMethod(clazz, field);
+                if (setterMethod != null) {
+                    fieldExtractor.setSetterMethod(setterMethod);
+                }
+                fieldExtractors.add(fieldExtractor);
             }
+        }
+    }
+
+    public static Method getSetterMethod(Class clazz, Field field) {
+        String name = "set" + StringUtils.capitalize(field.getName());
+        try {
+            Method declaredMethod = clazz.getDeclaredMethod(name, field.getType());
+            declaredMethod.setAccessible(true);
+            return declaredMethod;
+        } catch (NoSuchMethodException e) {
+            return null;
         }
     }
 
@@ -94,22 +118,34 @@ class PageModelExtractor {
         try {
             o = clazz.newInstance();
             for (FieldExtractor fieldExtractor : fieldExtractors) {
+                String value;
                 switch (fieldExtractor.getSource()) {
                     case Html:
-                        fieldExtractor.getField().set(o, fieldExtractor.getSelector().select(page.getHtml().toString()));
+                        value = fieldExtractor.getSelector().select(page.getHtml().toString());
                         break;
                     case Url:
-                        fieldExtractor.getField().set(o, fieldExtractor.getSelector().select(page.getUrl().toString()));
+                        value = fieldExtractor.getSelector().select(page.getUrl().toString());
                         break;
+                    default:
+                        value = fieldExtractor.getSelector().select(page.getHtml().toString());
                 }
-
+                setField(o,fieldExtractor,value);
             }
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
         }
         return o;
+    }
+
+    private void setField(Object o, FieldExtractor fieldExtractor, String value) throws IllegalAccessException, InvocationTargetException {
+        if (fieldExtractor.getSetterMethod()!=null){
+            fieldExtractor.getSetterMethod().invoke(o,value);
+        }
+        fieldExtractor.getField().set(o, value);
     }
 
     Class getClazz() {
