@@ -38,22 +38,32 @@ class PageModelExtractor {
         for (Field field : clazz.getDeclaredFields()) {
             field.setAccessible(true);
             ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
-            String value = extractBy.value();
-            Selector selector;
-            switch (extractBy.type()) {
-                case Css:
-                    selector = new CssSelector(value);
-                    break;
-                case Regex:
-                    selector = new RegexSelector(value);
-                    break;
-                case XPath:
-                    selector = new XpathSelector(value);
-                    break;
-                default:
-                    selector = new XpathSelector(value);
+            if (extractBy != null) {
+                String value = extractBy.value();
+                Selector selector;
+                switch (extractBy.type()) {
+                    case Css:
+                        selector = new CssSelector(value);
+                        break;
+                    case Regex:
+                        selector = new RegexSelector(value);
+                        break;
+                    case XPath:
+                        selector = new XpathSelector(value);
+                        break;
+                    default:
+                        selector = new XpathSelector(value);
+                }
+                fieldExtractors.add(new FieldExtractor(field, selector));
             }
-            fieldExtractors.add(new FieldExtractor(field, selector));
+            ExtractByUrl extractByUrl = field.getAnnotation(ExtractByUrl.class);
+            if (extractByUrl != null) {
+                String regexPattern = extractByUrl.value();
+                if (regexPattern.trim().equals("")) {
+                    regexPattern = ".*";
+                }
+                fieldExtractors.add(new FieldExtractor(field, new RegexSelector(regexPattern), FieldExtractor.Source.Url));
+            }
         }
     }
 
@@ -65,7 +75,7 @@ class PageModelExtractor {
         } else {
             String[] value = ((TargetUrl) annotation).value();
             for (String s : value) {
-                targetUrlPatterns.add(Pattern.compile(s.replace(".","\\.").replace("*","[^\"'#]*")));
+                targetUrlPatterns.add(Pattern.compile(s.replace(".", "\\.").replace("*", "[^\"'#]*")));
             }
         }
     }
@@ -84,7 +94,15 @@ class PageModelExtractor {
         try {
             o = clazz.newInstance();
             for (FieldExtractor fieldExtractor : fieldExtractors) {
-                fieldExtractor.getField().set(o, fieldExtractor.getSelector().select(page.getHtml().toString()));
+                switch (fieldExtractor.getSource()) {
+                    case Html:
+                        fieldExtractor.getField().set(o, fieldExtractor.getSelector().select(page.getHtml().toString()));
+                        break;
+                    case Url:
+                        fieldExtractor.getField().set(o, fieldExtractor.getSelector().select(page.getUrl().toString()));
+                        break;
+                }
+
             }
         } catch (InstantiationException e) {
             e.printStackTrace();

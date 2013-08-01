@@ -1168,7 +1168,7 @@ public class XpathSelectorTest {
                 + "    var location = window.location;\n"
                 + "    source_url = location.protocol + \"//\" + location.host + location.pathname + location.search;\n"
                 + "    pre.writeAttribute('codeable_id', post_id);\n"
-                + "    pre.writeAttribute('codeable_type', \"Blog\");\n"
+                + "    pre.writeAttribute('codeable_type', \"OschinaBlog\");\n"
                 + "    pre.writeAttribute('source_url', source_url);\n"
                 + "    pre.writeAttribute('pre_index', index);\n"
                 + "    pre.writeAttribute('title', 'jsoup 解析页面商品信息');\n"

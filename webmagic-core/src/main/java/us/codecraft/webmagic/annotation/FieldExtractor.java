@@ -15,9 +15,20 @@ class FieldExtractor {
 
     private final Selector selector;
 
-    FieldExtractor(Field field, Selector selector) {
+    private final Source source;
+
+    static enum Source {Html, Url}
+
+    public FieldExtractor(Field field, Selector selector) {
         this.field = field;
         this.selector = selector;
+        this.source = Source.Html;
+    }
+
+    public FieldExtractor(Field field, Selector selector, Source source) {
+        this.field = field;
+        this.selector = selector;
+        this.source = source;
     }
 
     Field getField() {
@@ -26,5 +37,9 @@ class FieldExtractor {
 
     Selector getSelector() {
         return selector;
+    }
+
+    Source getSource() {
+        return source;
     }
 }

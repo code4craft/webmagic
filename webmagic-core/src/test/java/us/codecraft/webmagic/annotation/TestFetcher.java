@@ -15,7 +15,7 @@ public class TestFetcher {
     @Ignore("takes long")
     @Test
     public void test() {
-        Spider.create(ObjectPageProcessor.create(Site.me().addStartUrl("http://my.oschina.net/flashsword/blog/145796"), Blog.class)).run();
+        Spider.create(ObjectPageProcessor.create(Site.me().addStartUrl("http://my.oschina.net/flashsword/blog/145796"), OschinaBlog.class)).run();
 
     }
 
