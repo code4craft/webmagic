@@ -5,13 +5,13 @@ package us.codecraft.webmagic.annotation;
  * @date: 13-8-1 <br>
  * Time: 下午10:18 <br>
  */
-@TargetUrl("http://djjchobits.iteye.com/blog/\\d+")
+@TargetUrl("http://my.oschina.net/flashsword/blog/*")
 public class Blog {
 
     @Fetcher("//title")
     private String title;
 
-    @Fetcher(value = "div#main",type = Fetcher.Type.Css)
+    @Fetcher(value = "div.BlogContent",type = Fetcher.Type.Css)
     private String content;
 
     @Override

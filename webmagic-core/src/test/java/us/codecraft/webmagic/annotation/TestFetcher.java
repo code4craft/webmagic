@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.annotation;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
@@ -11,9 +12,10 @@ import us.codecraft.webmagic.Spider;
  */
 public class TestFetcher {
 
+    @Ignore("takes long")
     @Test
     public void test() {
-        Spider.create(ObjectPageProcessor.create(Site.me().addStartUrl("http://djjchobits.iteye.com/blog/569000"), Blog.class)).run();
+        Spider.create(ObjectPageProcessor.create(Site.me().addStartUrl("http://my.oschina.net/flashsword/blog/145796"), Blog.class)).run();
 
     }
 
