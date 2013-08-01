@@ -27,7 +27,7 @@ public class CssSelector implements Selector {
     public String select(String text) {
         Document doc = Jsoup.parse(text);
         Elements elements = doc.select(selectorText);
-        if (CollectionUtils.isNotEmpty(elements)) {
+        if (CollectionUtils.isEmpty(elements)) {
             return null;
         }
         return elements.get(0).outerHtml();
