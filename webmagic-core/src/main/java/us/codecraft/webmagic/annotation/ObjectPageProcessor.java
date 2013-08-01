@@ -18,36 +18,36 @@ import java.util.regex.Pattern;
  */
 public class ObjectPageProcessor implements PageProcessor {
 
-    private List<PageModelFetcher> pageModelFetcherList;
+    private List<PageModelExtractor> pageModelExtractorList;
 
     private Site site;
 
     private Set<Pattern> targetUrlPatterns;
 
     public static ObjectPageProcessor create(Site site, Class... clazzs) {
-        List<PageModelFetcher> pageModelFetcherList = new ArrayList<PageModelFetcher>();
+        List<PageModelExtractor> pageModelExtractorList = new ArrayList<PageModelExtractor>();
         for (Class clazz : clazzs) {
-            PageModelFetcher pageModelFetcher = PageModelFetcher.create(clazz);
-            pageModelFetcherList.add(pageModelFetcher);
+            PageModelExtractor pageModelExtractor = PageModelExtractor.create(clazz);
+            pageModelExtractorList.add(pageModelExtractor);
         }
-        ObjectPageProcessor objectPageProcessor = new ObjectPageProcessor(site, pageModelFetcherList);
+        ObjectPageProcessor objectPageProcessor = new ObjectPageProcessor(site, pageModelExtractorList);
         return objectPageProcessor;
     }
 
-    private ObjectPageProcessor(Site site, List<PageModelFetcher> pageModelFetcherList) {
+    private ObjectPageProcessor(Site site, List<PageModelExtractor> pageModelExtractorList) {
         this.site = site;
-        this.pageModelFetcherList = pageModelFetcherList;
+        this.pageModelExtractorList = pageModelExtractorList;
         targetUrlPatterns = new HashSet<Pattern>();
-        for (PageModelFetcher pageModelFetcher : pageModelFetcherList) {
-            targetUrlPatterns.addAll(pageModelFetcher.getTargetUrlPatterns());
+        for (PageModelExtractor pageModelExtractor : pageModelExtractorList) {
+            targetUrlPatterns.addAll(pageModelExtractor.getTargetUrlPatterns());
         }
     }
 
     @Override
     public void process(Page page) {
-        for (PageModelFetcher pageModelFetcher : pageModelFetcherList) {
-            Object process = pageModelFetcher.process(page);
-            page.putField(pageModelFetcher.getClazz().getCanonicalName(), process);
+        for (PageModelExtractor pageModelExtractor : pageModelExtractorList) {
+            Object process = pageModelExtractor.process(page);
+            page.putField(pageModelExtractor.getClazz().getCanonicalName(), process);
         }
         for (String link : page.getHtml().links().all()) {
             for (Pattern targetUrlPattern : targetUrlPatterns) {

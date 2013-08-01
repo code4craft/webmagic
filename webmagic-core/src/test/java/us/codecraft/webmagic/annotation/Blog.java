@@ -8,10 +8,10 @@ package us.codecraft.webmagic.annotation;
 @TargetUrl("http://my.oschina.net/flashsword/blog/*")
 public class Blog {
 
-    @Fetcher("//title")
+    @ExtractBy("//title")
     private String title;
 
-    @Fetcher(value = "div.BlogContent",type = Fetcher.Type.Css)
+    @ExtractBy(value = "div.BlogContent",type = ExtractBy.Type.Css)
     private String content;
 
     @Override

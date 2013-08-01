@@ -17,30 +17,30 @@ import java.util.regex.Pattern;
  * @date: 13-8-1 <br>
  * Time: 下午9:33 <br>
  */
-class PageModelFetcher {
+class PageModelExtractor {
 
     private List<Pattern> targetUrlPatterns;
 
     private Class clazz;
 
-    private List<FieldFetcher> fieldFetchers;
+    private List<FieldExtractor> fieldExtractors;
 
-    public static PageModelFetcher create(Class clazz) {
-        PageModelFetcher pageModelFetcher = new PageModelFetcher();
-        pageModelFetcher.init(clazz);
-        return pageModelFetcher;
+    public static PageModelExtractor create(Class clazz) {
+        PageModelExtractor pageModelExtractor = new PageModelExtractor();
+        pageModelExtractor.init(clazz);
+        return pageModelExtractor;
     }
 
     private void init(Class clazz) {
         this.clazz = clazz;
         initTargetUrlPatterns();
-        fieldFetchers = new ArrayList<FieldFetcher>();
+        fieldExtractors = new ArrayList<FieldExtractor>();
         for (Field field : clazz.getDeclaredFields()) {
             field.setAccessible(true);
-            Fetcher fetcher = field.getAnnotation(Fetcher.class);
-            String value = fetcher.value();
+            ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
+            String value = extractBy.value();
             Selector selector;
-            switch (fetcher.type()) {
+            switch (extractBy.type()) {
                 case Css:
                     selector = new CssSelector(value);
                     break;
@@ -53,7 +53,7 @@ class PageModelFetcher {
                 default:
                     selector = new XpathSelector(value);
             }
-            fieldFetchers.add(new FieldFetcher(field, selector));
+            fieldExtractors.add(new FieldExtractor(field, selector));
         }
     }
 
@@ -83,8 +83,8 @@ class PageModelFetcher {
         Object o = null;
         try {
             o = clazz.newInstance();
-            for (FieldFetcher fieldFetcher : fieldFetchers) {
-                fieldFetcher.getField().set(o, fieldFetcher.getSelector().select(page.getHtml().toString()));
+            for (FieldExtractor fieldExtractor : fieldExtractors) {
+                fieldExtractor.getField().set(o, fieldExtractor.getSelector().select(page.getHtml().toString()));
             }
         } catch (InstantiationException e) {
             e.printStackTrace();
