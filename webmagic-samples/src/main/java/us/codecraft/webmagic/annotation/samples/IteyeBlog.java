@@ -14,7 +14,7 @@ import us.codecraft.webmagic.annotation.TargetUrl;
 public class IteyeBlog implements Blog{
 
     @ExtractBy("//title")
-    private String title;
+    private int title;
 
     @ExtractBy(value = "div#blog_content",type = ExtractBy.Type.Css)
     private String content;
@@ -32,7 +32,7 @@ public class IteyeBlog implements Blog{
     }
 
     public String getTitle() {
-        return title;
+        return null;
     }
 
     public String getContent() {

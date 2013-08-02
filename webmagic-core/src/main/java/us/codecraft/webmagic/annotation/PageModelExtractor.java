@@ -42,6 +42,9 @@ class PageModelExtractor {
         fieldExtractors = new ArrayList<FieldExtractor>();
         for (Field field : clazz.getDeclaredFields()) {
             field.setAccessible(true);
+            if (!field.getType().isAssignableFrom(String.class)){
+                 throw new IllegalStateException("Field "+field.getName()+" must be string");
+            }
             ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
             if (extractBy != null) {
                 String value = extractBy.value();

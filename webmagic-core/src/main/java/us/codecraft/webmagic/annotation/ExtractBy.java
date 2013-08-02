@@ -13,6 +13,8 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 public @interface ExtractBy {
 
+
+    //TODO: add list support
     String value();
 
     public enum Type {XPath, Regex, Css};
