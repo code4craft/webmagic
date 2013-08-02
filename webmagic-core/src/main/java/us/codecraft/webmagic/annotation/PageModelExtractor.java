@@ -24,6 +24,8 @@ class PageModelExtractor {
 
     private List<Pattern> targetUrlPatterns;
 
+    private List<Pattern> helpUrlPatterns;
+
     private Class clazz;
 
     private List<FieldExtractor> fieldExtractors;
@@ -57,7 +59,7 @@ class PageModelExtractor {
                     default:
                         selector = new XpathSelector(value);
                 }
-                FieldExtractor fieldExtractor = new FieldExtractor(field, selector);
+                FieldExtractor fieldExtractor = new FieldExtractor(field, selector, FieldExtractor.Source.Html, extractBy.notNull());
                 Method setterMethod = getSetterMethod(clazz, field);
                 if (setterMethod != null) {
                     fieldExtractor.setSetterMethod(setterMethod);
@@ -70,7 +72,7 @@ class PageModelExtractor {
                 if (regexPattern.trim().equals("")) {
                     regexPattern = ".*";
                 }
-                FieldExtractor fieldExtractor = new FieldExtractor(field, new RegexSelector(regexPattern), FieldExtractor.Source.Url);
+                FieldExtractor fieldExtractor = new FieldExtractor(field, new RegexSelector(regexPattern), FieldExtractor.Source.Url, extractByUrl.notNull());
                 Method setterMethod = getSetterMethod(clazz, field);
                 if (setterMethod != null) {
                     fieldExtractor.setSetterMethod(setterMethod);
@@ -102,6 +104,14 @@ class PageModelExtractor {
                 targetUrlPatterns.add(Pattern.compile(s.replace(".", "\\.").replace("*", "[^\"'#]*")));
             }
         }
+        helpUrlPatterns = new ArrayList<Pattern>();
+        annotation = clazz.getAnnotation(HelpUrl.class);
+        if (annotation != null) {
+            String[] value = ((HelpUrl) annotation).value();
+            for (String s : value) {
+                helpUrlPatterns.add(Pattern.compile(s.replace(".", "\\.").replace("*", "[^\"'#]*")));
+            }
+        }
     }
 
     public Object process(Page page) {
@@ -129,7 +139,10 @@ class PageModelExtractor {
                     default:
                         value = fieldExtractor.getSelector().select(page.getHtml().toString());
                 }
-                setField(o,fieldExtractor,value);
+                if (value==null&&fieldExtractor.isNotNull()){
+                    page.getResultItems().setSkip(true);
+                }
+                setField(o, fieldExtractor, value);
             }
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -142,8 +155,8 @@ class PageModelExtractor {
     }
 
     private void setField(Object o, FieldExtractor fieldExtractor, String value) throws IllegalAccessException, InvocationTargetException {
-        if (fieldExtractor.getSetterMethod()!=null){
-            fieldExtractor.getSetterMethod().invoke(o,value);
+        if (fieldExtractor.getSetterMethod() != null) {
+            fieldExtractor.getSetterMethod().invoke(o, value);
         }
         fieldExtractor.getField().set(o, value);
     }
@@ -154,5 +167,9 @@ class PageModelExtractor {
 
     List<Pattern> getTargetUrlPatterns() {
         return targetUrlPatterns;
+    }
+
+    List<Pattern> getHelpUrlPatterns() {
+        return helpUrlPatterns;
     }
 }

@@ -40,6 +40,7 @@ public class ObjectPageProcessor implements PageProcessor {
         targetUrlPatterns = new HashSet<Pattern>();
         for (PageModelExtractor pageModelExtractor : pageModelExtractorList) {
             targetUrlPatterns.addAll(pageModelExtractor.getTargetUrlPatterns());
+            targetUrlPatterns.addAll(pageModelExtractor.getHelpUrlPatterns());
         }
     }
 
@@ -47,6 +48,9 @@ public class ObjectPageProcessor implements PageProcessor {
     public void process(Page page) {
         for (PageModelExtractor pageModelExtractor : pageModelExtractorList) {
             Object process = pageModelExtractor.process(page);
+            if (process==null){
+                page.getResultItems().setSkip(true);
+            }
             postProcessPageModel(pageModelExtractor.getClazz(), process);
             page.putField(pageModelExtractor.getClazz().getCanonicalName(), process);
         }
