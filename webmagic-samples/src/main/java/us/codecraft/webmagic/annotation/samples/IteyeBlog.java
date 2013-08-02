@@ -32,7 +32,7 @@ public class IteyeBlog implements Blog{
     }
 
     public String getTitle() {
-        return null;
+        return title;
     }
 
     public String getContent() {
