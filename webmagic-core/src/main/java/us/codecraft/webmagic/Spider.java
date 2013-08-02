@@ -2,6 +2,7 @@ package us.codecraft.webmagic;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
+import us.codecraft.webmagic.annotation.ObjectPageProcessor;
 import us.codecraft.webmagic.downloader.Destroyable;
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
@@ -87,6 +88,10 @@ public class Spider implements Runnable, Task {
      */
     public static Spider create(PageProcessor pageProcessor) {
         return new Spider(pageProcessor);
+    }
+
+    public static Spider create(Site site,Class... pageModels) {
+        return new Spider(ObjectPageProcessor.create(site,pageModels));
     }
 
     /**

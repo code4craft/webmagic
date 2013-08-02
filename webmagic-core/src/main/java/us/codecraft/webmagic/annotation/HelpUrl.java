@@ -10,14 +10,8 @@ import java.lang.annotation.Target;
  * Time: 下午8:40 <br>
  */
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD})
-public @interface ExtractBy {
+@Target({ElementType.TYPE})
+public @interface HelpUrl {
 
-    String value();
-
-    public enum Type {XPath, Regex, Css};
-
-    Type type() default Type.XPath;
-
-    boolean notNull() default true;
+    String[] value();
 }

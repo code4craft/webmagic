@@ -11,8 +11,10 @@ import java.lang.annotation.Target;
  */
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
-public @interface ExtractByUrl {
+public @interface ExtractByUrl{
 
     String value() default "";
+
+    boolean notNull() default true;
 
 }

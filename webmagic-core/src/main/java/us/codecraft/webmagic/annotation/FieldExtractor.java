@@ -20,18 +20,15 @@ class FieldExtractor {
 
     private Method setterMethod;
 
+    private final boolean notNull;
+
     static enum Source {Html, Url}
 
-    public FieldExtractor(Field field, Selector selector) {
-        this.field = field;
-        this.selector = selector;
-        this.source = Source.Html;
-    }
-
-    public FieldExtractor(Field field, Selector selector, Source source) {
+    public FieldExtractor(Field field, Selector selector, Source source, boolean notNull) {
         this.field = field;
         this.selector = selector;
         this.source = source;
+        this.notNull = notNull;
     }
 
     Field getField() {
@@ -52,5 +49,9 @@ class FieldExtractor {
 
     Method getSetterMethod() {
         return setterMethod;
+    }
+
+    boolean isNotNull() {
+        return notNull;
     }
 }
