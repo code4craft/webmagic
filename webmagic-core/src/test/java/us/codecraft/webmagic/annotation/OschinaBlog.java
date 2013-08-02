@@ -14,11 +14,4 @@ public class OschinaBlog {
     @ExtractBy(value = "div.BlogContent",type = ExtractBy.Type.Css)
     private String content;
 
-    @Override
-    public String toString() {
-        return "OschinaBlog{" +
-                "title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                '}';
-    }
 }
