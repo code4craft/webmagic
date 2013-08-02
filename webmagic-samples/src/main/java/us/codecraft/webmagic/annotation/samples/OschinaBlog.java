@@ -10,25 +10,25 @@ import us.codecraft.webmagic.annotation.TargetUrl;
  * @date: 13-8-2 <br>
  * Time: 上午7:52 <br>
  */
-@TargetUrl("http://dengminhui.iteye.com/blog/*")
-public class IteyeBlog implements Blog{
+@TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
+public class OschinaBlog implements Blog{
 
     @ExtractBy("//title")
     private String title;
 
-    @ExtractBy(value = "div#blog_content",type = ExtractBy.Type.Css)
+    @ExtractBy(value = "div.BlogContent",type = ExtractBy.Type.Css)
     private String content;
 
     @Override
     public String toString() {
-        return "IteyeBlog{" +
+        return "OschinaBlog{" +
                 "title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 '}';
     }
 
     public static void main(String[] args) {
-        Spider.create(Site.me().addStartUrl("http://dengminhui.iteye.com/blog"),IteyeBlog.class).run();
+        Spider.create(Site.me().addStartUrl("http://my.oschina.net/flashsword/blog"),OschinaBlog.class).run();
     }
 
     public String getTitle() {
