@@ -1384,18 +1384,14 @@ public class XpathSelectorTest {
     public void testSaxon() throws XPathFactoryConfigurationException {
         System.setProperty("javax.xml.xpath.XPathFactory:" + NamespaceConstant.OBJECT_MODEL_SAXON, "net.sf.saxon.xpath.XPathFactoryImpl");
         System.setProperty("javax.xml.xpath.XPathFactory:" + NamespaceConstant.FN, "net.sf.saxon.xpath.XPathFactoryImpl");
-        XPathFactory xpf = XPathFactory.newInstance(NamespaceConstant.OBJECT_MODEL_SAXON);
         String text = "<h1>眉山：扎实推进农业农村工作 促农持续增收<br>\n" +
                 "<span>2013-07-31 23:29:45&nbsp;&nbsp;&nbsp;来源：<a href=\"http://www.mshw.net\" target=\"_blank\" style=\"color:#AAA\">眉山网</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;责任编辑：张斯炜</span></h1>";
         try {
             HtmlCleaner htmlCleaner = new HtmlCleaner();
             TagNode tagNode = htmlCleaner.clean(text);
             Document document = new DomSerializer(new CleanerProperties()).createDOM(tagNode);
-            javax.xml.xpath.XPathFactory factory = XPathFactoryImpl.newInstance(NamespaceConstant.OBJECT_MODEL_SAXON);
-            Configuration config = Configuration.newConfiguration();
-            XPathEvaluator xPathEvaluator = new XPathEvaluator(config);
-            JAXPXPathStaticContext context = new JAXPXPathStaticContext(config);
-            context.setNamespaceContext(new NamespaceContextImpl(new NamespaceResolver() {
+            XPathEvaluator xPathEvaluator = new XPathEvaluator();
+            xPathEvaluator.setNamespaceContext(new NamespaceContextImpl(new NamespaceResolver() {
 
 
                 @Override
@@ -1408,7 +1404,6 @@ public class XpathSelectorTest {
                     return Collections.singletonList("fn").iterator();
                 }
             }));
-            xPathEvaluator.setStaticContext(context);
             XPathExpression expr = xPathEvaluator.compile("fn:substring-before(//h1,'\n')");
             Object result = expr.evaluate(document, XPathConstants.STRING);
             System.out.println(result);
