@@ -12,6 +12,7 @@ import org.htmlcleaner.DomSerializer;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -1381,9 +1382,7 @@ public class XpathSelectorTest {
 
     //http://sourceforge.net/mailarchive/forum.php?thread_name=4EA92A8A.6080202%40saxonica.com&forum_name=saxon-help
     @Test
-    public void testSaxon() throws XPathFactoryConfigurationException {
-        System.setProperty("javax.xml.xpath.XPathFactory:" + NamespaceConstant.OBJECT_MODEL_SAXON, "net.sf.saxon.xpath.XPathFactoryImpl");
-        System.setProperty("javax.xml.xpath.XPathFactory:" + NamespaceConstant.FN, "net.sf.saxon.xpath.XPathFactoryImpl");
+    public void testSaxon() {
         String text = "<h1>眉山：扎实推进农业农村工作 促农持续增收<br>\n" +
                 "<span>2013-07-31 23:29:45&nbsp;&nbsp;&nbsp;来源：<a href=\"http://www.mshw.net\" target=\"_blank\" style=\"color:#AAA\">眉山网</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;责任编辑：张斯炜</span></h1>";
         try {
@@ -1406,10 +1405,44 @@ public class XpathSelectorTest {
             }));
             XPathExpression expr = xPathEvaluator.compile("fn:substring-before(//h1,'\n')");
             Object result = expr.evaluate(document, XPathConstants.STRING);
-            System.out.println(result);
+            Assert.assertNotNull(result);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Xpath2Selector xpath2Selector = new Xpath2Selector("fn:substring-before(//h1,'\n')");
+        String select = xpath2Selector.select(text);
+        Assert.assertNotNull(select);
+        Assert.assertNotNull(xpath2Selector.selectList(text));
+
+    }
+
+    @Test
+    public void testXpath2Selector() {
+        Xpath2Selector xpath2Selector = new Xpath2Selector("//a");
+        String select = xpath2Selector.select(html);
+        Assert.assertNotNull(select);
+    }
+
+    @Ignore("take long time")
+    @Test
+    public void performanceTest() {
+        Xpath2Selector xpath2Selector = new Xpath2Selector("//a");
+        long time =System.currentTimeMillis();
+        for (int i = 0; i < 1000; i++) {
+            xpath2Selector.selectList(html);
+        }
+        System.out.println(System.currentTimeMillis()-time);
+        XpathSelector xpathSelector = new XpathSelector("//a");
+        time =System.currentTimeMillis();
+        for (int i = 0; i < 1000; i++) {
+            xpathSelector.selectList(html);
+        }
+        System.out.println(System.currentTimeMillis()-time);
+        time =System.currentTimeMillis();
+        for (int i = 0; i < 1000; i++) {
+            xpath2Selector.selectList(html);
+        }
+        System.out.println(System.currentTimeMillis()-time);
     }
 
 }
