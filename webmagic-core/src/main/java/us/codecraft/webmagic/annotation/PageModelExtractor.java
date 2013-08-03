@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * @author yihua.huang@dianping.com <br>
+ * @author code4crafter@gmail.com <br>
  * @date: 13-8-1 <br>
  * Time: 下午9:33 <br>
  */
@@ -30,6 +30,8 @@ class PageModelExtractor {
 
     private List<FieldExtractor> fieldExtractors;
 
+    private AfterExtractor afterExtractor;
+
     public static PageModelExtractor create(Class clazz) {
         PageModelExtractor pageModelExtractor = new PageModelExtractor();
         pageModelExtractor.init(clazz);
@@ -40,6 +42,13 @@ class PageModelExtractor {
         this.clazz = clazz;
         initTargetUrlPatterns();
         fieldExtractors = new ArrayList<FieldExtractor>();
+        if (clazz.isAssignableFrom(AfterExtractor.class)){
+            try {
+                afterExtractor=(AfterExtractor)clazz.newInstance();
+            } catch (Exception e) {
+                throw new IllegalArgumentException(e);
+            }
+        }
         for (Field field : clazz.getDeclaredFields()) {
             field.setAccessible(true);
             if (!field.getType().isAssignableFrom(String.class)){
@@ -146,6 +155,9 @@ class PageModelExtractor {
                     page.getResultItems().setSkip(true);
                 }
                 setField(o, fieldExtractor, value);
+            }
+            if (afterExtractor!=null){
+                afterExtractor.afterProcess(page,o);
             }
         } catch (InstantiationException e) {
             e.printStackTrace();

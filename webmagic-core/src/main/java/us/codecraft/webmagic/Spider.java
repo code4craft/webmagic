@@ -90,10 +90,6 @@ public class Spider implements Runnable, Task {
         return new Spider(pageProcessor);
     }
 
-    public static Spider create(Site site,Class... pageModels) {
-        return new Spider(ObjectPageProcessor.create(site,pageModels));
-    }
-
     /**
      * 重新设置startUrls，会覆盖Site本身的startUrls。
      *

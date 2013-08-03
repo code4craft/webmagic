@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
- * @author yihua.huang@dianping.com <br>
+ * @author code4crafter@gmail.com <br>
  * @date: 13-8-1 <br>
  * Time: 下午8:46 <br>
  */

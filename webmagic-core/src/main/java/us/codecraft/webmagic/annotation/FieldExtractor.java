@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * @author yihua.huang@dianping.com <br>
+ * @author code4crafter@gmail.com <br>
  * @date: 13-8-1 <br>
  * Time: 下午9:48 <br>
  */
