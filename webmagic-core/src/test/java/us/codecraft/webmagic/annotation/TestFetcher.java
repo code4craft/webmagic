@@ -1,6 +1,5 @@
 package us.codecraft.webmagic.annotation;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import us.codecraft.webmagic.Site;
 
@@ -11,13 +10,11 @@ import us.codecraft.webmagic.Site;
  */
 public class TestFetcher {
 
-    @Ignore("takes long")
+//    @Ignore("takes long")
     @Test
     public void test() {
-        ObjectPipeline objectPipeline = new ObjectPipeline();
         OOSpider.create(Site.me().addStartUrl("http://my.oschina.net/flashsword/blog/145796"), OschinaBlog.class)
-                .pipeline(objectPipeline);
-        OschinaBlog oschinaBlog = null;
+                .run();
 
     }
 

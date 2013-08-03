@@ -18,30 +18,31 @@ import java.util.regex.Pattern;
  */
 public class ObjectPageProcessor implements PageProcessor {
 
-    private List<PageModelExtractor> pageModelExtractorList;
+    private List<PageModelExtractor> pageModelExtractorList = new ArrayList<PageModelExtractor>();
 
     private Site site;
 
-    private Set<Pattern> targetUrlPatterns;
+    private Set<Pattern> targetUrlPatterns = new HashSet<Pattern>();
 
     public static ObjectPageProcessor create(Site site, Class... clazzs) {
-        List<PageModelExtractor> pageModelExtractorList = new ArrayList<PageModelExtractor>();
+        ObjectPageProcessor objectPageProcessor = new ObjectPageProcessor(site);
         for (Class clazz : clazzs) {
-            PageModelExtractor pageModelExtractor = PageModelExtractor.create(clazz);
-            pageModelExtractorList.add(pageModelExtractor);
+            objectPageProcessor.addPageModel(clazz);
         }
-        ObjectPageProcessor objectPageProcessor = new ObjectPageProcessor(site, pageModelExtractorList);
         return objectPageProcessor;
     }
 
-    private ObjectPageProcessor(Site site, List<PageModelExtractor> pageModelExtractorList) {
+
+    public ObjectPageProcessor addPageModel(Class clazz){
+        PageModelExtractor pageModelExtractor = PageModelExtractor.create(clazz);
+        targetUrlPatterns.addAll(pageModelExtractor.getTargetUrlPatterns());
+        targetUrlPatterns.addAll(pageModelExtractor.getHelpUrlPatterns());
+        pageModelExtractorList.add(pageModelExtractor);
+        return this;
+    }
+
+    private ObjectPageProcessor(Site site) {
         this.site = site;
-        this.pageModelExtractorList = pageModelExtractorList;
-        targetUrlPatterns = new HashSet<Pattern>();
-        for (PageModelExtractor pageModelExtractor : pageModelExtractorList) {
-            targetUrlPatterns.addAll(pageModelExtractor.getTargetUrlPatterns());
-            targetUrlPatterns.addAll(pageModelExtractor.getHelpUrlPatterns());
-        }
     }
 
     @Override
