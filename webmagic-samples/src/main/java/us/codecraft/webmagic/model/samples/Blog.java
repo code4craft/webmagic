@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.oo.samples;
+package us.codecraft.webmagic.model.samples;
 
 /**
  * @author code4crafter@gmail.com <br>

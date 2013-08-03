@@ -1,9 +1,9 @@
-package us.codecraft.webmagic.oo.samples;
+package us.codecraft.webmagic.model.samples;
 
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.oo.ExtractBy;
-import us.codecraft.webmagic.oo.OOSpider;
-import us.codecraft.webmagic.oo.TargetUrl;
+import us.codecraft.webmagic.model.ExtractBy;
+import us.codecraft.webmagic.model.OOSpider;
+import us.codecraft.webmagic.model.TargetUrl;
 
 /**
  * @author code4crafter@gmail.com <br>

@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.oo;
+package us.codecraft.webmagic.model;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import us.codecraft.webmagic.Task;
