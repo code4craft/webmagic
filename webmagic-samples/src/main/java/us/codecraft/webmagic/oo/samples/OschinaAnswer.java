@@ -5,7 +5,7 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.oo.*;
 
 /**
- * @author yihua.huang@dianping.com <br>
+ * @author code4crafter@gmail.com <br>
  * @date: 13-8-3 <br>
  * Time: 下午8:25 <br>
  */
@@ -17,7 +17,7 @@ public class OschinaAnswer implements AfterExtractor{
     @ExtractBy("//img/@title")
     private String user;
 
-    @ExtractBy(value="//div[@class='detail']",notNull = false)
+    @ExtractBy("//div[@class='detail']")
     private String content;
 
     public static void main(String[] args) {

@@ -5,7 +5,7 @@ import org.junit.Test;
 import us.codecraft.webmagic.Site;
 
 /**
- * @author yihua.huang@dianping.com <br>
+ * @author code4crafter@gmail.com <br>
  * @date: 13-8-1 <br>
  * Time: 下午8:42 <br>
  */

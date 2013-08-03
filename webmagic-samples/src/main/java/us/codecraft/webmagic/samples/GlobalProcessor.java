@@ -10,7 +10,7 @@ import us.codecraft.webmagic.scheduler.RedisScheduler;
 import java.util.List;
 
 /**
- * Author yihua.huang@dianping.com
+ * Author code4crafter@gmail.com
  * Date: 13-6-24
  * Time: 下午2:12
  */

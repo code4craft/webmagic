@@ -1,7 +1,7 @@
 package us.codecraft.webmagic.oo.samples;
 
 /**
- * @author yihua.huang@dianping.com <br>
+ * @author code4crafter@gmail.com <br>
  * @date: 13-8-2 <br>
  * Time: 上午8:10 <br>
  */

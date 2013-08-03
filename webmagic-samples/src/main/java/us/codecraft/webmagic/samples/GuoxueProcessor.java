@@ -6,7 +6,7 @@ import us.codecraft.webmagic.processor.SimplePageProcessor;
 import us.codecraft.webmagic.schedular.FileCacheQueueScheduler;
 
 /**
- * @author yihua.huang@dianping.com <br>
+ * @author code4crafter@gmail.com <br>
  * @date: 13-7-14 <br>
  * Time: 上午8:33 <br>
  */

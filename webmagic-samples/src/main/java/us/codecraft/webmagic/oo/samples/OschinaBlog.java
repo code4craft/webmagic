@@ -6,7 +6,7 @@ import us.codecraft.webmagic.oo.OOSpider;
 import us.codecraft.webmagic.oo.TargetUrl;
 
 /**
- * @author yihua.huang@dianping.com <br>
+ * @author code4crafter@gmail.com <br>
  * @date: 13-8-2 <br>
  * Time: 上午7:52 <br>
  */

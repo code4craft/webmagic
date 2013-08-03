@@ -21,7 +21,7 @@ import java.util.Map;
  * 使用Selenium调用浏览器进行渲染。目前仅支持chrome。<br>
  * 需要下载Selenium driver支持。<br>
  *
- * @author yihua.huang@dianping.com <br>
+ * @author code4crafter@gmail.com <br>
  * @date: 13-7-26 <br>
  * Time: 下午1:37 <br>
  */
