@@ -39,7 +39,7 @@ class PageModelExtractor {
         this.clazz = clazz;
         initTargetUrlPatterns();
         fieldExtractors = new ArrayList<FieldExtractor>();
-        if (clazz.isAssignableFrom(AfterExtractor.class)) {
+        if (AfterExtractor.class.isAssignableFrom(clazz)) {
             try {
                 afterExtractor = (AfterExtractor) clazz.newInstance();
             } catch (Exception e) {
@@ -50,9 +50,9 @@ class PageModelExtractor {
             field.setAccessible(true);
             ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
             if (extractBy != null) {
-                if (!extractBy.multi() && !field.getType().isAssignableFrom(String.class)) {
+                if (!extractBy.multi() && !String.class.isAssignableFrom(field.getType())) {
                     throw new IllegalStateException("Field " + field.getName() + " must be string");
-                } else if (extractBy.multi() && !field.getType().isAssignableFrom(List.class)) {
+                } else if (extractBy.multi() && !List.class.isAssignableFrom(field.getType())) {
                     throw new IllegalStateException("Field " + field.getName() + " must be list");
                 }
                 String value = extractBy.value();
@@ -82,9 +82,9 @@ class PageModelExtractor {
             }
             ExtractByUrl extractByUrl = field.getAnnotation(ExtractByUrl.class);
             if (extractByUrl != null) {
-                if (!extractByUrl.multi() && !field.getType().isAssignableFrom(String.class)) {
+                if (!extractByUrl.multi() && !String.class.isAssignableFrom(field.getType())) {
                     throw new IllegalStateException("Field " + field.getName() + " must be string");
-                } else if (extractByUrl.multi() && !field.getType().isAssignableFrom(List.class)) {
+                } else if (extractByUrl.multi() && !List.class.isAssignableFrom(field.getType())) {
                     throw new IllegalStateException("Field " + field.getName() + " must be list");
                 }
                 String regexPattern = extractByUrl.value();
