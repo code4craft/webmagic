@@ -1,5 +1,7 @@
 package us.codecraft.webmagic.oo;
 
+import java.util.List;
+
 /**
  * @author yihua.huang@dianping.com <br>
  * @date: 13-8-1 <br>
@@ -11,7 +13,10 @@ public class OschinaBlog {
     @ExtractBy("//title")
     private String title;
 
-    @ExtractBy(value = "div.BlogContent",type = ExtractBy.Type.Css)
+    @ExtractBy(value = "div.BlogContent", type = ExtractBy.Type.Css)
     private String content;
+
+    @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
+    private List<String> tags;
 
 }

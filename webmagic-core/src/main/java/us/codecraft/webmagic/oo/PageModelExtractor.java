@@ -2,10 +2,7 @@ package us.codecraft.webmagic.oo;
 
 import org.apache.commons.lang3.StringUtils;
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.selector.CssSelector;
-import us.codecraft.webmagic.selector.RegexSelector;
-import us.codecraft.webmagic.selector.Selector;
-import us.codecraft.webmagic.selector.XpathSelector;
+import us.codecraft.webmagic.selector.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -42,20 +39,22 @@ class PageModelExtractor {
         this.clazz = clazz;
         initTargetUrlPatterns();
         fieldExtractors = new ArrayList<FieldExtractor>();
-        if (clazz.isAssignableFrom(AfterExtractor.class)){
+        if (clazz.isAssignableFrom(AfterExtractor.class)) {
             try {
-                afterExtractor=(AfterExtractor)clazz.newInstance();
+                afterExtractor = (AfterExtractor) clazz.newInstance();
             } catch (Exception e) {
                 throw new IllegalArgumentException(e);
             }
         }
         for (Field field : clazz.getDeclaredFields()) {
             field.setAccessible(true);
-            if (!field.getType().isAssignableFrom(String.class)){
-                 throw new IllegalStateException("Field "+field.getName()+" must be string");
-            }
             ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
             if (extractBy != null) {
+                if (!extractBy.multi() && !field.getType().isAssignableFrom(String.class)) {
+                    throw new IllegalStateException("Field " + field.getName() + " must be string");
+                } else if (extractBy.multi() && !field.getType().isAssignableFrom(List.class)) {
+                    throw new IllegalStateException("Field " + field.getName() + " must be list");
+                }
                 String value = extractBy.value();
                 Selector selector;
                 switch (extractBy.type()) {
@@ -68,10 +67,13 @@ class PageModelExtractor {
                     case XPath:
                         selector = new XpathSelector(value);
                         break;
+                    case XPath2:
+                        selector = new Xpath2Selector(value);
+                        break;
                     default:
-                        selector = new XpathSelector(value);
+                        selector = new Xpath2Selector(value);
                 }
-                FieldExtractor fieldExtractor = new FieldExtractor(field, selector, FieldExtractor.Source.Html, extractBy.notNull());
+                FieldExtractor fieldExtractor = new FieldExtractor(field, selector, FieldExtractor.Source.Html, extractBy.notNull(), extractBy.multi());
                 Method setterMethod = getSetterMethod(clazz, field);
                 if (setterMethod != null) {
                     fieldExtractor.setSetterMethod(setterMethod);
@@ -80,11 +82,16 @@ class PageModelExtractor {
             }
             ExtractByUrl extractByUrl = field.getAnnotation(ExtractByUrl.class);
             if (extractByUrl != null) {
+                if (!extractByUrl.multi() && !field.getType().isAssignableFrom(String.class)) {
+                    throw new IllegalStateException("Field " + field.getName() + " must be string");
+                } else if (extractByUrl.multi() && !field.getType().isAssignableFrom(List.class)) {
+                    throw new IllegalStateException("Field " + field.getName() + " must be list");
+                }
                 String regexPattern = extractByUrl.value();
                 if (regexPattern.trim().equals("")) {
                     regexPattern = ".*";
                 }
-                FieldExtractor fieldExtractor = new FieldExtractor(field, new RegexSelector(regexPattern), FieldExtractor.Source.Url, extractByUrl.notNull());
+                FieldExtractor fieldExtractor = new FieldExtractor(field, new RegexSelector(regexPattern), FieldExtractor.Source.Url, extractByUrl.notNull(), extractByUrl.multi());
                 Method setterMethod = getSetterMethod(clazz, field);
                 if (setterMethod != null) {
                     fieldExtractor.setSetterMethod(setterMethod);
@@ -138,24 +145,42 @@ class PageModelExtractor {
         try {
             o = clazz.newInstance();
             for (FieldExtractor fieldExtractor : fieldExtractors) {
-                String value;
-                switch (fieldExtractor.getSource()) {
-                    case Html:
-                        value = fieldExtractor.getSelector().select(page.getHtml().toString());
-                        break;
-                    case Url:
-                        value = fieldExtractor.getSelector().select(page.getUrl().toString());
-                        break;
-                    default:
-                        value = fieldExtractor.getSelector().select(page.getHtml().toString());
+                if (fieldExtractor.multi) {
+                    List<String> value;
+                    switch (fieldExtractor.getSource()) {
+                        case Html:
+                            value = fieldExtractor.getSelector().selectList(page.getHtml().toString());
+                            break;
+                        case Url:
+                            value = fieldExtractor.getSelector().selectList(page.getUrl().toString());
+                            break;
+                        default:
+                            value = fieldExtractor.getSelector().selectList(page.getHtml().toString());
+                    }
+                    if ((value == null || value.size() == 0) && fieldExtractor.isNotNull()) {
+                        page.getResultItems().setSkip(true);
+                    }
+                    setField(o, fieldExtractor, value);
+                } else {
+                    String value;
+                    switch (fieldExtractor.getSource()) {
+                        case Html:
+                            value = fieldExtractor.getSelector().select(page.getHtml().toString());
+                            break;
+                        case Url:
+                            value = fieldExtractor.getSelector().select(page.getUrl().toString());
+                            break;
+                        default:
+                            value = fieldExtractor.getSelector().select(page.getHtml().toString());
+                    }
+                    if (value == null && fieldExtractor.isNotNull()) {
+                        page.getResultItems().setSkip(true);
+                    }
+                    setField(o, fieldExtractor, value);
                 }
-                if (value==null&&fieldExtractor.isNotNull()){
-                    page.getResultItems().setSkip(true);
-                }
-                setField(o, fieldExtractor, value);
             }
-            if (afterExtractor!=null){
-                afterExtractor.afterProcess(page,o);
+            if (afterExtractor != null) {
+                afterExtractor.afterProcess(page, o);
             }
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -167,7 +192,7 @@ class PageModelExtractor {
         return o;
     }
 
-    private void setField(Object o, FieldExtractor fieldExtractor, String value) throws IllegalAccessException, InvocationTargetException {
+    private void setField(Object o, FieldExtractor fieldExtractor, Object value) throws IllegalAccessException, InvocationTargetException {
         if (fieldExtractor.getSetterMethod() != null) {
             fieldExtractor.getSetterMethod().invoke(o, value);
         }

@@ -10,25 +10,15 @@ import java.lang.reflect.Method;
  * @date: 13-8-1 <br>
  * Time: 下午9:48 <br>
  */
-class FieldExtractor {
+class FieldExtractor extends Extractor{
 
     private final Field field;
 
-    private final Selector selector;
-
-    private final Source source;
-
     private Method setterMethod;
 
-    private final boolean notNull;
-
-    static enum Source {Html, Url}
-
-    public FieldExtractor(Field field, Selector selector, Source source, boolean notNull) {
+    public FieldExtractor(Field field, Selector selector, Source source, boolean notNull,boolean multi) {
+        super(selector, source, notNull,multi);
         this.field = field;
-        this.selector = selector;
-        this.source = source;
-        this.notNull = notNull;
     }
 
     Field getField() {
