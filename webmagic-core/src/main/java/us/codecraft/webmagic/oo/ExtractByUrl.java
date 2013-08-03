@@ -17,4 +17,6 @@ public @interface ExtractByUrl{
 
     boolean notNull() default true;
 
+    boolean multi() default false;
+
 }

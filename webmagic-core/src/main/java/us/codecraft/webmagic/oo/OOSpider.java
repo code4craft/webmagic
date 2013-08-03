@@ -2,7 +2,6 @@ package us.codecraft.webmagic.oo;
 
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.pipeline.Pipeline;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -48,10 +47,6 @@ public class OOSpider extends Spider {
             objectPipeline.put(pageModel, pageModelPipeline);
         }
         return this;
-    }
-
-    public Spider pipeline(Pipeline pipeline) {
-        throw new UnsupportedOperationException("Sorry, OOSpider can only use ObjectPipeline");
     }
 
 }
