@@ -4,6 +4,8 @@ import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.pipeline.Pipeline;
 
+import java.lang.annotation.Annotation;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,7 +34,16 @@ public class ObjectPipeline implements Pipeline {
         for (Map.Entry<Class, PageModelPipeline> classPageModelPipelineEntry : pageModelPipelines.entrySet()) {
             Object o = resultItems.get(classPageModelPipelineEntry.getKey().getCanonicalName());
             if (o != null) {
-                classPageModelPipelineEntry.getValue().process(o, task);
+                Annotation annotation = classPageModelPipelineEntry.getKey().getAnnotation(ExtractBy.class);
+                ExtractBy extractBy = (ExtractBy) annotation;
+                if (extractBy.multi()) {
+                    List<Object> list = (List<Object>) o;
+                    for (Object o1 : list) {
+                        classPageModelPipelineEntry.getValue().process(o1, task);
+                    }
+                } else {
+                    classPageModelPipelineEntry.getValue().process(o, task);
+                }
             }
         }
     }

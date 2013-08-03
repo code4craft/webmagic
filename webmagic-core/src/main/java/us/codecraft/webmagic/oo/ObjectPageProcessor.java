@@ -51,7 +51,7 @@ public class ObjectPageProcessor implements PageProcessor {
     public void process(Page page) {
         for (PageModelExtractor pageModelExtractor : pageModelExtractorList) {
             Object process = pageModelExtractor.process(page);
-            if (process == null) {
+            if (process == null || (process instanceof List && ((List) process).size() == 0)) {
                 page.getResultItems().setSkip(true);
             }
             postProcessPageModel(pageModelExtractor.getClazz(), process);
