@@ -9,7 +9,7 @@ import us.codecraft.webmagic.Page;
  * @date: 13-8-3 <br>
  * Time: 上午9:42 <br>
  */
-public interface AfterExtractor<T> {
+public interface AfterExtractor {
 
-    public void afterProcess(Page page, T t);
+    public void afterProcess(Page page);
 }

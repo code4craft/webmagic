@@ -21,13 +21,15 @@ class PageModelExtractor {
 
     private List<Pattern> targetUrlPatterns = new ArrayList<Pattern>();
 
+    private Selector targetUrlRegionSelector;
+
     private List<Pattern> helpUrlPatterns = new ArrayList<Pattern>();
+
+    private Selector helpUrlRegionSelector;
 
     private Class clazz;
 
     private List<FieldExtractor> fieldExtractors;
-
-    private AfterExtractor afterExtractor;
 
     public static PageModelExtractor create(Class clazz) {
         PageModelExtractor pageModelExtractor = new PageModelExtractor();
@@ -39,13 +41,6 @@ class PageModelExtractor {
         this.clazz = clazz;
         initTargetUrlPatterns();
         fieldExtractors = new ArrayList<FieldExtractor>();
-        if (AfterExtractor.class.isAssignableFrom(clazz)) {
-            try {
-                afterExtractor = (AfterExtractor) clazz.newInstance();
-            } catch (Exception e) {
-                throw new IllegalArgumentException(e);
-            }
-        }
         for (Field field : clazz.getDeclaredFields()) {
             field.setAccessible(true);
             ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
@@ -117,16 +112,24 @@ class PageModelExtractor {
         if (annotation == null) {
             targetUrlPatterns.add(Pattern.compile(".*"));
         } else {
-            String[] value = ((TargetUrl) annotation).value();
+            TargetUrl targetUrl = (TargetUrl) annotation;
+            String[] value = targetUrl.value();
             for (String s : value) {
-                targetUrlPatterns.add(Pattern.compile(s.replace(".", "\\.").replace("*", "[^\"'#]*")));
+                targetUrlPatterns.add(Pattern.compile("("+s.replace(".", "\\.").replace("*", "[^\"'#]*")+")"));
+            }
+            if (!targetUrl.sourceRegion().equals("")){
+                targetUrlRegionSelector = new Xpath2Selector(targetUrl.sourceRegion());
             }
         }
         annotation = clazz.getAnnotation(HelpUrl.class);
         if (annotation != null) {
-            String[] value = ((HelpUrl) annotation).value();
+            HelpUrl helpUrl = (HelpUrl) annotation;
+            String[] value = helpUrl.value();
             for (String s : value) {
-                helpUrlPatterns.add(Pattern.compile(s.replace(".", "\\.").replace("*", "[^\"'#]*")));
+                helpUrlPatterns.add(Pattern.compile("("+s.replace(".", "\\.").replace("*", "[^\"'#]*")+")"));
+            }
+            if (!helpUrl.sourceRegion().equals("")){
+                helpUrlRegionSelector = new Xpath2Selector(helpUrl.sourceRegion());
             }
         }
     }
@@ -179,8 +182,8 @@ class PageModelExtractor {
                     setField(o, fieldExtractor, value);
                 }
             }
-            if (afterExtractor != null) {
-                afterExtractor.afterProcess(page, o);
+            if (AfterExtractor.class.isAssignableFrom(clazz)) {
+                ((AfterExtractor)o).afterProcess(page);
             }
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -209,5 +212,13 @@ class PageModelExtractor {
 
     List<Pattern> getHelpUrlPatterns() {
         return helpUrlPatterns;
+    }
+
+    Selector getTargetUrlRegionSelector() {
+        return targetUrlRegionSelector;
+    }
+
+    Selector getHelpUrlRegionSelector() {
+        return helpUrlRegionSelector;
     }
 }

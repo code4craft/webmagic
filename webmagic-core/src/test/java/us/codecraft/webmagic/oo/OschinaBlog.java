@@ -9,8 +9,8 @@ import java.util.List;
  * @date: 13-8-1 <br>
  * Time: 下午10:18 <br>
  */
-@TargetUrl("http://my.oschina.net/flashsword/blog/*")
-public class OschinaBlog implements AfterExtractor<OschinaBlog> {
+@TargetUrl(value="http://my.oschina.net/flashsword/blog/*",sourceRegion = "//div[@class='BlogLinks']")
+public class OschinaBlog implements AfterExtractor {
 
     @ExtractBy("//title")
     private String title;
@@ -22,7 +22,7 @@ public class OschinaBlog implements AfterExtractor<OschinaBlog> {
     private List<String> tags;
 
     @Override
-    public void afterProcess(Page page, OschinaBlog oschinaBlog) {
+    public void afterProcess(Page page) {
         content = null;
     }
 }
