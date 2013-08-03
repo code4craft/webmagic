@@ -15,7 +15,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactoryConfigurationException;
 
 /**
- * @author yihua.huang@dianping.com <br>
+ * @author code4crafter@gmail.com <br>
  * @date: 13-8-2 <br>
  * Time: 下午5:48 <br>
  */

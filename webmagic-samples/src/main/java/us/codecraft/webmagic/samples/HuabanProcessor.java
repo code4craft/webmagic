@@ -11,7 +11,7 @@ import us.codecraft.webmagic.selenium.downloader.SeleniumDownloader;
 /**
  * 花瓣网抽取器。<br>
  * 使用Selenium做页面动态渲染。<br>
- * @author yihua.huang@dianping.com <br>
+ * @author code4crafter@gmail.com <br>
  * @date: 13-7-26 <br>
  * Time: 下午4:08 <br>
  */

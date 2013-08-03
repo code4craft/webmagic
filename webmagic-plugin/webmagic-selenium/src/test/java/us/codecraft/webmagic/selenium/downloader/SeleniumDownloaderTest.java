@@ -8,7 +8,7 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 
 /**
- * @author yihua.huang@dianping.com <br>
+ * @author code4crafter@gmail.com <br>
  * @date: 13-7-26 <br>
  *        Time: 下午2:46 <br>
  */

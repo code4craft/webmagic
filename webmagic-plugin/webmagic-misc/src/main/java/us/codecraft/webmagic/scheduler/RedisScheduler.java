@@ -10,7 +10,7 @@ import us.codecraft.webmagic.schedular.Scheduler;
 /**
  * 使用redis管理url，构建一个分布式的爬虫。<br>
  *
- * @author yihua.huang@dianping.com <br>
+ * @author code4crafter@gmail.com <br>
  * @date: 13-7-25 <br>
  * Time: 上午7:07 <br>
  */
