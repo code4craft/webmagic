@@ -31,6 +31,8 @@ class PageModelExtractor {
 
     private List<FieldExtractor> fieldExtractors;
 
+    private Extractor extractor;
+
     public static PageModelExtractor create(Class clazz) {
         PageModelExtractor pageModelExtractor = new PageModelExtractor();
         pageModelExtractor.init(clazz);
@@ -39,7 +41,7 @@ class PageModelExtractor {
 
     private void init(Class clazz) {
         this.clazz = clazz;
-        initTargetUrlPatterns();
+        initClassExtractors();
         fieldExtractors = new ArrayList<FieldExtractor>();
         for (Field field : clazz.getDeclaredFields()) {
             field.setAccessible(true);
@@ -107,7 +109,7 @@ class PageModelExtractor {
         }
     }
 
-    private void initTargetUrlPatterns() {
+    private void initClassExtractors() {
         Annotation annotation = clazz.getAnnotation(TargetUrl.class);
         if (annotation == null) {
             targetUrlPatterns.add(Pattern.compile(".*"));
@@ -115,9 +117,9 @@ class PageModelExtractor {
             TargetUrl targetUrl = (TargetUrl) annotation;
             String[] value = targetUrl.value();
             for (String s : value) {
-                targetUrlPatterns.add(Pattern.compile("("+s.replace(".", "\\.").replace("*", "[^\"'#]*")+")"));
+                targetUrlPatterns.add(Pattern.compile("(" + s.replace(".", "\\.").replace("*", "[^\"'#]*") + ")"));
             }
-            if (!targetUrl.sourceRegion().equals("")){
+            if (!targetUrl.sourceRegion().equals("")) {
                 targetUrlRegionSelector = new Xpath2Selector(targetUrl.sourceRegion());
             }
         }
@@ -126,11 +128,16 @@ class PageModelExtractor {
             HelpUrl helpUrl = (HelpUrl) annotation;
             String[] value = helpUrl.value();
             for (String s : value) {
-                helpUrlPatterns.add(Pattern.compile("("+s.replace(".", "\\.").replace("*", "[^\"'#]*")+")"));
+                helpUrlPatterns.add(Pattern.compile("(" + s.replace(".", "\\.").replace("*", "[^\"'#]*") + ")"));
             }
-            if (!helpUrl.sourceRegion().equals("")){
+            if (!helpUrl.sourceRegion().equals("")) {
                 helpUrlRegionSelector = new Xpath2Selector(helpUrl.sourceRegion());
             }
+        }
+        annotation = clazz.getAnnotation(ExtractBy.class);
+        if (annotation != null) {
+            ExtractBy extractBy = (ExtractBy) annotation;
+            extractor = new Extractor(new Xpath2Selector(extractBy.value()), Extractor.Source.Html, extractBy.notNull(), extractBy.multi());
         }
     }
 
@@ -144,6 +151,28 @@ class PageModelExtractor {
         if (!matched) {
             return null;
         }
+        if (extractor == null) {
+            return processSingle(page,page.getHtml().toString());
+        } else {
+            if (extractor.multi){
+                List<Object> os = new ArrayList<Object>();
+                List<String> list = extractor.getSelector().selectList(page.getHtml().toString());
+                for (String s : list) {
+                    Object o = processSingle(page, s);
+                    if (o!=null){
+                        os.add(o);
+                    }
+                }
+                return os;
+            }else {
+                String select = extractor.getSelector().select(page.getHtml().toString());
+                Object o = processSingle(page, select);
+                return o;
+            }
+        }
+    }
+
+    private Object processSingle(Page page,String html) {
         Object o = null;
         try {
             o = clazz.newInstance();
@@ -152,38 +181,38 @@ class PageModelExtractor {
                     List<String> value;
                     switch (fieldExtractor.getSource()) {
                         case Html:
-                            value = fieldExtractor.getSelector().selectList(page.getHtml().toString());
+                            value = fieldExtractor.getSelector().selectList(html);
                             break;
                         case Url:
                             value = fieldExtractor.getSelector().selectList(page.getUrl().toString());
                             break;
                         default:
-                            value = fieldExtractor.getSelector().selectList(page.getHtml().toString());
+                            value = fieldExtractor.getSelector().selectList(html);
                     }
                     if ((value == null || value.size() == 0) && fieldExtractor.isNotNull()) {
-                        page.getResultItems().setSkip(true);
+                        return null;
                     }
                     setField(o, fieldExtractor, value);
                 } else {
                     String value;
                     switch (fieldExtractor.getSource()) {
                         case Html:
-                            value = fieldExtractor.getSelector().select(page.getHtml().toString());
+                            value = fieldExtractor.getSelector().select(html);
                             break;
                         case Url:
                             value = fieldExtractor.getSelector().select(page.getUrl().toString());
                             break;
                         default:
-                            value = fieldExtractor.getSelector().select(page.getHtml().toString());
+                            value = fieldExtractor.getSelector().select(html);
                     }
                     if (value == null && fieldExtractor.isNotNull()) {
-                        page.getResultItems().setSkip(true);
+                        return null;
                     }
                     setField(o, fieldExtractor, value);
                 }
             }
             if (AfterExtractor.class.isAssignableFrom(clazz)) {
-                ((AfterExtractor)o).afterProcess(page);
+                ((AfterExtractor) o).afterProcess(page);
             }
         } catch (InstantiationException e) {
             e.printStackTrace();
