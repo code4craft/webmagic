@@ -15,4 +15,6 @@ public @interface TargetUrl {
 
     String[] value();
 
+    String sourceRegion() default "";
+
 }
