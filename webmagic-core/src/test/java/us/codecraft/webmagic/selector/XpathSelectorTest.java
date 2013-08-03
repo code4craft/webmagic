@@ -1418,7 +1418,7 @@ public class XpathSelectorTest {
 
     @Test
     public void testXpath2Selector() {
-        Xpath2Selector xpath2Selector = new Xpath2Selector("//a");
+        Xpath2Selector xpath2Selector = new Xpath2Selector("//a/@href");
         String select = xpath2Selector.select(html);
         Assert.assertNotNull(select);
     }
