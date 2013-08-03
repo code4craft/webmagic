@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.oo;
+package us.codecraft.webmagic.model;
 
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;

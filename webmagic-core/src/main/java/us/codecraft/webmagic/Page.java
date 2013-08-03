@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * <pre>
- *Page保存了上一次抓取的结果，并可定义待抓取的链接内容。
+ * Page保存了上一次抓取的结果，并可定义待抓取的链接内容。
  *
  *     主要方法：
  *     {@link #getUrl()} 获取页面的Url
@@ -19,6 +19,7 @@ import java.util.List;
  *     {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} 添加待抓取的链接
  *
  * </pre>
+ *
  * @author code4crafter@gmail.com <br>
  */
 public class Page {
@@ -36,9 +37,16 @@ public class Page {
     public Page() {
     }
 
+    public Page setSkip(boolean skip) {
+        resultItems.setSkip(skip);
+        return this;
+
+    }
+
     /**
      * 保存抽取的结果
-     * @param key 结果的key
+     *
+     * @param key   结果的key
      * @param field 结果的value
      */
     public void putField(String key, Object field) {
@@ -47,6 +55,7 @@ public class Page {
 
     /**
      * 获取页面的html内容
+     *
      * @return html 页面的html内容
      */
     public Selectable getHtml() {
@@ -63,6 +72,7 @@ public class Page {
 
     /**
      * 添加待抓取的链接
+     *
      * @param requests 待抓取的链接
      */
     public void addTargetRequests(List<String> requests) {
@@ -79,6 +89,7 @@ public class Page {
 
     /**
      * 添加待抓取的链接
+     *
      * @param requestString 待抓取的链接
      */
     public void addTargetRequest(String requestString) {
@@ -93,6 +104,7 @@ public class Page {
 
     /**
      * 添加待抓取的页面，在需要传递附加信息时使用
+     *
      * @param request 待抓取的页面
      */
     public void addTargetRequest(Request request) {
@@ -103,6 +115,7 @@ public class Page {
 
     /**
      * 获取页面的Url
+     *
      * @return url 当前页面的url，可用于抽取
      */
     public Selectable getUrl() {
@@ -111,6 +124,7 @@ public class Page {
 
     /**
      * 设置url
+     *
      * @param url
      */
     public void setUrl(Selectable url) {
@@ -119,6 +133,7 @@ public class Page {
 
     /**
      * 获取抓取请求
+     *
      * @return request 抓取请求
      */
     public Request getRequest() {

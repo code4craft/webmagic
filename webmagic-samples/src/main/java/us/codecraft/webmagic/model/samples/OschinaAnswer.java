@@ -1,8 +1,8 @@
-package us.codecraft.webmagic.oo.samples;
+package us.codecraft.webmagic.model.samples;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.oo.*;
+import us.codecraft.webmagic.model.*;
 
 /**
  * @author code4crafter@gmail.com <br>

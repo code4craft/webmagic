@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.oo;
+package us.codecraft.webmagic.model;
 
 import org.junit.Ignore;
 import org.junit.Test;
