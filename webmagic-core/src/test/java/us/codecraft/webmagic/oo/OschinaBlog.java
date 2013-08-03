@@ -10,7 +10,7 @@ import java.util.List;
  * Time: 下午10:18 <br>
  */
 @TargetUrl("http://my.oschina.net/flashsword/blog/*")
-public class OschinaBlog implements AfterExtractor<OschinaBlog>{
+public class OschinaBlog implements AfterExtractor<OschinaBlog> {
 
     @ExtractBy("//title")
     private String title;
@@ -23,5 +23,6 @@ public class OschinaBlog implements AfterExtractor<OschinaBlog>{
 
     @Override
     public void afterProcess(Page page, OschinaBlog oschinaBlog) {
+        content = null;
     }
 }

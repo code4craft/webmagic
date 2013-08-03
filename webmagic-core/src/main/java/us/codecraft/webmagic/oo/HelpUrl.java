@@ -14,4 +14,6 @@ import java.lang.annotation.Target;
 public @interface HelpUrl {
 
     String[] value();
+
+    String sourceRegion() default "";
 }
