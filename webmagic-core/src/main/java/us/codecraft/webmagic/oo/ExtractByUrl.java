@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.annotation;
+package us.codecraft.webmagic.oo;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
