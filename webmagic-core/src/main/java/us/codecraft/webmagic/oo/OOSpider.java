@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.annotation;
+package us.codecraft.webmagic.oo;
 
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
@@ -16,7 +16,6 @@ public class OOSpider extends Spider {
      *
      * @param pageProcessor 已定义的抽取规则
      */
-
     private ObjectPageProcessor objectPageProcessor;
 
     private ObjectPipeline objectPipeline;

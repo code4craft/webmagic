@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.annotation;
+package us.codecraft.webmagic.oo;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;

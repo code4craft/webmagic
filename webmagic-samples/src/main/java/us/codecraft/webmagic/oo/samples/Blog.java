@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.annotation.samples;
+package us.codecraft.webmagic.oo.samples;
 
 /**
  * @author yihua.huang@dianping.com <br>

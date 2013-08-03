@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.annotation;
+package us.codecraft.webmagic.oo;
 
 import org.apache.commons.lang3.StringUtils;
 import us.codecraft.webmagic.Page;
