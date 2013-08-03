@@ -22,9 +22,9 @@ import java.util.regex.Pattern;
  */
 class PageModelExtractor {
 
-    private List<Pattern> targetUrlPatterns;
+    private List<Pattern> targetUrlPatterns = new ArrayList<Pattern>();
 
-    private List<Pattern> helpUrlPatterns;
+    private List<Pattern> helpUrlPatterns = new ArrayList<Pattern>();
 
     private Class clazz;
 
@@ -106,7 +106,6 @@ class PageModelExtractor {
     }
 
     private void initTargetUrlPatterns() {
-        targetUrlPatterns = new ArrayList<Pattern>();
         Annotation annotation = clazz.getAnnotation(TargetUrl.class);
         if (annotation == null) {
             targetUrlPatterns.add(Pattern.compile(".*"));
@@ -116,7 +115,6 @@ class PageModelExtractor {
                 targetUrlPatterns.add(Pattern.compile(s.replace(".", "\\.").replace("*", "[^\"'#]*")));
             }
         }
-        helpUrlPatterns = new ArrayList<Pattern>();
         annotation = clazz.getAnnotation(HelpUrl.class);
         if (annotation != null) {
             String[] value = ((HelpUrl) annotation).value();
