@@ -8,6 +8,7 @@ import org.htmlcleaner.DomSerializer;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.namespace.NamespaceContext;
@@ -70,7 +71,7 @@ public class Xpath2Selector implements Selector {
 
         private XPath2NamespaceContext() {
             put("fn", NamespaceConstant.FN);
-            put("xslt",NamespaceConstant.XSLT);
+            put("xslt", NamespaceConstant.XSLT);
         }
 
         @Override
@@ -116,15 +117,20 @@ public class Xpath2Selector implements Selector {
                 result = xPathExpression.evaluate(document, XPathConstants.STRING);
             }
             if (result instanceof NodeList) {
-                StreamResult xmlOutput = new StreamResult(new StringWriter());
-                Transformer transformer = TransformerFactory.newInstance().newTransformer();
-                transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
                 NodeList nodeList = (NodeList) result;
                 if (nodeList.getLength() == 0) {
                     return null;
                 }
-                transformer.transform(new DOMSource(nodeList.item(0)), xmlOutput);
-                return xmlOutput.getWriter().toString();
+                Node item = nodeList.item(0);
+                if (item.getNodeType() == Node.ATTRIBUTE_NODE || item.getNodeType() == Node.TEXT_NODE) {
+                    return item.getTextContent();
+                } else {
+                    StreamResult xmlOutput = new StreamResult(new StringWriter());
+                    Transformer transformer = TransformerFactory.newInstance().newTransformer();
+                    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+                    transformer.transform(new DOMSource(item), xmlOutput);
+                    return xmlOutput.getWriter().toString();
+                }
             }
             return result.toString();
         } catch (Exception e) {
@@ -152,9 +158,14 @@ public class Xpath2Selector implements Selector {
                 StreamResult xmlOutput = new StreamResult();
                 transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
                 for (int i = 0; i < nodeList.getLength(); i++) {
-                    xmlOutput.setWriter(new StringWriter());
-                    transformer.transform(new DOMSource(nodeList.item(i)), xmlOutput);
-                    results.add(xmlOutput.getWriter().toString());
+                    Node item = nodeList.item(i);
+                    if (item.getNodeType() == Node.ATTRIBUTE_NODE || item.getNodeType() == Node.TEXT_NODE) {
+                        results.add(item.getTextContent());
+                    } else {
+                        xmlOutput.setWriter(new StringWriter());
+                        transformer.transform(new DOMSource(item), xmlOutput);
+                        results.add(xmlOutput.getWriter().toString());
+                    }
                 }
             } else {
                 results.add(result.toString());

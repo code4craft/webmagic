@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.oo;
 
 import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.Site;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @date: 13-8-1 <br>
  * Time: 下午10:18 <br>
  */
-@TargetUrl(value="http://my.oschina.net/flashsword/blog/*",sourceRegion = "//div[@class='BlogLinks']")
+@TargetUrl(value="http://my.oschina.net/flashsword/blog/*",sourceRegion = "//div[@class='BlogLinks']//a/@href")
 public class OschinaBlog implements AfterExtractor {
 
     @ExtractBy("//title")
@@ -23,6 +24,13 @@ public class OschinaBlog implements AfterExtractor {
 
     @Override
     public void afterProcess(Page page) {
-        content = null;
+        System.out.println("title:\t"+title);
+        System.out.println("content:\t"+content);
+        System.out.println("tags:\t" + tags);
+    }
+
+    public static void main(String[] args) {
+        OOSpider.create(Site.me().addStartUrl("http://my.oschina.net/flashsword/blog/145796"), OschinaBlog.class)
+                .run();
     }
 }
