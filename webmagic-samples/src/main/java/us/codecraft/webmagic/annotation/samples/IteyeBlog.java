@@ -1,8 +1,8 @@
 package us.codecraft.webmagic.annotation.samples;
 
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.annotation.ExtractBy;
+import us.codecraft.webmagic.annotation.OOSpider;
 import us.codecraft.webmagic.annotation.TargetUrl;
 
 /**
@@ -28,7 +28,7 @@ public class IteyeBlog implements Blog{
     }
 
     public static void main(String[] args) {
-        Spider.create(Site.me().addStartUrl("http://dengminhui.iteye.com/blog"),IteyeBlog.class).run();
+        OOSpider.create(Site.me().addStartUrl("http://dengminhui.iteye.com/blog"), IteyeBlog.class).run();
     }
 
     public String getTitle() {

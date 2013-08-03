@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * @author yihua.huang@dianping.com <br>
+ * @author code4crafter@gmail.com <br>
  * @date: 13-8-1 <br>
  * Time: 下午8:40 <br>
  */
@@ -14,4 +14,5 @@ import java.lang.annotation.Target;
 public @interface TargetUrl {
 
     String[] value();
+
 }
