@@ -283,6 +283,11 @@ public class Spider implements Runnable, Task {
         return this;
     }
 
+    public Spider clearPipeline(){
+        pipelines=new ArrayList<Pipeline>();
+        return this;
+    }
+
     @Override
     public String getUUID() {
         if (uuid != null) {
