@@ -22,6 +22,9 @@ public class OschinaBlog implements AfterExtractor {
     @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
     private List<String> tags;
 
+    @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
+    private List<String> comments;
+
     @Override
     public void afterProcess(Page page) {
         System.out.println("title:\t"+title);
