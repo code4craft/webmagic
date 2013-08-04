@@ -4,17 +4,13 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 
 /**
+ * 基于Model的Spider，封装后的入口类。<br>
  * @author code4crafter@gmail.com <br>
  * @date: 13-8-3 <br>
  * Time: 上午9:51 <br>
  */
 public class OOSpider extends Spider {
 
-    /**
-     * OOSpider只能由ObjectPageProcessor创建。
-     *
-     * @param pageProcessor 已定义的抽取规则
-     */
     private ModelPageProcessor modelPageProcessor;
 
     private ModelPipeline modelPipeline;
@@ -24,6 +20,12 @@ public class OOSpider extends Spider {
         this.modelPageProcessor = modelPageProcessor;
     }
 
+    /**
+     * 创建一个爬虫。<br>
+     * @param site
+     * @param pageModelPipeline
+     * @param pageModels
+     */
     public OOSpider(Site site, PageModelPipeline pageModelPipeline, Class... pageModels) {
         this(ModelPageProcessor.create(site, pageModels));
         this.modelPipeline = new ModelPipeline();

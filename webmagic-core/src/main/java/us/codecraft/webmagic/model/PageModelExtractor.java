@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
+ * Model主要逻辑类。将一个带注解的POJO转换为一个PageModelExtractor。<br>
  * @author code4crafter@gmail.com <br>
  * @date: 13-8-1 <br>
  * Time: 下午9:33 <br>
