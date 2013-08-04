@@ -14,11 +14,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * 基于PageProcessor的扩展点。<br>
  * @author code4crafter@gmail.com <br>
  * @date: 13-8-1 <br>
  * Time: 下午8:46 <br>
  */
-public class ModelPageProcessor implements PageProcessor {
+class ModelPageProcessor implements PageProcessor {
 
     private List<PageModelExtractor> pageModelExtractorList = new ArrayList<PageModelExtractor>();
 

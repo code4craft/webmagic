@@ -10,11 +10,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 基于Pipeline的扩展点。<br>
  * @author code4crafter@gmail.com <br>
  * @date: 13-8-2 <br>
  * Time: 上午10:47 <br>
  */
-public class ModelPipeline implements Pipeline {
+class ModelPipeline implements Pipeline {
 
     private Map<Class, PageModelPipeline> pageModelPipelines = new ConcurrentHashMap<Class, PageModelPipeline>();
 
