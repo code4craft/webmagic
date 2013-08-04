@@ -14,14 +14,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date: 13-8-2 <br>
  * Time: 上午10:47 <br>
  */
-public class ObjectPipeline implements Pipeline {
+public class ModelPipeline implements Pipeline {
 
     private Map<Class, PageModelPipeline> pageModelPipelines = new ConcurrentHashMap<Class, PageModelPipeline>();
 
-    public ObjectPipeline() {
+    public ModelPipeline() {
     }
 
-    public ObjectPipeline put(Class clazz, PageModelPipeline pageModelPipeline) {
+    public ModelPipeline put(Class clazz, PageModelPipeline pageModelPipeline) {
         pageModelPipelines.put(clazz, pageModelPipeline);
         return this;
     }
