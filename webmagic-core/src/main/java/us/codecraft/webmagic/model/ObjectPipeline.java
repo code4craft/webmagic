@@ -35,14 +35,13 @@ public class ObjectPipeline implements Pipeline {
             Object o = resultItems.get(classPageModelPipelineEntry.getKey().getCanonicalName());
             if (o != null) {
                 Annotation annotation = classPageModelPipelineEntry.getKey().getAnnotation(ExtractBy.class);
-                ExtractBy extractBy = (ExtractBy) annotation;
-                if (extractBy.multi()) {
+                if (annotation == null || !((ExtractBy) annotation).multi()) {
+                    classPageModelPipelineEntry.getValue().process(o, task);
+                } else {
                     List<Object> list = (List<Object>) o;
                     for (Object o1 : list) {
                         classPageModelPipelineEntry.getValue().process(o1, task);
                     }
-                } else {
-                    classPageModelPipelineEntry.getValue().process(o, task);
                 }
             }
         }

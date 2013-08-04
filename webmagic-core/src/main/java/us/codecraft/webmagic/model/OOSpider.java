@@ -28,13 +28,15 @@ public class OOSpider extends Spider {
         this(ObjectPageProcessor.create(site, pageModels));
         this.objectPipeline = new ObjectPipeline();
         super.pipeline(objectPipeline);
-        for (Class pageModel : pageModels) {
-            this.objectPipeline.put(pageModel, pageModelPipeline);
+        if (pageModelPipeline!=null){
+            for (Class pageModel : pageModels) {
+                this.objectPipeline.put(pageModel, pageModelPipeline);
+            }
         }
     }
 
     public static OOSpider create(Site site, Class... pageModels) {
-        return new OOSpider(site, new ConsolePageModelPipeline(), pageModels);
+        return new OOSpider(site, null, pageModels);
     }
 
     public static OOSpider create(Site site, PageModelPipeline pageModelPipeline, Class... pageModels) {
