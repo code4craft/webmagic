@@ -46,56 +46,100 @@ class PageModelExtractor {
         fieldExtractors = new ArrayList<FieldExtractor>();
         for (Field field : clazz.getDeclaredFields()) {
             field.setAccessible(true);
-            ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
-            if (extractBy != null) {
-                if (!extractBy.multi() && !String.class.isAssignableFrom(field.getType())) {
-                    throw new IllegalStateException("Field " + field.getName() + " must be string");
-                } else if (extractBy.multi() && !List.class.isAssignableFrom(field.getType())) {
-                    throw new IllegalStateException("Field " + field.getName() + " must be list");
-                }
-                String value = extractBy.value();
-                Selector selector;
-                switch (extractBy.type()) {
-                    case Css:
-                        selector = new CssSelector(value);
-                        break;
-                    case Regex:
-                        selector = new RegexSelector(value);
-                        break;
-                    case XPath:
-                        selector = new XpathSelector(value);
-                        break;
-                    case XPath2:
-                        selector = new Xpath2Selector(value);
-                        break;
-                    default:
-                        selector = new Xpath2Selector(value);
-                }
-                FieldExtractor fieldExtractor = new FieldExtractor(field, selector, FieldExtractor.Source.Html, extractBy.notNull(), extractBy.multi());
-                Method setterMethod = getSetterMethod(clazz, field);
-                if (setterMethod != null) {
-                    fieldExtractor.setSetterMethod(setterMethod);
-                }
-                fieldExtractors.add(fieldExtractor);
+            getAnnotationExtractBy(clazz, field);
+            getAnnotationExtractByRaw(clazz,field);
+            getAnnotationExtractByUrl(clazz, field);
+        }
+    }
+
+    private void getAnnotationExtractByUrl(Class clazz, Field field) {
+        ExtractByUrl extractByUrl = field.getAnnotation(ExtractByUrl.class);
+        if (extractByUrl != null) {
+            if (!extractByUrl.multi() && !String.class.isAssignableFrom(field.getType())) {
+                throw new IllegalStateException("Field " + field.getName() + " must be string");
+            } else if (extractByUrl.multi() && !List.class.isAssignableFrom(field.getType())) {
+                throw new IllegalStateException("Field " + field.getName() + " must be list");
             }
-            ExtractByUrl extractByUrl = field.getAnnotation(ExtractByUrl.class);
-            if (extractByUrl != null) {
-                if (!extractByUrl.multi() && !String.class.isAssignableFrom(field.getType())) {
-                    throw new IllegalStateException("Field " + field.getName() + " must be string");
-                } else if (extractByUrl.multi() && !List.class.isAssignableFrom(field.getType())) {
-                    throw new IllegalStateException("Field " + field.getName() + " must be list");
-                }
-                String regexPattern = extractByUrl.value();
-                if (regexPattern.trim().equals("")) {
-                    regexPattern = ".*";
-                }
-                FieldExtractor fieldExtractor = new FieldExtractor(field, new RegexSelector(regexPattern), FieldExtractor.Source.Url, extractByUrl.notNull(), extractByUrl.multi());
-                Method setterMethod = getSetterMethod(clazz, field);
-                if (setterMethod != null) {
-                    fieldExtractor.setSetterMethod(setterMethod);
-                }
-                fieldExtractors.add(fieldExtractor);
+            String regexPattern = extractByUrl.value();
+            if (regexPattern.trim().equals("")) {
+                regexPattern = ".*";
             }
+            FieldExtractor fieldExtractor = new FieldExtractor(field, new RegexSelector(regexPattern), FieldExtractor.Source.Url, extractByUrl.notNull(), extractByUrl.multi());
+            Method setterMethod = getSetterMethod(clazz, field);
+            if (setterMethod != null) {
+                fieldExtractor.setSetterMethod(setterMethod);
+            }
+            fieldExtractors.add(fieldExtractor);
+        }
+    }
+
+    private void getAnnotationExtractBy(Class clazz, Field field) {
+        ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
+        if (extractBy != null) {
+            if (!extractBy.multi() && !String.class.isAssignableFrom(field.getType())) {
+                throw new IllegalStateException("Field " + field.getName() + " must be string");
+            } else if (extractBy.multi() && !List.class.isAssignableFrom(field.getType())) {
+                throw new IllegalStateException("Field " + field.getName() + " must be list");
+            }
+            String value = extractBy.value();
+            Selector selector;
+            switch (extractBy.type()) {
+                case Css:
+                    selector = new CssSelector(value);
+                    break;
+                case Regex:
+                    selector = new RegexSelector(value);
+                    break;
+                case XPath:
+                    selector = new XpathSelector(value);
+                    break;
+                case XPath2:
+                    selector = new Xpath2Selector(value);
+                    break;
+                default:
+                    selector = new Xpath2Selector(value);
+            }
+            FieldExtractor fieldExtractor = new FieldExtractor(field, selector, FieldExtractor.Source.Html, extractBy.notNull(), extractBy.multi());
+            Method setterMethod = getSetterMethod(clazz, field);
+            if (setterMethod != null) {
+                fieldExtractor.setSetterMethod(setterMethod);
+            }
+            fieldExtractors.add(fieldExtractor);
+        }
+    }
+
+    private void getAnnotationExtractByRaw(Class clazz, Field field) {
+        ExtractByRaw extractByRaw = field.getAnnotation(ExtractByRaw.class);
+        if (extractByRaw != null) {
+            if (!extractByRaw.multi() && !String.class.isAssignableFrom(field.getType())) {
+                throw new IllegalStateException("Field " + field.getName() + " must be string");
+            } else if (extractByRaw.multi() && !List.class.isAssignableFrom(field.getType())) {
+                throw new IllegalStateException("Field " + field.getName() + " must be list");
+            }
+            String value = extractByRaw.value();
+            Selector selector;
+            switch (extractByRaw.type()) {
+                case Css:
+                    selector = new CssSelector(value);
+                    break;
+                case Regex:
+                    selector = new RegexSelector(value);
+                    break;
+                case XPath:
+                    selector = new XpathSelector(value);
+                    break;
+                case XPath2:
+                    selector = new Xpath2Selector(value);
+                    break;
+                default:
+                    selector = new Xpath2Selector(value);
+            }
+            FieldExtractor fieldExtractor = new FieldExtractor(field, selector, FieldExtractor.Source.RawHtml, extractByRaw.notNull(), extractByRaw.multi());
+            Method setterMethod = getSetterMethod(clazz, field);
+            if (setterMethod != null) {
+                fieldExtractor.setSetterMethod(setterMethod);
+            }
+            fieldExtractors.add(fieldExtractor);
         }
     }
 
@@ -181,6 +225,9 @@ class PageModelExtractor {
                 if (fieldExtractor.multi) {
                     List<String> value;
                     switch (fieldExtractor.getSource()) {
+                        case RawHtml:
+                            value = fieldExtractor.getSelector().selectList(page.getHtml().toString());
+                            break;
                         case Html:
                             value = fieldExtractor.getSelector().selectList(html);
                             break;
@@ -197,6 +244,9 @@ class PageModelExtractor {
                 } else {
                     String value;
                     switch (fieldExtractor.getSource()) {
+                        case RawHtml:
+                            value = fieldExtractor.getSelector().select(page.getHtml().toString());
+                            break;
                         case Html:
                             value = fieldExtractor.getSelector().select(html);
                             break;
