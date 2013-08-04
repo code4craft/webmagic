@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * @date: 13-8-1 <br>
  * Time: 下午8:46 <br>
  */
-public class ObjectPageProcessor implements PageProcessor {
+public class ModelPageProcessor implements PageProcessor {
 
     private List<PageModelExtractor> pageModelExtractorList = new ArrayList<PageModelExtractor>();
 
@@ -26,16 +26,16 @@ public class ObjectPageProcessor implements PageProcessor {
 
     private Set<Pattern> targetUrlPatterns = new HashSet<Pattern>();
 
-    public static ObjectPageProcessor create(Site site, Class... clazzs) {
-        ObjectPageProcessor objectPageProcessor = new ObjectPageProcessor(site);
+    public static ModelPageProcessor create(Site site, Class... clazzs) {
+        ModelPageProcessor modelPageProcessor = new ModelPageProcessor(site);
         for (Class clazz : clazzs) {
-            objectPageProcessor.addPageModel(clazz);
+            modelPageProcessor.addPageModel(clazz);
         }
-        return objectPageProcessor;
+        return modelPageProcessor;
     }
 
 
-    public ObjectPageProcessor addPageModel(Class clazz) {
+    public ModelPageProcessor addPageModel(Class clazz) {
         PageModelExtractor pageModelExtractor = PageModelExtractor.create(clazz);
         targetUrlPatterns.addAll(pageModelExtractor.getTargetUrlPatterns());
         targetUrlPatterns.addAll(pageModelExtractor.getHelpUrlPatterns());
@@ -43,7 +43,7 @@ public class ObjectPageProcessor implements PageProcessor {
         return this;
     }
 
-    private ObjectPageProcessor(Site site) {
+    private ModelPageProcessor(Site site) {
         this.site = site;
     }
 

@@ -15,22 +15,22 @@ public class OOSpider extends Spider {
      *
      * @param pageProcessor 已定义的抽取规则
      */
-    private ObjectPageProcessor objectPageProcessor;
+    private ModelPageProcessor modelPageProcessor;
 
-    private ObjectPipeline objectPipeline;
+    private ModelPipeline modelPipeline;
 
-    protected OOSpider(ObjectPageProcessor objectPageProcessor) {
-        super(objectPageProcessor);
-        this.objectPageProcessor = objectPageProcessor;
+    protected OOSpider(ModelPageProcessor modelPageProcessor) {
+        super(modelPageProcessor);
+        this.modelPageProcessor = modelPageProcessor;
     }
 
     public OOSpider(Site site, PageModelPipeline pageModelPipeline, Class... pageModels) {
-        this(ObjectPageProcessor.create(site, pageModels));
-        this.objectPipeline = new ObjectPipeline();
-        super.pipeline(objectPipeline);
+        this(ModelPageProcessor.create(site, pageModels));
+        this.modelPipeline = new ModelPipeline();
+        super.pipeline(modelPipeline);
         if (pageModelPipeline!=null){
             for (Class pageModel : pageModels) {
-                this.objectPipeline.put(pageModel, pageModelPipeline);
+                this.modelPipeline.put(pageModel, pageModelPipeline);
             }
         }
     }
@@ -45,8 +45,8 @@ public class OOSpider extends Spider {
 
     public OOSpider addPageModel(PageModelPipeline pageModelPipeline, Class... pageModels) {
         for (Class pageModel : pageModels) {
-            objectPageProcessor.addPageModel(pageModel);
-            objectPipeline.put(pageModel, pageModelPipeline);
+            modelPageProcessor.addPageModel(pageModel);
+            modelPipeline.put(pageModel, pageModelPipeline);
         }
         return this;
     }
