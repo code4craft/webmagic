@@ -55,8 +55,10 @@ class PageModelExtractor {
                 fieldExtractor = fieldExtractorTmp;
             }
             // ExtractBy2 & ExtractBy3
-            addAnnotationExtractBy2(clazz, fieldExtractor);
-            addAnnotationExtractBy3(clazz, fieldExtractor);
+            if (fieldExtractor!=null){
+                addAnnotationExtractBy2(fieldExtractor);
+                addAnnotationExtractBy3(fieldExtractor);
+            }
             fieldExtractorTmp = getAnnotationExtractByUrl(clazz, field);
             if (fieldExtractor != null && fieldExtractorTmp != null) {
                 throw new IllegalStateException("Only one of 'ExtractBy ExtractByRaw ExtractByUrl' can be added to a field!");
@@ -69,8 +71,8 @@ class PageModelExtractor {
                 } else if (fieldExtractor.isMulti() && !List.class.isAssignableFrom(field.getType())) {
                     throw new IllegalStateException("Field " + field.getName() + " must be list");
                 }
+                fieldExtractors.add(fieldExtractor);
             }
-
         }
     }
 
@@ -122,7 +124,7 @@ class PageModelExtractor {
         return fieldExtractor;
     }
 
-    private void addAnnotationExtractBy2(Class clazz, FieldExtractor fieldExtractor) {
+    private void addAnnotationExtractBy2(FieldExtractor fieldExtractor) {
         ExtractBy2 extractBy = fieldExtractor.getField().getAnnotation(ExtractBy2.class);
         if (extractBy != null) {
             String value = extractBy.value();
@@ -147,7 +149,7 @@ class PageModelExtractor {
         }
     }
 
-    private void addAnnotationExtractBy3(Class clazz, FieldExtractor fieldExtractor) {
+    private void addAnnotationExtractBy3(FieldExtractor fieldExtractor) {
         ExtractBy3 extractBy = fieldExtractor.getField().getAnnotation(ExtractBy3.class);
         if (extractBy != null) {
             String value = extractBy.value();

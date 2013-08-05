@@ -1,12 +1,10 @@
 package us.codecraft.webmagic.model.samples;
 
-import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.PagedModel;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.*;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.PagedPipeline;
-import us.codecraft.webmagic.selector.Selectable;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,14 +15,16 @@ import java.util.List;
  * Time: 下午8:17 <br>
  */
 @TargetUrl("http://news.163.com/\\d+/\\d+/\\d+/\\w+*.html")
-public class News163 implements PagedModel, AfterExtractor {
+public class News163 implements PagedModel {
 
-    @ExtractByUrl("http://news\\.163\\.com/\\d+/\\d+/\\d+/(\\w+)*\\.html")
+    @ExtractByUrl("http://news\\.163\\.com/\\d+/\\d+/\\d+/([^_]*).*\\.html")
     private String pageKey;
 
     @ExtractByUrl(value = "http://news\\.163\\.com/\\d+/\\d+/\\d+/\\w+_(\\d+)\\.html", notNull = false)
     private String page;
 
+    @ExtractBy(value = "//div[@class=\"ep-pages\"]//a/@href", multi = true)
+    @ExtractBy2(value = "http://news\\.163\\.com/\\d+/\\d+/\\d+/\\w+_(\\d+)\\.html", type = ExtractBy2.Type.Regex)
     private List<String> otherPage;
 
     @ExtractBy("//h1[@id=\"h1title\"]/text()")
@@ -54,6 +54,7 @@ public class News163 implements PagedModel, AfterExtractor {
     @Override
     public PagedModel combine(PagedModel pagedModel) {
         News163 news163 = new News163();
+        news163.title = this.title;
         News163 pagedModel1 = (News163) pagedModel;
         news163.content = this.content + pagedModel1.content;
         return news163;
@@ -73,9 +74,4 @@ public class News163 implements PagedModel, AfterExtractor {
                 .clearPipeline().pipeline(new PagedPipeline()).pipeline(new ConsolePipeline()).run();
     }
 
-    @Override
-    public void afterProcess(Page page) {
-        Selectable xpath = page.getHtml().xpath("//div[@class=\"ep-pages\"]//a/@href");
-        otherPage = xpath.regex("http://news\\.163\\.com/\\d+/\\d+/\\d+/\\w+_(\\d+)\\.html").all();
-    }
 }
