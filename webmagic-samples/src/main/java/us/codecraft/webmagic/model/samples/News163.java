@@ -5,6 +5,7 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.*;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.PagedPipeline;
+import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 import java.util.Collection;
 import java.util.List;
@@ -71,7 +72,7 @@ public class News163 implements PagedModel {
 
     public static void main(String[] args) {
         OOSpider.create(Site.me().addStartUrl("http://news.163.com/13/0802/05/958I1E330001124J_2.html"), News163.class)
-                .clearPipeline().pipeline(new PagedPipeline()).pipeline(new ConsolePipeline()).run();
+                .scheduler(new RedisScheduler("localhost")).clearPipeline().pipeline(new PagedPipeline()).pipeline(new ConsolePipeline()).run();
     }
 
 }

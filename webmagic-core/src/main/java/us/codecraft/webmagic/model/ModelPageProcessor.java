@@ -51,14 +51,14 @@ class ModelPageProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         for (PageModelExtractor pageModelExtractor : pageModelExtractorList) {
+            extractLinks(page, pageModelExtractor.getHelpUrlRegionSelector(), pageModelExtractor.getHelpUrlPatterns());
+            extractLinks(page, pageModelExtractor.getTargetUrlRegionSelector(), pageModelExtractor.getTargetUrlPatterns());
             Object process = pageModelExtractor.process(page);
             if (process == null || (process instanceof List && ((List) process).size() == 0)) {
                 page.getResultItems().setSkip(true);
             }
             postProcessPageModel(pageModelExtractor.getClazz(), process);
             page.putField(pageModelExtractor.getClazz().getCanonicalName(), process);
-            extractLinks(page, pageModelExtractor.getHelpUrlRegionSelector(), pageModelExtractor.getHelpUrlPatterns());
-            extractLinks(page, pageModelExtractor.getTargetUrlRegionSelector(), pageModelExtractor.getTargetUrlPatterns());
         }
     }
 
