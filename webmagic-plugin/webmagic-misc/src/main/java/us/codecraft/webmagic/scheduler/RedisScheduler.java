@@ -56,18 +56,20 @@ public class RedisScheduler implements Scheduler {
     public synchronized Request poll(Task task) {
         Jedis jedis = pool.getResource();
         String url = jedis.lpop(QUEUE_PREFIX + task.getUUID());
-        String key = ITEM_PREFIX + DigestUtils.shaHex(url);
-        byte[] bytes = jedis.get(key.getBytes());
-        try {
-            Object o = HessianSerializer.INSTANCE.deSerialize(bytes);
-            return (Request)o;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        pool.returnResource(jedis);
         if (url == null) {
             return null;
         }
+        String key = ITEM_PREFIX + DigestUtils.shaHex(url);
+        byte[] bytes = jedis.get(key.getBytes());
+        if (bytes!=null){
+            try {
+                Object o = HessianSerializer.INSTANCE.deSerialize(bytes);
+                return (Request)o;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        pool.returnResource(jedis);
         return new Request(url);
     }
 }
