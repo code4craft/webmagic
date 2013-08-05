@@ -33,7 +33,7 @@ public class RedisScheduler implements Scheduler {
         if (jedis.zrank(SET_PREFIX + task.getUUID(), request.getUrl()) == null) {
             //使用List保存队列
             jedis.rpush(QUEUE_PREFIX + task.getUUID(), request.getUrl());
-            jedis.zadd(SET_PREFIX + task.getUUID(), System.currentTimeMillis(), request.getUrl());
+            jedis.zadd(SET_PREFIX + task.getUUID(), request.getPriority(), request.getUrl());
         }
         pool.returnResource(jedis);
     }
