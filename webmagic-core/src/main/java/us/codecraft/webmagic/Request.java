@@ -33,7 +33,7 @@ public class Request {
     /**
      * 额外参数，可以保存一些需要的上下文信息
      */
-    private Map<String, Object> extras = new HashMap<String, Object>();
+    private Map<String, Object> extras;
 
     private double priority;
 
@@ -56,10 +56,16 @@ public class Request {
     }
 
     public Object getExtra(String key) {
+        if (extras==null){
+            return null;
+        }
         return extras.get(key);
     }
 
     public Request putExtra(String key,Object value) {
+        if (extras==null){
+            extras = new HashMap<String, Object>();
+        }
         extras.put(key,value);
         return this;
     }
