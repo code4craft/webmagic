@@ -28,6 +28,8 @@ public class Request {
 
     private Object[] extra;
 
+    private double priority;
+
     /**
      * 构建一个request对象
      * @param url 必须参数，待抓取的url
@@ -36,6 +38,15 @@ public class Request {
     public Request(String url, Object... extra) {
         this.url = url;
         this.extra = extra;
+    }
+
+    public double getPriority() {
+        return priority;
+    }
+
+    public Request setPriority(double priority) {
+        this.priority = priority;
+        return this;
     }
 
     /**
@@ -54,4 +65,20 @@ public class Request {
         return url;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Request request = (Request) o;
+
+        if (!url.equals(request.url)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return url.hashCode();
+    }
 }
