@@ -1,5 +1,6 @@
 package us.codecraft.webmagic;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +27,9 @@ import java.util.Map;
  *         Date: 13-4-21
  *         Time: 上午11:37
  */
-public class Request {
+public class Request implements Serializable {
+
+    private static final long serialVersionUID = 2062192774891352043L;
 
     private String url;
 
@@ -40,7 +43,7 @@ public class Request {
     /**
      * 构建一个request对象
      *
-     * @param url   必须参数，待抓取的url
+     * @param url 必须参数，待抓取的url
      */
     public Request(String url) {
         this.url = url;
@@ -56,17 +59,17 @@ public class Request {
     }
 
     public Object getExtra(String key) {
-        if (extras==null){
+        if (extras == null) {
             return null;
         }
         return extras.get(key);
     }
 
-    public Request putExtra(String key,Object value) {
-        if (extras==null){
+    public Request putExtra(String key, Object value) {
+        if (extras == null) {
             extras = new HashMap<String, Object>();
         }
-        extras.put(key,value);
+        extras.put(key, value);
         return this;
     }
 
@@ -89,6 +92,10 @@ public class Request {
         if (!url.equals(request.url)) return false;
 
         return true;
+    }
+
+    public Map<String, Object> getExtras() {
+        return extras;
     }
 
     @Override

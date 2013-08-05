@@ -1,11 +1,14 @@
 package us.codecraft.webmagic.scheduler;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.schedular.Scheduler;
+
+import java.io.IOException;
 
 /**
  * 使用redis管理url，构建一个分布式的爬虫。<br>
@@ -22,6 +25,8 @@ public class RedisScheduler implements Scheduler {
 
     private static final String SET_PREFIX = "set_";
 
+    private static final String ITEM_PREFIX = "item_";
+
     public RedisScheduler(String host) {
         pool = new JedisPool(new JedisPoolConfig(), host);
     }
@@ -34,6 +39,15 @@ public class RedisScheduler implements Scheduler {
             //使用List保存队列
             jedis.rpush(QUEUE_PREFIX + task.getUUID(), request.getUrl());
             jedis.zadd(SET_PREFIX + task.getUUID(), request.getPriority(), request.getUrl());
+            if (request.getExtras() != null) {
+                String key = ITEM_PREFIX + DigestUtils.shaHex(request.getUrl());
+                try {
+                    byte[] serialize = HessianSerializer.INSTANCE.serialize(request);
+                    jedis.set(key.getBytes(), serialize);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         pool.returnResource(jedis);
     }
@@ -42,8 +56,16 @@ public class RedisScheduler implements Scheduler {
     public synchronized Request poll(Task task) {
         Jedis jedis = pool.getResource();
         String url = jedis.lpop(QUEUE_PREFIX + task.getUUID());
+        String key = ITEM_PREFIX + DigestUtils.shaHex(url);
+        byte[] bytes = jedis.get(key.getBytes());
+        try {
+            Object o = HessianSerializer.INSTANCE.deSerialize(bytes);
+            return (Request)o;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         pool.returnResource(jedis);
-        if (url==null){
+        if (url == null) {
             return null;
         }
         return new Request(url);
