@@ -9,7 +9,7 @@ import us.codecraft.webmagic.selector.Selector;
  */
 class Extractor {
 
-    protected final Selector selector;
+    protected Selector selector;
 
     protected final Source source;
 
@@ -36,5 +36,13 @@ class Extractor {
 
     boolean isNotNull() {
         return notNull;
+    }
+
+    boolean isMulti() {
+        return multi;
+    }
+
+    void setSelector(Selector selector) {
+        this.selector = selector;
     }
 }
