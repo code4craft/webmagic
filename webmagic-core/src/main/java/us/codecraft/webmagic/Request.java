@@ -1,5 +1,8 @@
 package us.codecraft.webmagic;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Request对象封装了待抓取的url信息。<br/>
  * 在PageProcessor中，Request对象可以通过{@link us.codecraft.webmagic.Page#getRequest()} 获取。<br/>
@@ -18,26 +21,29 @@ package us.codecraft.webmagic;
  *          String linktext =  (String)page.getRequest().getExtra()[0];
  *      }
  * </pre>
+ *
  * @author code4crafter@gmail.com <br>
- * Date: 13-4-21
- * Time: 上午11:37
+ *         Date: 13-4-21
+ *         Time: 上午11:37
  */
 public class Request {
 
     private String url;
 
-    private Object[] extra;
+    /**
+     * 额外参数，可以保存一些需要的上下文信息
+     */
+    private Map<String, Object> extras = new HashMap<String, Object>();
 
     private double priority;
 
     /**
      * 构建一个request对象
-     * @param url 必须参数，待抓取的url
-     * @param extra 额外参数，可以保存一些需要的上下文信息
+     *
+     * @param url   必须参数，待抓取的url
      */
-    public Request(String url, Object... extra) {
+    public Request(String url) {
         this.url = url;
-        this.extra = extra;
     }
 
     public double getPriority() {
@@ -49,16 +55,18 @@ public class Request {
         return this;
     }
 
-    /**
-     * 获取预存的对象
-     * @return object[] 预存的对象数组
-     */
-    public Object[] getExtra() {
-        return extra;
+    public Object getExtra(String key) {
+        return extras.get(key);
+    }
+
+    public Request putExtra(String key,Object value) {
+        extras.put(key,value);
+        return this;
     }
 
     /**
      * 获取待抓取的url
+     *
      * @return url 待抓取的url
      */
     public String getUrl() {
