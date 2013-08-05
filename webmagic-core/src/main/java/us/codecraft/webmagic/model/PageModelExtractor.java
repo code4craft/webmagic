@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 /**
  * Model主要逻辑类。将一个带注解的POJO转换为一个PageModelExtractor。<br>
+ *
  * @author code4crafter@gmail.com <br>
  * @date: 13-8-1 <br>
  * Time: 下午9:33 <br>
@@ -46,41 +47,54 @@ class PageModelExtractor {
         fieldExtractors = new ArrayList<FieldExtractor>();
         for (Field field : clazz.getDeclaredFields()) {
             field.setAccessible(true);
-            getAnnotationExtractBy(clazz, field);
-            getAnnotationExtractByRaw(clazz,field);
-            getAnnotationExtractByUrl(clazz, field);
+            FieldExtractor fieldExtractor = getAnnotationExtractBy(clazz, field);
+            FieldExtractor fieldExtractorTmp = getAnnotationExtractByRaw(clazz, field);
+            if (fieldExtractor != null && fieldExtractorTmp != null) {
+                throw new IllegalStateException("Only one of 'ExtractBy ExtractByRaw ExtractByUrl' can be added to a field!");
+            } else if (fieldExtractor == null && fieldExtractorTmp != null) {
+                fieldExtractor = fieldExtractorTmp;
+            }
+            // ExtractBy2 & ExtractBy3
+            addAnnotationExtractBy2(clazz, fieldExtractor);
+            addAnnotationExtractBy3(clazz, fieldExtractor);
+            fieldExtractorTmp = getAnnotationExtractByUrl(clazz, field);
+            if (fieldExtractor != null && fieldExtractorTmp != null) {
+                throw new IllegalStateException("Only one of 'ExtractBy ExtractByRaw ExtractByUrl' can be added to a field!");
+            } else if (fieldExtractor == null && fieldExtractorTmp != null) {
+                fieldExtractor = fieldExtractorTmp;
+            }
+            if (fieldExtractor != null) {
+                if (!fieldExtractor.isMulti() && !String.class.isAssignableFrom(field.getType())) {
+                    throw new IllegalStateException("Field " + field.getName() + " must be string");
+                } else if (fieldExtractor.isMulti() && !List.class.isAssignableFrom(field.getType())) {
+                    throw new IllegalStateException("Field " + field.getName() + " must be list");
+                }
+            }
+
         }
     }
 
-    private void getAnnotationExtractByUrl(Class clazz, Field field) {
+    private FieldExtractor getAnnotationExtractByUrl(Class clazz, Field field) {
+        FieldExtractor fieldExtractor = null;
         ExtractByUrl extractByUrl = field.getAnnotation(ExtractByUrl.class);
         if (extractByUrl != null) {
-            if (!extractByUrl.multi() && !String.class.isAssignableFrom(field.getType())) {
-                throw new IllegalStateException("Field " + field.getName() + " must be string");
-            } else if (extractByUrl.multi() && !List.class.isAssignableFrom(field.getType())) {
-                throw new IllegalStateException("Field " + field.getName() + " must be list");
-            }
             String regexPattern = extractByUrl.value();
             if (regexPattern.trim().equals("")) {
                 regexPattern = ".*";
             }
-            FieldExtractor fieldExtractor = new FieldExtractor(field, new RegexSelector(regexPattern), FieldExtractor.Source.Url, extractByUrl.notNull(), extractByUrl.multi());
+            fieldExtractor = new FieldExtractor(field, new RegexSelector(regexPattern), FieldExtractor.Source.Url, extractByUrl.notNull(), extractByUrl.multi());
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
                 fieldExtractor.setSetterMethod(setterMethod);
             }
-            fieldExtractors.add(fieldExtractor);
         }
+        return fieldExtractor;
     }
 
-    private void getAnnotationExtractBy(Class clazz, Field field) {
+    private FieldExtractor getAnnotationExtractBy(Class clazz, Field field) {
+        FieldExtractor fieldExtractor = null;
         ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
         if (extractBy != null) {
-            if (!extractBy.multi() && !String.class.isAssignableFrom(field.getType())) {
-                throw new IllegalStateException("Field " + field.getName() + " must be string");
-            } else if (extractBy.multi() && !List.class.isAssignableFrom(field.getType())) {
-                throw new IllegalStateException("Field " + field.getName() + " must be list");
-            }
             String value = extractBy.value();
             Selector selector;
             switch (extractBy.type()) {
@@ -99,23 +113,69 @@ class PageModelExtractor {
                 default:
                     selector = new Xpath2Selector(value);
             }
-            FieldExtractor fieldExtractor = new FieldExtractor(field, selector, FieldExtractor.Source.Html, extractBy.notNull(), extractBy.multi());
+            fieldExtractor = new FieldExtractor(field, selector, FieldExtractor.Source.Html, extractBy.notNull(), extractBy.multi());
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
                 fieldExtractor.setSetterMethod(setterMethod);
             }
-            fieldExtractors.add(fieldExtractor);
+        }
+        return fieldExtractor;
+    }
+
+    private void addAnnotationExtractBy2(Class clazz, FieldExtractor fieldExtractor) {
+        ExtractBy2 extractBy = fieldExtractor.getField().getAnnotation(ExtractBy2.class);
+        if (extractBy != null) {
+            String value = extractBy.value();
+            Selector selector;
+            switch (extractBy.type()) {
+                case Css:
+                    selector = new CssSelector(value);
+                    break;
+                case Regex:
+                    selector = new RegexSelector(value);
+                    break;
+                case XPath:
+                    selector = new XpathSelector(value);
+                    break;
+                case XPath2:
+                    selector = new Xpath2Selector(value);
+                    break;
+                default:
+                    selector = new Xpath2Selector(value);
+            }
+            fieldExtractor.setSelector(new AndSelector(fieldExtractor.getSelector(), selector));
         }
     }
 
-    private void getAnnotationExtractByRaw(Class clazz, Field field) {
+    private void addAnnotationExtractBy3(Class clazz, FieldExtractor fieldExtractor) {
+        ExtractBy3 extractBy = fieldExtractor.getField().getAnnotation(ExtractBy3.class);
+        if (extractBy != null) {
+            String value = extractBy.value();
+            Selector selector;
+            switch (extractBy.type()) {
+                case Css:
+                    selector = new CssSelector(value);
+                    break;
+                case Regex:
+                    selector = new RegexSelector(value);
+                    break;
+                case XPath:
+                    selector = new XpathSelector(value);
+                    break;
+                case XPath2:
+                    selector = new Xpath2Selector(value);
+                    break;
+                default:
+                    selector = new Xpath2Selector(value);
+            }
+            fieldExtractor.setSelector(new AndSelector(fieldExtractor.getSelector(), selector));
+        }
+    }
+
+    private FieldExtractor getAnnotationExtractByRaw(Class clazz, Field field) {
+        FieldExtractor fieldExtractor = null;
         ExtractByRaw extractByRaw = field.getAnnotation(ExtractByRaw.class);
         if (extractByRaw != null) {
-            if (!extractByRaw.multi() && !String.class.isAssignableFrom(field.getType())) {
-                throw new IllegalStateException("Field " + field.getName() + " must be string");
-            } else if (extractByRaw.multi() && !List.class.isAssignableFrom(field.getType())) {
-                throw new IllegalStateException("Field " + field.getName() + " must be list");
-            }
             String value = extractByRaw.value();
             Selector selector;
             switch (extractByRaw.type()) {
@@ -134,13 +194,13 @@ class PageModelExtractor {
                 default:
                     selector = new Xpath2Selector(value);
             }
-            FieldExtractor fieldExtractor = new FieldExtractor(field, selector, FieldExtractor.Source.RawHtml, extractByRaw.notNull(), extractByRaw.multi());
+            fieldExtractor = new FieldExtractor(field, selector, FieldExtractor.Source.RawHtml, extractByRaw.notNull(), extractByRaw.multi());
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
                 fieldExtractor.setSetterMethod(setterMethod);
             }
-            fieldExtractors.add(fieldExtractor);
         }
+        return fieldExtractor;
     }
 
     public static Method getSetterMethod(Class clazz, Field field) {
@@ -197,19 +257,19 @@ class PageModelExtractor {
             return null;
         }
         if (extractor == null) {
-            return processSingle(page,page.getHtml().toString());
+            return processSingle(page, page.getHtml().toString());
         } else {
-            if (extractor.multi){
+            if (extractor.multi) {
                 List<Object> os = new ArrayList<Object>();
                 List<String> list = extractor.getSelector().selectList(page.getHtml().toString());
                 for (String s : list) {
                     Object o = processSingle(page, s);
-                    if (o!=null){
+                    if (o != null) {
                         os.add(o);
                     }
                 }
                 return os;
-            }else {
+            } else {
                 String select = extractor.getSelector().select(page.getHtml().toString());
                 Object o = processSingle(page, select);
                 return o;
@@ -217,12 +277,12 @@ class PageModelExtractor {
         }
     }
 
-    private Object processSingle(Page page,String html) {
+    private Object processSingle(Page page, String html) {
         Object o = null;
         try {
             o = clazz.newInstance();
             for (FieldExtractor fieldExtractor : fieldExtractors) {
-                if (fieldExtractor.multi) {
+                if (fieldExtractor.isMulti()) {
                     List<String> value;
                     switch (fieldExtractor.getSource()) {
                         case RawHtml:
