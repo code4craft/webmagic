@@ -33,10 +33,13 @@ public class PagedPipeline implements Pipeline {
         Object o = objectEntry.getValue();
         if (o instanceof PagedModel) {
             PagedModel pagedModel = (PagedModel) o;
-            for (String otherPage : pagedModel.getOtherPages()) {
-                Boolean aBoolean = pageMap.get(pagedModel.getPageKey(), otherPage);
-                if (aBoolean == null) {
-                    pageMap.put(pagedModel.getPageKey(), otherPage, Boolean.FALSE);
+            pageMap.put(pagedModel.getPageKey(), pagedModel.getPage(), Boolean.TRUE);
+            if (pagedModel.getOtherPages()!=null){
+                for (String otherPage : pagedModel.getOtherPages()) {
+                    Boolean aBoolean = pageMap.get(pagedModel.getPageKey(), otherPage);
+                    if (aBoolean == null) {
+                        pageMap.put(pagedModel.getPageKey(), otherPage, Boolean.FALSE);
+                    }
                 }
             }
             //check if all pages are processed
