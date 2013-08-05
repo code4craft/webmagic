@@ -1,7 +1,7 @@
 package us.codecraft.webmagic.utils;
 
 /**
- * @author yihua.huang@dianping.com
+ * @author code4crafter@gmail.com
  * @date Dec 14, 2012
  */
 

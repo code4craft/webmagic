@@ -3,7 +3,7 @@ package us.codecraft.webmagic.utils;
 import java.util.Map;
 
 /**
- * @author yihua.huang@dianping.com
+ * @author code4crafter@gmail.com
  * @date Dec 14, 2012
  */
 public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {

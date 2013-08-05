@@ -46,7 +46,7 @@ public class News163 implements PagedModel, AfterExtractor {
     @Override
     public String getPage() {
         if (page == null) {
-            return "0";
+            return "1";
         }
         return page;
     }
