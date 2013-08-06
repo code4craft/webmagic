@@ -3,20 +3,26 @@ package us.codecraft.webmagic.pipeline;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 
-import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author yihua.huang@dianping.com <br>
@@ -24,41 +30,64 @@ import java.io.File;
  * Time: 下午2:11 <br>
  */
 public class LucenePipeline implements Pipeline {
-    @Override
-    public void process(ResultItems resultItems, Task task) {
+
+    private Directory directory;
+
+    private IndexWriter indexWriter;
+
+    private Analyzer analyzer;
+
+    private void init() throws IOException {
+        analyzer = new StandardAnalyzer(Version.LUCENE_44);
+        directory = new RAMDirectory();
+        IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_44, analyzer);
+        indexWriter = new IndexWriter(directory, config);
+        indexWriter.close();
+    }
+
+    public LucenePipeline() {
         try {
-
-        } catch (Exception e) {
-
+            init();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);
-//        Directory directory = new RAMDirectory();
-        // To store an index on disk, use this instead:
-        Directory directory = FSDirectory.open(new File("/data/webmagic/www.guoxue123.cn/"));
-        IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_44, analyzer);
-        IndexWriter iwriter = new IndexWriter(directory, config);
-        Document doc = new Document();
-//        String text = "This is the text to be indexed.";
-//        doc.add(new Field("fieldname", text, TextField.TYPE_STORED));
-//        iwriter.addDocument(doc);
-        iwriter.close();
-
-        // Now search the index:
+    public List<Document> search(String fieldName, String value) throws IOException, ParseException {
+        List<Document> documents = new ArrayList<Document>();
         DirectoryReader ireader = DirectoryReader.open(directory);
         IndexSearcher isearcher = new IndexSearcher(ireader);
         // Parse a simple query that searches for "text":
-        QueryParser parser = new QueryParser(Version.LUCENE_44, "fieldname", analyzer);
-        Query query = parser.parse("经典");
+        QueryParser parser = new QueryParser(Version.LUCENE_44, fieldName, analyzer);
+        Query query = parser.parse(value);
         ScoreDoc[] hits = isearcher.search(query, null, 1000).scoreDocs;
         // Iterate through the results:
         for (int i = 0; i < hits.length; i++) {
             Document hitDoc = isearcher.doc(hits[i].doc);
-            System.out.println(hitDoc);
+            documents.add(hitDoc);
         }
         ireader.close();
         directory.close();
+        return documents;
+    }
+
+    @Override
+    public void process(ResultItems resultItems, Task task) {
+        if (resultItems.isSkip()){
+            return;
+        }
+        Document doc = new Document();
+        Map<String,Object> all = resultItems.getAll();
+        if (all==null){
+            return;
+        }
+        for (Map.Entry<String, Object> objectEntry : all.entrySet()) {
+            doc.add(new Field(objectEntry.getKey(), objectEntry.getValue().toString(), TextField.TYPE_STORED));
+        }
+        try {
+            indexWriter.addDocument(doc);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

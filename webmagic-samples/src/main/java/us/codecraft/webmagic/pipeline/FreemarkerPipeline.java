@@ -40,9 +40,6 @@ public class FreemarkerPipeline implements Pipeline {
 
     @Override
     public void process(ResultItems resultItems, Task task) {
-        if (resultItems.isSkip()) {
-            return;
-        }
         String path = this.path + "" + task.getUUID() + "/";
         File file = new File(path);
         if (!file.exists()) {

@@ -29,9 +29,6 @@ class ModelPipeline implements Pipeline {
 
     @Override
     public void process(ResultItems resultItems, Task task) {
-        if (resultItems.isSkip()) {
-            return;
-        }
         for (Map.Entry<Class, PageModelPipeline> classPageModelPipelineEntry : pageModelPipelines.entrySet()) {
             Object o = resultItems.get(classPageModelPipelineEntry.getKey().getCanonicalName());
             if (o != null) {

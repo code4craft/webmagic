@@ -228,8 +228,10 @@ public class Spider implements Runnable, Task {
         }
         pageProcessor.process(page);
         addRequest(page);
-        for (Pipeline pipeline : pipelines) {
-            pipeline.process(page.getResultItems(), this);
+        if (!page.getResultItems().isSkip()){
+            for (Pipeline pipeline : pipelines) {
+                pipeline.process(page.getResultItems(), this);
+            }
         }
         sleep(site.getSleepTime());
     }
