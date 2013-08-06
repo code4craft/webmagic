@@ -3,7 +3,7 @@ package us.codecraft.webmagic.samples;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.processor.SimplePageProcessor;
-import us.codecraft.webmagic.schedular.FileCacheQueueScheduler;
+import us.codecraft.webmagic.scheduler.FileCacheQueueScheduler;
 
 /**
  * @author code4crafter@gmail.com <br>
