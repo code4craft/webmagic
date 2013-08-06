@@ -3,21 +3,25 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>us.codecraft</groupId>
         <artifactId>webmagic</artifactId>
+        <groupId>us.codecraft</groupId>
         <version>0.1.0</version>
     </parent>
-    <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
-    <modules>
-        <module>webmagic-misc</module>
-        <module>webmagic-selenium</module>
-        <module>webmagic-lucene</module>
-    </modules>
 
-    <artifactId>webmagic-plugin</artifactId>
+    <artifactId>webmagic-lucene</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-common</artifactId>
+            <version>4.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-queryparser</artifactId>
+            <version>4.4.0</version>
+        </dependency>
         <dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-core</artifactId>
@@ -28,5 +32,6 @@
             <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
+
 
 </project>

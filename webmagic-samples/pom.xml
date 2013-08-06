@@ -19,7 +19,7 @@
         </dependency>
         <dependency>
             <groupId>us.codecraft</groupId>
-            <artifactId>webmagic-misc</artifactId>
+            <artifactId>webmagic-extension</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
