@@ -13,11 +13,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>2.3.15</version>
-        </dependency>
-        <dependency>
             <groupId>org.resthub</groupId>
             <artifactId>hessian</artifactId>
             <version>4.0.8</version>
