@@ -6,7 +6,7 @@ import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.FreemarkerPipeline;
 import us.codecraft.webmagic.samples.DiandianBlogProcessor;
-import us.codecraft.webmagic.schedular.FileCacheQueueScheduler;
+import us.codecraft.webmagic.scheduler.FileCacheQueueScheduler;
 
 import java.io.IOException;
 

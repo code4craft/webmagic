@@ -4,7 +4,6 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.ExtractBy;
 import us.codecraft.webmagic.model.OOSpider;
 import us.codecraft.webmagic.model.TargetUrl;
-import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.JsonFilePipeline;
 
 /**
@@ -30,7 +29,7 @@ public class OschinaBlog implements Blog{
     }
 
     public static void main(String[] args) {
-        OOSpider.create(Site.me().addStartUrl("http://my.oschina.net/flashsword/blog"), OschinaBlog.class).pipeline(new ConsolePipeline()).pipeline(new JsonFilePipeline()).run();
+        OOSpider.create(Site.me().addStartUrl("http://my.oschina.net/flashsword/blog"), OschinaBlog.class).pipeline(new JsonFilePipeline()).run();
     }
 
     public String getTitle() {

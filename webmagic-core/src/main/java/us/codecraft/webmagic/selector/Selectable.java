@@ -19,6 +19,14 @@ public interface Selectable {
     public Selectable xpath(String xpath);
 
     /**
+     * select list with xpath 2.0 syntax
+     *
+     * @param xpath
+     * @return new Selectable after extract
+     */
+    public Selectable xpath2(String xpath);
+
+    /**
      * select list with css selector
      *
      * @param selector css selector expression
