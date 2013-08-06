@@ -3,10 +3,10 @@ package us.codecraft.webmagic.samples;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.downloader.selenium.SeleniumDownloader;
 import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.scheduler.RedisScheduler;
-import us.codecraft.webmagic.downloader.downloader.SeleniumDownloader;
 
 /**
  * 花瓣网抽取器。<br>
