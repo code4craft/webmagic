@@ -10,7 +10,7 @@
 
     <modules>  
     <module>webmagic-core</module>
-    <module>webmagic-plugin/</module>
+    <module>webmagic-extension/</module>
     <module>webmagic-samples/</module>
     </modules>
 
