@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.scheduler;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
