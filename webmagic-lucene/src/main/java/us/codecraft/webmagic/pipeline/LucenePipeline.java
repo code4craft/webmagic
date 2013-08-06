@@ -33,16 +33,14 @@ public class LucenePipeline implements Pipeline {
 
     private Directory directory;
 
-    private IndexWriter indexWriter;
-
     private Analyzer analyzer;
+
+    private IndexWriterConfig config;
 
     private void init() throws IOException {
         analyzer = new StandardAnalyzer(Version.LUCENE_44);
         directory = new RAMDirectory();
-        IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_44, analyzer);
-        indexWriter = new IndexWriter(directory, config);
-        indexWriter.close();
+        config = new IndexWriterConfig(Version.LUCENE_44, analyzer);
     }
 
     public LucenePipeline() {
@@ -67,7 +65,6 @@ public class LucenePipeline implements Pipeline {
             documents.add(hitDoc);
         }
         ireader.close();
-        directory.close();
         return documents;
     }
 
@@ -85,7 +82,9 @@ public class LucenePipeline implements Pipeline {
             doc.add(new Field(objectEntry.getKey(), objectEntry.getValue().toString(), TextField.TYPE_STORED));
         }
         try {
+            IndexWriter indexWriter = new IndexWriter(directory, config);
             indexWriter.addDocument(doc);
+            indexWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
