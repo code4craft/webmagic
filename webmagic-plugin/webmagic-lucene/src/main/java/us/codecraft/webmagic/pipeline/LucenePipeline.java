@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author yihua.huang@dianping.com <br>
+ * @author code4crafter@gmail.com <br>
  * @date: 13-8-5 <br>
  * Time: 下午2:11 <br>
  */
