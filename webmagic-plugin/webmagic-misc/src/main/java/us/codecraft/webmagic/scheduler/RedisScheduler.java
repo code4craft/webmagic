@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.scheduler;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.codec.digest.DigestUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -7,8 +8,6 @@ import redis.clients.jedis.JedisPoolConfig;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.schedular.Scheduler;
-
-import java.io.IOException;
 
 /**
  * 使用redis管理url，构建一个分布式的爬虫。<br>
@@ -41,12 +40,8 @@ public class RedisScheduler implements Scheduler {
             jedis.zadd(SET_PREFIX + task.getUUID(), request.getPriority(), request.getUrl());
             if (request.getExtras() != null) {
                 String key = ITEM_PREFIX + DigestUtils.shaHex(request.getUrl());
-                try {
-                    byte[] serialize = HessianSerializer.INSTANCE.serialize(request);
-                    jedis.set(key.getBytes(), serialize);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                byte[] serialize = JSON.toJSONBytes(request);
+                jedis.set(key.getBytes(), serialize);
             }
         }
         pool.returnResource(jedis);
@@ -61,13 +56,9 @@ public class RedisScheduler implements Scheduler {
         }
         String key = ITEM_PREFIX + DigestUtils.shaHex(url);
         byte[] bytes = jedis.get(key.getBytes());
-        if (bytes!=null){
-            try {
-                Object o = HessianSerializer.INSTANCE.deSerialize(bytes);
-                return (Request)o;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (bytes != null) {
+            Object o = JSON.parse(bytes);
+            return (Request) o;
         }
         pool.returnResource(jedis);
         return new Request(url);
