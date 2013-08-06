@@ -40,8 +40,8 @@ public class RedisScheduler implements Scheduler {
             jedis.zadd(SET_PREFIX + task.getUUID(), request.getPriority(), request.getUrl());
             if (request.getExtras() != null) {
                 String key = ITEM_PREFIX + DigestUtils.shaHex(request.getUrl());
-                byte[] serialize = JSON.toJSONBytes(request);
-                jedis.set(key.getBytes(), serialize);
+                byte[] bytes = JSON.toJSONString(request).getBytes();
+                jedis.set(key.getBytes(), bytes);
             }
         }
         pool.returnResource(jedis);
@@ -57,8 +57,8 @@ public class RedisScheduler implements Scheduler {
         String key = ITEM_PREFIX + DigestUtils.shaHex(url);
         byte[] bytes = jedis.get(key.getBytes());
         if (bytes != null) {
-            Object o = JSON.parse(bytes);
-            return (Request) o;
+            Request o = JSON.parseObject(new String(bytes),Request.class);
+            return o;
         }
         pool.returnResource(jedis);
         return new Request(url);

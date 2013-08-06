@@ -40,6 +40,9 @@ public class Request implements Serializable {
 
     private double priority;
 
+    public Request() {
+    }
+
     /**
      * 构建一个request对象
      *
@@ -101,5 +104,13 @@ public class Request implements Serializable {
     @Override
     public int hashCode() {
         return url.hashCode();
+    }
+
+    public void setExtras(Map<String, Object> extras) {
+        this.extras = extras;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
