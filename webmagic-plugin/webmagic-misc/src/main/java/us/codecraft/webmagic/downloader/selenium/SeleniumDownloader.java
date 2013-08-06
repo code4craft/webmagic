@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.selenium.downloader;
+package us.codecraft.webmagic.downloader.selenium;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
