@@ -6,7 +6,7 @@ import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.scheduler.RedisScheduler;
-import us.codecraft.webmagic.selenium.downloader.SeleniumDownloader;
+import us.codecraft.webmagic.downloader.downloader.SeleniumDownloader;
 
 /**
  * 花瓣网抽取器。<br>
