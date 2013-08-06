@@ -20,12 +20,12 @@ import java.io.PrintWriter;
  */
 public class JsonFilePipeline implements Pipeline {
 
-    private String path = "/data/temp/webmagic/";
+    private String path = "/data/webmagic/";
 
     private Logger logger = Logger.getLogger(getClass());
 
     /**
-     * 新建一个FilePipeline，使用默认保存路径"/data/temp/webmagic/"
+     * 新建一个FilePipeline，使用默认保存路径"/data/webmagic/"
      */
     public JsonFilePipeline() {
 
