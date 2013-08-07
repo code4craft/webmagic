@@ -110,11 +110,8 @@ class PageModelExtractor {
                 case XPath:
                     selector = new XpathSelector(value);
                     break;
-                case XPath2:
-                    selector = new Xpath2Selector(value);
-                    break;
                 default:
-                    selector = new Xpath2Selector(value);
+                    selector = new XpathSelector(value);
             }
             fieldExtractor = new FieldExtractor(field, selector, FieldExtractor.Source.Html, extractBy.notNull(), extractBy.multi());
             Method setterMethod = getSetterMethod(clazz, field);
@@ -140,11 +137,8 @@ class PageModelExtractor {
                 case XPath:
                     selector = new XpathSelector(value);
                     break;
-                case XPath2:
-                    selector = new Xpath2Selector(value);
-                    break;
                 default:
-                    selector = new Xpath2Selector(value);
+                    selector = new XpathSelector(value);
             }
             fieldExtractor.setSelector(new AndSelector(fieldExtractor.getSelector(), selector));
         }
@@ -165,11 +159,8 @@ class PageModelExtractor {
                 case XPath:
                     selector = new XpathSelector(value);
                     break;
-                case XPath2:
-                    selector = new Xpath2Selector(value);
-                    break;
                 default:
-                    selector = new Xpath2Selector(value);
+                    selector = new XpathSelector(value);
             }
             fieldExtractor.setSelector(new AndSelector(fieldExtractor.getSelector(), selector));
         }
@@ -191,11 +182,8 @@ class PageModelExtractor {
                 case XPath:
                     selector = new XpathSelector(value);
                     break;
-                case XPath2:
-                    selector = new Xpath2Selector(value);
-                    break;
                 default:
-                    selector = new Xpath2Selector(value);
+                    selector = new XpathSelector(value);
             }
             fieldExtractor = new FieldExtractor(field, selector, FieldExtractor.Source.RawHtml, extractByRaw.notNull(), extractByRaw.multi());
             Method setterMethod = getSetterMethod(clazz, field);
@@ -228,7 +216,7 @@ class PageModelExtractor {
                 targetUrlPatterns.add(Pattern.compile("(" + s.replace(".", "\\.").replace("*", "[^\"'#]*") + ")"));
             }
             if (!targetUrl.sourceRegion().equals("")) {
-                targetUrlRegionSelector = new Xpath2Selector(targetUrl.sourceRegion());
+                targetUrlRegionSelector = new XpathSelector(targetUrl.sourceRegion());
             }
         }
         annotation = clazz.getAnnotation(HelpUrl.class);
@@ -239,13 +227,13 @@ class PageModelExtractor {
                 helpUrlPatterns.add(Pattern.compile("(" + s.replace(".", "\\.").replace("*", "[^\"'#]*") + ")"));
             }
             if (!helpUrl.sourceRegion().equals("")) {
-                helpUrlRegionSelector = new Xpath2Selector(helpUrl.sourceRegion());
+                helpUrlRegionSelector = new XpathSelector(helpUrl.sourceRegion());
             }
         }
         annotation = clazz.getAnnotation(ExtractBy.class);
         if (annotation != null) {
             ExtractBy extractBy = (ExtractBy) annotation;
-            extractor = new Extractor(new Xpath2Selector(extractBy.value()), Extractor.Source.Html, extractBy.notNull(), extractBy.multi());
+            extractor = new Extractor(new XpathSelector(extractBy.value()), Extractor.Source.Html, extractBy.notNull(), extractBy.multi());
         }
     }
 

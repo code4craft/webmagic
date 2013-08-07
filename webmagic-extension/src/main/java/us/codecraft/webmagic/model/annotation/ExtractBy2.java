@@ -6,6 +6,7 @@ import java.lang.annotation.Target;
 
 /**
  * 定义类或者字段的抽取规则。<br>
+ *
  * @author code4crafter@gmail.com <br>
  * @date: 13-8-1 <br>
  * Time: 下午8:40 <br>
@@ -16,8 +17,8 @@ public @interface ExtractBy2 {
 
     String value();
 
-    public enum Type {XPath2, XPath, Regex, Css}
+    public enum Type {XPath, Regex, Css}
 
-    Type type() default Type.XPath2;
+    Type type() default Type.XPath;
 
 }
