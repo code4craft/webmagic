@@ -6,6 +6,7 @@ import us.codecraft.webmagic.model.samples.IteyeBlog;
 import us.codecraft.webmagic.model.samples.News163;
 import us.codecraft.webmagic.model.samples.OschinaBlog;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
+import us.codecraft.webmagic.pipeline.PagedPipeline;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -40,18 +41,19 @@ public class QuickStarter {
                 key = null;
             }
         }
-        System.out.println("The demo started and will last 60 seconds...");
+        System.out.println("The demo started and will last 20 seconds...");
 
         //Start spider
-        OOSpider.create(Site.me().addStartUrl(urlMap.get(key)), clazzMap.get(key)).pipeline(new ConsolePipeline()).runAsync();
+        OOSpider.create(Site.me().addStartUrl(urlMap.get(key)), clazzMap.get(key)).pipeline(new PagedPipeline()).pipeline(new ConsolePipeline()).runAsync();
 
 
         try {
-            Thread.sleep(60000);
+            Thread.sleep(20000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         System.out.println("The demo stopped!");
+        System.out.println("To more usage, try to customize your own Spider!");
         System.exit(0);
     }
 }
