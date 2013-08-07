@@ -47,6 +47,9 @@ public class FileCacheQueueScheduler implements Scheduler {
     private Set<String> urls;
 
     public FileCacheQueueScheduler(String filePath) {
+        if (!filePath.endsWith("/")&&!filePath.endsWith("\\")){
+            filePath+="/";
+        }
         this.filePath = filePath;
     }
 

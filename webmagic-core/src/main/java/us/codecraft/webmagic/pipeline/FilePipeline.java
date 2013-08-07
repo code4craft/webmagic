@@ -37,6 +37,9 @@ public class FilePipeline implements Pipeline {
      * @param path 文件保存路径
      */
     public FilePipeline(String path) {
+        if (!path.endsWith("/")&&!path.endsWith("\\")){
+            path+="/";
+        }
         this.path = path;
     }
 
