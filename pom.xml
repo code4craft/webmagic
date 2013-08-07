@@ -8,10 +8,12 @@
     <packaging>pom</packaging>
     <artifactId>webmagic</artifactId>
 
-    <modules>  
-    <module>webmagic-core</module>
-    <module>webmagic-extension/</module>
-    <module>webmagic-samples/</module>
+    <modules>
+        <module>webmagic-core</module>
+        <module>webmagic-extension/</module>
+        <module>webmagic-samples/</module>
+        <module>webmagic-selenium/</module>
+        <module>webmagic-lucene/</module>
     </modules>
 
     <dependencyManagement>
@@ -141,7 +143,6 @@
             </plugin>
         </plugins>
     </build>
-
 
 
 </project>

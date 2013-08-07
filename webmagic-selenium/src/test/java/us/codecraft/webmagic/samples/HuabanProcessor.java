@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.samples.selenium;
+package us.codecraft.webmagic.samples;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -6,7 +6,6 @@ import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.selenium.SeleniumDownloader;
 import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 /**
  * 花瓣网抽取器。<br>
@@ -39,7 +38,6 @@ public class HuabanProcessor implements PageProcessor {
 
     public static void main(String[] args) {
         Spider.create(new HuabanProcessor()).thread(5)
-                .scheduler(new RedisScheduler("localhost"))
                 .pipeline(new FilePipeline("/data/webmagic/test/"))
                 .downloader(new SeleniumDownloader("/Users/yihua/Downloads/chromedriver"))
                 .runAsync();
