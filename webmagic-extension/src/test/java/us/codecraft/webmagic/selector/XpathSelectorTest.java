@@ -1380,42 +1380,6 @@ public class XpathSelectorTest {
         System.out.println(xpathSelector.select(text));
     }
 
-    //http://sourceforge.net/mailarchive/forum.php?thread_name=4EA92A8A.6080202%40saxonica.com&forum_name=saxon-help
-    @Test
-    public void testSaxon() {
-        String text = "<h1>眉山：扎实推进农业农村工作 促农持续增收<br>\n" +
-                "<span>2013-07-31 23:29:45&nbsp;&nbsp;&nbsp;来源：<a href=\"http://www.mshw.net\" target=\"_blank\" style=\"color:#AAA\">眉山网</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;责任编辑：张斯炜</span></h1>";
-        try {
-            HtmlCleaner htmlCleaner = new HtmlCleaner();
-            TagNode tagNode = htmlCleaner.clean(text);
-            Document document = new DomSerializer(new CleanerProperties()).createDOM(tagNode);
-            XPathEvaluator xPathEvaluator = new XPathEvaluator();
-            xPathEvaluator.setNamespaceContext(new NamespaceContextImpl(new NamespaceResolver() {
-
-
-                @Override
-                public String getURIForPrefix(String s, boolean b) {
-                    return NamespaceConstant.FN;
-                }
-
-                @Override
-                public Iterator<String> iteratePrefixes() {
-                    return Collections.singletonList("fn").iterator();
-                }
-            }));
-            XPathExpression expr = xPathEvaluator.compile("fn:substring-before(//h1,'\n')");
-            Object result = expr.evaluate(document, XPathConstants.STRING);
-            Assert.assertNotNull(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Xpath2Selector xpath2Selector = new Xpath2Selector("fn:substring-before(//h1,'\n')");
-        String select = xpath2Selector.select(text);
-        Assert.assertNotNull(select);
-        Assert.assertNotNull(xpath2Selector.selectList(text));
-
-    }
-
     @Test
     public void testXpath2Selector() {
         Xpath2Selector xpath2Selector = new Xpath2Selector("//a/@href");

@@ -34,10 +34,6 @@ public class SelectorFactory {
         return newSelector(XpathSelector.class, xpath);
     }
 
-    public Xpath2Selector newXpath2Selector(String xpath) {
-        return newSelector(Xpath2Selector.class, xpath);
-    }
-
     public SmartContentSelector newSmartContentSelector(){
         return newSelector(SmartContentSelector.class);
     }

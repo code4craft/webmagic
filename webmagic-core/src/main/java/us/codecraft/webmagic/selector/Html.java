@@ -64,12 +64,6 @@ public class Html extends PlainText {
     }
 
     @Override
-    public Selectable xpath2(String xpath) {
-        Xpath2Selector xpathSelector = SelectorFactory.getInstatnce().newXpath2Selector(xpath);
-        return selectList(xpathSelector, strings);
-    }
-
-    @Override
     public Selectable $(String selector) {
         CssSelector cssSelector = new CssSelector(selector);
         return selectList(cssSelector,strings);
