@@ -35,11 +35,6 @@ public class PlainText implements Selectable {
     }
 
     @Override
-    public Selectable xpath2(String xpath) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public Selectable $(String selector) {
         throw new UnsupportedOperationException();
     }
