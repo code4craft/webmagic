@@ -1,3 +1,3 @@
 webmagic-extension
 -------
-webmagic的扩展模块。包括注解格式定义爬虫、JSON、分布式等支持。
+webmagic与selenium的集成，用于爬取ajax页面。selenium太重，所以单独抽出成一个包了。
