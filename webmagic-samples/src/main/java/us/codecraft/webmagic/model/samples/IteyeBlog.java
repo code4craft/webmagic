@@ -10,7 +10,7 @@ import us.codecraft.webmagic.model.annotation.TargetUrl;
  * @date: 13-8-2 <br>
  * Time: 上午7:52 <br>
  */
-@TargetUrl("http://dengminhui.iteye.com/blog/*")
+@TargetUrl("http://*.iteye.com/blog/*")
 public class IteyeBlog implements Blog{
 
     @ExtractBy("//title")
@@ -28,7 +28,7 @@ public class IteyeBlog implements Blog{
     }
 
     public static void main(String[] args) {
-        OOSpider.create(Site.me().addStartUrl("http://dengminhui.iteye.com/blog"), IteyeBlog.class).run();
+        OOSpider.create(Site.me().addStartUrl("http://*.iteye.com/blog"), IteyeBlog.class).run();
     }
 
     public String getTitle() {
