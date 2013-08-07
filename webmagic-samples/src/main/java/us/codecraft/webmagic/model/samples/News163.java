@@ -28,7 +28,7 @@ public class News163 implements PagedModel {
     @ExtractByUrl(value = "http://news\\.163\\.com/\\d+/\\d+/\\d+/\\w+_(\\d+)\\.html", notNull = false)
     private String page;
 
-    @ExtractBy(value = "//div[@class=\"ep-pages\"]//a/@href", multi = true)
+    @ExtractBy(value = "//div[@class=\"ep-pages\"]//a/@href", multi = true,notNull = false)
     @ExtractBy2(value = "http://news\\.163\\.com/\\d+/\\d+/\\d+/\\w+_(\\d+)\\.html", type = ExtractBy2.Type.Regex)
     private List<String> otherPage;
 
