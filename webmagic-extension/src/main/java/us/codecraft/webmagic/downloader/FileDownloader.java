@@ -34,6 +34,9 @@ public class FileDownloader implements Downloader {
     }
 
     public FileDownloader(String path, Downloader downloaderWhenFileMiss) {
+        if (!path.endsWith("/")&&!path.endsWith("\\")){
+            path+="/";
+        }
         this.path = path;
         this.downloaderWhenFileMiss = downloaderWhenFileMiss;
     }

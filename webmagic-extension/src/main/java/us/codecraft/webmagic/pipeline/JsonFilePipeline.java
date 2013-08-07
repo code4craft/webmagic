@@ -37,6 +37,9 @@ public class JsonFilePipeline implements Pipeline {
      * @param path 文件保存路径
      */
     public JsonFilePipeline(String path) {
+        if (!path.endsWith("/")&&!path.endsWith("\\")){
+            path+="/";
+        }
         this.path = path;
     }
 
