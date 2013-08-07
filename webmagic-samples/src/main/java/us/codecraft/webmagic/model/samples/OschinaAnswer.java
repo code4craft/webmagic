@@ -3,6 +3,9 @@ package us.codecraft.webmagic.model.samples;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.*;
+import us.codecraft.webmagic.model.annotation.ExtractBy;
+import us.codecraft.webmagic.model.annotation.HelpUrl;
+import us.codecraft.webmagic.model.annotation.TargetUrl;
 
 /**
  * @author code4crafter@gmail.com <br>
