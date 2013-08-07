@@ -2,6 +2,7 @@ package us.codecraft.webmagic.model;
 
 import org.apache.commons.lang3.StringUtils;
 import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.model.annotation.*;
 import us.codecraft.webmagic.selector.*;
 
 import java.lang.annotation.Annotation;
