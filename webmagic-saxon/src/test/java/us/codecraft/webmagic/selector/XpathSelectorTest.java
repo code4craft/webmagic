@@ -1,25 +1,8 @@
 package us.codecraft.webmagic.selector;
 
-import net.sf.saxon.Configuration;
-import net.sf.saxon.lib.NamespaceConstant;
-import net.sf.saxon.om.NamespaceResolver;
-import net.sf.saxon.pull.NamespaceContextImpl;
-import net.sf.saxon.xpath.JAXPXPathStaticContext;
-import net.sf.saxon.xpath.XPathEvaluator;
-import net.sf.saxon.xpath.XPathFactoryImpl;
-import org.htmlcleaner.CleanerProperties;
-import org.htmlcleaner.DomSerializer;
-import org.htmlcleaner.HtmlCleaner;
-import org.htmlcleaner.TagNode;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
-import javax.xml.xpath.*;
-import java.util.Collections;
-import java.util.Iterator;
 
 /**
  * @author code4crafter@gmail.com <br> Date: 13-4-21 Time: 上午10:06

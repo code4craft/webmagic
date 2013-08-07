@@ -16,9 +16,9 @@ public @interface ExtractByRaw {
 
     String value();
 
-    public enum Type {XPath2, XPath, Regex, Css}
+    public enum Type {XPath, Regex, Css}
 
-    Type type() default Type.XPath2;
+    Type type() default Type.XPath;
 
     boolean notNull() default true;
 
