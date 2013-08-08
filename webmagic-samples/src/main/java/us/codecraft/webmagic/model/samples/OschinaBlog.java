@@ -1,10 +1,12 @@
 package us.codecraft.webmagic.model.samples;
 
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.model.annotation.ExtractBy;
+import us.codecraft.webmagic.model.ConsolePageModelPipeline;
 import us.codecraft.webmagic.model.OOSpider;
+import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
-import us.codecraft.webmagic.pipeline.JsonFilePipeline;
+
+import java.util.List;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -12,7 +14,7 @@ import us.codecraft.webmagic.pipeline.JsonFilePipeline;
  * Time: 上午7:52 <br>
  */
 @TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
-public class OschinaBlog implements Blog{
+public class OschinaBlog {
 
     @ExtractBy("//title")
     private String title;
@@ -20,23 +22,12 @@ public class OschinaBlog implements Blog{
     @ExtractBy(value = "div.BlogContent",type = ExtractBy.Type.Css)
     private String content;
 
-    @Override
-    public String toString() {
-        return "OschinaBlog{" +
-                "title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                '}';
-    }
+    @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
+    private List<String> tags;
 
     public static void main(String[] args) {
-        OOSpider.create(Site.me().addStartUrl("http://my.oschina.net/flashsword/blog"), OschinaBlog.class).pipeline(new JsonFilePipeline()).run();
+        OOSpider.create(Site.me().addStartUrl("http://my.oschina.net/flashsword/blog")
+                ,new ConsolePageModelPipeline(), OschinaBlog.class).run();
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getContent() {
-        return content;
-    }
 }
