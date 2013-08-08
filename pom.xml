@@ -12,9 +12,6 @@
         <module>webmagic-core</module>
         <module>webmagic-extension/</module>
         <module>webmagic-samples/</module>
-        <module>webmagic-selenium/</module>
-        <module>webmagic-lucene/</module>
-        <module>webmagic-saxon/</module>
     </modules>
 
     <dependencyManagement>
