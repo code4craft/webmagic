@@ -20,7 +20,7 @@ public @interface ExtractByRaw {
 
     Type type() default Type.XPath;
 
-    boolean notNull() default true;
+    boolean notNull() default false;
 
     boolean multi() default false;
 

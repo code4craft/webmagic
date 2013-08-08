@@ -16,7 +16,7 @@ public @interface ExtractByUrl{
 
     String value() default "";
 
-    boolean notNull() default true;
+    boolean notNull() default false;
 
     boolean multi() default false;
 
