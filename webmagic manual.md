@@ -295,7 +295,8 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 --------
 	
 ## 分布式
-	webmagic-extension中，通过redis来管理URL，达到分布式的效果。具体实现方式只有一个类：`us.codecraft.webmagic.scheduler.RedisScheduler`。
+
+webmagic-extension中，通过redis来管理URL，达到分布式的效果。具体实现方式只有一个类：`us.codecraft.webmagic.scheduler.RedisScheduler`。
 	
 
 	
