@@ -108,11 +108,6 @@ Spider是爬虫的入口类。Pipeline是结果输出和持久化的接口，这
 
 #### 使用注解
 
-PageProcessor的方式灵活、强大，但是没有解决两个问题：
-
-* 对于一个站点，如果想抓取多种格式的URL，那么必须在PageProcesser中写判断逻辑，代码难以管理。
-* 抓取结果没有对应Model，并不符合Java程序开发习惯，与一些框架也无法很好整合。
-
 webmagic-extension包括了注解方式编写爬虫的方法，只需基于一个POJO增加注解即可完成一个爬虫。以下仍然是抓取oschina博客的一段代码，功能与OschinaBlogPageProcesser完全相同：
 
 	@TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
@@ -136,19 +131,15 @@ webmagic-extension包括了注解方式编写爬虫的方法，只需基于一�
 
 这个例子定义了一个Model类，Model类的字段'title'、'content'、'tags'均为要抽取的属性。这个类在Pipeline里是可以复用的。
 
-"TargetUrl"关键词表示要抓取的URL，这里使用了正则表达式，匹配 "http://my.oschina.net/flashsword/blog/150039" 格式的URL。webmagic对正则表达式进行了修改，"."仅表示字符"."而不代表任意字符，而"\*"则代表了".\*"，例如"http://\*.oschina.net/\*"代表了oschina所有的二级域名下的URL。
+关于注解的使用方式，在后面会专门讲到。
 
-"ExtractBy"关键词定义了字段抽取的规则。抽取的规则默认使用[**XPath**](http://www.w3school.com.cn/xpath/)，也可以选择使用CSS Selector、正则表达式。使用"ExtractBy"注解提取的字段(设置type)，目前只能为String或者List类型(multi=true时有效)。"ExtractBy"支持链式抽取，通过增加注解"ExtractBy2"、"ExtractBy3"实现。
-
-OOSpider是注解式爬虫的入口，这里调用create()方法将OschinaBlog这个类加入到爬虫的抽取中，这里是可以传入多个类的，OOSpider会根据TargetUrl调用不同的Model进行解析。
-
-可以通过定义PageModelPipeline来选择结果输出方式。这里new ConsolePageModelPipeline()是PageModelPipeline的一个实现，会将结果输出到控制台。
-
-注解方式其实也是通过一个PageProcessor的实现--ModelPageProcessor完成，因此对webmagic-core代码没有任何影响。
+------
 
 ## 核心架构解析
 
-webmagic-core是爬虫的核心框架。此部分摘自作者的博文
+webmagic-core是爬虫的核心框架，只包括一个爬虫各功能模块的核心功能。webmagic-core的目标是成为网页爬虫的一个教科书般的实现。
+
+此节部分内容摘自作者的博文
 [webmagic的设计机制及原理-如何开发一个Java爬虫](http://my.oschina.net/flashsword/blog/145796)。
 
 ### webmagic-core的模块划分
@@ -243,4 +234,69 @@ Pipeline其实也是容易被忽略的一部分。大家都知道持久化的重
 
 webmagic目前只支持控制台输出和文件持久化，但是持久化到数据库也是很容易的。这里不妨看一下[webmagic结合JFinal持久化到数据库的一段代码](http://www.oschina.net/code/snippet_190591_23456)。因为JFinal目前还不支持maven，所以并没有放到webmagic-samples里来。
 
-## 示例
+------
+
+## 注解模块
+
+webmagic-extension包括注解模块。为什么会有注解方式？
+
+因为PageProcessor的方式灵活、强大，但是没有解决两个问题：
+
+* 对于一个站点，如果想抓取多种格式的URL，那么必须在PageProcesser中写判断逻辑，代码难以管理。
+* 抓取结果没有对应Model，并不符合Java程序开发习惯，与一些框架也无法很好整合。
+
+注解的核心是Model类，本身是一个POJO，这个Model类用于传递、保存页面最终抓取结果数据。注解方式直接将抽取与数据绑定，以便于编写和维护。
+
+注解方式其实也是通过一个PageProcessor的实现--ModelPageProcessor完成，因此对webmagic-core代码没有任何影响。
+
+注解部分包括以下内容：
+
+* ### TargetUrl
+
+	"TargetUrl"表示这个Model对应要抓取的URL，它包含两层意思：符合这个条件的URL会被加入抓取队列；符合这个条件的URL会被这个Model抓取。TargetUrl可以`sourceRegion`指定提取URL的区域(仅支持XPath)。
+	
+	TargetUrl使用了正则表达式，匹配 "http://my.oschina.net/flashsword/blog/150039" 格式的URL。webmagic对正则表达式进行了修改，"."仅表示字符"."而不代表任意字符，而"\*"则代表了".\*"，例如"http://\*.oschina.net/\*"代表了oschina所有的二级域名下的URL。
+	
+	与TargetUrl相似的还有`HelpUrl`，HelpUrl表示：仅仅抓取该URL用作链接提取，并不对它进行内容抽取。例如博客正文页对应TargetUrl，而列表页则对应HelpUrl。
+
+* ### ExtractBy	
+
+	* #### 用于字段
+
+		"ExtractBy"可用于类以及字段。用于字段时，定义了字段抽取的规则。抽取的规则默认使用[**XPath**](http://www.w3school.com.cn/xpath/)，也可以选择使用CSS Selector、正则表达式(通过设置type)。
+	
+		ExtractBy还有几个扩展属性。`multi`表示是否抽取列表，当然，设置为multi时，你需要一个List字段去容纳它。`notnull`则表示，此字段不允许为null，若为null则放弃整个对象。
+
+	* #### 用于类	
+		"ExtractBy"用于类时，则限定了字段抽取的区域。用于类时仍支持multi，multi则表示一个页面可以抽取到多个对象。
+
+	* #### ExtractByRaw & ExtractByUrl
+	
+		在类使用"ExtractBy"修饰后，字段的"ExtractBy"使用的是其抽取的结果，如果仍然想要抽取原HTML，可以使用"ExtractByRaw"。与此类似的还有"ExtractByUrl"，表示从URL重抽取信息。ExtractByUrl只支持正则表达式。
+
+	* #### ExtractBy2 ExtractBy3	
+		
+		"ExtractBy"、"ExtractByRaw"支持链式抽取，通过增加注解"ExtractBy2"、"ExtractBy3"实现。
+		
+* ### AfterExtractor
+
+	AfterExtractor接口是对注解方式抽取能力不足的补充。实现AfterExtractor接口后，会在**使用注解方式填充完字段后**调用`afterProcess()`方法，在这个方法中可以直接访问已抽取的字段、补充需要抽取的字段，甚至做一些简单的输出和持久化操作(并不是很建议这么做)。这部分可以参考[webmagic结合JFinal持久化到数据库的一段代码](http://www.oschina.net/code/snippet_190591_23456)。
+
+* ### OOSpider
+	OOSpider是注解式爬虫的入口，这里调用`create()`方法将OschinaBlog这个类加入到爬虫的抽取中，这里是可以传入多个类的，OOSpider会根据TargetUrl调用不同的Model进行解析。
+
+* ### PageModelPipeline
+	可以通过定义PageModelPipeline来选择结果输出方式。这里new ConsolePageModelPipeline()是PageModelPipeline的一个实现，会将结果输出到控制台。
+	
+* ### 分页
+	处理单项数据分页(例如单条新闻多个页面)是爬虫一个比较头疼的问题。webmagic有一个对于分页的实现，通过实现`PagedModel`接口即可。webmagic-samples里有一个抓取网易新闻的类：`us.codecraft.webmagic.model.samples.News163`。关于分页，这里有一篇对于webmagic分页实现的详细说明的文章[关于爬虫实现分页的一些思考](http://my.oschina.net/flashsword/blog/150039)。
+	目前分页功能还没有分布式实现。
+
+--------
+	
+## 分布式
+	webmagic-extension中，通过redis来管理URL，达到分布式的效果。具体实现方式只有一个类：`us.codecraft.webmagic.scheduler.RedisScheduler`。
+	
+
+	
+
