@@ -2,7 +2,7 @@ package us.codecraft.webmagic.utils;
 
 /**
  * @author code4crafter@gmail.com
- * @date Dec 14, 2012
+ * Date Dec 14, 2012
  */
 
 import java.util.HashMap;

@@ -5,7 +5,7 @@ import us.codecraft.webmagic.Task;
 
 /**
  * @author code4crafter@gmail.com <br>
- * @date: 13-8-3 <br>
+ * Date: 13-8-3 <br>
  * Time: 下午3:41 <br>
  */
 public class ConsolePageModelPipeline implements PageModelPipeline {

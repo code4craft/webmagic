@@ -9,7 +9,7 @@ import us.codecraft.webmagic.Task;
 
 /**
  * @author code4crafter@gmail.com <br>
- * @date: 13-7-25 <br>
+ * Date: 13-7-25 <br>
  * Time: 上午7:51 <br>
  */
 public class RedisSchedulerTest {

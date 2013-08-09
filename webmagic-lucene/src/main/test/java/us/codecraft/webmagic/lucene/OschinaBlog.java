@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * @author code4crafter@gmail.com <br>
- * @date: 13-8-2 <br>
+ * Date: 13-8-2 <br>
  * Time: 上午7:52 <br>
  */
 @TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")

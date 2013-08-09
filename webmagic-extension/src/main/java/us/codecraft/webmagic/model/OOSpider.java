@@ -6,7 +6,7 @@ import us.codecraft.webmagic.Spider;
 /**
  * 基于Model的Spider，封装后的入口类。<br>
  * @author code4crafter@gmail.com <br>
- * @date: 13-8-3 <br>
+ * Date: 13-8-3 <br>
  * Time: 上午9:51 <br>
  */
 public class OOSpider extends Spider {

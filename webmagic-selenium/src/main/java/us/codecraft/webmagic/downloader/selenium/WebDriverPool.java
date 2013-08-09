@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author code4crafter@gmail.com <br>
- * @date: 13-7-26 <br>
+ * Date: 13-7-26 <br>
  * Time: 下午1:41 <br>
  */
 class WebDriverPool {
