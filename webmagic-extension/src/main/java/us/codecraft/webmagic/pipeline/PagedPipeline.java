@@ -9,6 +9,9 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 用于实现分页的Pipeline。<br>
+ * 在使用redis做分布式爬虫时，请不要使用此功能。<br>
+ *
  * @author code4crafter@gmail.com <br>
  * @date: 13-8-4 <br>
  * Time: 下午5:15 <br>
@@ -34,7 +37,7 @@ public class PagedPipeline implements Pipeline {
         if (o instanceof PagedModel) {
             PagedModel pagedModel = (PagedModel) o;
             pageMap.put(pagedModel.getPageKey(), pagedModel.getPage(), Boolean.TRUE);
-            if (pagedModel.getOtherPages()!=null){
+            if (pagedModel.getOtherPages() != null) {
                 for (String otherPage : pagedModel.getOtherPages()) {
                     Boolean aBoolean = pageMap.get(pagedModel.getPageKey(), otherPage);
                     if (aBoolean == null) {
@@ -70,8 +73,8 @@ public class PagedPipeline implements Pipeline {
                     }
                 });
                 PagedModel value = entryList.get(0).getValue();
-                for (int i=1;i<entryList.size();i++){
-                    value=value.combine(entryList.get(i).getValue());
+                for (int i = 1; i < entryList.size(); i++) {
+                    value = value.combine(entryList.get(i).getValue());
                 }
                 objectEntry.setValue(value);
             }
