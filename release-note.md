@@ -6,7 +6,7 @@ Release Notes
 
 增加了webmagic-extension模块。
 
-增加了注解方式支持，可以通过POJO+注解的方式编写一个爬虫，更符合Java开发习惯。
+增加了注解方式支持，可以通过POJO+注解的方式编写一个爬虫，更符合Java开发习惯。以下是抓取一个博客的完整代码：
 
     @TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
     public class OschinaBlog {
@@ -33,9 +33,9 @@ Release Notes
 
 增加基于Selenium的浏览器渲染支持，用于抓取动态加载内容(webmagic-selenium模块)。
 
-修复一些bug。
+修复一些已有bug。
 
-补充了大量的文档。
+补充了文档：[webmagic-0.2.0用户手册](http://code4craft.github.io/webmagic/)。
 
 *2012-7-25* `version：0.1.0`
 
