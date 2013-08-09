@@ -371,7 +371,7 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 	处理单项数据分页(例如单条新闻多个页面)是爬虫一个比较头疼的问题。webmagic目前对于分页的解决方案是：在注解模式下，Model通过实现**PagedModel**接口，并引入PagedPipeline作为第一个Pipeline来实现。具体可以参考webmagic-samples中抓取网易新闻的代码：**us.codecraft.webmagic.model.samples.News163**。
 	
 	关于分页，这里有一篇对于webmagic分页实现的详细说明的文章[关于爬虫实现分页的一些思考](http://my.oschina.net/flashsword/blog/150039)。
-	目前分页功能还没有分布式实现，如果实现RedisScheduler进行分布式爬取，请不要使用分页功能。
+	目前分页功能还没有分布式实现，如果使用RedisScheduler进行分布式爬取，请不要使用分页功能。
 	
 ### 分布式
 
