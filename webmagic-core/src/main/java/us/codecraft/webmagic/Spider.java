@@ -8,8 +8,8 @@ import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.schedular.QueueScheduler;
-import us.codecraft.webmagic.schedular.Scheduler;
+import us.codecraft.webmagic.scheduler.QueueScheduler;
+import us.codecraft.webmagic.scheduler.Scheduler;
 import us.codecraft.webmagic.utils.ThreadUtils;
 
 import java.util.ArrayList;
@@ -228,8 +228,10 @@ public class Spider implements Runnable, Task {
         }
         pageProcessor.process(page);
         addRequest(page);
-        for (Pipeline pipeline : pipelines) {
-            pipeline.process(page.getResultItems(), this);
+        if (!page.getResultItems().isSkip()){
+            for (Pipeline pipeline : pipelines) {
+                pipeline.process(page.getResultItems(), this);
+            }
         }
         sleep(site.getSleepTime());
     }
@@ -280,6 +282,11 @@ public class Spider implements Runnable, Task {
         synchronized (this) {
             this.executorService = ThreadUtils.newFixedThreadPool(threadNum);
         }
+        return this;
+    }
+
+    public Spider clearPipeline(){
+        pipelines=new ArrayList<Pipeline>();
         return this;
     }
 

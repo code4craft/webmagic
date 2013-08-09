@@ -5,7 +5,7 @@
     <parent>
         <groupId>us.codecraft</groupId>
         <artifactId>webmagic</artifactId>
-        <version>0.1.0</version>
+        <version>0.2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -19,12 +19,7 @@
         </dependency>
         <dependency>
             <groupId>us.codecraft</groupId>
-            <artifactId>webmagic-misc</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>us.codecraft</groupId>
-            <artifactId>webmagic-selenium</artifactId>
+            <artifactId>webmagic-extension</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -32,5 +27,24 @@
             <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>./lib/</classpathPrefix>
+                            <mainClass>us.codecraft.webmagic.main.QuickStarter</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

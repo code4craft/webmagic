@@ -1,5 +1,7 @@
 package us.codecraft.webmagic;
 
+import us.codecraft.webmagic.utils.UrlUtils;
+
 import java.util.*;
 
 /**
@@ -90,6 +92,11 @@ public class Site {
      * @return 已设置的domain
      */
     public String getDomain() {
+        if (domain == null) {
+            if (startUrls.size() > 0) {
+                domain = UrlUtils.getDomain(startUrls.get(0));
+            }
+        }
         return domain;
     }
 
@@ -150,6 +157,7 @@ public class Site {
 
     /**
      * 获取初始页面的地址列表
+     *
      * @return 初始页面的地址列表
      */
     public List<String> getStartUrls() {
@@ -158,6 +166,7 @@ public class Site {
 
     /**
      * 增加初始页面的地址，可反复调用此方法增加多个初始地址。
+     *
      * @param startUrl 初始页面的地址
      * @return this
      */
@@ -179,6 +188,7 @@ public class Site {
 
     /**
      * 获取两次抓取之间的间隔
+     *
      * @return 两次抓取之间的间隔，单位毫秒
      */
     public int getSleepTime() {
@@ -187,6 +197,7 @@ public class Site {
 
     /**
      * 获取重新下载的次数，默认为0
+     *
      * @return 重新下载的次数
      */
     public int getRetryTimes() {
@@ -195,6 +206,7 @@ public class Site {
 
     /**
      * 设置获取重新下载的次数，默认为0
+     *
      * @return this
      */
     public Site setRetryTimes(int retryTimes) {
@@ -219,7 +231,7 @@ public class Site {
         return true;
     }
 
-    public Task toTask(){
+    public Task toTask() {
         return new Task() {
             @Override
             public String getUUID() {
