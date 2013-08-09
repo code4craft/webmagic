@@ -298,7 +298,26 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 
 注解的核心是Model类，本身是一个POJO，这个Model类用于传递、保存页面最终抓取结果数据。注解方式直接将抽取与数据绑定，以便于编写和维护。
 
-注解方式其实也是通过一个PageProcessor的实现--ModelPageProcessor完成，因此对webmagic-core代码没有任何影响。
+注解方式其实也是通过一个PageProcessor的实现--ModelPageProcessor完成，因此对webmagic-core代码没有任何影响。仍然以抓取OschinaBlog的程序为例：
+
+	@TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
+	public class OschinaBlog {
+
+	    @ExtractBy("//title")
+	    private String title;
+
+	    @ExtractBy(value = "div.BlogContent",type = ExtractBy.Type.Css)
+	    private String content;
+
+	    @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
+	    private List<String> tags;
+
+	    public static void main(String[] args) {
+	        OOSpider.create(
+	        	Site.me().addStartUrl("http://my.oschina.net/flashsword/blog"),
+				new ConsolePageModelPipeline(), OschinaBlog.class).run();
+	    }
+	}
 
 注解部分包括以下内容：
 
