@@ -14,7 +14,17 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 public @interface HelpUrl {
 
+    /**
+     * 某个类对应的URL规则列表<br>
+     * webmagic对正则表达式进行了修改，"."仅表示字符"."而不代表任意字符，而"\*"则代表了".\*"，例如"http://\*.oschina.net/\*"代表了oschina所有的二级域名下的URL。<br>
+     *
+     * @return 抽取规则
+     */
     String[] value();
 
+    /**
+     * 指定提取URL的区域(仅支持XPath)
+     * @return 指定提取URL的区域
+     */
     String sourceRegion() default "";
 }

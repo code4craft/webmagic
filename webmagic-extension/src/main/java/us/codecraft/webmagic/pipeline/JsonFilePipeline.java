@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * 持久化到文件的接口。
+ * JSON格式持久化到文件的接口。
  *
  * @author code4crafter@gmail.com <br>
  *         Date: 13-4-21

@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * 定义类或者字段的抽取规则。<br>
+ * 定义类或者字段的抽取规则，只能在Extract、ExtractByRaw之后使用。<br>
  * @author code4crafter@gmail.com <br>
  * @date: 13-8-1 <br>
  * Time: 下午8:40 <br>
