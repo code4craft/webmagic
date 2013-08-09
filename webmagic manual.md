@@ -4,7 +4,7 @@ webmagic使用手册
 
 >web爬虫是一种技术，webmagic致力于将这种技术的实现成本降低，但是出于对资源提供者的尊重，webmagic不会做反封锁的事情，包括：验证码破解、代理切换、自动登录、抓取静态资源等。
 
->作者黄亿华([code4crafter@gmail.com](code4crafter@gmail.com))目前就职于大众点评，曾经在前公司进行过一年的垂直爬虫的开发。webmagic就是为了解决爬虫开发的一些重复劳动而产生的框架。有使用不便或者问题，欢迎在github[提交issue](https://github.com/code4craft/webmagic/issues)，或者在[oschina讨论模块](http://www.oschina.net/question)提问。
+>作者黄亿华([code4crafter@gmail.com](code4crafter@gmail.com))目前就职于大众点评，曾经在前公司进行过一年的垂直爬虫的开发，webmagic就是为了解决爬虫开发的一些重复劳动而产生的框架。
 
 >webmagic的架构和设计参考了以下两个项目，感谢以下两个项目的作者：
 
@@ -12,7 +12,10 @@ webmagic使用手册
 
 >Java爬虫 **Spiderman** [https://gitcafe.com/laiweiwei/Spiderman](https://gitcafe.com/laiweiwei/Spiderman)
 
----------
+>webmagic遵循[Apache 2.0协议](http://www.apache.org/licenses/LICENSE-2.0.html)，你可以自由进行使用和修改。有使用不便或者问题，欢迎在github[提交issue](https://github.com/code4craft/webmagic/issues)，或者在[oschina讨论模块](http://www.oschina.net/question)提问。
+
+<div style="page-break-after:always"></div>
+
 
 ## 快速开始
 
@@ -66,7 +69,7 @@ webmagic还包含两个可用的扩展包，因为这两个包都依赖了比较
 
 	git clone http://git.oschina.net/flashsword20/webmagic-bin.git
 
-在`bin/lib`目录下，有项目依赖的所有jar包，直接在IDE里import即可。
+在**bin/lib**目录下，有项目依赖的所有jar包，直接在IDE里import即可。
 
 ### 第一个爬虫
 
@@ -131,11 +134,12 @@ webmagic-extension包括了注解方式编写爬虫的方法，只需基于一�
 
 这个例子定义了一个Model类，Model类的字段'title'、'content'、'tags'均为要抽取的属性。这个类在Pipeline里是可以复用的。
 
-关于注解的使用方式，在后面会专门讲到。
+注解的详细使用方式见后文中得webmagic-extension注解模块。
 
-------
+<div style="page-break-after:always"></div>
 
-## 核心架构解析
+
+## webmagic-core
 
 webmagic-core是爬虫的核心框架，只包括一个爬虫各功能模块的核心功能。webmagic-core的目标是成为网页爬虫的一个教科书般的实现。
 
@@ -147,12 +151,12 @@ webmagic-core是爬虫的核心框架，只包括一个爬虫各功能模块的�
 webmagic-core参考了scrapy的模块划分，分为Spider(整个爬虫的调度框架)、Downloader(页面下载)、PageProcessor(链接提取和页面分析)、Scheduler(URL管理)、Pipeline(离线分析和持久化)几部分。只不过scrapy通过middleware实现扩展，而webmagic则通过定义这几个接口，并将其不同的实现注入主框架类Spider来实现扩展。
 
 ![image](http://code4craft.github.io/images/posts/webmagic.png)
+<div style="page-break-after:always"></div>
 
 #### Spider类(核心调度)
 
-Spider是爬虫的入口类，Spider的接口调用采用了链式的API设计，其他功能全部通过接口注入Spider实现，下面是启动一个比较复杂的Spider的例子。
+**Spider**是爬虫的入口类，Spider的接口调用采用了链式的API设计，其他功能全部通过接口注入Spider实现，下面是启动一个比较复杂的Spider的例子。
 
-    <!-- lang: java -->
     Spider.create(sinaBlogProcessor)
 	.scheduler(new FileCacheQueueScheduler("/data/temp/webmagic/cache/"))
 	.pipeline(new FilePipeline())
@@ -175,68 +179,115 @@ Spider的核心处理流程非常简单，代码如下：
         }
         sleep(site.getSleepTime());
     }
-
-#### Downloader(页面下载)
-
-大部分爬虫都是通过模拟http请求，接收并分析响应来完成。这方面，JDK自带的**HttpURLConnection**可以满足最简单的需要，而**Apache HttpClient**(4.0后整合到HttpCompenent项目中)则是开发复杂爬虫的不二之选。它支持自定义HTTP头(对于爬虫比较有用的就是User-agent、cookie等)、自动redirect、连接复用、cookie保留、设置代理等诸多强大的功能。
-
-webmagic使用了HttpClient 4.2，并封装到了**HttpClientDownloader**。学习HttpClient的使用对于构建高性能爬虫是非常有帮助的，官方的[Tutorial](http://hc.apache.org/httpcomponents-client-ga/tutorial/html/)就是很好的学习资料。目前webmagic对HttpClient的使用仍在初步阶段，不过对于一般抓取任务，已经够用了。
-
-对于一些Javascript动态加载的网页，仅仅使用http模拟下载工具，并不能取到页面的内容。这方面的思路有两种：一种是抽丝剥茧，分析js的逻辑，再用爬虫去重现它(比如在网页中提取关键数据，再用这些数据去构造Ajax请求，最后直接从响应体获取想要的数据)；
-另一种就是：内置一个浏览器，直接获取最后加载完的页面。这方面，js可以使用**PhantomJS**，它内部集成了webkit。而Java可以使用**Selenium**，这是一个非常强大的浏览器模拟工具。webmagic-selenium包中整合了Selenium到`SeleniumDownloader`，可以直接进行动态加载页面的抓取。
-
+    
 #### PageProcessor(页面分析及链接抽取)
 
-页面分析可以说是垂直爬虫最复杂的一部分，在webmagic里，PageProcessor是定制爬虫的核心。通过编写一个实现PageProcessor接口的类，就可以定制一个自己的爬虫。
+页面分析是垂直爬虫中需要定制的部分。在webmagic-core里，通过实现**PageProcessor**接口来实现定制爬虫。PageProcessor有两个核心方法：public void process(Page page)和public Site getSite() 。
 
-**Selector**是webmagic为了简化页面抽取开发的独立模块，是webmagic的主要着力点。这里整合了CSS Selector、XPath和正则表达式，并可以进行链式的抽取，很容易就实现强大的功能。即使你使用自己开发的爬虫工具，webmagic的Selector仍然值得一试。
+* public void process(Page page)
 
-例如，我已经下载了一个页面，现在要抽取某个区域的所有包含"blog"的链接，我可以这样写：
+	通过对**Page**对象的操作，实现爬虫逻辑。Page对象包括两个最重要的方法：addTargetRequests()可以添加URL到待抓取队列，put()可以将结果保存供后续处理。
+	Page的数据可以通过Page.getHtml()和Page.getUrl()获取。
+
+* public Site getSite()
+	
+	**Site**对象定义了爬虫的域名、起始地址、抓取间隔、编码等信息。
+
+**Selector**是webmagic为了简化页面抽取开发的独立模块，是webmagic-core的主要着力点。这里整合了CSS Selector、XPath和正则表达式，并可以进行链式的抽取。
 		
     <!-- lang: java -->
     //content是用别的爬虫工具抽取到的正文
-    String content = "blabla";
-    List<String> links = Html.create(content)
+    List<String> links = page.getHtml()
     .$("div.title")  //css 选择，Java里虽然很少有$符号出现，不过貌似$作为方法名是合法的
     .xpath("//@href")  //提取链接
     .regex(".*blog.*") //正则匹配过滤
     .all(); //转换为string列表
 
+webmagic包括一个对于页面正文的自动抽取的类**SmartContentSelector**。相信用过Evernote Clearly都会对其自动抽取正文的技术印象深刻。这个技术又叫**Readability**。当然webmagic对Readability的实现还比较粗略，但是仍有一些学习价值。
 
-另外，webmagic的抓取链接需要显示的调用`Page.addTargetRequests()`去添加，这也是为了灵活性考虑的(很多时候，下一步的URL不是单纯的页面href链接，可能会根据页面模块进行抽取，甚至可能是自己拼凑出来的)。
+基于Saxon，webmagic提供了XPath2.0语法的支持。XPath2.0语法支持内部函数、逻辑控制等，是一门完整的语言，如果你熟悉XPath2.0语法，倒是不妨一试(需要引入**webmagic-saxon**包)。
 
-webmagic包括一个对于页面正文的自动抽取的功能**SmartContentSelector**。相信用过Evernote Clearly都会对其自动抽取正文的技术印象深刻。这个技术又叫**Readability**。当然webmagic对Readability的实现还比较粗略，但是仍有一些学习价值。
+**webmagic-samples**包里有一些为某个站点定制的PageProcessor，供学习之用。
 
-基于Saxon，webmagic提供了XPath2.0语法的支持。XPath2.0语法支持内部函数、逻辑控制等，是一门完整的语言，如果你熟悉语法，倒是不妨一试(需要引入webmagic-saxon包)。
+#### Downloader(页面下载)
+
+**Downloader**是webmagic中下载页面的接口，主要方法：
+
+* public Page download(Request request, Task task) 
+	
+	**Request**对象封装了待抓取的URL及其他信息，而Page则包含了页面下载后的Html及其他信息。Task是一个包装了任务对应的Site信息的抽象接口。
+	
+* public void setThread(int thread)
+	
+	因为Downloader一般会涉及连接池等功能，而这些功能与多线程密切相关，所以定义了此方法。
+
+目前有几个Downloader的实现：
+
+* HttpClientDownloader
+	
+	集成了**Apache HttpClient**的Downloader。Apache HttpClient(4.0后整合到HttpCompenent项目中)是强大的Java http下载器，它支持自定义HTTP头(对于爬虫比较有用的就是User-agent、cookie等)、自动redirect、连接复用、cookie保留、设置代理等诸多强大的功能。
+
+* SeleniumDownloader
+	
+	对于一些Javascript动态加载的网页，仅仅使用http模拟下载工具，并不能取到页面的内容。这方面的思路有两种：一种是抽丝剥茧，分析js的逻辑，再用爬虫去重现它；另一种就是：内置一个浏览器，直接获取最后加载完的页面。**webmagic-selenium**包中整合了Selenium到SeleniumDownloader，可以直接进行动态加载页面的抓取。
 
 #### Scheduler(URL管理)
 
+**Scheduler**是webmagic的管理模块，通过实现Scheduler可以定制自己的URL管理器。Scheduler包括两个主要方法：
 
-URL管理的问题可大可小。对于小规模的抓取，URL管理是很简单的。我们只需要将待抓取URL和未抓取URL分开保存，并进行去重即可。使用JDK内置的集合类型Set、List或者Queue都可以满足需要。如果我们要进行多线程抓取，则可以选择线程安全的容器，例如LinkedBlockingQueue以及ConcurrentHashMap。
+* public void push(Request request,Task task)
+	
+	将待抓取URL加入Scheduler。Request对象是对URL的一个封装，还包括优先级、以及一个供存储数据的Map。Task仍然用于区分不同任务，在多个任务公用一个Scheduler时可以此进行区分。
 
-因为小规模的URL管理非常简单，很多框架都并不将其抽象为一个模块，而是直接融入到代码中。但是实际上，抽象出Scheduler模块，会使得框架的解耦程度上升一个档次，并非常容易进行横向扩展，这也是我从scrapy中学到的。
+* public Request poll(Task task)
+	
+	从Scheduler里取出一条请求，并进行后续执行。
 
-在webmagic的设计中，除了Scheduler模块，其他的处理-从下载、解析到持久化，每个任务都是互相独立的，因此可以通过多个Spider共用一个Scheduler来进行扩展。排除去重的因素，URL管理天生就是一个队列，我们可以很方便的用分布式的队列工具去扩展它，也可以基于mysql、redis或者mongodb这样的存储工具来构造一个队列，这样构建一个多线程乃至分布式的爬虫就轻而易举了。
+webmagic目前有三个Scheduler的实现：
 
-URL去重也是一个比较复杂的问题。如果数据量较少，则使用hash的方式就能很好解决。数据量较大的情况下，可以使用Bloom Filter或者更复杂的方式。
+* QueueScheduler
+	
+	一个简单的内存队列，速度较快，并且是线程安全的。
+	
+* FileCacheQueueScheduler
+	
+	使用文件保存队列，它可以用于耗时较长的下载任务，在任务中途停止后(手动停止或者程序崩溃)，下次执行仍然从中止的URL开始继续爬取。
+	
+* RedisScheduler
+	
+	使用redis存储URL队列。通过使用同一台redis服务器存储URL，webmagic可以很容易的在多机部署，从而达到分布式爬虫的效果。
 
-webmagic目前有两个Scheduler的实现，**QueueScheduler**是一个简单的内存队列，速度较快，并且是线程安全的，**FileCacheQueueScheduler**则是一个文件队列，它可以用于耗时较长的下载任务，在任务中途停止后，下次执行仍然从中止的URL开始继续爬取。
+#### Pipeline(后续处理和持久化)
 
-webmagic有一个基于redis的Scheduler实现**RedisScheduler**。通过使用同一台redis服务器存储URL，webmagic可以很容易的在多机部署，从而达到分布式爬虫的效果。
+**Pipeline**是最终抽取结果进行输出和持久化的接口。它只包括一个方法：
 
+* public void process(ResultItems resultItems,Task task)
+	
+	**ResultItems**是集成了抽取结果的对象。通过ResultItems.get(key)可以获取抽取结果。Task同样是用于区分不同任务的对象。
+	
+webmagic包括以下几个Pipeline的实现：
 
-#### Pipeline-离线处理和持久化
+* ConsolePipeline
+	
+	直接输出结果到控制台，测试时使用。
+	
+* FilePipeline
+	
+	输出结果到文件，每个URL单独保存到一个页面，以URL的MD5结果作为文件名。通过构造函数`public FilePipeline(String path)`定义存储路径，**以下使用文件持久化的类，多数都使用此方法指定路径**。
+	
+* JsonFilePipeline
+	
+	以JSON输出结果到文件(.json后缀)，其他与FilePipeline相同。
 
+webmagic目前不支持持久化到数据库，但是结合其他工具，持久化到数据库也是很容易的。这里不妨看一下[webmagic结合JFinal持久化到数据库的一段代码](http://www.oschina.net/code/snippet_190591_23456)。因为JFinal目前还不支持maven，所以这段代码并没有放到webmagic-samples里来。
 
-Pipeline其实也是容易被忽略的一部分。大家都知道持久化的重要性，但是很多框架都选择直接在页面抽取的时候将持久化一起完成，例如crawer4j。但是Pipeline真正的好处是，将页面的在线分析和离线处理拆分开来，可以在一些线程里进行下载，另一些线程里进行处理和持久化。
+<div style="page-break-after:always"></div>
 
-你可以扩展Pipeline来实现抽取结果的持久化，将其保存到你想要保存的地方-本地文件、数据库、mongodb等等。Pipeline的处理目前还是在线的，但是修改为离线的也并不困难。
+## webmagic-extension
 
-webmagic目前只支持控制台输出和文件持久化，但是持久化到数据库也是很容易的。这里不妨看一下[webmagic结合JFinal持久化到数据库的一段代码](http://www.oschina.net/code/snippet_190591_23456)。因为JFinal目前还不支持maven，所以并没有放到webmagic-samples里来。
+webmagic-extension是为了开发爬虫更方便而实现的一些功能模块。这些功能完全基于webmagic-core的框架，包括注解形式编写爬虫、分页、分布式等功能。
 
-------
-
-## 注解模块
+### 注解模块
 
 webmagic-extension包括注解模块。为什么会有注解方式？
 
@@ -251,53 +302,59 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 
 注解部分包括以下内容：
 
-* ### TargetUrl
+* #### TargetUrl
 
-	"TargetUrl"表示这个Model对应要抓取的URL，它包含两层意思：符合这个条件的URL会被加入抓取队列；符合这个条件的URL会被这个Model抓取。TargetUrl可以`sourceRegion`指定提取URL的区域(仅支持XPath)。
+	"TargetUrl"表示这个Model对应要抓取的URL，它包含两层意思：符合这个条件的URL会被加入抓取队列；符合这个条件的URL会被这个Model抓取。TargetUrl可以**sourceRegion**指定提取URL的区域(仅支持XPath)。
 	
 	TargetUrl使用了正则表达式，匹配 "http://my.oschina.net/flashsword/blog/150039" 格式的URL。webmagic对正则表达式进行了修改，"."仅表示字符"."而不代表任意字符，而"\*"则代表了".\*"，例如"http://\*.oschina.net/\*"代表了oschina所有的二级域名下的URL。
 	
-	与TargetUrl相似的还有`HelpUrl`，HelpUrl表示：仅仅抓取该URL用作链接提取，并不对它进行内容抽取。例如博客正文页对应TargetUrl，而列表页则对应HelpUrl。
+	与TargetUrl相似的还有**HelpUrl**，HelpUrl表示：仅仅抓取该URL用作链接提取，并不对它进行内容抽取。例如博客正文页对应TargetUrl，而列表页则对应HelpUrl。
 
-* ### ExtractBy	
+* #### ExtractBy	
 
-	* #### 用于字段
+	* ##### 用于字段
 
 		"ExtractBy"可用于类以及字段。用于字段时，定义了字段抽取的规则。抽取的规则默认使用[**XPath**](http://www.w3school.com.cn/xpath/)，也可以选择使用CSS Selector、正则表达式(通过设置type)。
 	
-		ExtractBy还有几个扩展属性。`multi`表示是否抽取列表，当然，设置为multi时，你需要一个List字段去容纳它。`notnull`则表示，此字段不允许为null，若为null则放弃整个对象。
+		ExtractBy还有几个扩展属性。**multi**表示是否抽取列表，当然，设置为multi时，你需要一个List字段去容纳它。**notnull**则表示，此字段不允许为null，若为null则放弃整个对象。
 
-	* #### 用于类	
+	* ##### 用于类	
 		"ExtractBy"用于类时，则限定了字段抽取的区域。用于类时仍支持multi，multi则表示一个页面可以抽取到多个对象。
 
-	* #### ExtractByRaw & ExtractByUrl
+	* ##### ExtractByRaw & ExtractByUrl
 	
-		在类使用"ExtractBy"修饰后，字段的"ExtractBy"使用的是其抽取的结果，如果仍然想要抽取原HTML，可以使用"ExtractByRaw"。与此类似的还有"ExtractByUrl"，表示从URL重抽取信息。ExtractByUrl只支持正则表达式。
+		在类使用"ExtractBy"修饰后，字段的"ExtractBy"使用的是其抽取的结果，如果仍然想要抽取原HTML，可以使用"ExtractByRaw"。与此类似的还有"ExtractByUrl"，表示从URL中抽取信息。ExtractByUrl只支持正则表达式。
 
-	* #### ExtractBy2 ExtractBy3	
+	* ##### ExtractBy2 ExtractBy3	
 		
 		"ExtractBy"、"ExtractByRaw"支持链式抽取，通过增加注解"ExtractBy2"、"ExtractBy3"实现。
 		
-* ### AfterExtractor
+* #### AfterExtractor
 
-	AfterExtractor接口是对注解方式抽取能力不足的补充。实现AfterExtractor接口后，会在**使用注解方式填充完字段后**调用`afterProcess()`方法，在这个方法中可以直接访问已抽取的字段、补充需要抽取的字段，甚至做一些简单的输出和持久化操作(并不是很建议这么做)。这部分可以参考[webmagic结合JFinal持久化到数据库的一段代码](http://www.oschina.net/code/snippet_190591_23456)。
+	AfterExtractor接口是对注解方式抽取能力不足的补充。实现AfterExtractor接口后，会在**使用注解方式填充完字段后**调用**afterProcess()**方法，在这个方法中可以直接访问已抽取的字段、补充需要抽取的字段，甚至做一些简单的输出和持久化操作(并不是很建议这么做)。这部分可以参考[webmagic结合JFinal持久化到数据库的一段代码](http://www.oschina.net/code/snippet_190591_23456)。
 
-* ### OOSpider
-	OOSpider是注解式爬虫的入口，这里调用`create()`方法将OschinaBlog这个类加入到爬虫的抽取中，这里是可以传入多个类的，OOSpider会根据TargetUrl调用不同的Model进行解析。
+* #### OOSpider
+	OOSpider是注解式爬虫的入口，这里调用**create()**方法将OschinaBlog这个类加入到爬虫的抽取中，这里是可以传入多个类的，例如：
+	
+		OOSpider.create(
+			Site.me().addStartUrl("http://www.oschina.net"),
+			new ConsolePageModelPipeline(),
+			OschinaBlog.clas,OschinaAnswer.class).run();
+		
+	OOSpider会根据TargetUrl调用不同的Model进行解析。
 
-* ### PageModelPipeline
+* #### PageModelPipeline
 	可以通过定义PageModelPipeline来选择结果输出方式。这里new ConsolePageModelPipeline()是PageModelPipeline的一个实现，会将结果输出到控制台。
 	
-* ### 分页
-	处理单项数据分页(例如单条新闻多个页面)是爬虫一个比较头疼的问题。webmagic有一个对于分页的实现，通过实现`PagedModel`接口即可。webmagic-samples里有一个抓取网易新闻的类：`us.codecraft.webmagic.model.samples.News163`。关于分页，这里有一篇对于webmagic分页实现的详细说明的文章[关于爬虫实现分页的一些思考](http://my.oschina.net/flashsword/blog/150039)。
-	目前分页功能还没有分布式实现。
+* #### 分页
 
---------
+	处理单项数据分页(例如单条新闻多个页面)是爬虫一个比较头疼的问题。webmagic目前对于分页的解决方案是：在注解模式下，Model通过实现**PagedModel**接口，并引入PagedPipeline作为第一个Pipeline来实现。具体可以参考webmagic-samples中抓取网易新闻的代码：**us.codecraft.webmagic.model.samples.News163**。
 	
-## 分布式
-
-webmagic-extension中，通过redis来管理URL，达到分布式的效果。具体实现方式只有一个类：`us.codecraft.webmagic.scheduler.RedisScheduler`。
+	关于分页，这里有一篇对于webmagic分页实现的详细说明的文章[关于爬虫实现分页的一些思考](http://my.oschina.net/flashsword/blog/150039)。
+	目前分页功能还没有分布式实现，如果实现RedisScheduler进行分布式爬取，请不要使用分页功能。
 	
+### 分布式
 
+webmagic-extension中，通过redis来管理URL，达到分布式的效果。但是对于分布式爬虫，仅仅程序能够分布式运行，还满足不了大规模抓取的需要，webmagic可能后期会加入一些任务管理和监控的功能，也欢迎各位用户为webmagic提交代码，做出贡献。
 	
 
