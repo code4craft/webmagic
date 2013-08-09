@@ -20,12 +20,12 @@ import java.util.Map;
  */
 public class FilePipeline implements Pipeline {
 
-    private String path = "/data/temp/webmagic/";
+    private String path = "/data/webmagic/";
 
     private Logger logger = Logger.getLogger(getClass());
 
     /**
-     * 新建一个FilePipeline，使用默认保存路径"/data/temp/webmagic/"
+     * 新建一个FilePipeline，使用默认保存路径"/data/webmagic/"
      */
     public FilePipeline() {
 
@@ -37,6 +37,9 @@ public class FilePipeline implements Pipeline {
      * @param path 文件保存路径
      */
     public FilePipeline(String path) {
+        if (!path.endsWith("/")&&!path.endsWith("\\")){
+            path+="/";
+        }
         this.path = path;
     }
 
@@ -46,9 +49,6 @@ public class FilePipeline implements Pipeline {
         File file = new File(path);
         if (!file.exists()) {
             file.mkdirs();
-        }
-        if (resultItems.isSkip()) {
-            return;
         }
         try {
             PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(resultItems.getRequest().getUrl()) + ".html"));

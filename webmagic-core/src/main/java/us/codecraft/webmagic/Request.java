@@ -1,5 +1,9 @@
 package us.codecraft.webmagic;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Request对象封装了待抓取的url信息。<br/>
  * 在PageProcessor中，Request对象可以通过{@link us.codecraft.webmagic.Page#getRequest()} 获取。<br/>
@@ -18,40 +22,95 @@ package us.codecraft.webmagic;
  *          String linktext =  (String)page.getRequest().getExtra()[0];
  *      }
  * </pre>
+ *
  * @author code4crafter@gmail.com <br>
- * Date: 13-4-21
- * Time: 上午11:37
+ *         Date: 13-4-21
+ *         Time: 上午11:37
  */
-public class Request {
+public class Request implements Serializable {
+
+    private static final long serialVersionUID = 2062192774891352043L;
 
     private String url;
 
-    private Object[] extra;
-
     /**
-     * 构建一个request对象
-     * @param url 必须参数，待抓取的url
-     * @param extra 额外参数，可以保存一些需要的上下文信息
+     * 额外参数，可以保存一些需要的上下文信息
      */
-    public Request(String url, Object... extra) {
-        this.url = url;
-        this.extra = extra;
+    private Map<String, Object> extras;
+
+    private double priority;
+
+    public Request() {
     }
 
     /**
-     * 获取预存的对象
-     * @return object[] 预存的对象数组
+     * 构建一个request对象
+     *
+     * @param url 必须参数，待抓取的url
      */
-    public Object[] getExtra() {
-        return extra;
+    public Request(String url) {
+        this.url = url;
+    }
+
+    public double getPriority() {
+        return priority;
+    }
+
+    public Request setPriority(double priority) {
+        this.priority = priority;
+        return this;
+    }
+
+    public Object getExtra(String key) {
+        if (extras == null) {
+            return null;
+        }
+        return extras.get(key);
+    }
+
+    public Request putExtra(String key, Object value) {
+        if (extras == null) {
+            extras = new HashMap<String, Object>();
+        }
+        extras.put(key, value);
+        return this;
     }
 
     /**
      * 获取待抓取的url
+     *
      * @return url 待抓取的url
      */
     public String getUrl() {
         return url;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Request request = (Request) o;
+
+        if (!url.equals(request.url)) return false;
+
+        return true;
+    }
+
+    public Map<String, Object> getExtras() {
+        return extras;
+    }
+
+    @Override
+    public int hashCode() {
+        return url.hashCode();
+    }
+
+    public void setExtras(Map<String, Object> extras) {
+        this.extras = extras;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }
