@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.schedular;
+package us.codecraft.webmagic.scheduler;
 
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
