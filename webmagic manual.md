@@ -375,4 +375,7 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 
 webmagic-extension中，通过redis来管理URL，达到分布式的效果。但是对于分布式爬虫，仅仅程序能够分布式运行，还满足不了大规模抓取的需要，webmagic可能后期会加入一些任务管理和监控的功能，也欢迎各位用户为webmagic提交代码，做出贡献。
 	
+### 更进一步
+
+如果这篇文档仍然满足不了你的需要，你可以阅读webmagic的[Javadoc](http://code4craft.github.io/webmagic/docs/)，或者直接阅读源码。
 
