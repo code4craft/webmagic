@@ -42,7 +42,7 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
 
     /**
      * @param key
-     * @return
+     * @return map
      */
     public Map<K2, V> get(K1 key) {
         return map.get(key);
@@ -51,7 +51,7 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
     /**
      * @param key1
      * @param key2
-     * @return
+     * @return value
      */
     public V get(K1 key1, K2 key2) {
         if (get(key1) == null) {

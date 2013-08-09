@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.schedular;
+package us.codecraft.webmagic.scheduler;
 
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Request;

@@ -4,7 +4,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.schedular.Scheduler;
 
 import java.io.*;
 import java.util.LinkedHashSet;

@@ -8,8 +8,8 @@ import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.schedular.QueueScheduler;
-import us.codecraft.webmagic.schedular.Scheduler;
+import us.codecraft.webmagic.scheduler.QueueScheduler;
+import us.codecraft.webmagic.scheduler.Scheduler;
 import us.codecraft.webmagic.utils.ThreadUtils;
 
 import java.util.ArrayList;
