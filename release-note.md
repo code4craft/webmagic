@@ -1,5 +1,42 @@
 Release Notes
 ----
+*2012-8-9* `version：0.2.0`
+
+此次更新的主题是"方便"(之前的主题是"灵活")。
+
+增加了webmagic-extension模块。
+
+增加了注解方式支持，可以通过POJO+注解的方式编写一个爬虫，更符合Java开发习惯。
+
+    @TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
+    public class OschinaBlog {
+
+        @ExtractBy("//title")
+        private String title;
+
+        @ExtractBy(value = "div.BlogContent",type = ExtractBy.Type.Css)
+        private String content;
+
+        @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
+        private List<String> tags;
+
+        public static void main(String[] args) {
+            OOSpider.create(Site.me().addStartUrl("http://my.oschina.net/flashsword/blog")
+                    ,new ConsolePageModelPipeline(), OschinaBlog.class).run();
+        }
+
+    }
+
+增加基于redis的分布式支持。
+
+增加XPath2.0语法支持(webmagic-saxon模块)。
+
+增加基于Selenium的浏览器渲染支持，用于抓取动态加载内容(webmagic-selenium模块)。
+
+修复一些bug。
+
+补充了大量的文档。
+
 *2012-7-25* `version：0.1.0`
 
 第一个稳定版本。
