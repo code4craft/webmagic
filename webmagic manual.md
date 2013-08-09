@@ -331,20 +331,21 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 
 * #### ExtractBy	
 
-	* ##### 用于字段
+	* #### 用于字段
 
 		"ExtractBy"可用于类以及字段。用于字段时，定义了字段抽取的规则。抽取的规则默认使用[**XPath**](http://www.w3school.com.cn/xpath/)，也可以选择使用CSS Selector、正则表达式(通过设置type)。
 	
 		ExtractBy还有几个扩展属性。**multi**表示是否抽取列表，当然，设置为multi时，你需要一个List字段去容纳它。**notnull**则表示，此字段不允许为null，若为null则放弃整个对象。
 
-	* ##### 用于类	
+	* #### 用于类	
+		
 		"ExtractBy"用于类时，则限定了字段抽取的区域。用于类时仍支持multi，multi则表示一个页面可以抽取到多个对象。
 
-	* ##### ExtractByRaw & ExtractByUrl
+	* #### ExtractByRaw & ExtractByUrl
 	
 		在类使用"ExtractBy"修饰后，字段的"ExtractBy"使用的是其抽取的结果，如果仍然想要抽取原HTML，可以使用"ExtractByRaw"。与此类似的还有"ExtractByUrl"，表示从URL中抽取信息。ExtractByUrl只支持正则表达式。
 
-	* ##### ExtractBy2 ExtractBy3	
+	* #### ExtractBy2 ExtractBy3	
 		
 		"ExtractBy"、"ExtractByRaw"支持链式抽取，通过增加注解"ExtractBy2"、"ExtractBy3"实现。
 		
