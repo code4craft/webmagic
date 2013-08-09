@@ -22,7 +22,7 @@ import java.util.Map;
  * 需要下载Selenium driver支持。<br>
  *
  * @author code4crafter@gmail.com <br>
- * @date: 13-7-26 <br>
+ * Date: 13-7-26 <br>
  * Time: 下午1:37 <br>
  */
 public class SeleniumDownloader implements Downloader, Destroyable {

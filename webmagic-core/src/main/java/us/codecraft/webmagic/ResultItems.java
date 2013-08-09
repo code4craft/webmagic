@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * 保存抽取结果的类，由PageProcessor处理得到，传递给{@link us.codecraft.webmagic.pipeline.Pipeline}进行持久化。<br>
  * @author code4crafter@gmail.com <br>
- * @date: 13-7-25 <br>
+ * Date: 13-7-25 <br>
  * Time: 下午12:20 <br>
  */
 public class ResultItems {

@@ -8,7 +8,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
  * @author code4crafter@gmail.com <br>
- * @date: 13-7-26 <br>
+ * Date: 13-7-26 <br>
  * Time: 上午7:31 <br>
  */
 public class IteyeBlogProcessor implements PageProcessor {

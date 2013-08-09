@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 基于Pipeline的扩展点，用于实现注解格式的Pipeline。<br>
  * 与PageModelPipeline是一对多的关系(原谅作者没有更好的名字了)。<br>
  * @author code4crafter@gmail.com <br>
- * @date: 13-8-2 <br>
+ * Date: 13-8-2 <br>
  * Time: 上午10:47 <br>
  */
 class ModelPipeline implements Pipeline {

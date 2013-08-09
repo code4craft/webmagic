@@ -26,7 +26,7 @@ import java.util.Map;
 
 /**
  * @author code4crafter@gmail.com <br>
- * @date: 13-8-5 <br>
+ * Date: 13-8-5 <br>
  * Time: 下午2:11 <br>
  */
 public class LucenePipeline implements Pipeline {

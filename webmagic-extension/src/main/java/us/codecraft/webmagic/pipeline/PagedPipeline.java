@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 在使用redis做分布式爬虫时，请不要使用此功能。<br>
  *
  * @author code4crafter@gmail.com <br>
- * @date: 13-8-4 <br>
+ * Date: 13-8-4 <br>
  * Time: 下午5:15 <br>
  */
 public class PagedPipeline implements Pipeline {

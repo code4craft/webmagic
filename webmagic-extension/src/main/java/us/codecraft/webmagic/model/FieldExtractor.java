@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 
 /**
  * @author code4crafter@gmail.com <br>
- * @date: 13-8-1 <br>
+ * Date: 13-8-1 <br>
  * Time: 下午9:48 <br>
  */
 class FieldExtractor extends Extractor{

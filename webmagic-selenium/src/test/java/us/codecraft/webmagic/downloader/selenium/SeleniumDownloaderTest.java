@@ -9,7 +9,7 @@ import us.codecraft.webmagic.Task;
 
 /**
  * @author code4crafter@gmail.com <br>
- * @date: 13-7-26 <br>
+ * Date: 13-7-26 <br>
  *        Time: 下午2:46 <br>
  */
 public class SeleniumDownloaderTest {

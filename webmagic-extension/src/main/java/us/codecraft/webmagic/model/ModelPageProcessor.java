@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 /**
  * 基于PageProcessor的扩展点。<br>
  * @author code4crafter@gmail.com <br>
- * @date: 13-8-1 <br>
+ * Date: 13-8-1 <br>
  * Time: 下午8:46 <br>
  */
 class ModelPageProcessor implements PageProcessor {

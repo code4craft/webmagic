@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 
 /**
  * @author code4crafter@gmail.com <br>
- * @date: 13-7-26 <br>
+ * Date: 13-7-26 <br>
  * Time: 下午2:12 <br>
  */
 public class WebDriverPoolTest {
