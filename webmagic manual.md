@@ -229,7 +229,7 @@ webmagic包括一个对于页面正文的自动抽取的类**SmartContentSelecto
 
 * SeleniumDownloader
 	
-	对于一些Javascript动态加载的网页，仅仅使用http模拟下载工具，并不能取到页面的内容。这方面的思路有两种：一种是抽丝剥茧，分析js的逻辑，再用爬虫去重现它；另一种就是：内置一个浏览器，直接获取最后加载完的页面。**webmagic-selenium**包中整合了Selenium到SeleniumDownloader，可以直接进行动态加载页面的抓取。
+	对于一些Javascript动态加载的网页，仅仅使用http模拟下载工具，并不能取到页面的内容。这方面的思路有两种：一种是抽丝剥茧，分析js的逻辑，再用爬虫去重现它；另一种就是：内置一个浏览器，直接获取最后加载完的页面。**webmagic-selenium**包中整合了Selenium到SeleniumDownloader，可以直接进行动态加载页面的抓取。使用selenium需要安装一些native的工具，具体步骤可以参考作者的博文[使用Selenium来抓取动态加载的页面](http://my.oschina.net/flashsword/blog/147334)
 
 #### Scheduler(URL管理)
 
