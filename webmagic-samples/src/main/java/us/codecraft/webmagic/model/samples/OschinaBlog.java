@@ -1,10 +1,11 @@
 package us.codecraft.webmagic.model.samples;
 
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.model.ConsolePageModelPipeline;
+import us.codecraft.webmagic.model.HasKey;
 import us.codecraft.webmagic.model.OOSpider;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
+import us.codecraft.webmagic.pipeline.JsonFilePageModelPipeline;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * Time: 上午7:52 <br>
  */
 @TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
-public class OschinaBlog {
+public class OschinaBlog implements HasKey{
 
     @ExtractBy("//title")
     private String title;
@@ -27,7 +28,23 @@ public class OschinaBlog {
 
     public static void main(String[] args) {
         OOSpider.create(Site.me().addStartUrl("http://my.oschina.net/flashsword/blog")
-                ,new ConsolePageModelPipeline(), OschinaBlog.class).run();
+                ,new JsonFilePageModelPipeline(), OschinaBlog.class).run();
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    @Override
+    public String key() {
+        return title;
+    }
 }
