@@ -8,6 +8,7 @@ import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
@@ -60,6 +61,7 @@ public class HttpClientPool {
 
         SchemeRegistry schemeRegistry = new SchemeRegistry();
         schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
+        schemeRegistry.register(new Scheme("https",  443, SSLSocketFactory.getSocketFactory()));
 
         PoolingClientConnectionManager connectionManager = new PoolingClientConnectionManager(schemeRegistry);
         connectionManager.setMaxTotal(poolSize);
