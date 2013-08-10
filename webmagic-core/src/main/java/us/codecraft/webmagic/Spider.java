@@ -220,6 +220,11 @@ public class Spider implements Runnable, Task {
         }
     }
 
+    public void test(String url){
+        checkComponent();
+        processRequest(new Request(url));
+    }
+
     private void processRequest(Request request) {
         Page page = downloader.download(request, this);
         if (page == null) {
