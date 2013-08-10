@@ -352,6 +352,7 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 	AfterExtractor接口是对注解方式抽取能力不足的补充。实现AfterExtractor接口后，会在**使用注解方式填充完字段后**调用**afterProcess()**方法，在这个方法中可以直接访问已抽取的字段、补充需要抽取的字段，甚至做一些简单的输出和持久化操作(并不是很建议这么做)。这部分可以参考[webmagic结合JFinal持久化到数据库的一段代码](http://www.oschina.net/code/snippet_190591_23456)。
 
 * #### OOSpider
+	
 	OOSpider是注解式爬虫的入口，这里调用**create()**方法将OschinaBlog这个类加入到爬虫的抽取中，这里是可以传入多个类的，例如：
 	
 		OOSpider.create(
@@ -362,7 +363,9 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 	OOSpider会根据TargetUrl调用不同的Model进行解析。
 
 * #### PageModelPipeline
+	
 	可以通过定义PageModelPipeline来选择结果输出方式。这里new ConsolePageModelPipeline()是PageModelPipeline的一个实现，会将结果输出到控制台。
+	PageModelPipeline还有一个实现**JsonFilePageModelPipeline**，可以将对象持久化以JSON格式输出，并持久化到文件。JsonFilePageModelPipeline默认使用对象的MD5值作为文件名，你可以在Model中实现HasKey接口，指定输出的文件名。
 	
 * #### 分页
 

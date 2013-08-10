@@ -31,6 +31,11 @@ public class OschinaBlog implements HasKey{
                 ,new JsonFilePageModelPipeline(), OschinaBlog.class).run();
     }
 
+    @Override
+    public String key() {
+        return title;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -41,10 +46,5 @@ public class OschinaBlog implements HasKey{
 
     public List<String> getTags() {
         return tags;
-    }
-
-    @Override
-    public String key() {
-        return title;
     }
 }
