@@ -380,5 +380,5 @@ webmagic-extension中，通过redis来管理URL，达到分布式的效果。但
 	
 ### 更进一步
 
-如果这篇文档仍然满足不了你的需要，你可以阅读webmagic的[Javadoc](http://code4craft.github.io/webmagic/docs/)，或者直接阅读源码。
+如果这篇文档仍然满足不了你的需要，你可以阅读webmagic的[Javadoc](http://code4craft.github.io/webmagic/docs/)，或者直接阅读源码[https://github.com/code4craft/webmagic](https://github.com/code4craft/webmagic)。
 
