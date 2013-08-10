@@ -1,8 +1,10 @@
 webmagic使用手册
 ------
->webmagic是一个开源的Java垂直爬虫框架，目标是简化爬虫的开发流程，让开发者专注于逻辑功能的开发。webmagic的核心非常简单，但是覆盖爬虫的整个流程，也是很好的学习爬虫开发的材料。作者曾经进行过一年的垂直爬虫的开发，webmagic就是为了解决爬虫开发的一些重复劳动而产生的框架。
+>webmagic是一个开源的Java垂直爬虫框架，目标是简化爬虫的开发流程，让开发者专注于逻辑功能的开发。webmagic的核心非常简单，但是覆盖爬虫的整个流程，也是很好的学习爬虫开发的材料。
 
->web爬虫是一种技术，webmagic致力于将这种技术的实现成本降低，但是出于对资源提供者的尊重，webmagic不会做反封锁的事情，包括：验证码破解、代理切换、自动登录、抓取静态资源等。
+>web爬虫是一种技术，webmagic致力于将这种技术的实现成本降低，但是出于对资源提供者的尊重，webmagic不会做反封锁的事情，包括：验证码破解、代理切换、自动登录等。
+
+>作者黄亿华([code4crafter@gmail.com](code4crafter@gmail.com))目前就职于大众点评，曾经在前公司进行过一年的垂直爬虫的开发，webmagic就是为了解决爬虫开发的一些重复劳动而产生的框架。
 
 >webmagic的架构和设计参考了以下两个项目，感谢以下两个项目的作者：
 
@@ -63,7 +65,7 @@ webmagic还包含两个可用的扩展包，因为这两个包都依赖了比较
 
 ### 不使用maven
 
-不使用maven的用户，可以下载这个二进制打包版本(感谢[oschina](http://www.oschina.net/))：
+不使用maven的用户，可以下载附带二进制jar包的版本(感谢[oschina](http://www.oschina.net/))：
 
 	git clone http://git.oschina.net/flashsword20/webmagic-bin.git
 
@@ -160,7 +162,6 @@ webmagic-core参考了scrapy的模块划分，分为Spider(整个爬虫的调度
 	.pipeline(new FilePipeline())
 	.thread(10).run();	
 
-
 Spider的核心处理流程非常简单，代码如下：
 
     <!-- lang: java -->
@@ -177,6 +178,8 @@ Spider的核心处理流程非常简单，代码如下：
         }
         sleep(site.getSleepTime());
     }
+    
+Spider还包括一个方法test(String url)，该方法只抓取一个单独的页面，用于测试抽取效果。
     
 #### PageProcessor(页面分析及链接抽取)
 
@@ -352,7 +355,6 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 	AfterExtractor接口是对注解方式抽取能力不足的补充。实现AfterExtractor接口后，会在**使用注解方式填充完字段后**调用**afterProcess()**方法，在这个方法中可以直接访问已抽取的字段、补充需要抽取的字段，甚至做一些简单的输出和持久化操作(并不是很建议这么做)。这部分可以参考[webmagic结合JFinal持久化到数据库的一段代码](http://www.oschina.net/code/snippet_190591_23456)。
 
 * #### OOSpider
-	
 	OOSpider是注解式爬虫的入口，这里调用**create()**方法将OschinaBlog这个类加入到爬虫的抽取中，这里是可以传入多个类的，例如：
 	
 		OOSpider.create(
@@ -363,22 +365,17 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 	OOSpider会根据TargetUrl调用不同的Model进行解析。
 
 * #### PageModelPipeline
-	
 	可以通过定义PageModelPipeline来选择结果输出方式。这里new ConsolePageModelPipeline()是PageModelPipeline的一个实现，会将结果输出到控制台。
-	PageModelPipeline还有一个实现**JsonFilePageModelPipeline**，可以将对象持久化以JSON格式输出，并持久化到文件。JsonFilePageModelPipeline默认使用对象的MD5值作为文件名，你可以在Model中实现HasKey接口，指定输出的文件名。
 	
 * #### 分页
 
 	处理单项数据分页(例如单条新闻多个页面)是爬虫一个比较头疼的问题。webmagic目前对于分页的解决方案是：在注解模式下，Model通过实现**PagedModel**接口，并引入PagedPipeline作为第一个Pipeline来实现。具体可以参考webmagic-samples中抓取网易新闻的代码：**us.codecraft.webmagic.model.samples.News163**。
 	
 	关于分页，这里有一篇对于webmagic分页实现的详细说明的文章[关于爬虫实现分页的一些思考](http://my.oschina.net/flashsword/blog/150039)。
-	目前分页功能还没有分布式实现，如果使用RedisScheduler进行分布式爬取，请不要使用分页功能。
+	目前分页功能还没有分布式实现，如果实现RedisScheduler进行分布式爬取，请不要使用分页功能。
 	
 ### 分布式
 
 webmagic-extension中，通过redis来管理URL，达到分布式的效果。但是对于分布式爬虫，仅仅程序能够分布式运行，还满足不了大规模抓取的需要，webmagic可能后期会加入一些任务管理和监控的功能，也欢迎各位用户为webmagic提交代码，做出贡献。
 	
-### 更进一步
-
-如果这篇文档仍然满足不了你的需要，你可以阅读webmagic的[Javadoc](http://code4craft.github.io/webmagic/docs/)，或者直接阅读源码[https://github.com/code4craft/webmagic](https://github.com/code4craft/webmagic)。
 
