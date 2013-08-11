@@ -29,6 +29,10 @@ public class RedisScheduler implements Scheduler {
         pool = new JedisPool(new JedisPoolConfig(), host);
     }
 
+    public RedisScheduler(JedisPool pool) {
+        this.pool = pool;
+    }
+
     @Override
     public synchronized void push(Request request, Task task) {
         Jedis jedis = pool.getResource();
@@ -59,7 +63,7 @@ public class RedisScheduler implements Scheduler {
             }
             String key = ITEM_PREFIX + task.getUUID();
             String field = DigestUtils.shaHex(url);
-            byte[] bytes = jedis.hget(key.getBytes(),field.getBytes());
+            byte[] bytes = jedis.hget(key.getBytes(), field.getBytes());
             if (bytes != null) {
                 Request o = JSON.parseObject(new String(bytes), Request.class);
                 return o;
