@@ -40,33 +40,33 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Spider implements Runnable, Task {
 
-    private Downloader downloader;
+    protected Downloader downloader;
 
-    private List<Pipeline> pipelines = new ArrayList<Pipeline>();
+    protected List<Pipeline> pipelines = new ArrayList<Pipeline>();
 
-    private PageProcessor pageProcessor;
+    protected PageProcessor pageProcessor;
 
-    private List<String> startUrls;
+    protected List<String> startUrls;
 
-    private Site site;
+    protected Site site;
 
-    private String uuid;
+    protected String uuid;
 
-    private Scheduler scheduler = new QueueScheduler();
+    protected Scheduler scheduler = new QueueScheduler();
 
-    private Logger logger = Logger.getLogger(getClass());
+    protected Logger logger = Logger.getLogger(getClass());
 
-    private ExecutorService executorService;
+    protected ExecutorService executorService;
 
-    private int threadNum = 1;
+    protected int threadNum = 1;
 
-    private AtomicInteger stat = new AtomicInteger(STAT_INIT);
+    protected AtomicInteger stat = new AtomicInteger(STAT_INIT);
 
-    private final static int STAT_INIT = 0;
+    protected final static int STAT_INIT = 0;
 
-    private final static int STAT_RUNNING = 1;
+    protected final static int STAT_RUNNING = 1;
 
-    private final static int STAT_STOPPED = 2;
+    protected final static int STAT_STOPPED = 2;
 
     /**
      * 使用已定义的抽取规则新建一个Spider。
@@ -206,7 +206,7 @@ public class Spider implements Runnable, Task {
         destroy();
     }
 
-    private void destroy() {
+    protected void destroy() {
         destroyEach(downloader);
         destroyEach(pageProcessor);
         for (Pipeline pipeline : pipelines) {
@@ -233,7 +233,7 @@ public class Spider implements Runnable, Task {
         }
     }
 
-    private void processRequest(Request request) {
+    protected void processRequest(Request request) {
         Page page = downloader.download(request, this);
         if (page == null) {
             sleep(site.getSleepTime());
@@ -249,7 +249,7 @@ public class Spider implements Runnable, Task {
         sleep(site.getSleepTime());
     }
 
-    private void sleep(int time) {
+    protected void sleep(int time) {
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {
@@ -257,7 +257,7 @@ public class Spider implements Runnable, Task {
         }
     }
 
-    private void addRequest(Page page) {
+    protected void addRequest(Page page) {
         if (CollectionUtils.isNotEmpty(page.getTargetRequests())) {
             for (Request request : page.getTargetRequests()) {
                 scheduler.push(request, this);
@@ -265,7 +265,7 @@ public class Spider implements Runnable, Task {
         }
     }
 
-    private void checkIfNotRunning() {
+    protected void checkIfNotRunning() {
         if (!stat.compareAndSet(STAT_INIT, STAT_INIT)) {
             throw new IllegalStateException("Spider is already running!");
         }

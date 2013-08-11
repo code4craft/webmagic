@@ -12,8 +12,8 @@ import us.codecraft.webmagic.Task;
  * 使用redis管理url，构建一个分布式的爬虫。<br>
  *
  * @author code4crafter@gmail.com <br>
- * Date: 13-7-25 <br>
- * Time: 上午7:07 <br>
+ *         Date: 13-7-25 <br>
+ *         Time: 上午7:07 <br>
  */
 public class RedisScheduler implements Scheduler {
 
@@ -32,34 +32,42 @@ public class RedisScheduler implements Scheduler {
     @Override
     public synchronized void push(Request request, Task task) {
         Jedis jedis = pool.getResource();
-        //使用SortedSet进行url去重
-        if (jedis.zrank(SET_PREFIX + task.getUUID(), request.getUrl()) == null) {
-            //使用List保存队列
-            jedis.rpush(QUEUE_PREFIX + task.getUUID(), request.getUrl());
-            jedis.zadd(SET_PREFIX + task.getUUID(), request.getPriority(), request.getUrl());
-            if (request.getExtras() != null) {
-                String key = ITEM_PREFIX + DigestUtils.shaHex(request.getUrl());
-                byte[] bytes = JSON.toJSONString(request).getBytes();
-                jedis.set(key.getBytes(), bytes);
+        try {
+            //使用Set进行url去重
+            if (!jedis.sismember(SET_PREFIX + task.getUUID(), request.getUrl())) {
+                //使用List保存队列
+                jedis.rpush(QUEUE_PREFIX + task.getUUID(), request.getUrl());
+                jedis.sadd(SET_PREFIX + task.getUUID(), request.getUrl());
+                if (request.getExtras() != null) {
+                    String field = DigestUtils.shaHex(request.getUrl());
+                    String value = JSON.toJSONString(request);
+                    jedis.hset((ITEM_PREFIX + task.getUUID()), field, value);
+                }
             }
+        } finally {
+            pool.returnResource(jedis);
         }
-        pool.returnResource(jedis);
     }
 
     @Override
     public synchronized Request poll(Task task) {
         Jedis jedis = pool.getResource();
-        String url = jedis.lpop(QUEUE_PREFIX + task.getUUID());
-        if (url == null) {
-            return null;
+        try {
+            String url = jedis.lpop(QUEUE_PREFIX + task.getUUID());
+            if (url == null) {
+                return null;
+            }
+            String key = ITEM_PREFIX + task.getUUID();
+            String field = DigestUtils.shaHex(url);
+            byte[] bytes = jedis.hget(key.getBytes(),field.getBytes());
+            if (bytes != null) {
+                Request o = JSON.parseObject(new String(bytes), Request.class);
+                return o;
+            }
+            Request request = new Request(url);
+            return request;
+        } finally {
+            pool.returnResource(jedis);
         }
-        String key = ITEM_PREFIX + DigestUtils.shaHex(url);
-        byte[] bytes = jedis.get(key.getBytes());
-        if (bytes != null) {
-            Request o = JSON.parseObject(new String(bytes),Request.class);
-            return o;
-        }
-        pool.returnResource(jedis);
-        return new Request(url);
     }
 }

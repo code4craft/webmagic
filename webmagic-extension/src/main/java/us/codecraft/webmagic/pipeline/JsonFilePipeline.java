@@ -5,6 +5,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.utils.FilePersistentBase;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -18,40 +19,31 @@ import java.io.PrintWriter;
  *         Date: 13-4-21
  *         Time: 下午6:28
  */
-public class JsonFilePipeline implements Pipeline {
-
-    private String path = "/data/webmagic/";
+public class JsonFilePipeline extends FilePersistentBase implements Pipeline {
 
     private Logger logger = Logger.getLogger(getClass());
 
     /**
-     * 新建一个FilePipeline，使用默认保存路径"/data/webmagic/"
+     * 新建一个JsonFilePipeline，使用默认保存路径"/data/webmagic/"
      */
     public JsonFilePipeline() {
-
+        setPath("/data/webmagic");
     }
 
     /**
-     * 新建一个FilePipeline
+     * 新建一个JsonFilePipeline
      *
      * @param path 文件保存路径
      */
     public JsonFilePipeline(String path) {
-        if (!path.endsWith("/")&&!path.endsWith("\\")){
-            path+="/";
-        }
-        this.path = path;
+        setPath(path);
     }
 
     @Override
     public void process(ResultItems resultItems, Task task) {
         String path = this.path + "/" + task.getUUID() + "/";
-        File file = new File(path);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
         try {
-            PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(resultItems.getRequest().getUrl()) + ".json"));
+            PrintWriter printWriter = new PrintWriter(new FileWriter(new File(path + DigestUtils.md5Hex(resultItems.getRequest().getUrl()) + ".json")));
             printWriter.write(JSON.toJSONString(resultItems.getAll()));
             printWriter.close();
         } catch (IOException e) {

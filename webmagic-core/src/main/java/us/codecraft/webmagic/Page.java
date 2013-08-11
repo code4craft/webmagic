@@ -148,4 +148,15 @@ public class Page {
     public ResultItems getResultItems() {
         return resultItems;
     }
+
+    @Override
+    public String toString() {
+        return "Page{" +
+                "request=" + request +
+                ", resultItems=" + resultItems +
+                ", html=" + html +
+                ", url=" + url +
+                ", targetRequests=" + targetRequests +
+                '}';
+    }
 }
