@@ -220,9 +220,17 @@ public class Spider implements Runnable, Task {
         }
     }
 
-    public void test(String url){
+    /**
+     * 用某些特定URL进行爬虫测试
+     * @param urls 要抓取的url
+     */
+    public void test(String... urls){
         checkComponent();
-        processRequest(new Request(url));
+        if (urls.length>0){
+            for (String url : urls) {
+                processRequest(new Request(url));
+            }
+        }
     }
 
     private void processRequest(Request request) {

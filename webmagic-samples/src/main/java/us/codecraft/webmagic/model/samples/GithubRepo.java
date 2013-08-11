@@ -8,6 +8,7 @@ import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.model.annotation.HelpUrl;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
 import us.codecraft.webmagic.pipeline.JsonFilePageModelPipeline;
+import us.codecraft.webmagic.scheduler.FileCacheQueueScheduler;
 
 import java.util.List;
 
@@ -32,12 +33,19 @@ public class GithubRepo implements HasKey {
     @ExtractBy(value = "//div[@class='repository-lang-stats']//li//span[@class='lang']",multi = true)
     private List<String> language;
 
+    @ExtractBy("//a[@class='social-count js-social-count']/text()")
+    private String star;
+
+    @ExtractBy("//a[@class='social-count js-social-count']/text()")
+    private String fork;
+
     @ExtractByUrl
     private String url;
 
     public static void main(String[] args) {
-        OOSpider.create(Site.me().addStartUrl("https://github.com/explore").setSleepTime(0),
-                new JsonFilePageModelPipeline(), GithubRepo.class).thread(15).run();
+        OOSpider.create(Site.me().addStartUrl("https://github.com/explore").setSleepTime(0).setRetryTimes(3),
+                new JsonFilePageModelPipeline(), GithubRepo.class)
+                .scheduler(new FileCacheQueueScheduler("/data/webmagic/cache/")).thread(15).run();
     }
 
     @Override
@@ -63,5 +71,13 @@ public class GithubRepo implements HasKey {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getStar() {
+        return star;
+    }
+
+    public String getFork() {
+        return fork;
     }
 }
