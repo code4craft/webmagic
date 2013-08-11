@@ -66,13 +66,7 @@ public class HttpClientDownloader implements Downloader {
                 }
                 //
                 handleGzip(httpResponse);
-                String content = IOUtils.toString(httpResponse.getEntity().getContent(),
-                        charset);
-                Page page = new Page();
-                page.setHtml(new Html(UrlUtils.fixAllRelativeHrefs(content, request.getUrl())));
-                page.setUrl(new PlainText(request.getUrl()));
-                page.setRequest(request);
-                return page;
+                return handleResponse(request, charset, httpResponse,task);
             } else {
                 logger.warn("code error " + statusCode + "\t" + request.getUrl());
             }
@@ -80,6 +74,16 @@ public class HttpClientDownloader implements Downloader {
             logger.warn("download page " + request.getUrl() + " error", e);
         }
         return null;
+    }
+
+    protected Page handleResponse(Request request, String charset, HttpResponse httpResponse,Task task) throws IOException {
+        String content = IOUtils.toString(httpResponse.getEntity().getContent(),
+                charset);
+        Page page = new Page();
+        page.setHtml(new Html(UrlUtils.fixAllRelativeHrefs(content, request.getUrl())));
+        page.setUrl(new PlainText(request.getUrl()));
+        page.setRequest(request);
+        return page;
     }
 
     @Override

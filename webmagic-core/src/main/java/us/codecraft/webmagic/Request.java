@@ -113,4 +113,13 @@ public class Request implements Serializable {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    @Override
+    public String toString() {
+        return "Request{" +
+                "url='" + url + '\'' +
+                ", extras=" + extras +
+                ", priority=" + priority +
+                '}';
+    }
 }

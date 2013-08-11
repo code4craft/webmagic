@@ -4,8 +4,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.utils.FilePersistentBase;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,9 +18,7 @@ import java.util.Map;
  *         Date: 13-4-21
  *         Time: 下午6:28
  */
-public class FilePipeline implements Pipeline {
-
-    private String path = "/data/webmagic/";
+public class FilePipeline extends FilePersistentBase implements Pipeline  {
 
     private Logger logger = Logger.getLogger(getClass());
 
@@ -28,7 +26,7 @@ public class FilePipeline implements Pipeline {
      * 新建一个FilePipeline，使用默认保存路径"/data/webmagic/"
      */
     public FilePipeline() {
-
+        setPath("/data/webmagic/");
     }
 
     /**
@@ -37,21 +35,14 @@ public class FilePipeline implements Pipeline {
      * @param path 文件保存路径
      */
     public FilePipeline(String path) {
-        if (!path.endsWith("/")&&!path.endsWith("\\")){
-            path+="/";
-        }
-        this.path = path;
+        setPath(path);
     }
 
     @Override
     public void process(ResultItems resultItems, Task task) {
-        String path = this.path + "/" + task.getUUID() + "/";
-        File file = new File(path);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
+        String path = this.path + PATH_SEPERATOR + task.getUUID() + PATH_SEPERATOR;
         try {
-            PrintWriter printWriter = new PrintWriter(new FileWriter(path + DigestUtils.md5Hex(resultItems.getRequest().getUrl()) + ".html"));
+            PrintWriter printWriter = new PrintWriter(new FileWriter(getFile(path + DigestUtils.md5Hex(resultItems.getRequest().getUrl()) + ".html")));
             printWriter.println("url:\t" + resultItems.getRequest().getUrl());
             for (Map.Entry<String, Object> entry : resultItems.getAll().entrySet()) {
                 if (entry.getValue() instanceof Iterable) {

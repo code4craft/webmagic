@@ -2,6 +2,7 @@ package us.codecraft.webmagic.model;
 
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
  * 基于Model的Spider，封装后的入口类。<br>
@@ -18,6 +19,10 @@ public class OOSpider extends Spider {
     protected OOSpider(ModelPageProcessor modelPageProcessor) {
         super(modelPageProcessor);
         this.modelPageProcessor = modelPageProcessor;
+    }
+
+    public OOSpider(PageProcessor pageProcessor) {
+        super(pageProcessor);
     }
 
     /**

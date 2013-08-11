@@ -7,8 +7,8 @@ import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.model.HasKey;
 import us.codecraft.webmagic.model.PageModelPipeline;
+import us.codecraft.webmagic.utils.FilePersistentBase;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,38 +21,29 @@ import java.io.PrintWriter;
  *         Date: 13-4-21
  *         Time: 下午6:28
  */
-public class JsonFilePageModelPipeline implements PageModelPipeline {
-
-    private String path = "/data/webmagic/";
+public class JsonFilePageModelPipeline extends FilePersistentBase implements PageModelPipeline {
 
     private Logger logger = Logger.getLogger(getClass());
 
     /**
-     * 新建一个FilePipeline，使用默认保存路径"/data/webmagic/"
+     * 新建一个JsonFilePageModelPipeline，使用默认保存路径"/data/webmagic/"
      */
     public JsonFilePageModelPipeline() {
-
+        setPath("/data/webmagic/");
     }
 
     /**
-     * 新建一个FilePipeline
+     * 新建一个JsonFilePageModelPipeline
      *
      * @param path 文件保存路径
      */
     public JsonFilePageModelPipeline(String path) {
-        if (!path.endsWith("/") && !path.endsWith("\\")) {
-            path += "/";
-        }
-        this.path = path;
+        setPath(path);
     }
 
     @Override
     public void process(Object o, Task task) {
         String path = this.path + "/" + task.getUUID() + "/";
-        File file = new File(path);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
         try {
             String filename;
             if (o instanceof HasKey) {
@@ -60,7 +51,7 @@ public class JsonFilePageModelPipeline implements PageModelPipeline {
             } else {
                 filename = path + DigestUtils.md5Hex(ToStringBuilder.reflectionToString(o)) + ".json";
             }
-            PrintWriter printWriter = new PrintWriter(new FileWriter(filename));
+            PrintWriter printWriter = new PrintWriter(new FileWriter(getFile(filename)));
             printWriter.write(JSON.toJSONString(o));
             printWriter.close();
         } catch (IOException e) {
