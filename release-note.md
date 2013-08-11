@@ -28,13 +28,15 @@ Release Notes
 
     }
 
+增加一个Spider.test(url)方法，用于开发爬虫时进行调试。
+
 增加基于redis的分布式支持。
 
 增加XPath2.0语法支持(webmagic-saxon模块)。
 
 增加基于Selenium的浏览器渲染支持，用于抓取动态加载内容(webmagic-selenium模块)。
 
-修复一些已有bug。
+修复了不支持https的bug。
 
 补充了文档：[webmagic-0.2.0用户手册](http://code4craft.github.io/webmagic/)。
 
