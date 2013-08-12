@@ -14,8 +14,8 @@ import java.util.List;
  *     主要方法：
  *     {@link #getUrl()} 获取页面的Url
  *     {@link #getHtml()}  获取页面的html内容
- *     {@link #putField(String, us.codecraft.webmagic.selector.Selectable)} 保存抽取的结果
- *     {@link #getFields()} 获取抽取的结果，在 {@link us.codecraft.webmagic.pipeline.Pipeline} 中调用
+ *     {@link #putField(String, Object)}  保存抽取的结果
+ *     {@link #getResultItems()} 获取抽取的结果，在 {@link us.codecraft.webmagic.pipeline.Pipeline} 中调用
  *     {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} 添加待抓取的链接
  *
  * </pre>
