@@ -56,6 +56,13 @@ public class Request implements Serializable {
         return priority;
     }
 
+    /**
+     * 设置优先级，用于URL队列排序<br>
+     * 需扩展Scheduler<br>
+     * 目前还没有对应支持优先级的Scheduler实现 =。= <br>
+     * @param priority 优先级，越大则越靠前
+     * @return this
+     */
     public Request setPriority(double priority) {
         this.priority = priority;
         return this;
