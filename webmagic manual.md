@@ -4,7 +4,7 @@ webmagic使用手册
 
 >web爬虫是一种技术，webmagic致力于将这种技术的实现成本降低，但是出于对资源提供者的尊重，webmagic不会做反封锁的事情，包括：验证码破解、代理切换、自动登录等。
 
->作者黄亿华([code4crafter@gmail.com](code4crafter@gmail.com))目前就职于大众点评，曾经在前公司进行过一年的垂直爬虫的开发，webmagic就是为了解决爬虫开发的一些重复劳动而产生的框架。
+>作者黄亿华([code4crafter@gmail.com](code4crafter@gmail.com))曾经在前公司进行过一年的垂直爬虫的开发，webmagic就是为了解决爬虫开发的一些重复劳动而产生的框架。
 
 >webmagic的架构和设计参考了以下两个项目，感谢以下两个项目的作者：
 
