@@ -17,6 +17,8 @@ import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -34,10 +36,23 @@ public class HttpClientDownloader implements Downloader {
 
     @Override
     public Page download(Request request, Task task) {
-        Site site = task.getSite();
+        Site site = null;
+        if (task != null) {
+            site = task.getSite();
+        }
+        int retryTimes = 0;
+        Set<Integer> acceptStatCode;
+        String charset = null;
+        if (site != null) {
+            retryTimes = site.getRetryTimes();
+            acceptStatCode = site.getAcceptStatCode();
+            charset = site.getCharset();
+        } else {
+            acceptStatCode = new HashSet<Integer>();
+            acceptStatCode.add(200);
+        }
         logger.info("downloading page " + request.getUrl());
         HttpClient httpClient = HttpClientPool.getInstance(poolSize).getClient(site);
-        String charset = site.getCharset();
         try {
             HttpGet httpGet = new HttpGet(request.getUrl());
             HttpResponse httpResponse = null;
@@ -49,7 +64,8 @@ public class HttpClientDownloader implements Downloader {
                     retry = false;
                 } catch (IOException e) {
                     tried++;
-                    if (tried > site.getRetryTimes()) {
+
+                    if (tried > retryTimes) {
                         logger.warn("download page " + request.getUrl() + " error", e);
                         return null;
                     }
@@ -58,7 +74,7 @@ public class HttpClientDownloader implements Downloader {
                 }
             } while (retry);
             int statusCode = httpResponse.getStatusLine().getStatusCode();
-            if (site.getAcceptStatCode().contains(statusCode)) {
+            if (acceptStatCode.contains(statusCode)) {
                 //charset
                 if (charset == null) {
                     String value = httpResponse.getEntity().getContentType().getValue();
@@ -66,7 +82,7 @@ public class HttpClientDownloader implements Downloader {
                 }
                 //
                 handleGzip(httpResponse);
-                return handleResponse(request, charset, httpResponse,task);
+                return handleResponse(request, charset, httpResponse, task);
             } else {
                 logger.warn("code error " + statusCode + "\t" + request.getUrl());
             }
@@ -76,7 +92,7 @@ public class HttpClientDownloader implements Downloader {
         return null;
     }
 
-    protected Page handleResponse(Request request, String charset, HttpResponse httpResponse,Task task) throws IOException {
+    protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
         String content = IOUtils.toString(httpResponse.getEntity().getContent(),
                 charset);
         Page page = new Page();
@@ -88,7 +104,7 @@ public class HttpClientDownloader implements Downloader {
 
     @Override
     public void setThread(int thread) {
-        poolSize=thread;
+        poolSize = thread;
     }
 
     private void handleGzip(HttpResponse httpResponse) {

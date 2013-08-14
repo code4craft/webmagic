@@ -50,24 +50,30 @@ public class HttpClientPool {
 
     private HttpClient generateClient(Site site) {
         HttpParams params = new BasicHttpParams();
-        params.setParameter(CoreProtocolPNames.USER_AGENT, site.getUserAgent());
+        if (site != null && site.getUserAgent() != null) {
+            params.setParameter(CoreProtocolPNames.USER_AGENT, site.getUserAgent());
+        }
         params.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, 1000);
         params.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 2000);
 
         HttpProtocolParamBean paramsBean = new HttpProtocolParamBean(params);
         paramsBean.setVersion(HttpVersion.HTTP_1_1);
-        paramsBean.setContentCharset(site.getCharset());
+        if (site != null && site.getCharset() != null) {
+            paramsBean.setContentCharset(site.getCharset());
+        }
         paramsBean.setUseExpectContinue(false);
 
         SchemeRegistry schemeRegistry = new SchemeRegistry();
         schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
-        schemeRegistry.register(new Scheme("https",  443, SSLSocketFactory.getSocketFactory()));
+        schemeRegistry.register(new Scheme("https", 443, SSLSocketFactory.getSocketFactory()));
 
         PoolingClientConnectionManager connectionManager = new PoolingClientConnectionManager(schemeRegistry);
         connectionManager.setMaxTotal(poolSize);
         connectionManager.setDefaultMaxPerRoute(100);
         DefaultHttpClient httpClient = new DefaultHttpClient(connectionManager, params);
-        generateCookie(httpClient, site);
+        if (site != null) {
+            generateCookie(httpClient, site);
+        }
         httpClient.getParams().setIntParameter("http.socket.timeout", 60000);
         httpClient.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BEST_MATCH);
         return httpClient;
@@ -75,10 +81,12 @@ public class HttpClientPool {
 
     private void generateCookie(DefaultHttpClient httpClient, Site site) {
         CookieStore cookieStore = new BasicCookieStore();
-        for (Map.Entry<String, String> cookieEntry : site.getCookies().entrySet()) {
-            BasicClientCookie cookie = new BasicClientCookie(cookieEntry.getKey(), cookieEntry.getValue());
-            cookie.setDomain(site.getDomain());
-            cookieStore.addCookie(cookie);
+        if (site.getCookies() != null) {
+            for (Map.Entry<String, String> cookieEntry : site.getCookies().entrySet()) {
+                BasicClientCookie cookie = new BasicClientCookie(cookieEntry.getKey(), cookieEntry.getValue());
+                cookie.setDomain(site.getDomain());
+                cookieStore.addCookie(cookie);
+            }
         }
         httpClient.setCookieStore(cookieStore);
     }
