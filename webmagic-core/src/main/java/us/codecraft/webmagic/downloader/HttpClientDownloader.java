@@ -34,6 +34,17 @@ public class HttpClientDownloader implements Downloader {
 
     private int poolSize = 1;
 
+    /**
+     * 直接下载页面的简便方法
+     *
+     * @param url
+     * @return
+     */
+    public Html download(String url) {
+        Page page = download(new Request(url), null);
+        return (Html)page.getHtml();
+    }
+
     @Override
     public Page download(Request request, Task task) {
         Site site = null;
