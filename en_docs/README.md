@@ -2,13 +2,13 @@ webmagic
 ---
 [![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
 
->A crawler framework.
+>A crawler framework. It covers the whole lifecycle of crawler: downloading, url management, content extraction and persistent. It can simply the development of a  specific crawler.
 
 ## Features:
 
 * Simple core with high flexibility.
 * Simple API for html extracting.
-* Multi-thread and Distributed support.
+* Multi-thread and Distribution support.
 * Easy to be integrated.
 
 ## Install:
