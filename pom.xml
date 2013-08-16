@@ -7,11 +7,34 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <artifactId>webmagic</artifactId>
+    <name>webmagic</name>
+    <description>
+        A crawler framework. It covers the whole lifecycle of crawler: downloading, url management, content
+        extraction and persistent. It can simply the development of a specific crawler.
+    </description>
+    <url>https://github.com/code4craft/webmagic/</url>
+    <developers>
+        <developer>
+            <id>code4craft</id>
+            <name>Yihua huang</name>
+            <email>code4crafer@gmail.com</email>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git@github.com:code4craft/webmagic.git</connection>
+        <developerConnection>scm:git:git@github.com:code4craft/webmagic.git</developerConnection>
+        <url>git@github.com:code4craft/webmagic.git</url>
+    </scm>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
 
     <modules>
         <module>webmagic-core</module>
         <module>webmagic-extension/</module>
-        <module>webmagic-samples/</module>
     </modules>
 
     <dependencyManagement>
