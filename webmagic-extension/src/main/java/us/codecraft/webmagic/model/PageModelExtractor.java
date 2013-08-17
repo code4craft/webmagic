@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.model.annotation.*;
 import us.codecraft.webmagic.selector.*;
+import us.codecraft.webmagic.utils.ExtractorUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -49,20 +50,15 @@ class PageModelExtractor {
         for (Field field : clazz.getDeclaredFields()) {
             field.setAccessible(true);
             FieldExtractor fieldExtractor = getAnnotationExtractBy(clazz, field);
-            FieldExtractor fieldExtractorTmp = getAnnotationExtractByRaw(clazz, field);
+            FieldExtractor fieldExtractorTmp = getAnnotationExtractCombo(clazz, field);
             if (fieldExtractor != null && fieldExtractorTmp != null) {
-                throw new IllegalStateException("Only one of 'ExtractBy ExtractByRaw ExtractByUrl' can be added to a field!");
+                throw new IllegalStateException("Only one of 'ExtractBy ComboExtract ExtractByUrl' can be added to a field!");
             } else if (fieldExtractor == null && fieldExtractorTmp != null) {
                 fieldExtractor = fieldExtractorTmp;
             }
-            // ExtractBy2 & ExtractBy3
-            if (fieldExtractor!=null){
-                addAnnotationExtractBy2(fieldExtractor);
-                addAnnotationExtractBy3(fieldExtractor);
-            }
             fieldExtractorTmp = getAnnotationExtractByUrl(clazz, field);
             if (fieldExtractor != null && fieldExtractorTmp != null) {
-                throw new IllegalStateException("Only one of 'ExtractBy ExtractByRaw ExtractByUrl' can be added to a field!");
+                throw new IllegalStateException("Only one of 'ExtractBy ComboExtract ExtractByUrl' can be added to a field!");
             } else if (fieldExtractor == null && fieldExtractorTmp != null) {
                 fieldExtractor = fieldExtractorTmp;
             }
@@ -94,26 +90,23 @@ class PageModelExtractor {
         return fieldExtractor;
     }
 
-    private FieldExtractor getAnnotationExtractBy(Class clazz, Field field) {
+    private FieldExtractor getAnnotationExtractCombo(Class clazz, Field field) {
         FieldExtractor fieldExtractor = null;
-        ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
-        if (extractBy != null) {
-            String value = extractBy.value();
+        ComboExtract comboExtract = field.getAnnotation(ComboExtract.class);
+        if (comboExtract != null) {
+            ExtractBy[] extractBies = comboExtract.value();
             Selector selector;
-            switch (extractBy.type()) {
-                case Css:
-                    selector = new CssSelector(value);
+            switch (comboExtract.op()) {
+                case And:
+                    selector = new AndSelector(ExtractorUtils.getSelectors(extractBies));
                     break;
-                case Regex:
-                    selector = new RegexSelector(value);
-                    break;
-                case XPath:
-                    selector = new XpathSelector(value);
+                case Or:
+                    selector = new OrSelector(ExtractorUtils.getSelectors(extractBies));
                     break;
                 default:
-                    selector = new XpathSelector(value);
+                    selector = new AndSelector(ExtractorUtils.getSelectors(extractBies));
             }
-            fieldExtractor = new FieldExtractor(field, selector, FieldExtractor.Source.Html, extractBy.notNull(), extractBy.multi());
+            fieldExtractor = new FieldExtractor(field, selector, FieldExtractor.Source.Html, comboExtract.notNull(), comboExtract.multi());
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
                 fieldExtractor.setSetterMethod(setterMethod);
@@ -122,70 +115,12 @@ class PageModelExtractor {
         return fieldExtractor;
     }
 
-    private void addAnnotationExtractBy2(FieldExtractor fieldExtractor) {
-        ExtractBy2 extractBy = fieldExtractor.getField().getAnnotation(ExtractBy2.class);
-        if (extractBy != null) {
-            String value = extractBy.value();
-            Selector selector;
-            switch (extractBy.type()) {
-                case Css:
-                    selector = new CssSelector(value);
-                    break;
-                case Regex:
-                    selector = new RegexSelector(value);
-                    break;
-                case XPath:
-                    selector = new XpathSelector(value);
-                    break;
-                default:
-                    selector = new XpathSelector(value);
-            }
-            fieldExtractor.setSelector(new AndSelector(fieldExtractor.getSelector(), selector));
-        }
-    }
-
-    private void addAnnotationExtractBy3(FieldExtractor fieldExtractor) {
-        ExtractBy3 extractBy = fieldExtractor.getField().getAnnotation(ExtractBy3.class);
-        if (extractBy != null) {
-            String value = extractBy.value();
-            Selector selector;
-            switch (extractBy.type()) {
-                case Css:
-                    selector = new CssSelector(value);
-                    break;
-                case Regex:
-                    selector = new RegexSelector(value);
-                    break;
-                case XPath:
-                    selector = new XpathSelector(value);
-                    break;
-                default:
-                    selector = new XpathSelector(value);
-            }
-            fieldExtractor.setSelector(new AndSelector(fieldExtractor.getSelector(), selector));
-        }
-    }
-
-    private FieldExtractor getAnnotationExtractByRaw(Class clazz, Field field) {
+    private FieldExtractor getAnnotationExtractBy(Class clazz, Field field) {
         FieldExtractor fieldExtractor = null;
-        ExtractByRaw extractByRaw = field.getAnnotation(ExtractByRaw.class);
-        if (extractByRaw != null) {
-            String value = extractByRaw.value();
-            Selector selector;
-            switch (extractByRaw.type()) {
-                case Css:
-                    selector = new CssSelector(value);
-                    break;
-                case Regex:
-                    selector = new RegexSelector(value);
-                    break;
-                case XPath:
-                    selector = new XpathSelector(value);
-                    break;
-                default:
-                    selector = new XpathSelector(value);
-            }
-            fieldExtractor = new FieldExtractor(field, selector, FieldExtractor.Source.RawHtml, extractByRaw.notNull(), extractByRaw.multi());
+        ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
+        if (extractBy != null) {
+            Selector selector = ExtractorUtils.getSelector(extractBy);
+            fieldExtractor = new FieldExtractor(field, selector, FieldExtractor.Source.Html, extractBy.notNull(), extractBy.multi());
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
                 fieldExtractor.setSetterMethod(setterMethod);

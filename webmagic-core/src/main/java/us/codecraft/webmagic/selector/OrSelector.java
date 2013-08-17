@@ -5,8 +5,7 @@ import java.util.List;
 
 /**
  * @author code4crafter@gmail.com <br>
- * Date: 13-8-3 <br>
- * Time: 下午5:29 <br>
+ * @since 0.2.0
  */
 public class OrSelector implements Selector {
 
@@ -18,11 +17,15 @@ public class OrSelector implements Selector {
         }
     }
 
+    public OrSelector(List<Selector> selectors) {
+        this.selectors = selectors;
+    }
+
     @Override
     public String select(String text) {
         for (Selector selector : selectors) {
             text = selector.select(text);
-            if (text!=null){
+            if (text != null) {
                 return text;
             }
         }

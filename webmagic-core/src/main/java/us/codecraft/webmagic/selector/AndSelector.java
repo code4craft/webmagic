@@ -5,8 +5,7 @@ import java.util.List;
 
 /**
  * @author code4crafter@gmail.com <br>
- * Date: 13-8-3 <br>
- * Time: 下午5:29 <br>
+ * @since 0.2.0
  */
 public class AndSelector implements Selector {
 
@@ -16,6 +15,10 @@ public class AndSelector implements Selector {
         for (Selector selector : selectors) {
             this.selectors.add(selector);
         }
+    }
+
+    public AndSelector(List<Selector> selectors) {
+        this.selectors = selectors;
     }
 
     @Override
