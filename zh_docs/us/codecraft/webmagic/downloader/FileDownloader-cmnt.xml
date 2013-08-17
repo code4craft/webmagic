@@ -4,7 +4,7 @@
 <date-generated>Sat Aug 17 14:14:45 CST 2013</date-generated>
 </meta>
 <comment>
-<key><![CDATA[us.codecraft.webmagic.downloader.FileDownloader]]></key>
+<key><![CDATA[us.codecraft.webmagic.downloader.FileCache]]></key>
 <data><![CDATA[ 使用缓存到本地的文件来模拟下载，可以在Spider框架中仅进行抽取工作。<br>
  @author code4crafer@gmail.com
          Date: 13-6-24
