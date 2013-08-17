@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <pre>
+ * <pre class="zh">
  * Page保存了上一次抓取的结果，并可定义待抓取的链接内容。
  *
  *     主要方法：
@@ -17,6 +17,17 @@ import java.util.List;
  *     {@link #putField(String, Object)}  保存抽取的结果
  *     {@link #getResultItems()} 获取抽取的结果，在 {@link us.codecraft.webmagic.pipeline.Pipeline} 中调用
  *     {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} 添加待抓取的链接
+ *
+ * </pre>
+ * <pre class="en">
+ * Store extracted result and urls to be crawled.
+ *
+ *     Main method：
+ *     {@link #getUrl()} get url of current page
+ *     {@link #getHtml()}  get content of current page
+ *     {@link #putField(String, Object)}  save extracted result
+ *     {@link #getResultItems()} get extract results to be used in {@link us.codecraft.webmagic.pipeline.Pipeline}
+ *     {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} add urls to crawl
  *
  * </pre>
  *
@@ -44,7 +55,7 @@ public class Page {
     }
 
     /**
-     * 保存抽取的结果
+     *
      *
      * @param key   结果的key
      * @param field 结果的value

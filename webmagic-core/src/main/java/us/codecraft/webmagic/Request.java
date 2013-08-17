@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * <div class="zh">
  * Request对象封装了待抓取的url信息。<br/>
  * 在PageProcessor中，Request对象可以通过{@link us.codecraft.webmagic.Page#getRequest()} 获取。<br/>
  * <br/>
@@ -22,6 +23,7 @@ import java.util.Map;
  *          String linktext =  (String)page.getRequest().getExtra()[0];
  *      }
  * </pre>
+ * </div>
  *
  * @author code4crafter@gmail.com <br>
  *         Date: 13-4-21
