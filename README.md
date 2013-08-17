@@ -92,14 +92,35 @@ You can also use annotation way:
 				new ConsolePageModelPipeline(), OschinaBlog.class).run();
 	    }
 	}
-	
-### Samples and docs:
+		
+### Docs and samples:
 
-There are some samples in `webmagic-samples` package.
+The architecture of webmagic (refered to [Scrapy](http://scrapy.org/))
+
+![image](http://code4craft.github.io/images/posts/webmagic.png)
 
 Javadocs: [http://code4craft.github.io/webmagic/docs/en/](http://code4craft.github.io/webmagic/docs/en/)
+
+There are some samples in `webmagic-samples` package.
 
 
 ### Lisence:
 
 Lisenced under [Apache 2.0 lisence](http://opensource.org/licenses/Apache-2.0)
+
+### Thanks:
+
+To write webmagic, I refered to the projects below :
+
+* **Scrapy**
+
+	A crawler framework in Python.
+ 
+	[http://scrapy.org/](http://scrapy.org/)
+
+* **Spiderman**
+
+	Another framework in Java.
+	
+	[https://gitcafe.com/laiweiwei/Spiderman](https://gitcafe.com/laiweiwei/Spiderman)
+
