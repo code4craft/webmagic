@@ -1,5 +1,7 @@
 webmagic
 ---
+[Readme in Chinese](https://github.com/code4craft/webmagic/tree/master/zh_docs)
+
 [![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
 
 >A crawler framework. It covers the whole lifecycle of crawler: downloading, url management, content extraction and persistent. It can simply the development of a  specific crawler.
@@ -8,8 +10,10 @@ webmagic
 
 * Simple core with high flexibility.
 * Simple API for html extracting.
+* Annotation with POJO to customize a crawler, no configuration.
 * Multi-thread and Distribution support.
 * Easy to be integrated.
+
 
 ## Install:
 
