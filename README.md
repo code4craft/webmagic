@@ -120,7 +120,7 @@ To write webmagic, I refered to the projects below :
 
 * **Spiderman**
 
-	Another framework in Java.
+	Another crawler framework in Java.
 	
 	[https://gitcafe.com/laiweiwei/Spiderman](https://gitcafe.com/laiweiwei/Spiderman)
 
