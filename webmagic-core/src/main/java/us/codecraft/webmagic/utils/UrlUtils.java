@@ -6,20 +6,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * url及html处理工具类。<br>
+ * url and html utils.
+ *
  * @author code4crafter@gmail.com <br>
- * Date: 13-4-21
- * Time: 下午1:52
+ * @since 0.1.0
  */
 public class UrlUtils {
 
     private static Pattern relativePathPattern = Pattern.compile("^([\\.]+)/");
 
     /**
-     * 将url想对地址转化为绝对地址
-     * @param url url地址
-     * @param refer url地址来自哪个页面
-     * @return url绝对地址
+     * canonicalizeUrl
+     * @param url
+     * @param refer
+     * @return canonicalizeUrl
      */
     public static String canonicalizeUrl(String url, String refer) {
         if (StringUtils.isBlank(url) || StringUtils.isBlank(refer)) {

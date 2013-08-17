@@ -3,11 +3,10 @@ package us.codecraft.webmagic.utils;
 import java.io.File;
 
 /**
- * 文件持久化的基础类。<br>
+ * Base object of file persistence.
  *
  * @author code4crafter@gmail.com <br>
- *         Date: 13-8-11 <br>
- *         Time: 下午4:21 <br>
+ * @since 0.2.0
  */
 public class FilePersistentBase {
 

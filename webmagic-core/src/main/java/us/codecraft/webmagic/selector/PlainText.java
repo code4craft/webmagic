@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 可抽取的纯文本，不包括xpath和css selector实现。<br>
+ * Selectable plain text.<br>
+ * Can not be selected by XPath or CSS Selector.
+ *
  * @author code4crafter@gmail.com <br>
- * Date: 13-4-21
- * Time: 上午7:54
+ * @since 0.1.0
  */
 public class PlainText implements Selectable {
 
@@ -59,7 +60,7 @@ public class PlainText implements Selectable {
         List<String> results = new ArrayList<String>();
         for (String string : strings) {
             String result = selector.select(string);
-            if (result!=null){
+            if (result != null) {
                 results.add(result);
             }
         }
