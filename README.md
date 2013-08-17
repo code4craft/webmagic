@@ -93,9 +93,12 @@ You can also use annotation way:
 	    }
 	}
 	
-### Samples:
+### Samples and docs:
 
 There are some samples in `webmagic-samples` package.
+
+Javadocs: [http://code4craft.github.io/webmagic/docs/en/](http://code4craft.github.io/webmagic/docs/en/)
+
 
 ### Lisence:
 
