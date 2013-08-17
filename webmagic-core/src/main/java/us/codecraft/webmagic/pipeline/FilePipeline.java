@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.pipeline;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.http.annotation.ThreadSafe;
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
@@ -12,28 +13,23 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 /**
- * 持久化到文件的接口。
+ * Store results in files.<br>
  *
  * @author code4crafter@gmail.com <br>
- *         Date: 13-4-21
- *         Time: 下午6:28
+ * @since 0.1.0
  */
-public class FilePipeline extends FilePersistentBase implements Pipeline  {
+@ThreadSafe
+public class FilePipeline extends FilePersistentBase implements Pipeline {
 
     private Logger logger = Logger.getLogger(getClass());
 
     /**
-     * 新建一个FilePipeline，使用默认保存路径"/data/webmagic/"
+     * create a FilePipeline with default path"/data/webmagic/"
      */
     public FilePipeline() {
         setPath("/data/webmagic/");
     }
 
-    /**
-     * 新建一个FilePipeline
-     *
-     * @param path 文件保存路径
-     */
     public FilePipeline(String path) {
         setPath(path);
     }

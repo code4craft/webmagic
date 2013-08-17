@@ -9,13 +9,13 @@ import java.util.List;
 
 /**
  *
- * Object storing extracted result and urls to be crawled.<br>
+ * Object storing extracted result and urls to fetch.<br>
  * Main method：                                               <br>
  * {@link #getUrl()} get url of current page                   <br>
  * {@link #getHtml()}  get content of current page                 <br>
  * {@link #putField(String, Object)}  save extracted result            <br>
  * {@link #getResultItems()} get extract results to be used in {@link us.codecraft.webmagic.pipeline.Pipeline}<br>
- * {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} add urls to crawl                 <br>
+ * {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} add urls to fetch                 <br>
  *
  * @author code4crafter@gmail.com <br>
  * @since 0.1.0
@@ -71,7 +71,7 @@ public class Page {
     }
 
     /**
-     * add urls to crawl
+     * add urls to fetch
      *
      * @param requests
      */
@@ -88,7 +88,7 @@ public class Page {
     }
 
     /**
-     * add url to crawl
+     * add url to fetch
      *
      * @param requestString
      */
@@ -103,7 +103,7 @@ public class Page {
     }
 
     /**
-     * add requests to crawl
+     * add requests to fetch
      *
      * @param request
      */

@@ -24,7 +24,7 @@
      {@link #getHtml()}  get content of current page
      {@link #putField(String, Object)}  save extracted result
      {@link #getResultItems()} get extract results to be used in {@link us.codecraft.webmagic.pipeline.Pipeline}
-     {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} add urls to crawl
+     {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} add urls to fetch
 
  </pre>
 

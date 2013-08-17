@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
 import org.apache.http.HttpResponse;
+import org.apache.http.annotation.ThreadSafe;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.GzipDecompressingEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -22,12 +23,12 @@ import java.util.Set;
 
 
 /**
- * 封装了HttpClient的下载器。已实现指定次数重试、处理gzip、自定义UA/cookie等功能。<br>
+ * The http downloader based on HttpClient.
  *
  * @author code4crafter@gmail.com <br>
- *         Date: 13-4-21
- *         Time: 下午12:15
+ * @since 0.1.0
  */
+@ThreadSafe
 public class HttpClientDownloader implements Downloader {
 
     private Logger logger = Logger.getLogger(getClass());
@@ -35,14 +36,14 @@ public class HttpClientDownloader implements Downloader {
     private int poolSize = 1;
 
     /**
-     * 直接下载页面的简便方法
+     * A simple method to download a url.
      *
      * @param url
      * @return html
      */
     public Html download(String url) {
         Page page = download(new Request(url), null);
-        return (Html)page.getHtml();
+        return (Html) page.getHtml();
     }
 
     @Override

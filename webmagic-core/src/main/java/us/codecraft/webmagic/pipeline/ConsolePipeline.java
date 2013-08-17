@@ -6,11 +6,11 @@ import us.codecraft.webmagic.Task;
 import java.util.Map;
 
 /**
- * 命令行输出抽取结果。可用于测试。<br>
+ * Write results in console.<br>
+ * Usually used in test.
  *
  * @author code4crafter@gmail.com <br>
- *         Date: 13-4-21
- *         Time: 下午1:45
+ * @since 0.1.0
  */
 public class ConsolePipeline implements Pipeline {
 

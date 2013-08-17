@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * css风格的选择器。包装了Jsoup。<br>
+ * CSS selector. Based on Jsoup.
+ *
  * @author code4crafter@gmail.com <br>
- *         Date: 13-4-21
- *         Time: 上午9:39
+ * @since 0.1.0
  */
 public class CssSelector implements Selector {
 

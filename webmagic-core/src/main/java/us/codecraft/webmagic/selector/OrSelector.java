@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * All extractors will do extracting separately, <br>
+ * and the results of extractors will combined as the final result.
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
