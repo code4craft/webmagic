@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:46 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.model.annotation.ExtractByRaw]]></key>
+<data><![CDATA[ 对于在Class级别就使用过ExtractBy的类，在字段中想抽取全部内容可使用此方法。<br>
+
+ @author code4crafter@gmail.com <br>
+ Date: 13-8-1 <br>
+ Time: 下午8:40 <br>
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.model.annotation.ExtractByRaw.value]]></key>
+<data><![CDATA[ 抽取规则
+
+ @return 抽取规则
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.model.annotation.ExtractByRaw.type]]></key>
+<data><![CDATA[ 抽取规则类型，支持XPath、Css selector、正则表达式，默认是XPath
+
+ @return 抽取规则类型
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.model.annotation.ExtractByRaw.notNull]]></key>
+<data><![CDATA[ 是否是不能为空的关键字段，若notNull为true，则对应字段抽取不到时，丢弃整个类，默认为false
+
+ @return 是否是不能为空的关键字段
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.model.annotation.ExtractByRaw.multi]]></key>
+<data><![CDATA[ 是否抽取多个结果<br>
+ 需要List<String>来盛放结果<br>
+
+ @return 是否抽取多个结果
+]]></data>
+</comment>
+</javadoc>

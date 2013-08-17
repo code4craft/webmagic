@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:45 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.selector]]></key>
+<data><![CDATA[
+提供了便捷抽取页面内容的工具，对外核心接口是Selectable，内部抽取则是通过实现Selector来定制。
+	]]></data>
+</comment>
+</javadoc>

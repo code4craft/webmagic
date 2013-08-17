@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:46 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.processor.PageProcessor]]></key>
+<data><![CDATA[ 定制爬虫的核心接口。通过实现PageProcessor可以实现一个定制的爬虫。<br>
+     extends the class to implements various spiders.<br>
+ @author code4crafter@gmail.com <br>
+ Date: 13-4-21
+ Time: 上午11:42
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.processor.PageProcessor.process(us.codecraft.webmagic.Page)]]></key>
+<data><![CDATA[ 定义如何处理页面，包括链接提取、内容抽取等。
+ @param page
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.processor.PageProcessor.getSite()]]></key>
+<data><![CDATA[ 定义任务一些配置信息，例如开始链接、抓取间隔、自定义cookie、自定义UA等。
+ @return site
+]]></data>
+</comment>
+</javadoc>

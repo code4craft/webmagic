@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:45 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.model]]></key>
+<data><![CDATA[
+webmagic对抓取器编写的面向模型(称为PageModel)的封装。基于POJO及注解即可实现一个PageProcessor。
+	]]></data>
+</comment>
+</javadoc>

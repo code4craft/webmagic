@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:46 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.scheduler.Scheduler]]></key>
+<data><![CDATA[ 包含url管理和调度的接口。包括url抓取队列，url去重等功能。<br>
+ Scheduler的接口包含一个Task参数，该参数是为单Scheduler多Task预留的(Spider就是一个Task)。<br>
+ @author code4crafter@gmail.com <br>
+ Date: 13-4-21
+ Time: 下午1:12
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.scheduler.Scheduler.push(us.codecraft.webmagic.Request, us.codecraft.webmagic.Task)]]></key>
+<data><![CDATA[ 加入一个待抓取的链接
+ @param request 待抓取的链接
+ @param task 定义的任务，以满足单Scheduler多Task的情况
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.scheduler.Scheduler.poll(us.codecraft.webmagic.Task)]]></key>
+<data><![CDATA[ 返回下一个要抓取的链接
+ @param task 定义的任务，以满足单Scheduler多Task的情况
+ @return 下一个要抓取的链接
+]]></data>
+</comment>
+</javadoc>

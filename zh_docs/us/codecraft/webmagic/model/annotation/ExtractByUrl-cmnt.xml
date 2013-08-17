@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:46 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.model.annotation.ExtractByUrl]]></key>
+<data><![CDATA[ 定义类或者字段的抽取规则(从url中抽取，只支持正则表达式)。<br>
+ @author code4crafter@gmail.com <br>
+ Date: 13-8-1 <br>
+ Time: 下午8:40 <br>
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.model.annotation.ExtractByUrl.value]]></key>
+<data><![CDATA[ 抽取规则，支持正则表达式
+
+ @return 抽取规则
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.model.annotation.ExtractByUrl.notNull]]></key>
+<data><![CDATA[ 是否是不能为空的关键字段，若notNull为true，则对应字段抽取不到时，丢弃整个类，默认为false
+
+ @return 是否是不能为空的关键字段
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.model.annotation.ExtractByUrl.multi]]></key>
+<data><![CDATA[ 是否抽取多个结果<br>
+ 用于字段时，需要List<String>来盛放结果<br>
+ 用于类时，表示单页抽取多个对象<br>
+
+ @return 是否抽取多个结果
+]]></data>
+</comment>
+</javadoc>

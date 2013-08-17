@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:46 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.model.annotation.HelpUrl]]></key>
+<data><![CDATA[ 定义辅助爬取的url。<br>
+ @author code4crafter@gmail.com <br>
+ Date: 13-8-1 <br>
+ Time: 下午8:40 <br>
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.model.annotation.HelpUrl.value]]></key>
+<data><![CDATA[ 某个类对应的URL规则列表<br>
+ webmagic对正则表达式进行了修改，"."仅表示字符"."而不代表任意字符，而"\*"则代表了".\*"，例如"http://\*.oschina.net/\*"代表了oschina所有的二级域名下的URL。<br>
+
+ @return 抽取规则
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.model.annotation.HelpUrl.sourceRegion]]></key>
+<data><![CDATA[ 指定提取URL的区域(仅支持XPath)
+ @return 指定提取URL的区域
+]]></data>
+</comment>
+</javadoc>

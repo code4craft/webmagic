@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:46 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.utils.DoubleKeyMap]]></key>
+<data><![CDATA[ @author code4crafter@gmail.com
+ Date Dec 14, 2012
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.utils.DoubleKeyMap(java.util.Map<K1, java.util.Map<K2, V>>, java.lang.Class<? extends java.util.Map>)]]></key>
+<data><![CDATA[ init map with protoMapClass
+
+ @param protoMapClass
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.utils.DoubleKeyMap.get(K1)]]></key>
+<data><![CDATA[ @param key
+ @return map
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.utils.DoubleKeyMap.get(K1, K2)]]></key>
+<data><![CDATA[ @param key1
+ @param key2
+ @return value
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.utils.DoubleKeyMap.put(K1, java.util.Map<K2, V>)]]></key>
+<data><![CDATA[ @param key1
+ @param submap
+ @return
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.utils.DoubleKeyMap.put(K1, K2, V)]]></key>
+<data><![CDATA[ @param key1
+ @param key2
+ @param value
+ @return
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.utils.DoubleKeyMap.remove(K1, K2)]]></key>
+<data><![CDATA[ @param key1
+ @param key2
+ @return
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.utils.DoubleKeyMap.remove(K1)]]></key>
+<data><![CDATA[ @param key1
+ @return
+]]></data>
+</comment>
+</javadoc>

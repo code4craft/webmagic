@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:45 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.pipeline]]></key>
+<data><![CDATA[
+包含了处理页面抽取结果的接口Pipeline和它的几个实现类。
+	]]></data>
+</comment>
+</javadoc>

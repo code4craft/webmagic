@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:45 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site]]></key>
+<data><![CDATA[ Site定义一个待抓取的站点的各种信息。<br>
+ 这个类的所有getter方法，一般都只会被爬虫框架内部进行调用。<br>
+
+ @author code4crafter@gmail.com <br>
+         Date: 13-4-21
+         Time: 下午12:13
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.me()]]></key>
+<data><![CDATA[ 创建一个Site对象，等价于new Site()
+
+ @return 新建的对象
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.addCookie(java.lang.String, java.lang.String)]]></key>
+<data><![CDATA[ 为这个站点添加一个cookie，可用于抓取某些需要登录访问的站点。这个cookie的域名与{@link #getDomain()}是一致的
+
+ @param name  cookie的名称
+ @param value cookie的值
+ @return this
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.setUserAgent(java.lang.String)]]></key>
+<data><![CDATA[ 为这个站点设置user-agent，很多网站都对user-agent进行了限制，不设置此选项可能会得到期望之外的结果。
+
+ @param userAgent userAgent
+ @return this
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.getCookies()]]></key>
+<data><![CDATA[ 获取已经设置的所有cookie
+
+ @return 已经设置的所有cookie
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.getUserAgent()]]></key>
+<data><![CDATA[ 获取已设置的user-agent
+
+ @return 已设置的user-agent
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.getDomain()]]></key>
+<data><![CDATA[ 获取已设置的domain
+
+ @return 已设置的domain
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.setDomain(java.lang.String)]]></key>
+<data><![CDATA[ 设置这个站点所在域名，必须项。<br>
+ 目前不支持多个域名的抓取。抓取多个域名请新建一个Spider。
+
+ @param domain 爬虫会抓取的域名
+ @return this
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.setCharset(java.lang.String)]]></key>
+<data><![CDATA[ 设置页面编码，若不设置则自动根据Html meta信息获取。<br>
+ 一般无需设置encoding，如果发现下载的结果是乱码，则可以设置此项。<br>
+
+ @param charset 编码格式，主要是"utf-8"、"gbk"两种
+ @return this
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.getCharset()]]></key>
+<data><![CDATA[ 获取已设置的编码
+
+ @return 已设置的domain
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.setAcceptStatCode(java.util.Set<java.lang.Integer>)]]></key>
+<data><![CDATA[ 设置可接受的http状态码，仅当状态码在这个集合中时，才会读取页面内容。<br>
+ 默认为200，正常情况下，无须设置此项。<br>
+ 某些站点会错误的返回状态码，此时可以对这个选项进行设置。<br>
+
+ @param acceptStatCode 可接受的状态码
+ @return this
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.getAcceptStatCode()]]></key>
+<data><![CDATA[ 获取可接受的状态码
+
+ @return 可接受的状态码
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.getStartUrls()]]></key>
+<data><![CDATA[ 获取初始页面的地址列表
+
+ @return 初始页面的地址列表
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.addStartUrl(java.lang.String)]]></key>
+<data><![CDATA[ 增加初始页面的地址，可反复调用此方法增加多个初始地址。
+
+ @param startUrl 初始页面的地址
+ @return this
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.setSleepTime(int)]]></key>
+<data><![CDATA[ 设置两次抓取之间的间隔，避免对目标站点压力过大(或者避免被防火墙屏蔽...)。
+
+ @param sleepTime 单位毫秒
+ @return this
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.getSleepTime()]]></key>
+<data><![CDATA[ 获取两次抓取之间的间隔
+
+ @return 两次抓取之间的间隔，单位毫秒
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.getRetryTimes()]]></key>
+<data><![CDATA[ 获取重新下载的次数，默认为0
+
+ @return 重新下载的次数
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Site.setRetryTimes(int)]]></key>
+<data><![CDATA[ 设置获取重新下载的次数，默认为0
+
+ @return this
+]]></data>
+</comment>
+</javadoc>

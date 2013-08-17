@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:45 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.downloader.HttpClientDownloader]]></key>
+<data><![CDATA[ 封装了HttpClient的下载器。已实现指定次数重试、处理gzip、自定义UA/cookie等功能。<br>
+
+ @author code4crafter@gmail.com <br>
+         Date: 13-4-21
+         Time: 下午12:15
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.downloader.HttpClientDownloader.download(java.lang.String)]]></key>
+<data><![CDATA[ 直接下载页面的简便方法
+
+ @param url
+ @return
+]]></data>
+</comment>
+</javadoc>

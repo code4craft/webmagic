@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:45 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.scheduler]]></key>
+<data><![CDATA[
+包含url管理和调度的接口Scheduler及它的几个实现类。
+	]]></data>
+</comment>
+</javadoc>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:45 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Task]]></key>
+<data><![CDATA[ 抓取任务的抽象接口。<br>
+ @author code4crafter@gmail.com <br>
+ Date: 13-6-18
+ Time: 下午2:57
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Task.getUUID()]]></key>
+<data><![CDATA[ 返回唯一标志该任务的字符串，以区分不同任务。
+ @return uuid
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Task.getSite()]]></key>
+<data><![CDATA[ 返回任务抓取的站点信息
+ @return site
+]]></data>
+</comment>
+</javadoc>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:46 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.scheduler.RedisScheduler]]></key>
+<data><![CDATA[ 使用redis管理url，构建一个分布式的爬虫。<br>
+
+ @author code4crafter@gmail.com <br>
+         Date: 13-7-25 <br>
+         Time: 上午7:07 <br>
+]]></data>
+</comment>
+</javadoc>

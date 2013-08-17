@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:45 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Page]]></key>
+<data><![CDATA[ <pre class="zh">
+ Page保存了上一次抓取的结果，并可定义待抓取的链接内容。
+
+     主要方法：
+     {@link #getUrl()} 获取页面的Url
+     {@link #getHtml()}  获取页面的html内容
+     {@link #putField(String, Object)}  保存抽取的结果
+     {@link #getResultItems()} 获取抽取的结果，在 {@link us.codecraft.webmagic.pipeline.Pipeline} 中调用
+     {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} 添加待抓取的链接
+
+ </pre>
+ <pre class="en">
+ Store extracted result and urls to be crawled.
+
+     Main method：
+     {@link #getUrl()} get url of current page
+     {@link #getHtml()}  get content of current page
+     {@link #putField(String, Object)}  save extracted result
+     {@link #getResultItems()} get extract results to be used in {@link us.codecraft.webmagic.pipeline.Pipeline}
+     {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} add urls to crawl
+
+ </pre>
+
+ @author code4crafter@gmail.com <br>
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Page.putField(java.lang.String, java.lang.Object)]]></key>
+<data><![CDATA[
+
+ @param key   结果的key
+ @param field 结果的value
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Page.getHtml()]]></key>
+<data><![CDATA[ 获取页面的html内容
+
+ @return html 页面的html内容
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Page.addTargetRequests(java.util.List<java.lang.String>)]]></key>
+<data><![CDATA[ 添加待抓取的链接
+
+ @param requests 待抓取的链接
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Page.addTargetRequest(java.lang.String)]]></key>
+<data><![CDATA[ 添加待抓取的链接
+
+ @param requestString 待抓取的链接
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Page.addTargetRequest(us.codecraft.webmagic.Request)]]></key>
+<data><![CDATA[ 添加待抓取的页面，在需要传递附加信息时使用
+
+ @param request 待抓取的页面
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Page.getUrl()]]></key>
+<data><![CDATA[ 获取页面的Url
+
+ @return url 当前页面的url，可用于抽取
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Page.setUrl(us.codecraft.webmagic.selector.Selectable)]]></key>
+<data><![CDATA[ 设置url
+
+ @param url
+]]></data>
+</comment>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.Page.getRequest()]]></key>
+<data><![CDATA[ 获取抓取请求
+
+ @return request 抓取请求
+]]></data>
+</comment>
+</javadoc>

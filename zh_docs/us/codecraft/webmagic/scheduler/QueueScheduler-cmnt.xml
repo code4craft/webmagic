@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:46 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.scheduler.QueueScheduler]]></key>
+<data><![CDATA[ 内存队列实现的线程安全Scheduler。<br>
+ @author code4crafter@gmail.com <br>
+ Date: 13-4-21
+ Time: 下午1:13
+]]></data>
+</comment>
+</javadoc>

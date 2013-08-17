@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<javadoc>
+<meta>
+<date-generated>Sat Aug 17 14:14:45 CST 2013</date-generated>
+</meta>
+<comment>
+<key><![CDATA[us.codecraft.webmagic.downloader]]></key>
+<data><![CDATA[
+包含了页面下载的接口Downloader和实现类HttpClientDownloader，该实现类封装了HttpComponent库。
+	]]></data>
+</comment>
+</javadoc>
