@@ -1,21 +1,25 @@
 package us.codecraft.webmagic;
 
 /**
- * 抓取任务的抽象接口。<br>
+ * Interface for identifying different tasks.<br>
+ *
  * @author code4crafter@gmail.com <br>
- * Date: 13-6-18
- * Time: 下午2:57
+ * @since 0.1.0
+ * @see us.codecraft.webmagic.scheduler.Scheduler
+ * @see us.codecraft.webmagic.pipeline.Pipeline
  */
 public interface Task {
 
     /**
-     * 返回唯一标志该任务的字符串，以区分不同任务。
+     * unique id for a task.
+     *
      * @return uuid
      */
     public String getUUID();
 
     /**
-     * 返回任务抓取的站点信息
+     * site of a task
+     *
      * @return site
      */
     public Site getSite();

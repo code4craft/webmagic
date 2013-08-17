@@ -74,9 +74,9 @@ public class Spider implements Runnable, Task {
     protected final static int STAT_STOPPED = 2;
 
     /**
-     * 使用已定义的抽取规则新建一个Spider。
+     * create a spider with pageProcessor.
      *
-     * @param pageProcessor 已定义的抽取规则
+     * @param pageProcessor
      */
     public Spider(PageProcessor pageProcessor) {
         this.pageProcessor = pageProcessor;
@@ -85,17 +85,19 @@ public class Spider implements Runnable, Task {
     }
 
     /**
-     * 使用已定义的抽取规则新建一个Spider。
+     * create a spider with pageProcessor.
      *
-     * @param pageProcessor 已定义的抽取规则
-     * @return 新建的Spider
+     * @param pageProcessor
+     * @return new spider
+     * @see PageProcessor
      */
     public static Spider create(PageProcessor pageProcessor) {
         return new Spider(pageProcessor);
     }
 
     /**
-     * 重新设置startUrls，会覆盖Site本身的startUrls。
+     * Set startUrls of Spider.<br>
+     * Prior to startUrls of Site.
      *
      * @param startUrls
      * @return this
@@ -107,9 +109,10 @@ public class Spider implements Runnable, Task {
     }
 
     /**
-     * 为爬虫设置一个唯一ID，用于标志任务，默认情况下使用domain作为uuid，对于单domain多任务的情况，请为重复任务设置不同的ID。
+     * Set an uuid for spider.<br>
+     * Default uuid is domain of site.<br>
      *
-     * @param uuid 唯一ID
+     * @param uuid
      * @return this
      */
     public Spider setUUID(String uuid) {
@@ -118,30 +121,86 @@ public class Spider implements Runnable, Task {
     }
 
     /**
-     * 设置调度器。调度器用于保存待抓取URL，并可以进行去重、同步、持久化等工作。默认情况下使用内存中的阻塞队列进行调度。
+     * set scheduler for Spider
      *
-     * @param scheduler 调度器
+     * @param scheduler
      * @return this
+     * @Deprecated
+     * @see #setScheduler(us.codecraft.webmagic.scheduler.Scheduler)
      */
     public Spider scheduler(Scheduler scheduler) {
+        return setScheduler(scheduler);
+    }
+
+    /**
+     * set scheduler for Spider
+     *
+     * @param scheduler
+     * @return this
+     * @since 0.2.1
+     * @see Scheduler
+     */
+    public Spider setScheduler(Scheduler scheduler) {
         checkIfNotRunning();
         this.scheduler = scheduler;
         return this;
     }
 
     /**
-     * 设置处理管道。处理管道用于最终抽取结果的后处理，例如：保存到文件、保存到数据库等。默认情况下会输出到控制台。
+     * add a pipeline for Spider
      *
-     * @param pipeline 处理管道
+     * @param pipeline
      * @return this
+     * @deprecated
+     * @see #setPipeline(us.codecraft.webmagic.pipeline.Pipeline)
      */
     public Spider pipeline(Pipeline pipeline) {
+        return addPipeline(pipeline);
+    }
+
+    /**
+     * add a pipeline for Spider
+     *
+     * @param pipeline
+     * @return this
+     * @since 0.2.1
+     * @see Pipeline
+     */
+    public Spider addPipeline(Pipeline pipeline) {
         checkIfNotRunning();
         this.pipelines.add(pipeline);
         return this;
     }
 
+    /**
+     * clear the pipelines set
+     *
+     * @return this
+     */
+    public Spider clearPipeline() {
+        pipelines = new ArrayList<Pipeline>();
+        return this;
+    }
+
+    /**
+     * set the downloader of spider
+     *
+     * @param downloader
+     * @return this
+     * @deprecated
+     * @see #setDownloader(us.codecraft.webmagic.downloader.Downloader)
+     */
     public Spider downloader(Downloader downloader) {
+        return setDownloader(downloader);
+    }
+
+    /**
+     * set the downloader of spider
+     * @see Downloader
+     * @param downloader
+     * @return this
+     */
+    public Spider setDownloader(Downloader downloader) {
         checkIfNotRunning();
         this.downloader = downloader;
         return this;
@@ -226,9 +285,9 @@ public class Spider implements Runnable, Task {
     }
 
     /**
-     * 用某些特定URL进行爬虫测试
+     * Process specific urls without url discovering.
      *
-     * @param urls 要抓取的url
+     * @param urls urls to process
      */
     public void test(String... urls) {
         checkComponent();
@@ -284,9 +343,9 @@ public class Spider implements Runnable, Task {
     }
 
     /**
-     * 建立多个线程下载
+     * start with more than one threads
      *
-     * @param threadNum 线程数
+     * @param threadNum
      * @return this
      */
     public Spider thread(int threadNum) {
@@ -301,11 +360,6 @@ public class Spider implements Runnable, Task {
         synchronized (this) {
             this.executorService = ThreadUtils.newFixedThreadPool(threadNum);
         }
-        return this;
-    }
-
-    public Spider clearPipeline() {
-        pipelines = new ArrayList<Pipeline>();
         return this;
     }
 
