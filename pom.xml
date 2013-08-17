@@ -35,6 +35,7 @@
     <modules>
         <module>webmagic-core</module>
         <module>webmagic-extension/</module>
+        <module>webmagic-samples</module>
     </modules>
 
     <dependencyManagement>

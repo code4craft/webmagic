@@ -2,9 +2,9 @@ package us.codecraft.webmagic.model.samples;
 
 import us.codecraft.webmagic.PagedModel;
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.model.*;
+import us.codecraft.webmagic.model.OOSpider;
+import us.codecraft.webmagic.model.annotation.ComboExtract;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
-import us.codecraft.webmagic.model.annotation.ExtractBy2;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
@@ -16,8 +16,8 @@ import java.util.List;
 
 /**
  * @author code4crafter@gmail.com <br>
- * Date: 13-8-4 <br>
- * Time: 下午8:17 <br>
+ *         Date: 13-8-4 <br>
+ *         Time: 下午8:17 <br>
  */
 @TargetUrl("http://news.163.com/\\d+/\\d+/\\d+/\\w+*.html")
 public class News163 implements PagedModel {
@@ -28,8 +28,9 @@ public class News163 implements PagedModel {
     @ExtractByUrl(value = "http://news\\.163\\.com/\\d+/\\d+/\\d+/\\w+_(\\d+)\\.html", notNull = false)
     private String page;
 
-    @ExtractBy(value = "//div[@class=\"ep-pages\"]//a/@href", multi = true,notNull = false)
-    @ExtractBy2(value = "http://news\\.163\\.com/\\d+/\\d+/\\d+/\\w+_(\\d+)\\.html", type = ExtractBy2.Type.Regex)
+    @ComboExtract(value = {@ExtractBy("//div[@class=\"ep-pages\"]//a/@href"),
+            @ExtractBy(value = "http://news\\.163\\.com/\\d+/\\d+/\\d+/\\w+_(\\d+)\\.html", type = ExtractBy.Type.Regex)},
+            multi = true, notNull = false)
     private List<String> otherPage;
 
     @ExtractBy("//h1[@id=\"h1title\"]/text()")
