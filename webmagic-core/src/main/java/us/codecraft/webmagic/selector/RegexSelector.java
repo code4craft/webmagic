@@ -9,10 +9,10 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * 正则表达式抽取器。<br>
+ * Selector in regex.<br>
+ *
  * @author code4crafter@gmail.com <br>
- * Date: 13-4-21
- * Time: 上午7:09
+ * @since 0.1.0
  */
 public class RegexSelector implements Selector {
 
@@ -21,18 +21,18 @@ public class RegexSelector implements Selector {
     private Pattern regex;
 
     public RegexSelector(String regexStr) {
-        if (StringUtils.isBlank(regexStr)){
+        if (StringUtils.isBlank(regexStr)) {
             throw new IllegalArgumentException("regex must not be empty");
         }
-        if (!StringUtils.contains(regexStr,"(")&&!StringUtils.contains(regexStr,")")){
-            regexStr="("+regexStr+")";
+        if (!StringUtils.contains(regexStr, "(") && !StringUtils.contains(regexStr, ")")) {
+            regexStr = "(" + regexStr + ")";
         }
-        if (!StringUtils.contains(regexStr,"(")||!StringUtils.contains(regexStr,")")){
+        if (!StringUtils.contains(regexStr, "(") || !StringUtils.contains(regexStr, ")")) {
             throw new IllegalArgumentException("regex must have capture group 1");
         }
         this.regexStr = regexStr;
         try {
-            regex = Pattern.compile(regexStr,Pattern.DOTALL|Pattern.CASE_INSENSITIVE);
+            regex = Pattern.compile(regexStr, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
         } catch (PatternSyntaxException e) {
             throw new IllegalArgumentException("invalid regex", e);
         }
@@ -45,7 +45,7 @@ public class RegexSelector implements Selector {
 
     @Override
     public List<String> selectList(String text) {
-        List<String> strings=new ArrayList<String>();
+        List<String> strings = new ArrayList<String>();
         List<RegexResult> results = selectGroupList(text);
         for (RegexResult result : results) {
             strings.add(result.get(1));
@@ -56,7 +56,7 @@ public class RegexSelector implements Selector {
     public RegexResult selectGroup(String text) {
         Matcher matcher = regex.matcher(text);
         if (matcher.find()) {
-            String[] groups = new String[matcher.groupCount()+1];
+            String[] groups = new String[matcher.groupCount() + 1];
             for (int i = 0; i < groups.length; i++) {
                 groups[i] = matcher.group(i);
             }
@@ -69,7 +69,7 @@ public class RegexSelector implements Selector {
         Matcher matcher = regex.matcher(text);
         List<RegexResult> resultList = new ArrayList<RegexResult>();
         while (matcher.find()) {
-            String[] groups = new String[matcher.groupCount()+1];
+            String[] groups = new String[matcher.groupCount() + 1];
             for (int i = 0; i < groups.length; i++) {
                 groups[i] = matcher.group(i);
             }

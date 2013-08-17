@@ -6,10 +6,10 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * 对文本进行替换。<br>
+ * Replace selector。<br>
+ *
  * @author code4crafter@gmail.com <br>
- * Date: 13-4-21
- * Time: 上午7:09
+ * @since 0.1.0
  */
 public class ReplaceSelector implements Selector {
 

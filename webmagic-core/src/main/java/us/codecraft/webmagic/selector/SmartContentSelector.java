@@ -3,17 +3,19 @@ package us.codecraft.webmagic.selector;
 import org.apache.log4j.Logger;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
+import us.codecraft.webmagic.utils.Experimental;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * readability算法，基础是找到所有p标签的父节点
- * 写的比较乱，最终效果还在尝试中
+ * Extract the text content of html.<br>
+ * Using Readability algorithm: find parents of all p tags.
+ *
  * @author code4crafter@gmail.com <br>
- * Date: 13-4-21
- * Time: 下午4:42
+ * @since 0.1.0
  */
+@Experimental
 public class SmartContentSelector implements Selector {
 
     private Logger logger = Logger.getLogger(getClass());

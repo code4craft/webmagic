@@ -3,10 +3,10 @@ package us.codecraft.webmagic.selector;
 import java.util.List;
 
 /**
- * 可进行抽取的文本。<br>
+ * Selectable text.<br>
+ *
  * @author code4crafter@gmail.com <br>
- * Date: 13-4-20
- * Time: 下午7:51
+ * @since 0.1.0
  */
 public interface Selectable {
 

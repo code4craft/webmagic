@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 产生selector的工厂。<br>
+ * Selector factory with some inner cache.<br>
+ *
  * @author code4crafter@gmail.com <br>
- * Date: 13-4-21
- * Time: 上午7:56
+ * @since 0.1.0
  */
 public class SelectorFactory {
 
@@ -34,7 +34,7 @@ public class SelectorFactory {
         return newSelector(XpathSelector.class, xpath);
     }
 
-    public SmartContentSelector newSmartContentSelector(){
+    public SmartContentSelector newSmartContentSelector() {
         return newSelector(SmartContentSelector.class);
     }
 

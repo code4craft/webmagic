@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 可抽取的html文本。<br>
+ * Selectable plain text.<br>
+ *
  * @author code4crafter@gmail.com <br>
- *         Date: 13-4-21
- *         Time: 上午7:54
+ * @since 0.1.0
  */
 public class Html extends PlainText {
 
@@ -66,7 +66,7 @@ public class Html extends PlainText {
     @Override
     public Selectable $(String selector) {
         CssSelector cssSelector = new CssSelector(selector);
-        return selectList(cssSelector,strings);
+        return selectList(cssSelector, strings);
     }
 
 }
