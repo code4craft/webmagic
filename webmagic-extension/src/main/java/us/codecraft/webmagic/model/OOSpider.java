@@ -23,6 +23,12 @@ import us.codecraft.webmagic.processor.PageProcessor;
  *      private List<String> tags;
  * }
  </pre>
+ * And start the spider by:
+ * <pre>
+ *   OOSpider.create(Site.me().addStartUrl("http://my.oschina.net/flashsword/blog")
+ *        ,new JsonFilePageModelPipeline(), OschinaBlog.class).run();
+ * }
+ </pre>
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */

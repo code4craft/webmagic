@@ -4,6 +4,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.*;
+import us.codecraft.webmagic.model.annotation.Experimental;
 import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.processor.SimplePageProcessor;
@@ -20,6 +21,7 @@ import java.io.*;
  * @author code4crafter@gmail.com
  * @since 0.2.1
  */
+@Experimental
 public class FileCache extends FilePersistentBase implements Downloader, Pipeline, PageProcessor {
 
     private Downloader downloaderWhenFileMiss;
