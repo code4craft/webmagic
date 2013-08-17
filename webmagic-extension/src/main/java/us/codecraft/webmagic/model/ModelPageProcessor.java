@@ -14,10 +14,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 基于PageProcessor的扩展点。<br>
+ * The extension to PageProcessor for page model extractor.
+ *
  * @author code4crafter@gmail.com <br>
- * Date: 13-8-1 <br>
- * Time: 下午8:46 <br>
+ * @since 0.2.0
  */
 class ModelPageProcessor implements PageProcessor {
 

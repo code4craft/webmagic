@@ -42,7 +42,7 @@ public class OOSpider extends Spider {
     }
 
     /**
-     * 创建一个爬虫。<br>
+     * create a spider
      * @param site
      * @param pageModelPipeline
      * @param pageModels

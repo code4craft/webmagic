@@ -11,11 +11,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 基于Pipeline的扩展点，用于实现注解格式的Pipeline。<br>
- * 与PageModelPipeline是一对多的关系(原谅作者没有更好的名字了)。<br>
+ * The extension to Pipeline for page model extractor.
+ *
  * @author code4crafter@gmail.com <br>
- * Date: 13-8-2 <br>
- * Time: 上午10:47 <br>
+ * @since 0.2.0
  */
 class ModelPipeline implements Pipeline {
 

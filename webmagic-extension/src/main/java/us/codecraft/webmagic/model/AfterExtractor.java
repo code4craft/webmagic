@@ -3,9 +3,10 @@ package us.codecraft.webmagic.model;
 import us.codecraft.webmagic.Page;
 
 /**
- * 实现这个接口即可在抽取后进行后处理。<br>
+ * Interface to be implemented by page models that need to do something after fields are extracted。<br>
  *
  * @author code4crafter@gmail.com <br>
+ * @since 0.2.0
  */
 public interface AfterExtractor {
 

@@ -4,9 +4,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import us.codecraft.webmagic.Task;
 
 /**
+ * Print page model in console.<br>
+ * Usually used in test.<br>
  * @author code4crafter@gmail.com <br>
- * Date: 13-8-3 <br>
- * Time: 下午3:41 <br>
+ * @since 0.2.0
  */
 public class ConsolePageModelPipeline implements PageModelPipeline {
     @Override

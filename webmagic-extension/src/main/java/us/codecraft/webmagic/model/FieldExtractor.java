@@ -6,18 +6,18 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
+ * Wrapper of field and extractor.
  * @author code4crafter@gmail.com <br>
- * Date: 13-8-1 <br>
- * Time: 下午9:48 <br>
+ * @since 0.2.0
  */
-class FieldExtractor extends Extractor{
+class FieldExtractor extends Extractor {
 
     private final Field field;
 
     private Method setterMethod;
 
-    public FieldExtractor(Field field, Selector selector, Source source, boolean notNull,boolean multi) {
-        super(selector, source, notNull,multi);
+    public FieldExtractor(Field field, Selector selector, Source source, boolean notNull, boolean multi) {
+        super(selector, source, notNull, multi);
         this.field = field;
     }
 

@@ -3,9 +3,10 @@ package us.codecraft.webmagic.model;
 import us.codecraft.webmagic.Task;
 
 /**
+ * Implements PageModelPipeline to persistent your page model.
+ *
  * @author code4crafter@gmail.com <br>
- * Date: 13-8-3 <br>
- * Time: 上午9:34 <br>
+ * @since 0.2.0
  */
 public interface PageModelPipeline<T> {
 

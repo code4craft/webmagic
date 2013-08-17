@@ -3,9 +3,9 @@ package us.codecraft.webmagic.model;
 import us.codecraft.webmagic.selector.Selector;
 
 /**
+ * The object contains 'ExtractBy' information.
  * @author code4crafter@gmail.com <br>
- * Date: 13-8-1 <br>
- * Time: 下午9:48 <br>
+ * @since 0.2.0
  */
 class Extractor {
 
