@@ -1,6 +1,6 @@
 package us.codecraft.webmagic.model;
 
-import us.codecraft.webmagic.model.annotation.Experimental;
+import us.codecraft.webmagic.utils.Experimental;
 
 /**
  * Interface to be implemented by page mode.<br>

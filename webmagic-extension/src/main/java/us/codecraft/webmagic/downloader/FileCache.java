@@ -4,7 +4,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.*;
-import us.codecraft.webmagic.model.annotation.Experimental;
+import us.codecraft.webmagic.utils.Experimental;
 import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.processor.SimplePageProcessor;

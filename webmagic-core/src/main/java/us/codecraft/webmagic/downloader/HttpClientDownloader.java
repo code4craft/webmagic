@@ -38,7 +38,7 @@ public class HttpClientDownloader implements Downloader {
      * 直接下载页面的简便方法
      *
      * @param url
-     * @return
+     * @return html
      */
     public Html download(String url) {
         Page page = download(new Request(url), null);

@@ -18,25 +18,30 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * <pre>
- * webmagic爬虫的入口类。
- *
- * 示例：
- * 定义一个最简单的爬虫：
- *      Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*blog/*")).run();
- *
- * 使用FilePipeline保存结果到文件:
- *      Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*blog/*"))
- *          .pipeline(new FilePipeline("/data/temp/webmagic/")).run();
- *
- * 使用FileCacheQueueScheduler缓存URL，关闭爬虫后下次自动从停止的页面继续抓取:
- *      Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*blog/*"))
- *          .scheduler(new FileCacheQueueScheduler("/data/temp/webmagic/cache/")).run();
- * </pre>
+ * Entrance of a crawler.<br>
+ * A spider contains four modules: Downloader, Scheduler, PageProcessor and Pipeline.<br>
+ * Every module is a field of Spider.                                                    <br>
+ * The modules are defined in interface.                                                     <br>
+ * You can customize a spider with various implementations of them.                              <br>
+ * Examples:                                                                                         <br>
+ * <br>
+ * A simple crawler:                                                                                         <br>
+ * Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*blog/*")).run();<br>
+ * <br>
+ * Store results to files by FilePipeline:                                                                              <br>
+ * Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*blog/*"))                   <br>
+ * .pipeline(new FilePipeline("/data/temp/webmagic/")).run();                                                          <br>
+ * <br>
+ * Use FileCacheQueueScheduler to store urls and cursor in files, so that a Spider can resume the status when shutdown.                 <br>
+ * Spider.create(new SimplePageProcessor("http://my.oschina.net/", "http://my.oschina.net/*blog/*"))                                   <br>
+ * .scheduler(new FileCacheQueueScheduler("/data/temp/webmagic/cache/")).run();                                                        <br>
  *
  * @author code4crafter@gmail.com <br>
- *         Date: 13-4-21
- *         Time: 上午6:53
+ * @see Downloader
+ * @see Scheduler
+ * @see PageProcessor
+ * @see Pipeline
+ * @since 0.1.0
  */
 public class Spider implements Runnable, Task {
 
@@ -222,11 +227,12 @@ public class Spider implements Runnable, Task {
 
     /**
      * 用某些特定URL进行爬虫测试
+     *
      * @param urls 要抓取的url
      */
-    public void test(String... urls){
+    public void test(String... urls) {
         checkComponent();
-        if (urls.length>0){
+        if (urls.length > 0) {
             for (String url : urls) {
                 processRequest(new Request(url));
             }
@@ -241,7 +247,7 @@ public class Spider implements Runnable, Task {
         }
         pageProcessor.process(page);
         addRequest(page);
-        if (!page.getResultItems().isSkip()){
+        if (!page.getResultItems().isSkip()) {
             for (Pipeline pipeline : pipelines) {
                 pipeline.process(page.getResultItems(), this);
             }
@@ -298,8 +304,8 @@ public class Spider implements Runnable, Task {
         return this;
     }
 
-    public Spider clearPipeline(){
-        pipelines=new ArrayList<Pipeline>();
+    public Spider clearPipeline() {
+        pipelines = new ArrayList<Pipeline>();
         return this;
     }
 

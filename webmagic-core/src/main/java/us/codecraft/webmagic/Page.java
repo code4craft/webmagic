@@ -8,30 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <pre class="zh">
- * Page保存了上一次抓取的结果，并可定义待抓取的链接内容。
  *
- *     主要方法：
- *     {@link #getUrl()} 获取页面的Url
- *     {@link #getHtml()}  获取页面的html内容
- *     {@link #putField(String, Object)}  保存抽取的结果
- *     {@link #getResultItems()} 获取抽取的结果，在 {@link us.codecraft.webmagic.pipeline.Pipeline} 中调用
- *     {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} 添加待抓取的链接
- *
- * </pre>
- * <pre class="en">
- * Store extracted result and urls to be crawled.
- *
- *     Main method：
- *     {@link #getUrl()} get url of current page
- *     {@link #getHtml()}  get content of current page
- *     {@link #putField(String, Object)}  save extracted result
- *     {@link #getResultItems()} get extract results to be used in {@link us.codecraft.webmagic.pipeline.Pipeline}
- *     {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} add urls to crawl
- *
- * </pre>
+ * Object storing extracted result and urls to be crawled.<br>
+ * Main method：                                               <br>
+ * {@link #getUrl()} get url of current page                   <br>
+ * {@link #getHtml()}  get content of current page                 <br>
+ * {@link #putField(String, Object)}  save extracted result            <br>
+ * {@link #getResultItems()} get extract results to be used in {@link us.codecraft.webmagic.pipeline.Pipeline}<br>
+ * {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} add urls to crawl                 <br>
  *
  * @author code4crafter@gmail.com <br>
+ * @since 0.1.0
+ * @see us.codecraft.webmagic.downloader.Downloader
+ * @see us.codecraft.webmagic.processor.PageProcessor
  */
 public class Page {
 
@@ -55,19 +44,19 @@ public class Page {
     }
 
     /**
+     * store extract results
      *
-     *
-     * @param key   结果的key
-     * @param field 结果的value
+     * @param key
+     * @param field
      */
     public void putField(String key, Object field) {
         resultItems.put(key, field);
     }
 
     /**
-     * 获取页面的html内容
+     * get html content of page
      *
-     * @return html 页面的html内容
+     * @return html
      */
     public Selectable getHtml() {
         return html;
@@ -82,9 +71,9 @@ public class Page {
     }
 
     /**
-     * 添加待抓取的链接
+     * add urls to crawl
      *
-     * @param requests 待抓取的链接
+     * @param requests
      */
     public void addTargetRequests(List<String> requests) {
         synchronized (targetRequests) {
@@ -99,9 +88,9 @@ public class Page {
     }
 
     /**
-     * 添加待抓取的链接
+     * add url to crawl
      *
-     * @param requestString 待抓取的链接
+     * @param requestString
      */
     public void addTargetRequest(String requestString) {
         if (StringUtils.isBlank(requestString) || requestString.equals("#")) {
@@ -114,9 +103,9 @@ public class Page {
     }
 
     /**
-     * 添加待抓取的页面，在需要传递附加信息时使用
+     * add requests to crawl
      *
-     * @param request 待抓取的页面
+     * @param request
      */
     public void addTargetRequest(Request request) {
         synchronized (targetRequests) {
@@ -125,27 +114,22 @@ public class Page {
     }
 
     /**
-     * 获取页面的Url
+     * get url of current page
      *
-     * @return url 当前页面的url，可用于抽取
+     * @return url of current page
      */
     public Selectable getUrl() {
         return url;
     }
 
-    /**
-     * 设置url
-     *
-     * @param url
-     */
     public void setUrl(Selectable url) {
         this.url = url;
     }
 
     /**
-     * 获取抓取请求
+     * get request of current page
      *
-     * @return request 抓取请求
+     * @return request
      */
     public Request getRequest() {
         return request;

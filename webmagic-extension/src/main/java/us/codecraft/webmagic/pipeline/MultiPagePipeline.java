@@ -3,7 +3,7 @@ package us.codecraft.webmagic.pipeline;
 import us.codecraft.webmagic.MultiPageModel;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.model.annotation.Experimental;
+import us.codecraft.webmagic.utils.Experimental;
 import us.codecraft.webmagic.utils.DoubleKeyMap;
 
 import java.util.*;

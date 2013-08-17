@@ -4,10 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 保存抽取结果的类，由PageProcessor处理得到，传递给{@link us.codecraft.webmagic.pipeline.Pipeline}进行持久化。<br>
+ * Object contains extract results.<br>
+ * It is contained in Page and will be processed in pipeline.
+ *
  * @author code4crafter@gmail.com <br>
- * Date: 13-7-25 <br>
- * Time: 下午12:20 <br>
+ * @since 0.1.0
+ * @see Page
+ * @see us.codecraft.webmagic.pipeline.Pipeline
  */
 public class ResultItems {
 
@@ -25,7 +28,7 @@ public class ResultItems {
         return (T) fields.get(key);
     }
 
-    public  Map<String, Object> getAll() {
+    public Map<String, Object> getAll() {
         return fields;
     }
 
@@ -44,8 +47,10 @@ public class ResultItems {
     }
 
     /**
-     * 是否忽略这个页面，用于pipeline来判断是否对这个页面进行处理
-     * @return 是否忽略 true 忽略
+     * Whether to skip the result.<br>
+     * Result which is skipped will not be processed by Pipeline.
+     *
+     * @return whether to skip the result
      */
     public boolean isSkip() {
         return skip;
@@ -53,8 +58,10 @@ public class ResultItems {
 
 
     /**
-     * 设置是否忽略这个页面，用于pipeline来判断是否对这个页面进行处理
-     * @param skip
+     * Set whether to skip the result.<br>
+     * Result which is skipped will not be processed by Pipeline.
+     *
+     * @param skip whether to skip the result
      * @return this
      */
     public ResultItems setSkip(boolean skip) {

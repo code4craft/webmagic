@@ -1,33 +1,17 @@
 package us.codecraft.webmagic;
 
+import us.codecraft.webmagic.utils.Experimental;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <div class="zh">
- * Request对象封装了待抓取的url信息。<br/>
- * 在PageProcessor中，Request对象可以通过{@link us.codecraft.webmagic.Page#getRequest()} 获取。<br/>
- * <br/>
- * Request对象包含一个extra属性，可以写入一些必须的上下文，这个特性在某些场合会有用。<br/>
- * <pre>
- *      Example:
- *          抓取<a href="${link}">${linktext}</a>时，希望提取链接link，并保存linktext的信息。
- *      在上一个页面：
- *      public void process(Page page){
- *          Request request = new Request(link,linktext);
- *          page.addTargetRequest(request)
- *      }
- *      在下一个页面：
- *      public void process(Page page){
- *          String linktext =  (String)page.getRequest().getExtra()[0];
- *      }
- * </pre>
- * </div>
+ * Object contains url to crawl.<br>
+ * It contains some additional information.<br>
  *
  * @author code4crafter@gmail.com <br>
- *         Date: 13-4-21
- *         Time: 上午11:37
+ * @since 0.1.0
  */
 public class Request implements Serializable {
 
@@ -36,20 +20,22 @@ public class Request implements Serializable {
     private String url;
 
     /**
-     * 额外参数，可以保存一些需要的上下文信息
+     * Store additional information in extras.
      */
     private Map<String, Object> extras;
 
+    /**
+     * Priority of the request.<br>
+     * The bigger will be processed earlier. <br>
+     * Need a scheduler supporting priority.<br>
+     * But no scheduler in webmagic supporting priority now (:
+     */
+    @Experimental
     private double priority;
 
     public Request() {
     }
 
-    /**
-     * 构建一个request对象
-     *
-     * @param url 必须参数，待抓取的url
-     */
     public Request(String url) {
         this.url = url;
     }
@@ -59,12 +45,14 @@ public class Request implements Serializable {
     }
 
     /**
-     * 设置优先级，用于URL队列排序<br>
-     * 需扩展Scheduler<br>
-     * 目前还没有对应支持优先级的Scheduler实现 =。= <br>
-     * @param priority 优先级，越大则越靠前
+     * Set the priority of request for sorting.<br>
+     * Need a scheduler supporting priority.<br>
+     * But no scheduler in webmagic supporting priority now (:
+     *
+     * @param priority
      * @return this
      */
+    @Experimental
     public Request setPriority(double priority) {
         this.priority = priority;
         return this;
@@ -85,11 +73,6 @@ public class Request implements Serializable {
         return this;
     }
 
-    /**
-     * 获取待抓取的url
-     *
-     * @return url 待抓取的url
-     */
     public String getUrl() {
         return url;
     }

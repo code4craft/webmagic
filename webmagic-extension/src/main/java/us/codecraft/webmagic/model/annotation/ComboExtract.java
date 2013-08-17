@@ -21,7 +21,7 @@ public @interface ComboExtract {
      */
     ExtractBy[] value();
 
-    enum Op {
+    public static enum Op {
         /**
          * All extractors will be arranged as a pipeline. <br>
          * The next extractor uses the result of the previous as source.
@@ -49,7 +49,10 @@ public @interface ComboExtract {
      */
     boolean notNull() default false;
 
-    public enum Source {
+    /**
+     * types of source for extracting.
+     */
+    public static enum Source {
         /**
          * extract from the content extracted by class extractor
          */

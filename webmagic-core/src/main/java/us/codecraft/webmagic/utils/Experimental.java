@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.model.annotation;
+package us.codecraft.webmagic.utils;
 
 /**
  * @author code4crafter@gmail.com <br>

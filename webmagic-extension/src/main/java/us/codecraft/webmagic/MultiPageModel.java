@@ -1,6 +1,6 @@
 package us.codecraft.webmagic;
 
-import us.codecraft.webmagic.model.annotation.Experimental;
+import us.codecraft.webmagic.utils.Experimental;
 
 import java.util.Collection;
 

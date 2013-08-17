@@ -5,12 +5,11 @@ import us.codecraft.webmagic.utils.UrlUtils;
 import java.util.*;
 
 /**
- * Site定义一个待抓取的站点的各种信息。<br>
- * 这个类的所有getter方法，一般都只会被爬虫框架内部进行调用。<br>
+ * Object contains setting for crawler.<br>
  *
  * @author code4crafter@gmail.com <br>
- *         Date: 13-4-21
- *         Time: 下午12:13
+ * @since 0.1.0
+ * @see us.codecraft.webmagic.processor.PageProcessor
  */
 public class Site {
 
@@ -22,6 +21,9 @@ public class Site {
 
     private String charset;
 
+    /**
+     * startUrls is the urls the crawler to start with.
+     */
     private List<String> startUrls = new ArrayList<String>();
 
     private int sleepTime = 3000;
@@ -37,19 +39,19 @@ public class Site {
     }
 
     /**
-     * 创建一个Site对象，等价于new Site()
+     * new a Site
      *
-     * @return 新建的对象
+     * @return new site
      */
     public static Site me() {
         return new Site();
     }
 
     /**
-     * 为这个站点添加一个cookie，可用于抓取某些需要登录访问的站点。这个cookie的域名与{@link #getDomain()}是一致的
+     * Add a cookie with domain {@link #getDomain()}
      *
-     * @param name  cookie的名称
-     * @param value cookie的值
+     * @param name
+     * @param value
      * @return this
      */
     public Site addCookie(String name, String value) {
@@ -58,7 +60,7 @@ public class Site {
     }
 
     /**
-     * 为这个站点设置user-agent，很多网站都对user-agent进行了限制，不设置此选项可能会得到期望之外的结果。
+     * set user agent
      *
      * @param userAgent userAgent
      * @return this
@@ -69,27 +71,27 @@ public class Site {
     }
 
     /**
-     * 获取已经设置的所有cookie
+     * get cookies
      *
-     * @return 已经设置的所有cookie
+     * @return get cookies
      */
     public Map<String, String> getCookies() {
         return cookies;
     }
 
     /**
-     * 获取已设置的user-agent
+     * get user agent
      *
-     * @return 已设置的user-agent
+     * @return user agent
      */
     public String getUserAgent() {
         return userAgent;
     }
 
     /**
-     * 获取已设置的domain
+     * get domain
      *
-     * @return 已设置的domain
+     * @return get domain
      */
     public String getDomain() {
         if (domain == null) {
@@ -101,10 +103,9 @@ public class Site {
     }
 
     /**
-     * 设置这个站点所在域名，必须项。<br>
-     * 目前不支持多个域名的抓取。抓取多个域名请新建一个Spider。
+     * set the domain of site.
      *
-     * @param domain 爬虫会抓取的域名
+     * @param domain
      * @return this
      */
     public Site setDomain(String domain) {
@@ -113,10 +114,10 @@ public class Site {
     }
 
     /**
-     * 设置页面编码，若不设置则自动根据Html meta信息获取。<br>
-     * 一般无需设置encoding，如果发现下载的结果是乱码，则可以设置此项。<br>
+     * Set charset of page manually.<br>
+     * When charset is not set or set to null, it can be auto detected by Http header.
      *
-     * @param charset 编码格式，主要是"utf-8"、"gbk"两种
+     * @param charset
      * @return this
      */
     public Site setCharset(String charset) {
@@ -125,20 +126,21 @@ public class Site {
     }
 
     /**
-     * 获取已设置的编码
+     * get charset set manually
      *
-     * @return 已设置的domain
+     * @return charset
      */
     public String getCharset() {
         return charset;
     }
 
     /**
-     * 设置可接受的http状态码，仅当状态码在这个集合中时，才会读取页面内容。<br>
-     * 默认为200，正常情况下，无须设置此项。<br>
-     * 某些站点会错误的返回状态码，此时可以对这个选项进行设置。<br>
+     * Set acceptStatCode.<br>
+     * When status code of http response is in acceptStatCodes, it will be processed.<br>
+     * {200} by default.<br>
+     * It is not necessarily to be set.<br>
      *
-     * @param acceptStatCode 可接受的状态码
+     * @param acceptStatCode
      * @return this
      */
     public Site setAcceptStatCode(Set<Integer> acceptStatCode) {
@@ -147,27 +149,27 @@ public class Site {
     }
 
     /**
-     * 获取可接受的状态码
+     * get acceptStatCode
      *
-     * @return 可接受的状态码
+     * @return acceptStatCode
      */
     public Set<Integer> getAcceptStatCode() {
         return acceptStatCode;
     }
 
     /**
-     * 获取初始页面的地址列表
+     * get start urls
      *
-     * @return 初始页面的地址列表
+     * @return start urls
      */
     public List<String> getStartUrls() {
         return startUrls;
     }
 
     /**
-     * 增加初始页面的地址，可反复调用此方法增加多个初始地址。
+     * Add a url to start url.<br>
      *
-     * @param startUrl 初始页面的地址
+     * @param startUrl
      * @return this
      */
     public Site addStartUrl(String startUrl) {
@@ -176,9 +178,10 @@ public class Site {
     }
 
     /**
-     * 设置两次抓取之间的间隔，避免对目标站点压力过大(或者避免被防火墙屏蔽...)。
+     * Set the interval between the processing of two pages.<br>
+     * Time unit is micro seconds.<br>
      *
-     * @param sleepTime 单位毫秒
+     * @param sleepTime
      * @return this
      */
     public Site setSleepTime(int sleepTime) {
@@ -187,25 +190,26 @@ public class Site {
     }
 
     /**
-     * 获取两次抓取之间的间隔
+     * Get the interval between the processing of two pages.<br>
+     * Time unit is micro seconds.<br>
      *
-     * @return 两次抓取之间的间隔，单位毫秒
+     * @return the interval between the processing of two pages,
      */
     public int getSleepTime() {
         return sleepTime;
     }
 
     /**
-     * 获取重新下载的次数，默认为0
+     * Get retry times when download fail, 0 by default.<br>
      *
-     * @return 重新下载的次数
+     * @return retry times when download fail
      */
     public int getRetryTimes() {
         return retryTimes;
     }
 
     /**
-     * 设置获取重新下载的次数，默认为0
+     * Set retry times when download fail, 0 by default.<br>
      *
      * @return this
      */
