@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * JsonPath
  * @author code4crafter@gmail.com <br>
- *         Date: 13-8-12 <br>
- *         Time: 下午12:54 <br>
  */
 public class JsonPathSelector implements Selector {
 

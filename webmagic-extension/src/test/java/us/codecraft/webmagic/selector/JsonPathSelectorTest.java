@@ -7,8 +7,6 @@ import java.util.List;
 
 /**
  * @author code4crafter@gmai.com <br>
- *         Date: 13-8-12 <br>
- *         Time: 下午1:12 <br>
  */
 public class JsonPathSelectorTest {
 

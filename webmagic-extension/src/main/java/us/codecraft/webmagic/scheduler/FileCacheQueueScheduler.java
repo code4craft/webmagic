@@ -16,10 +16,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 磁盘文件实现的url管理模块，可以保证在长时间执行的任务中断后，下次启动从中断位置重新开始。<br>
+ * Store urls and cursor in files so that a Spider can resume the status when shutdown。<br>
+ *
  * @author code4crafter@gmail.com <br>
- * Date: 13-4-21
- * Time: 下午1:13
+ * @since 0.2.0
  */
 public class FileCacheQueueScheduler implements Scheduler {
 
@@ -46,8 +46,8 @@ public class FileCacheQueueScheduler implements Scheduler {
     private Set<String> urls;
 
     public FileCacheQueueScheduler(String filePath) {
-        if (!filePath.endsWith("/")&&!filePath.endsWith("\\")){
-            filePath+="/";
+        if (!filePath.endsWith("/") && !filePath.endsWith("\\")) {
+            filePath += "/";
         }
         this.filePath = filePath;
     }
@@ -95,7 +95,7 @@ public class FileCacheQueueScheduler implements Scheduler {
             readCursorFile();
             readUrlFile();
         } catch (IOException e) {
-            logger.error("init file error",e);
+            logger.error("init file error", e);
         }
     }
 
@@ -122,7 +122,7 @@ public class FileCacheQueueScheduler implements Scheduler {
     }
 
     private String getFileName(String filename) {
-        return filePath + task.getUUID()  + filename;
+        return filePath + task.getUUID() + filename;
     }
 
     @Override

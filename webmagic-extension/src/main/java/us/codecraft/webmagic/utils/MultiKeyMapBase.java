@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * multikey map, some basic objects *
+ * multi-key map, some basic objects *
  *
  * @author yihua.huang
  */

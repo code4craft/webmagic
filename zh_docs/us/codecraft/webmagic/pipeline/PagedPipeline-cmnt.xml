@@ -4,7 +4,7 @@
 <date-generated>Sat Aug 17 14:14:46 CST 2013</date-generated>
 </meta>
 <comment>
-<key><![CDATA[us.codecraft.webmagic.pipeline.PagedPipeline]]></key>
+<key><![CDATA[us.codecraft.webmagic.pipeline.MultiPagePipeline]]></key>
 <data><![CDATA[ 用于实现分页的Pipeline。<br>
  在使用redis做分布式爬虫时，请不要使用此功能。<br>
 

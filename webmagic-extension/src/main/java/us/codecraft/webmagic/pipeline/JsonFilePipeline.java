@@ -13,28 +13,22 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * JSON格式持久化到文件的接口。
+ * Store results to files in JSON format。<br>
  *
  * @author code4crafter@gmail.com <br>
- *         Date: 13-4-21
- *         Time: 下午6:28
+ * @since 0.2.0
  */
 public class JsonFilePipeline extends FilePersistentBase implements Pipeline {
 
     private Logger logger = Logger.getLogger(getClass());
 
     /**
-     * 新建一个JsonFilePipeline，使用默认保存路径"/data/webmagic/"
+     * new JsonFilePageModelPipeline with default path "/data/webmagic/"
      */
     public JsonFilePipeline() {
         setPath("/data/webmagic");
     }
 
-    /**
-     * 新建一个JsonFilePipeline
-     *
-     * @param path 文件保存路径
-     */
     public JsonFilePipeline(String path) {
         setPath(path);
     }

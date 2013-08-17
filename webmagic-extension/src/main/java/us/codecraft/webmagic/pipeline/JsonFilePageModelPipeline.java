@@ -14,29 +14,24 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * JSON格式持久化到文件的接口。<br>
- * 如果持久化的文件名是乱码，请再运行的环境变量里加上LANG=zh_CN.UTF-8。<br>
+ * Store results objects (page models) to files in JSON format。<br>
+ * Use model.getKey() as file name if the model implements HasKey.<br>
+ * Otherwise use SHA1 as file name.
  *
  * @author code4crafter@gmail.com <br>
- *         Date: 13-4-21
- *         Time: 下午6:28
+ * @since 0.2.0
  */
 public class JsonFilePageModelPipeline extends FilePersistentBase implements PageModelPipeline {
 
     private Logger logger = Logger.getLogger(getClass());
 
     /**
-     * 新建一个JsonFilePageModelPipeline，使用默认保存路径"/data/webmagic/"
+     * new JsonFilePageModelPipeline with default path "/data/webmagic/"
      */
     public JsonFilePageModelPipeline() {
         setPath("/data/webmagic/");
     }
 
-    /**
-     * 新建一个JsonFilePageModelPipeline
-     *
-     * @param path 文件保存路径
-     */
     public JsonFilePageModelPipeline(String path) {
         setPath(path);
     }
@@ -47,7 +42,7 @@ public class JsonFilePageModelPipeline extends FilePersistentBase implements Pag
         try {
             String filename;
             if (o instanceof HasKey) {
-                filename = path + ((HasKey)o).key() + ".json";
+                filename = path + ((HasKey) o).key() + ".json";
             } else {
                 filename = path + DigestUtils.md5Hex(ToStringBuilder.reflectionToString(o)) + ".json";
             }

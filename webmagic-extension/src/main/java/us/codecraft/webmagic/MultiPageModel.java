@@ -8,7 +8,7 @@ import java.util.Collection;
  * Date: 13-8-4 <br>
  * Time: 下午5:18 <br>
  */
-public interface PagedModel {
+public interface MultiPageModel {
 
     public String getPageKey();
 
@@ -16,6 +16,6 @@ public interface PagedModel {
 
     public String getPage();
 
-    public PagedModel combine(PagedModel pagedModel);
+    public MultiPageModel combine(MultiPageModel multiPageModel);
 
 }

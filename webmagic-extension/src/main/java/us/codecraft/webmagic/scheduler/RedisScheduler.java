@@ -9,11 +9,10 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 
 /**
- * 使用redis管理url，构建一个分布式的爬虫。<br>
+ * Use Redis as url scheduler for distributed crawlers。<br>
  *
  * @author code4crafter@gmail.com <br>
- *         Date: 13-7-25 <br>
- *         Time: 上午7:07 <br>
+ * @since 0.2.0
  */
 public class RedisScheduler implements Scheduler {
 

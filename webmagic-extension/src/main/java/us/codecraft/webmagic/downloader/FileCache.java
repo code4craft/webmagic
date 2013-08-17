@@ -17,7 +17,6 @@ import java.io.*;
 /**
  * Download file and saved to file for cache.<br>
  *
- *
  * @author code4crafter@gmail.com
  * @since 0.2.1
  */
