@@ -9,7 +9,7 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 
 /**
- * Use Redis as url scheduler for distributed crawlers。<br>
+ * Use Redis as url scheduler for distributed crawlers.<br>
  *
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0

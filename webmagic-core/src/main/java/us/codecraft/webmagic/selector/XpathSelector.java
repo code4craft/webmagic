@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * XPath selector based on HtmlCleaner。<br>
+ * XPath selector based on HtmlCleaner.<br>
  *
  * @author code4crafter@gmail.com <br>
  * @since 0.1.0

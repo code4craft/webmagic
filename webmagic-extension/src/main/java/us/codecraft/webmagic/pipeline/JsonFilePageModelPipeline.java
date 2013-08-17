@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * Store results objects (page models) to files in JSON format。<br>
+ * Store results objects (page models) to files in JSON format.<br>
  * Use model.getKey() as file name if the model implements HasKey.<br>
  * Otherwise use SHA1 as file name.
  *

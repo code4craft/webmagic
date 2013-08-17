@@ -5,7 +5,7 @@ import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
- * The spider for page model extractor。<br>
+ * The spider for page model extractor.<br>
  * In webmagic, we call a POJO containing extract result as "page model". <br>
  * You can customize a crawler by write a page model with annotations. <br>
  * Such as:

@@ -5,7 +5,7 @@ import us.codecraft.webmagic.utils.Experimental;
 import java.util.Collection;
 
 /**
- * Extract an object of more than one pages, such as news and articles。<br>
+ * Extract an object of more than one pages, such as news and articles.<br>
  *
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0

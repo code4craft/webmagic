@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * Store results to files in JSON format。<br>
+ * Store results to files in JSON format.<br>
  *
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
