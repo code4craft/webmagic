@@ -9,12 +9,13 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.downloader.Destroyable;
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.UrlUtils;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -25,7 +26,7 @@ import java.util.Map;
  * Date: 13-7-26 <br>
  * Time: 下午1:37 <br>
  */
-public class SeleniumDownloader implements Downloader, Destroyable {
+public class SeleniumDownloader implements Downloader, Closeable {
 
     private volatile WebDriverPool webDriverPool;
 
@@ -104,7 +105,7 @@ public class SeleniumDownloader implements Downloader, Destroyable {
     }
 
     @Override
-    public void destroy() {
+    public void close() throws IOException {
         webDriverPool.closeAll();
     }
 }

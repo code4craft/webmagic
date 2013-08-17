@@ -56,7 +56,7 @@ public class OOSpider extends Spider {
     public OOSpider(Site site, PageModelPipeline pageModelPipeline, Class... pageModels) {
         this(ModelPageProcessor.create(site, pageModels));
         this.modelPipeline = new ModelPipeline();
-        super.pipeline(modelPipeline);
+        super.addPipeline(modelPipeline);
         if (pageModelPipeline!=null){
             for (Class pageModel : pageModels) {
                 this.modelPipeline.put(pageModel, pageModelPipeline);

@@ -2,7 +2,6 @@ package us.codecraft.webmagic;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
-import us.codecraft.webmagic.downloader.Destroyable;
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
@@ -12,6 +11,8 @@ import us.codecraft.webmagic.scheduler.QueueScheduler;
 import us.codecraft.webmagic.scheduler.Scheduler;
 import us.codecraft.webmagic.utils.ThreadUtils;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -279,8 +280,12 @@ public class Spider implements Runnable, Task {
     }
 
     private void destroyEach(Object object) {
-        if (object instanceof Destroyable) {
-            ((Destroyable) object).destroy();
+        if (object instanceof Closeable) {
+            try {
+                ((Closeable) object).close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
