@@ -20,7 +20,9 @@ public class RegexSelector implements Selector {
 
     private Pattern regex;
 
-    public RegexSelector(String regexStr) {
+    private int group = 1;
+
+    public RegexSelector(String regexStr, int group) {
         if (StringUtils.isBlank(regexStr)) {
             throw new IllegalArgumentException("regex must not be empty");
         }
@@ -36,11 +38,16 @@ public class RegexSelector implements Selector {
         } catch (PatternSyntaxException e) {
             throw new IllegalArgumentException("invalid regex", e);
         }
+        this.group = group;
+    }
+
+    public RegexSelector(String regexStr) {
+        this(regexStr, 1);
     }
 
     @Override
     public String select(String text) {
-        return selectGroup(text).get(1);
+        return selectGroup(text).get(group);
     }
 
     @Override
@@ -48,7 +55,7 @@ public class RegexSelector implements Selector {
         List<String> strings = new ArrayList<String>();
         List<RegexResult> results = selectGroupList(text);
         for (RegexResult result : results) {
-            strings.add(result.get(1));
+            strings.add(result.get(group));
         }
         return strings;
     }

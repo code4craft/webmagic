@@ -26,9 +26,9 @@ public class OrSelector implements Selector {
     @Override
     public String select(String text) {
         for (Selector selector : selectors) {
-            text = selector.select(text);
-            if (text != null) {
-                return text;
+            String result = selector.select(text);
+            if (result != null) {
+                return result;
             }
         }
         return null;

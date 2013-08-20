@@ -27,7 +27,11 @@ public class SelectorFactory {
     }
 
     public RegexSelector newRegexSelector(String regex, int group) {
-        return newSelector(RegexSelector.class, regex, String.valueOf(group));
+        String cacheKey = getCacheKey(RegexSelector.class, regex, String.valueOf(group));
+        if (innerCache.get(cacheKey) != null) {
+            return (RegexSelector) innerCache.get(cacheKey);
+        }
+        return new RegexSelector(regex, group);
     }
 
     public ReplaceSelector newReplaceSelector(String regex, String replacement) {

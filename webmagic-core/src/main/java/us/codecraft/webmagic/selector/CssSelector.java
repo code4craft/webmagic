@@ -43,6 +43,8 @@ public class CssSelector implements Selector {
     private String getValue(Element element) {
         if (attrName == null) {
             return element.outerHtml();
+        } else if ("innerHtml".equalsIgnoreCase(attrName)) {
+            return element.html();
         } else {
             return element.attr(attrName);
         }
