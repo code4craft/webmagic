@@ -31,7 +31,7 @@ public class Request implements Serializable {
      * But no scheduler in webmagic supporting priority now (:
      */
     @Experimental
-    private double priority;
+    private long priority;
 
     public Request() {
     }
@@ -40,7 +40,7 @@ public class Request implements Serializable {
         this.url = url;
     }
 
-    public double getPriority() {
+    public long getPriority() {
         return priority;
     }
 
@@ -53,7 +53,7 @@ public class Request implements Serializable {
      * @return this
      */
     @Experimental
-    public Request setPriority(double priority) {
+    public Request setPriority(long priority) {
         this.priority = priority;
         return this;
     }

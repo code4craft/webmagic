@@ -1,5 +1,15 @@
 Release Notes
 ----
+*2012-8-20* `version：0.2.1`
+
+ComboExtractor support for annotation.
+
+Request priority support (using `PriorityScheduler`).
+
+Complete some I18n work (comments and documents).
+
+
+
 *2012-8-9* `version：0.2.0`
 
 此次更新的主题是"方便"(之前的主题是"灵活")。
