@@ -8,8 +8,16 @@ Request priority support (using `PriorityScheduler`).
 
 Complete some I18n work (comments and documents).
 
+More convenient extractor API:
 
-
+* Add attribute name select for CSSSelector.
+* Group of regex selector can be specified.
+* Add OrSelector.
+* Add Selectors, import static Selectors.* for fluent API such as:
+		
+		or(regex("<title>(.*)</title>"), xpath("//title"), $("title")).select(s);
+* Add JsonPathSelector for Json parse.
+		
 *2012-8-9* `version：0.2.0`
 
 此次更新的主题是"方便"(之前的主题是"灵活")。
