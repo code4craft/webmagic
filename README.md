@@ -16,24 +16,18 @@ webmagic
 
 
 ## Install:
-
-Clone the repo and build:
-
-	git clone https://github.com/code4craft/webmagic.git
-	cd webmagic
-	mvn clean install	  
-
-Add dependencies to your project:
+  
+Add dependencies to your pom.xml:
 
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-core</artifactId>
-            <version>0.2.0</version>
+            <version>0.2.1</version>
         </dependency>
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-extension</artifactId>
-            <version>0.2.0</version>
+            <version>0.2.1</version>
         </dependency>
 
 ## Get Started:
