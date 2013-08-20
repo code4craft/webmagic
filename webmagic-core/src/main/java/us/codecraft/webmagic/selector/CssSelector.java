@@ -19,8 +19,15 @@ public class CssSelector implements Selector {
 
     private String selectorText;
 
+    private String attrName;
+
     public CssSelector(String selectorText) {
         this.selectorText = selectorText;
+    }
+
+    public CssSelector(String selectorText, String attrName) {
+        this.selectorText = selectorText;
+        this.attrName = attrName;
     }
 
     @Override
@@ -30,7 +37,15 @@ public class CssSelector implements Selector {
         if (CollectionUtils.isEmpty(elements)) {
             return null;
         }
-        return elements.get(0).outerHtml();
+        return getValue(elements.get(0));
+    }
+
+    private String getValue(Element element) {
+        if (attrName == null) {
+            return element.outerHtml();
+        } else {
+            return element.attr(attrName);
+        }
     }
 
     @Override
@@ -40,7 +55,10 @@ public class CssSelector implements Selector {
         Elements elements = doc.select(selectorText);
         if (CollectionUtils.isNotEmpty(elements)) {
             for (Element element : elements) {
-                strings.add(element.outerHtml());
+                String value = getValue(element);
+                if (value != null) {
+                    strings.add(value);
+                }
             }
         }
         return strings;

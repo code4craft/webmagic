@@ -26,6 +26,10 @@ public class SelectorFactory {
         return newSelector(RegexSelector.class, regex);
     }
 
+    public RegexSelector newRegexSelector(String regex, int group) {
+        return newSelector(RegexSelector.class, regex, String.valueOf(group));
+    }
+
     public ReplaceSelector newReplaceSelector(String regex, String replacement) {
         return newSelector(ReplaceSelector.class, regex, replacement);
     }

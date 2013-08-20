@@ -69,4 +69,10 @@ public class Html extends PlainText {
         return selectList(cssSelector, strings);
     }
 
+    @Override
+    public Selectable $(String selector, String attrName) {
+        CssSelector cssSelector = new CssSelector(selector, attrName);
+        return selectList(cssSelector, strings);
+    }
+
 }

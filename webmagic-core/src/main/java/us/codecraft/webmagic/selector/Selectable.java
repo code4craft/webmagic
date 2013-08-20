@@ -27,6 +27,15 @@ public interface Selectable {
     public Selectable $(String selector);
 
     /**
+     * select list with css selector
+     *
+     * @param selector css selector expression
+     * @param attrName attribute name of css selector
+     * @return new Selectable after extract
+     */
+    public Selectable $(String selector, String attrName);
+
+    /**
      * select smart content with ReadAbility algorithm
      *
      * @return content
@@ -41,12 +50,21 @@ public interface Selectable {
     public Selectable links();
 
     /**
-     * select list with regex
+     * select list with regex, default group is group 1
      *
      * @param regex
      * @return new Selectable after extract
      */
     public Selectable regex(String regex);
+
+    /**
+     * select list with regex
+     *
+     * @param regex
+     * @param group
+     * @return new Selectable after extract
+     */
+    public Selectable regex(String regex, int group);
 
     /**
      * replace with regex

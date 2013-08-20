@@ -41,6 +41,11 @@ public class PlainText implements Selectable {
     }
 
     @Override
+    public Selectable $(String selector, String attrName) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Selectable smartContent() {
         throw new UnsupportedOperationException();
     }
@@ -53,6 +58,12 @@ public class PlainText implements Selectable {
     @Override
     public Selectable regex(String regex) {
         RegexSelector regexSelector = SelectorFactory.getInstatnce().newRegexSelector(regex);
+        return selectList(regexSelector, strings);
+    }
+
+    @Override
+    public Selectable regex(String regex, int group) {
+        RegexSelector regexSelector = SelectorFactory.getInstatnce().newRegexSelector(regex, group);
         return selectList(regexSelector, strings);
     }
 
