@@ -9,6 +9,10 @@
     <version>0.2.2-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
     <artifactId>webmagic-parent</artifactId>
     <name>webmagic-parent</name>
     <description>
