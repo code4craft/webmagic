@@ -8,11 +8,11 @@
         <version>7</version>
     </parent>
     <groupId>us.codecraft</groupId>
-    <version>0.2.1</version>
+    <version>0.2.1-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <artifactId>webmagic-parent</artifactId>
-    <name>webmagic</name>
+    <name>webmagic-parent</name>
     <description>
         A crawler framework. It covers the whole lifecycle of crawler: downloading, url management, content
         extraction and persistent. It can simply the development of a specific crawler.
