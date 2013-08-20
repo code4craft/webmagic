@@ -27,10 +27,8 @@ public class Request implements Serializable {
     /**
      * Priority of the request.<br>
      * The bigger will be processed earlier. <br>
-     * Need a scheduler supporting priority.<br>
-     * But no scheduler in webmagic supporting priority now (:
+     * @see us.codecraft.webmagic.scheduler.PriorityScheduler
      */
-    @Experimental
     private long priority;
 
     public Request() {
@@ -47,7 +45,7 @@ public class Request implements Serializable {
     /**
      * Set the priority of request for sorting.<br>
      * Need a scheduler supporting priority.<br>
-     * But no scheduler in webmagic supporting priority now (:
+     * @see us.codecraft.webmagic.scheduler.PriorityScheduler
      *
      * @param priority
      * @return this
