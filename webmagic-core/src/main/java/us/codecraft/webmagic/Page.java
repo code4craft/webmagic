@@ -88,6 +88,23 @@ public class Page {
     }
 
     /**
+     * add urls to fetch
+     *
+     * @param requests
+     */
+    public void addTargetRequests(List<String> requests,long priority) {
+        synchronized (targetRequests) {
+            for (String s : requests) {
+                if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
+                    break;
+                }
+                s = UrlUtils.canonicalizeUrl(s, url.toString());
+                targetRequests.add(new Request(s).setPriority(priority));
+            }
+        }
+    }
+
+    /**
      * add url to fetch
      *
      * @param requestString
