@@ -18,7 +18,8 @@ import static us.codecraft.webmagic.selector.Selectors.xpath;
  */
 public class ZipCodePageProcessor implements PageProcessor {
 
-    private Site site = Site.me().setCharset("gb2312").setSleepTime(0).addStartUrl("http://www.ip138.com/post/");
+    private Site site = Site.me().setCharset("gb2312")
+            .setSleepTime(100).addStartUrl("http://www.ip138.com/post/");
 
     @Override
     public void process(Page page) {
@@ -79,5 +80,10 @@ public class ZipCodePageProcessor implements PageProcessor {
 
     public static void main(String[] args) {
         Spider.create(new ZipCodePageProcessor()).scheduler(new PriorityScheduler()).run();
+
+        PriorityScheduler scheduler = new PriorityScheduler();
+        Spider spider = Spider.create(new ZipCodePageProcessor()).scheduler(scheduler);
+        scheduler.push(new Request("http://www.baidu.com/s?wd=webmagic&f=12&rsp=0&oq=webmagix&tn=baiduhome_pg&ie=utf-8"),spider);
+        spider.run();
     }
 }
