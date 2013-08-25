@@ -83,6 +83,27 @@ public interface Selectable {
     public String toString();
 
     /**
+     * select text content of html
+     *
+     * @return text
+     */
+    public Selectable text();
+
+    /**
+     * select text content of html
+     *
+     * @return text
+     */
+    public Selectable text(String newlineSeparator);
+
+    /**
+     * if result exist for select
+     *
+     * @return true if result exist
+     */
+    public boolean match();
+
+    /**
      * multi string result
      *
      * @return multi string result

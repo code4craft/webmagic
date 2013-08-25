@@ -47,32 +47,44 @@ public class Html extends PlainText {
 
     @Override
     public Selectable smartContent() {
-        SmartContentSelector smartContentSelector = SelectorFactory.getInstatnce().newSmartContentSelector();
+        SmartContentSelector smartContentSelector = Selectors.smartContent();
         return select(smartContentSelector, strings);
     }
 
     @Override
     public Selectable links() {
-        XpathSelector xpathSelector = SelectorFactory.getInstatnce().newXpathSelector("//a/@href");
+        XpathSelector xpathSelector = Selectors.xpath("//a/@href");
         return selectList(xpathSelector, strings);
     }
 
     @Override
     public Selectable xpath(String xpath) {
-        XpathSelector xpathSelector = SelectorFactory.getInstatnce().newXpathSelector(xpath);
+        XpathSelector xpathSelector = Selectors.xpath(xpath);
         return selectList(xpathSelector, strings);
     }
 
     @Override
     public Selectable $(String selector) {
-        CssSelector cssSelector = new CssSelector(selector);
+        CssSelector cssSelector = Selectors.$(selector);
         return selectList(cssSelector, strings);
     }
 
     @Override
     public Selectable $(String selector, String attrName) {
-        CssSelector cssSelector = new CssSelector(selector, attrName);
+        CssSelector cssSelector = Selectors.$(selector, attrName);
         return selectList(cssSelector, strings);
+    }
+
+    @Override
+    public Selectable text() {
+        TextContentSelector selector = Selectors.text();
+        return select(selector, strings);
+    }
+
+    @Override
+    public Selectable text(String newlineSeparator) {
+        TextContentSelector selector = Selectors.text(newlineSeparator);
+        return select(selector, strings);
     }
 
 }

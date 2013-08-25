@@ -16,6 +16,10 @@ public abstract class Selectors {
         return SelectorFactory.getInstatnce().newRegexSelector(expr, group);
     }
 
+    public static SmartContentSelector smartContent() {
+        return SelectorFactory.getInstatnce().newSmartContentSelector();
+    }
+
     public static CssSelector $(String expr) {
         return new CssSelector(expr);
     }
@@ -34,6 +38,14 @@ public abstract class Selectors {
 
     public static OrSelector or(Selector... selectors) {
         return new OrSelector(selectors);
+    }
+
+    public static TextContentSelector text() {
+        return new TextContentSelector();
+    }
+
+    public static TextContentSelector text(String newlineSeperator) {
+        return new TextContentSelector(newlineSeperator);
     }
 
     public static void main(String[] args) {

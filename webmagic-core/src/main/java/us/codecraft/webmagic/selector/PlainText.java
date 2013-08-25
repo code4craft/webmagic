@@ -57,13 +57,13 @@ public class PlainText implements Selectable {
 
     @Override
     public Selectable regex(String regex) {
-        RegexSelector regexSelector = SelectorFactory.getInstatnce().newRegexSelector(regex);
+        RegexSelector regexSelector = Selectors.regex(regex);
         return selectList(regexSelector, strings);
     }
 
     @Override
     public Selectable regex(String regex, int group) {
-        RegexSelector regexSelector = SelectorFactory.getInstatnce().newRegexSelector(regex, group);
+        RegexSelector regexSelector = Selectors.regex(regex, group);
         return selectList(regexSelector, strings);
     }
 
@@ -105,5 +105,22 @@ public class PlainText implements Selectable {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public Selectable text() {
+        //do nothing
+        return this;
+    }
+
+    @Override
+    public Selectable text(String newlineSeparator) {
+        //do nothing
+        return this;
+    }
+
+    @Override
+    public boolean match() {
+        return strings != null && strings.size() > 0;
     }
 }
