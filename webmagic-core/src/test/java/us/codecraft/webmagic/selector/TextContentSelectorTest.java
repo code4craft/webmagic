@@ -28,7 +28,7 @@ public class TextContentSelectorTest {
     public void testDownload() {
         String s = new HttpClientDownloader().download("http://blog.codecraft.us/blog/2013/08/18/ti-yan-dao-liao-open-sourcede-mei-li/", "utf-8")
                 .smartContent().text().toString();
-        Assert.assertNotNull(text);
+        Assert.assertNotNull(s);
     }
 
 }
