@@ -36,6 +36,7 @@ Add dependencies to your pom.xml:
 
 Write a class implements PageProcessor：
 
+```java
     public class OschinaBlogPageProcesser implements PageProcessor {
 
         private Site site = Site.me().setDomain("my.oschina.net")
@@ -61,6 +62,7 @@ Write a class implements PageProcessor：
                  .pipeline(new ConsolePipeline()).run();
         }
     }
+```
 
 * `page.addTargetRequests(links)`
 	
@@ -68,6 +70,7 @@ Write a class implements PageProcessor：
     
 You can also use annotation way:
 
+```java
 	@TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
 	public class OschinaBlog {
 
@@ -86,6 +89,7 @@ You can also use annotation way:
 				new ConsolePageModelPipeline(), OschinaBlog.class).run();
 	    }
 	}
+```
 		
 ### Docs and samples:
 
