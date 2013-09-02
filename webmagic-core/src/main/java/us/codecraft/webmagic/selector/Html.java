@@ -59,7 +59,7 @@ public class Html extends PlainText {
 
     @Override
     public Selectable xpath(String xpath) {
-        XpathSelector xpathSelector = Selectors.xpath(xpath);
+        XsoupSelector xpathSelector = new XsoupSelector(xpath);
         return selectList(xpathSelector, strings);
     }
 

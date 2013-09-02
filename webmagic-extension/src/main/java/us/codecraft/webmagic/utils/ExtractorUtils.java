@@ -1,10 +1,7 @@
 package us.codecraft.webmagic.utils;
 
 import us.codecraft.webmagic.model.annotation.ExtractBy;
-import us.codecraft.webmagic.selector.CssSelector;
-import us.codecraft.webmagic.selector.RegexSelector;
-import us.codecraft.webmagic.selector.Selector;
-import us.codecraft.webmagic.selector.XpathSelector;
+import us.codecraft.webmagic.selector.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +24,10 @@ public class ExtractorUtils {
                 selector = new RegexSelector(value);
                 break;
             case XPath:
-                selector = new XpathSelector(value);
+                selector = new XsoupSelector(value);
                 break;
             default:
-                selector = new XpathSelector(value);
+                selector = new XsoupSelector(value);
         }
         return selector;
     }
