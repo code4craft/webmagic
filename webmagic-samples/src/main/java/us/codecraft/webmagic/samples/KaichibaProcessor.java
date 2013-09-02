@@ -2,6 +2,7 @@ package us.codecraft.webmagic.samples;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
@@ -23,5 +24,9 @@ public class KaichibaProcessor implements PageProcessor {
     public Site getSite() {
         return Site.me().setDomain("kaichiba.com").addStartUrl("http://kaichiba.com/shop/41725781").setCharset("utf-8").
                 setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
+    }
+
+    public static void main(String[] args) {
+        Spider.create(new KaichibaProcessor()).run();
     }
 }

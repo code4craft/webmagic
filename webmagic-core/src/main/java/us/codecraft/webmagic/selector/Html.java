@@ -53,7 +53,7 @@ public class Html extends PlainText {
 
     @Override
     public Selectable links() {
-        XpathSelector xpathSelector = Selectors.xpath("//a/@href");
+        XsoupSelector xpathSelector = new XsoupSelector("//a/@href");
         return selectList(xpathSelector, strings);
     }
 
