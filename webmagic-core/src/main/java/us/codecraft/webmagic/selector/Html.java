@@ -97,4 +97,34 @@ public class Html extends PlainText {
         return selectList(cssSelector, strings);
     }
 
+    public Document getDocument() {
+        return document;
+    }
+
+    public String getText() {
+        return document.html();
+    }
+
+    /**
+     *
+     * @param selector
+     * @return
+     */
+    public String select(Selector selector) {
+        if (selector instanceof ElementSelector) {
+            ElementSelector elementSelector = (ElementSelector) selector;
+            return elementSelector.select(getDocument());
+        } else {
+            return selector.select(getText());
+        }
+    }
+
+    public List<String> selectList(Selector selector) {
+        if (selector instanceof ElementSelector) {
+            ElementSelector elementSelector = (ElementSelector) selector;
+            return elementSelector.selectList(getDocument());
+        } else {
+            return selector.selectList(getText());
+        }
+    }
 }

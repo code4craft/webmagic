@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.model;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.nodes.Element;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.model.annotation.*;
 import us.codecraft.webmagic.selector.*;
@@ -34,7 +35,7 @@ class PageModelExtractor {
 
     private List<FieldExtractor> fieldExtractors;
 
-    private Extractor extractor;
+    private Extractor objectExtractor;
 
     public static PageModelExtractor create(Class clazz) {
         PageModelExtractor pageModelExtractor = new PageModelExtractor();
@@ -169,7 +170,7 @@ class PageModelExtractor {
         annotation = clazz.getAnnotation(ExtractBy.class);
         if (annotation != null) {
             ExtractBy extractBy = (ExtractBy) annotation;
-            extractor = new Extractor(new XpathSelector(extractBy.value()), Extractor.Source.Html, extractBy.notNull(), extractBy.multi());
+            objectExtractor = new Extractor(new XpathSelector(extractBy.value()), Extractor.Source.Html, extractBy.notNull(), extractBy.multi());
         }
     }
 
@@ -183,12 +184,12 @@ class PageModelExtractor {
         if (!matched) {
             return null;
         }
-        if (extractor == null) {
+        if (objectExtractor == null) {
             return processSingle(page, page.getHtml().toString());
         } else {
-            if (extractor.multi) {
+            if (objectExtractor.multi) {
                 List<Object> os = new ArrayList<Object>();
-                List<String> list = extractor.getSelector().selectList(page.getHtml().toString());
+                List<String> list = objectExtractor.getSelector().selectList(page.getHtml().toString());
                 for (String s : list) {
                     Object o = processSingle(page, s);
                     if (o != null) {
@@ -197,10 +198,16 @@ class PageModelExtractor {
                 }
                 return os;
             } else {
-                String select = extractor.getSelector().select(page.getHtml().toString());
+                String select = objectExtractor.getSelector().select(page.getHtml().toString());
                 Object o = processSingle(page, select);
                 return o;
             }
+        }
+    }
+
+    private List<String> select(Selector selector,Element element,String html){
+        if (selector instanceof ElementSelector){
+
         }
     }
 
