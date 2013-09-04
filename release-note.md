@@ -1,5 +1,19 @@
 Release Notes
 ----
+*2012-9-4* `version：0.3.0`
+
+* Change default XPath selector from HtmlCleaner to [Xsoup](https://github.com/code4craft/xsoup).
+	
+	[Xsoup](https://github.com/code4craft/xsoup) is an XPath selector based on Jsoup written by me. It has much better performance than HtmlCleaner.
+	
+	Time of processing a page is reduced from 7~9ms to 0.4ms.
+	
+	If Xsoup is not stable for your usage, just use `Spider.xsoupOff()` to turn off it and report an issue to me!
+	
+* Add cycle retry times for Site.
+	
+	When cycle retry times is set, Spider will put the url which downloading failed  back to scheduler, and retry after a cycle of queue.
+
 *2012-8-20* `version：0.2.1`
 
 ComboExtractor support for annotation.
