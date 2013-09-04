@@ -36,9 +36,11 @@ public class RedisScheduler implements Scheduler {
     public synchronized void push(Request request, Task task) {
         Jedis jedis = pool.getResource();
         try {
-            //使用Set进行url去重
-            if (!jedis.sismember(SET_PREFIX + task.getUUID(), request.getUrl())) {
-                //使用List保存队列
+            // if cycleRetriedTimes is set, allow duplicated.
+            Object cycleRetriedTimes = request.getExtra(Request.CYCLE_TRIED_TIMES);
+            // use set to remove duplicate url
+            if (cycleRetriedTimes != null || !jedis.sismember(SET_PREFIX + task.getUUID(), request.getUrl())) {
+                // use list to store queue
                 jedis.rpush(QUEUE_PREFIX + task.getUUID(), request.getUrl());
                 jedis.sadd(SET_PREFIX + task.getUUID(), request.getUrl());
                 if (request.getExtras() != null) {

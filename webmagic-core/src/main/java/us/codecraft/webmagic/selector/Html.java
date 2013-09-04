@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.selector;
 
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import us.codecraft.webmagic.utils.EnvironmentUtil;
@@ -15,6 +16,8 @@ import java.util.List;
  */
 public class Html extends PlainText {
 
+    private Logger logger = Logger.getLogger(getClass());
+
     /**
      * Store parsed document for better performance when only one text exist.
      */
@@ -26,7 +29,11 @@ public class Html extends PlainText {
 
     public Html(String text) {
         super(text);
-        this.document = Jsoup.parse(text);
+        try {
+            this.document = Jsoup.parse(text);
+        } catch (Exception e) {
+            logger.warn("parse document error ", e);
+        }
     }
 
     public Html(Document document) {
@@ -108,7 +115,7 @@ public class Html extends PlainText {
     }
 
     public String getText() {
-        if (strings!=null&&strings.size()>0){
+        if (strings != null && strings.size() > 0) {
             return strings.get(0);
         }
         return document.html();
