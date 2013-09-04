@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Tools for annotation converting. <br>
+ *
  * @author code4crafter@gmail.com <br>
  * @since 0.2.1
  */
@@ -24,17 +25,27 @@ public class ExtractorUtils {
                 selector = new RegexSelector(value);
                 break;
             case XPath:
-                selector = new XsoupSelector(value);
+                selector = getXpathSelector(value);
                 break;
             default:
-                selector = new XsoupSelector(value);
+                selector = getXpathSelector(value);
+        }
+        return selector;
+    }
+
+    private static Selector getXpathSelector(String value) {
+        Selector selector;
+        if (EnvironmentUtil.useXsoup()) {
+            selector = new XsoupSelector(value);
+        } else {
+            selector = new XpathSelector(value);
         }
         return selector;
     }
 
     public static List<Selector> getSelectors(ExtractBy[] extractBies) {
         List<Selector> selectors = new ArrayList<Selector>();
-        if (extractBies==null){
+        if (extractBies == null) {
             return selectors;
         }
         for (ExtractBy extractBy : extractBies) {

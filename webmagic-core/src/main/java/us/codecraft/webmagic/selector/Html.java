@@ -2,6 +2,7 @@ package us.codecraft.webmagic.selector;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import us.codecraft.webmagic.utils.EnvironmentUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,17 +73,22 @@ public class Html extends PlainText {
 
     @Override
     public Selectable xpath(String xpath) {
-        XsoupSelector xsoupSelector = new XsoupSelector(xpath);
-        if (document!=null){
-            return new Html(xsoupSelector.selectList(document));
+        if (EnvironmentUtil.useXsoup()) {
+            XsoupSelector xsoupSelector = new XsoupSelector(xpath);
+            if (document != null) {
+                return new Html(xsoupSelector.selectList(document));
+            }
+            return selectList(xsoupSelector, strings);
+        } else {
+            XpathSelector xpathSelector = new XpathSelector(xpath);
+            return selectList(xpathSelector, strings);
         }
-        return selectList(xsoupSelector, strings);
     }
 
     @Override
     public Selectable $(String selector) {
         CssSelector cssSelector = Selectors.$(selector);
-        if (document!=null){
+        if (document != null) {
             return new Html(cssSelector.selectList(document));
         }
         return selectList(cssSelector, strings);
@@ -91,7 +97,7 @@ public class Html extends PlainText {
     @Override
     public Selectable $(String selector, String attrName) {
         CssSelector cssSelector = Selectors.$(selector, attrName);
-        if (document!=null){
+        if (document != null) {
             return new Html(cssSelector.selectList(document));
         }
         return selectList(cssSelector, strings);
@@ -102,15 +108,17 @@ public class Html extends PlainText {
     }
 
     public String getText() {
+        if (strings!=null&&strings.size()>0){
+            return strings.get(0);
+        }
         return document.html();
     }
 
     /**
-     *
      * @param selector
      * @return
      */
-    public String select(Selector selector) {
+    public String selectDocument(Selector selector) {
         if (selector instanceof ElementSelector) {
             ElementSelector elementSelector = (ElementSelector) selector;
             return elementSelector.select(getDocument());
@@ -119,7 +127,7 @@ public class Html extends PlainText {
         }
     }
 
-    public List<String> selectList(Selector selector) {
+    public List<String> selectDocumentForList(Selector selector) {
         if (selector instanceof ElementSelector) {
             ElementSelector elementSelector = (ElementSelector) selector;
             return elementSelector.selectList(getDocument());

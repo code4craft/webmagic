@@ -1,7 +1,6 @@
 package us.codecraft.webmagic.model;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jsoup.nodes.Element;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.model.annotation.*;
 import us.codecraft.webmagic.selector.*;
@@ -185,13 +184,13 @@ class PageModelExtractor {
             return null;
         }
         if (objectExtractor == null) {
-            return processSingle(page, page.getHtml().toString());
+            return processSingle(page, null, false);
         } else {
             if (objectExtractor.multi) {
                 List<Object> os = new ArrayList<Object>();
                 List<String> list = objectExtractor.getSelector().selectList(page.getHtml().toString());
                 for (String s : list) {
-                    Object o = processSingle(page, s);
+                    Object o = processSingle(page, s, false);
                     if (o != null) {
                         os.add(o);
                     }
@@ -199,19 +198,13 @@ class PageModelExtractor {
                 return os;
             } else {
                 String select = objectExtractor.getSelector().select(page.getHtml().toString());
-                Object o = processSingle(page, select);
+                Object o = processSingle(page, select, false);
                 return o;
             }
         }
     }
 
-    private List<String> select(Selector selector,Element element,String html){
-        if (selector instanceof ElementSelector){
-
-        }
-    }
-
-    private Object processSingle(Page page, String html) {
+    private Object processSingle(Page page, String html, boolean isRaw) {
         Object o = null;
         try {
             o = clazz.newInstance();
@@ -220,10 +213,14 @@ class PageModelExtractor {
                     List<String> value;
                     switch (fieldExtractor.getSource()) {
                         case RawHtml:
-                            value = fieldExtractor.getSelector().selectList(page.getHtml().toString());
+                            value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
                             break;
                         case Html:
-                            value = fieldExtractor.getSelector().selectList(html);
+                            if (isRaw) {
+                                value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
+                            } else {
+                                value = fieldExtractor.getSelector().selectList(html);
+                            }
                             break;
                         case Url:
                             value = fieldExtractor.getSelector().selectList(page.getUrl().toString());
@@ -239,10 +236,14 @@ class PageModelExtractor {
                     String value;
                     switch (fieldExtractor.getSource()) {
                         case RawHtml:
-                            value = fieldExtractor.getSelector().select(page.getHtml().toString());
+                            value = page.getHtml().selectDocument(fieldExtractor.getSelector());
                             break;
                         case Html:
-                            value = fieldExtractor.getSelector().select(html);
+                            if (isRaw) {
+                                value = page.getHtml().selectDocument(fieldExtractor.getSelector());
+                            } else {
+                                value = fieldExtractor.getSelector().select(html);
+                            }
                             break;
                         case Url:
                             value = fieldExtractor.getSelector().select(page.getUrl().toString());
