@@ -310,6 +310,12 @@ public class Spider implements Runnable, Task {
             sleep(site.getSleepTime());
             return;
         }
+        //for cycle retry
+        if (page.getHtml()==null){
+            addRequest(page);
+            sleep(site.getSleepTime());
+            return;
+        }
         pageProcessor.process(page);
         addRequest(page);
         if (!page.getResultItems().isSkip()) {

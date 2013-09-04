@@ -4,6 +4,7 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
+import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 import java.util.List;
 
@@ -24,10 +25,10 @@ public class F58PageProcesser implements PageProcessor {
 
     @Override
     public Site getSite() {
-        return Site.me().setDomain("sh.58.com").addStartUrl("http://sh.58.com/");  //To change body of implemented methods use File | Settings | File Templates.
+        return Site.me().setDomain("sh.58.com").addStartUrl("http://sh1.51a8.com/").setCycleRetryTimes(2);  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public static void main(String[] args) {
-        Spider.create(new F58PageProcesser()).run();
+        Spider.create(new F58PageProcesser()).setScheduler(new RedisScheduler("localhost")).run();
     }
 }
