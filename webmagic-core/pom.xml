@@ -28,7 +28,6 @@
         <dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>xsoup</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
