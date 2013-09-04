@@ -18,7 +18,7 @@ import java.io.PrintWriter;
  * Otherwise use SHA1 as file name.
  *
  * @author code4crafter@gmail.com <br>
- * @since 0.2.2
+ * @since 0.3.0
  */
 public class FilePageModelPipeline extends FilePersistentBase implements PageModelPipeline {
 

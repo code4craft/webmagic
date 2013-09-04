@@ -3,7 +3,6 @@ package us.codecraft.webmagic.samples;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
@@ -32,6 +31,6 @@ public class IteyeBlogProcessor implements PageProcessor {
     }
 
     public static void main(String[] args) {
-        Spider.create(new IteyeBlogProcessor()).thread(5).pipeline(new FilePipeline("/data/webmagic/")).run();
+        Spider.create(new IteyeBlogProcessor()).thread(5).run();
     }
 }

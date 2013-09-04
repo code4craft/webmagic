@@ -4,9 +4,7 @@ import org.apache.commons.collections.CollectionUtils;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 import java.util.List;
 
@@ -41,8 +39,6 @@ public class InfoQMiniBookProcessor implements PageProcessor {
 
     public static void main(String[] args) {
         Spider.create(new InfoQMiniBookProcessor())
-                .scheduler(new RedisScheduler("localhost"))
-                .pipeline(new FilePipeline("/data/temp/webmagic/"))
                 .thread(5)
                 .run();
     }

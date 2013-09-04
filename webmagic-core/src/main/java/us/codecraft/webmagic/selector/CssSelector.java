@@ -1,8 +1,6 @@
 package us.codecraft.webmagic.selector;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -15,7 +13,7 @@ import java.util.List;
  * @author code4crafter@gmail.com <br>
  * @since 0.1.0
  */
-public class CssSelector implements Selector {
+public class CssSelector extends BaseElementSelector {
 
     private String selectorText;
 
@@ -30,16 +28,6 @@ public class CssSelector implements Selector {
         this.attrName = attrName;
     }
 
-    @Override
-    public String select(String text) {
-        Document doc = Jsoup.parse(text);
-        Elements elements = doc.select(selectorText);
-        if (CollectionUtils.isEmpty(elements)) {
-            return null;
-        }
-        return getValue(elements.get(0));
-    }
-
     private String getValue(Element element) {
         if (attrName == null) {
             return element.outerHtml();
@@ -51,9 +39,17 @@ public class CssSelector implements Selector {
     }
 
     @Override
-    public List<String> selectList(String text) {
+    public String select(Element element) {
+        Elements elements = element.select(selectorText);
+        if (CollectionUtils.isEmpty(elements)) {
+            return null;
+        }
+        return getValue(elements.get(0));
+    }
+
+    @Override
+    public List<String> selectList(Element doc) {
         List<String> strings = new ArrayList<String>();
-        Document doc = Jsoup.parse(text);
         Elements elements = doc.select(selectorText);
         if (CollectionUtils.isNotEmpty(elements)) {
             for (Element element : elements) {

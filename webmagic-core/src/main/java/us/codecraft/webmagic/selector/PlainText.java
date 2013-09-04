@@ -89,7 +89,7 @@ public class PlainText implements Selectable {
 
     @Override
     public Selectable replace(String regex, String replacement) {
-        ReplaceSelector replaceSelector = SelectorFactory.getInstatnce().newReplaceSelector(regex, replacement);
+        ReplaceSelector replaceSelector = new ReplaceSelector(regex,replacement);
         return select(replaceSelector, strings);
     }
 
@@ -105,18 +105,6 @@ public class PlainText implements Selectable {
         } else {
             return null;
         }
-    }
-
-    @Override
-    public Selectable text() {
-        //do nothing
-        return this;
-    }
-
-    @Override
-    public Selectable text(String newlineSeparator) {
-        //do nothing
-        return this;
     }
 
     @Override

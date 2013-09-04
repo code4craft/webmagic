@@ -2,6 +2,7 @@ package us.codecraft.webmagic.samples;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 import java.util.List;
@@ -21,13 +22,17 @@ public class MeicanProcessor implements PageProcessor {
         }
         page.addTargetRequests(requests);
         page.addTargetRequests(page.getHtml().links().regex("(.*/restaurant/[^#]+)").all());
-        page.putField("items", page.getHtml().xpath("//ul[@class=\"dishes menu_dishes\"]/li/span[@class=\"name\"]"));
-        page.putField("prices", page.getHtml().xpath("//ul[@class=\"dishes menu_dishes\"]/li/span[@class=\"price_outer\"]/span[@class=\"price\"]"));
+        page.putField("items", page.getHtml().xpath("//ul[@class=\"dishes menu_dishes\"]/li/span[@class=\"name\"]/text()"));
+        page.putField("prices", page.getHtml().xpath("//ul[@class=\"dishes menu_dishes\"]/li/span[@class=\"price_outer\"]/span[@class=\"price\"]/text()"));
     }
 
     @Override
     public Site getSite() {
         return Site.me().setDomain("meican.com").addStartUrl("http://www.meican.com/shanghai/districts").setCharset("utf-8").
                 setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
+    }
+
+    public static void main(String[] args) {
+        Spider.create(new MeicanProcessor()).run();
     }
 }

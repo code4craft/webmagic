@@ -1,6 +1,7 @@
 package us.codecraft.webmagic;
 
 import org.apache.commons.lang3.StringUtils;
+import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Selectable;
 import us.codecraft.webmagic.utils.UrlUtils;
 
@@ -28,7 +29,7 @@ public class Page {
 
     private ResultItems resultItems = new ResultItems();
 
-    private Selectable html;
+    private Html html;
 
     private Selectable url;
 
@@ -58,11 +59,11 @@ public class Page {
      *
      * @return html
      */
-    public Selectable getHtml() {
+    public Html getHtml() {
         return html;
     }
 
-    public void setHtml(Selectable html) {
+    public void setHtml(Html html) {
         this.html = html;
     }
 
