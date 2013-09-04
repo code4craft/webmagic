@@ -10,7 +10,7 @@ import java.util.List;
  * XPath selector based on Xsoup.<br>
  *
  * @author code4crafter@gmail.com <br>
- * @since 0.2.2
+ * @since 0.3.0
  */
 public class XsoupSelector extends BaseElementSelector {
 

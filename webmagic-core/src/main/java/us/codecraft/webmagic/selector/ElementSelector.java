@@ -8,7 +8,7 @@ import java.util.List;
  * Selector(extractor) for html elements.<br>
  *
  * @author code4crafter@gmail.com <br>
- * @since 0.2.2
+ * @since 0.3.0
  */
 public interface ElementSelector {
 
