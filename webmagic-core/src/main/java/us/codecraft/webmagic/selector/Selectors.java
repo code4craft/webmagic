@@ -9,11 +9,15 @@ package us.codecraft.webmagic.selector;
 public abstract class Selectors {
 
     public static RegexSelector regex(String expr) {
-        return SelectorFactory.getInstatnce().newRegexSelector(expr);
+        return new RegexSelector(expr);
     }
 
     public static RegexSelector regex(String expr, int group) {
-        return SelectorFactory.getInstatnce().newRegexSelector(expr, group);
+        return new RegexSelector(expr,group);
+    }
+
+    public static SmartContentSelector smartContent() {
+        return new SmartContentSelector();
     }
 
     public static CssSelector $(String expr) {
@@ -25,7 +29,11 @@ public abstract class Selectors {
     }
 
     public static XpathSelector xpath(String expr) {
-        return SelectorFactory.getInstatnce().newXpathSelector(expr);
+        return new XpathSelector(expr);
+    }
+
+    public static XsoupSelector xsoup(String expr) {
+        return new XsoupSelector(expr);
     }
 
     public static AndSelector and(Selector... selectors) {

@@ -83,6 +83,13 @@ public interface Selectable {
     public String toString();
 
     /**
+     * if result exist for select
+     *
+     * @return true if result exist
+     */
+    public boolean match();
+
+    /**
      * multi string result
      *
      * @return multi string result

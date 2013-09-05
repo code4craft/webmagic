@@ -34,7 +34,7 @@ class PageModelExtractor {
 
     private List<FieldExtractor> fieldExtractors;
 
-    private Extractor extractor;
+    private Extractor objectExtractor;
 
     public static PageModelExtractor create(Class clazz) {
         PageModelExtractor pageModelExtractor = new PageModelExtractor();
@@ -169,7 +169,7 @@ class PageModelExtractor {
         annotation = clazz.getAnnotation(ExtractBy.class);
         if (annotation != null) {
             ExtractBy extractBy = (ExtractBy) annotation;
-            extractor = new Extractor(new XpathSelector(extractBy.value()), Extractor.Source.Html, extractBy.notNull(), extractBy.multi());
+            objectExtractor = new Extractor(new XpathSelector(extractBy.value()), Extractor.Source.Html, extractBy.notNull(), extractBy.multi());
         }
     }
 
@@ -183,28 +183,28 @@ class PageModelExtractor {
         if (!matched) {
             return null;
         }
-        if (extractor == null) {
-            return processSingle(page, page.getHtml().toString());
+        if (objectExtractor == null) {
+            return processSingle(page, null, false);
         } else {
-            if (extractor.multi) {
+            if (objectExtractor.multi) {
                 List<Object> os = new ArrayList<Object>();
-                List<String> list = extractor.getSelector().selectList(page.getHtml().toString());
+                List<String> list = objectExtractor.getSelector().selectList(page.getHtml().toString());
                 for (String s : list) {
-                    Object o = processSingle(page, s);
+                    Object o = processSingle(page, s, false);
                     if (o != null) {
                         os.add(o);
                     }
                 }
                 return os;
             } else {
-                String select = extractor.getSelector().select(page.getHtml().toString());
-                Object o = processSingle(page, select);
+                String select = objectExtractor.getSelector().select(page.getHtml().toString());
+                Object o = processSingle(page, select, false);
                 return o;
             }
         }
     }
 
-    private Object processSingle(Page page, String html) {
+    private Object processSingle(Page page, String html, boolean isRaw) {
         Object o = null;
         try {
             o = clazz.newInstance();
@@ -213,10 +213,14 @@ class PageModelExtractor {
                     List<String> value;
                     switch (fieldExtractor.getSource()) {
                         case RawHtml:
-                            value = fieldExtractor.getSelector().selectList(page.getHtml().toString());
+                            value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
                             break;
                         case Html:
-                            value = fieldExtractor.getSelector().selectList(html);
+                            if (isRaw) {
+                                value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
+                            } else {
+                                value = fieldExtractor.getSelector().selectList(html);
+                            }
                             break;
                         case Url:
                             value = fieldExtractor.getSelector().selectList(page.getUrl().toString());
@@ -232,10 +236,14 @@ class PageModelExtractor {
                     String value;
                     switch (fieldExtractor.getSource()) {
                         case RawHtml:
-                            value = fieldExtractor.getSelector().select(page.getHtml().toString());
+                            value = page.getHtml().selectDocument(fieldExtractor.getSelector());
                             break;
                         case Html:
-                            value = fieldExtractor.getSelector().select(html);
+                            if (isRaw) {
+                                value = page.getHtml().selectDocument(fieldExtractor.getSelector());
+                            } else {
+                                value = fieldExtractor.getSelector().select(html);
+                            }
                             break;
                         case Url:
                             value = fieldExtractor.getSelector().select(page.getUrl().toString());

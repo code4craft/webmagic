@@ -46,6 +46,17 @@ public class HttpClientDownloader implements Downloader {
         return (Html) page.getHtml();
     }
 
+    /**
+     * A simple method to download a url.
+     *
+     * @param url
+     * @return html
+     */
+    public Html download(String url, String charset) {
+        Page page = download(new Request(url), Site.me().setCharset(charset).toTask());
+        return (Html) page.getHtml();
+    }
+
     @Override
     public Page download(Request request, Task task) {
         Site site = null;
@@ -79,6 +90,21 @@ public class HttpClientDownloader implements Downloader {
 
                     if (tried > retryTimes) {
                         logger.warn("download page " + request.getUrl() + " error", e);
+                        if (site.getCycleRetryTimes() > 0) {
+                            Page page = new Page();
+                            Object cycleTriedTimesObject = request.getExtra(Request.CYCLE_TRIED_TIMES);
+                            if (cycleTriedTimesObject == null) {
+                                page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, 1));
+                            } else {
+                                int cycleTriedTimes = (Integer) cycleTriedTimesObject;
+                                cycleTriedTimes++;
+                                if (cycleTriedTimes >= site.getCycleRetryTimes()) {
+                                    return null;
+                                }
+                                page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, 1));
+                            }
+                            return page;
+                        }
                         return null;
                     }
                     logger.info("download page " + request.getUrl() + " error, retry the " + tried + " time!");
@@ -87,13 +113,12 @@ public class HttpClientDownloader implements Downloader {
             } while (retry);
             int statusCode = httpResponse.getStatusLine().getStatusCode();
             if (acceptStatCode.contains(statusCode)) {
+                handleGzip(httpResponse);
                 //charset
                 if (charset == null) {
                     String value = httpResponse.getEntity().getContentType().getValue();
                     charset = UrlUtils.getCharset(value);
                 }
-                //
-                handleGzip(httpResponse);
                 return handleResponse(request, charset, httpResponse, task);
             } else {
                 logger.warn("code error " + statusCode + "\t" + request.getUrl());

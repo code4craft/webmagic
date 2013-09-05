@@ -4,7 +4,7 @@ webmagic
 
 [![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
 
->A scalable crawler framework. It covers the whole lifecycle of crawler: downloading, url management, content extraction and persistent. It can simply the development of a  specific crawler.
+>A scalable crawler framework. It covers the whole lifecycle of crawler: downloading, url management, content extraction and persistent. It can simplify the development of a  specific crawler.
 
 ## Features:
 
@@ -16,24 +16,18 @@ webmagic
 
 
 ## Install:
-
-Clone the repo and build:
-
-	git clone https://github.com/code4craft/webmagic.git
-	cd webmagic
-	mvn clean install	  
-
-Add dependencies to your project:
+  
+Add dependencies to your pom.xml:
 
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-core</artifactId>
-            <version>0.2.0</version>
+            <version>0.3.0</version>
         </dependency>
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-extension</artifactId>
-            <version>0.2.0</version>
+            <version>0.3.0</version>
         </dependency>
 
 ## Get Started:
@@ -42,6 +36,7 @@ Add dependencies to your project:
 
 Write a class implements PageProcessor：
 
+```java
     public class OschinaBlogPageProcesser implements PageProcessor {
 
         private Site site = Site.me().setDomain("my.oschina.net")
@@ -67,6 +62,7 @@ Write a class implements PageProcessor：
                  .pipeline(new ConsolePipeline()).run();
         }
     }
+```
 
 * `page.addTargetRequests(links)`
 	
@@ -74,6 +70,7 @@ Write a class implements PageProcessor：
     
 You can also use annotation way:
 
+```java
 	@TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
 	public class OschinaBlog {
 
@@ -92,6 +89,7 @@ You can also use annotation way:
 				new ConsolePageModelPipeline(), OschinaBlog.class).run();
 	    }
 	}
+```
 		
 ### Docs and samples:
 

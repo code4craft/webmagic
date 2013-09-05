@@ -29,23 +29,18 @@ Java爬虫 **Spiderman** [https://gitcafe.com/laiweiwei/Spiderman](https://gitca
 
 ### 使用maven
 
-webmagic使用maven管理依赖，你可以直接下载webmagic源码进行编译：
-
-	git clone https://github.com/code4craft/webmagic.git
-	cd webmagic
-	mvn clean install
-
-安装后，在项目中添加对应的依赖即可使用webmagic：
+webmagic使用maven管理依赖，在项目中添加对应的依赖即可使用webmagic：
 
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-core</artifactId>
-            <version>0.2.0</version>
+            <version>0.3.0</version>
         </dependency>
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-extension</artifactId>
-            <version>0.2.0</version>
+            <version>0.3.0
+            </version>
         </dependency>
 
 #### 项目结构
@@ -60,7 +55,7 @@ webmagic主要包括两个包：
 	
 	webmagic的扩展模块，提供一些更方便的编写爬虫的工具。包括注解格式定义爬虫、JSON、分布式等支持。
 	
-webmagic还包含两个可用的扩展包，因为这两个包都依赖了比较重量级的工具，所以从主要包中抽离出来：
+webmagic还包含两个可用的扩展包，因为这两个包都依赖了比较重量级的工具，所以从主要包中抽离出来，这些包需要下载源码后自己编译：：
 
 * **webmagic-saxon**
 

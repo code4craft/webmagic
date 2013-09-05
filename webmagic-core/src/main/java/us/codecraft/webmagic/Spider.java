@@ -9,6 +9,7 @@ import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.scheduler.QueueScheduler;
 import us.codecraft.webmagic.scheduler.Scheduler;
+import us.codecraft.webmagic.utils.EnvironmentUtil;
 import us.codecraft.webmagic.utils.ThreadUtils;
 
 import java.io.Closeable;
@@ -309,6 +310,12 @@ public class Spider implements Runnable, Task {
             sleep(site.getSleepTime());
             return;
         }
+        //for cycle retry
+        if (page.getHtml()==null){
+            addRequest(page);
+            sleep(site.getSleepTime());
+            return;
+        }
         pageProcessor.process(page);
         addRequest(page);
         if (!page.getResultItems().isSkip()) {
@@ -366,6 +373,14 @@ public class Spider implements Runnable, Task {
             this.executorService = ThreadUtils.newFixedThreadPool(threadNum);
         }
         return this;
+    }
+
+    /**
+     * switch off xsoup
+     * @return
+     */
+    public static void xsoupOff(){
+        EnvironmentUtil.setUseXsoup(false);
     }
 
     @Override

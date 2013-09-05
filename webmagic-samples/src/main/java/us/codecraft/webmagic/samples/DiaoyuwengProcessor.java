@@ -2,6 +2,7 @@ package us.codecraft.webmagic.samples;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.PlainText;
 
@@ -24,7 +25,7 @@ public class DiaoyuwengProcessor implements PageProcessor {
         page.addTargetRequests(requests);
         if (page.getUrl().toString().contains("thread")){
             page.putField("title", page.getHtml().xpath("//a[@id='thread_subject']"));
-            page.putField("content", page.getHtml().xpath("//div[@class='pcb']//tbody"));
+            page.putField("content", page.getHtml().xpath("//div[@class='pcb']//tbody/tidyText()"));
             page.putField("date",page.getHtml().regex("发表于 (\\d{4}-\\d+-\\d+ \\d+:\\d+:\\d+)"));
             page.putField("id",new PlainText("1000"+page.getUrl().regex("http://www\\.diaoyuweng\\.com/thread-(\\d+)-1-1.html").toString()));
         }
@@ -37,5 +38,9 @@ public class DiaoyuwengProcessor implements PageProcessor {
                     setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31").setCharset("GBK").setSleepTime(500);
         }
         return site;
+    }
+
+    public static void main(String[] args) {
+        Spider.create(new DiaoyuwengProcessor()).run();
     }
 }

@@ -30,6 +30,8 @@ public class Site {
 
     private int retryTimes = 0;
 
+    private int cycleRetryTimes = 0;
+
     private static final Set<Integer> DEFAULT_STATUS_CODE_SET = new HashSet<Integer>();
 
     private Set<Integer> acceptStatCode = DEFAULT_STATUS_CODE_SET;
@@ -200,7 +202,7 @@ public class Site {
     }
 
     /**
-     * Get retry times when download fail, 0 by default.<br>
+     * Get retry times when download fail immediately, 0 by default.<br>
      *
      * @return retry times when download fail
      */
@@ -215,6 +217,25 @@ public class Site {
      */
     public Site setRetryTimes(int retryTimes) {
         this.retryTimes = retryTimes;
+        return this;
+    }
+
+    /**
+     * When cycleRetryTimes is more than 0, it will add back to scheduler and try download again. <br>
+     *
+     * @return retry times when download fail
+     */
+    public int getCycleRetryTimes() {
+        return cycleRetryTimes;
+    }
+
+    /**
+     * Set cycleRetryTimes times when download fail, 0 by default. Only work in RedisScheduler. <br>
+     *
+     * @return this
+     */
+    public Site setCycleRetryTimes(int cycleRetryTimes) {
+        this.cycleRetryTimes = cycleRetryTimes;
         return this;
     }
 
