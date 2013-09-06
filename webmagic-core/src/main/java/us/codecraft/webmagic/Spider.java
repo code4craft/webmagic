@@ -79,22 +79,22 @@ public class Spider implements Runnable, Task {
      * create a spider with pageProcessor.
      *
      * @param pageProcessor
+     * @return new spider
+     * @see PageProcessor
      */
-    public Spider(PageProcessor pageProcessor) {
-        this.pageProcessor = pageProcessor;
-        this.site = pageProcessor.getSite();
-        this.startUrls = pageProcessor.getSite().getStartUrls();
+    public static Spider create(PageProcessor pageProcessor) {
+        return new Spider(pageProcessor);
     }
 
     /**
      * create a spider with pageProcessor.
      *
      * @param pageProcessor
-     * @return new spider
-     * @see PageProcessor
      */
-    public static Spider create(PageProcessor pageProcessor) {
-        return new Spider(pageProcessor);
+    public Spider(PageProcessor pageProcessor) {
+        this.pageProcessor = pageProcessor;
+        this.site = pageProcessor.getSite();
+        this.startUrls = pageProcessor.getSite().getStartUrls();
     }
 
     /**
@@ -105,7 +105,7 @@ public class Spider implements Runnable, Task {
      * @return this
      */
     public Spider startUrls(List<String> startUrls) {
-        checkIfNotRunning();
+        checkIfRunning();
         this.startUrls = startUrls;
         return this;
     }
@@ -139,11 +139,11 @@ public class Spider implements Runnable, Task {
      *
      * @param scheduler
      * @return this
-     * @since 0.2.1
      * @see Scheduler
+     * @since 0.2.1
      */
     public Spider setScheduler(Scheduler scheduler) {
-        checkIfNotRunning();
+        checkIfRunning();
         this.scheduler = scheduler;
         return this;
     }
@@ -153,8 +153,8 @@ public class Spider implements Runnable, Task {
      *
      * @param pipeline
      * @return this
-     * @deprecated
      * @see #setPipeline(us.codecraft.webmagic.pipeline.Pipeline)
+     * @deprecated
      */
     public Spider pipeline(Pipeline pipeline) {
         return addPipeline(pipeline);
@@ -165,11 +165,11 @@ public class Spider implements Runnable, Task {
      *
      * @param pipeline
      * @return this
-     * @since 0.2.1
      * @see Pipeline
+     * @since 0.2.1
      */
     public Spider addPipeline(Pipeline pipeline) {
-        checkIfNotRunning();
+        checkIfRunning();
         this.pipelines.add(pipeline);
         return this;
     }
@@ -189,8 +189,8 @@ public class Spider implements Runnable, Task {
      *
      * @param downloader
      * @return this
-     * @deprecated
      * @see #setDownloader(us.codecraft.webmagic.downloader.Downloader)
+     * @deprecated
      */
     public Spider downloader(Downloader downloader) {
         return setDownloader(downloader);
@@ -198,12 +198,13 @@ public class Spider implements Runnable, Task {
 
     /**
      * set the downloader of spider
-     * @see Downloader
+     *
      * @param downloader
      * @return this
+     * @see Downloader
      */
     public Spider setDownloader(Downloader downloader) {
-        checkIfNotRunning();
+        checkIfRunning();
         this.downloader = downloader;
         return this;
     }
@@ -220,7 +221,8 @@ public class Spider implements Runnable, Task {
 
     @Override
     public void run() {
-        if (!stat.compareAndSet(STAT_INIT, STAT_RUNNING)) {
+        if (!stat.compareAndSet(STAT_INIT, STAT_RUNNING)
+                && !stat.compareAndSet(STAT_STOPPED, STAT_RUNNING)) {
             throw new IllegalStateException("Spider is already running!");
         }
         checkComponent();
@@ -228,18 +230,19 @@ public class Spider implements Runnable, Task {
             for (String startUrl : startUrls) {
                 scheduler.push(new Request(startUrl), this);
             }
+            startUrls.clear();
         }
         Request request = scheduler.poll(this);
-        //singel thread
+        //single thread
         if (executorService == null) {
-            while (request != null) {
+            while (request != null && stat.compareAndSet(STAT_RUNNING, STAT_RUNNING)) {
                 processRequest(request);
                 request = scheduler.poll(this);
             }
         } else {
             //multi thread
             final AtomicInteger threadAlive = new AtomicInteger(0);
-            while (true) {
+            while (true && stat.compareAndSet(STAT_RUNNING, STAT_RUNNING)) {
                 if (request == null) {
                     //when no request found but some thread is alive, sleep a while.
                     try {
@@ -311,7 +314,7 @@ public class Spider implements Runnable, Task {
             return;
         }
         //for cycle retry
-        if (page.getHtml()==null){
+        if (page.getHtml() == null) {
             addRequest(page);
             sleep(site.getSleepTime());
             return;
@@ -342,8 +345,8 @@ public class Spider implements Runnable, Task {
         }
     }
 
-    protected void checkIfNotRunning() {
-        if (!stat.compareAndSet(STAT_INIT, STAT_INIT)) {
+    protected void checkIfRunning() {
+        if (!stat.compareAndSet(STAT_INIT, STAT_INIT) && !stat.compareAndSet(STAT_STOPPED, STAT_STOPPED)) {
             throw new IllegalStateException("Spider is already running!");
         }
     }
@@ -354,6 +357,19 @@ public class Spider implements Runnable, Task {
         thread.start();
     }
 
+    public void start() {
+        runAsync();
+    }
+
+    public void stop() {
+        stat.compareAndSet(STAT_RUNNING, STAT_STOPPED);
+    }
+
+    public void stopAndDestroy() {
+        stat.compareAndSet(STAT_RUNNING, STAT_STOPPED);
+        destroy();
+    }
+
     /**
      * start with more than one threads
      *
@@ -361,7 +377,7 @@ public class Spider implements Runnable, Task {
      * @return this
      */
     public Spider thread(int threadNum) {
-        checkIfNotRunning();
+        checkIfRunning();
         this.threadNum = threadNum;
         if (threadNum <= 0) {
             throw new IllegalArgumentException("threadNum should be more than one!");
@@ -377,9 +393,10 @@ public class Spider implements Runnable, Task {
 
     /**
      * switch off xsoup
+     *
      * @return
      */
-    public static void xsoupOff(){
+    public static void xsoupOff() {
         EnvironmentUtil.setUseXsoup(false);
     }
 
