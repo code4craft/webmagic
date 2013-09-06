@@ -19,13 +19,12 @@ public class UrlUtilsTest {
         fixrelativeurl = UrlUtils.canonicalizeUrl("../aa", "http://www.dianping.com/sh/ss/com");
         Assert.assertEquals("http://www.dianping.com/sh/aa", fixrelativeurl);
 
-        fixrelativeurl = UrlUtils.canonicalizeUrl("..../aa", "http://www.dianping.com/sh/ss/com");
-        Assert.assertEquals("http://www.dianping.com/aa", fixrelativeurl);
-        fixrelativeurl = UrlUtils.canonicalizeUrl(".../aa", "http://www.dianping.com/sh/ss/com");
-        Assert.assertEquals("http://www.dianping.com/aa", fixrelativeurl);
         fixrelativeurl = UrlUtils.canonicalizeUrl("..aa", "http://www.dianping.com/sh/ss/com");
         Assert.assertEquals("http://www.dianping.com/sh/ss/..aa", fixrelativeurl);
+        fixrelativeurl = UrlUtils.canonicalizeUrl("../../aa", "http://www.dianping.com/sh/ss/com/");
+        Assert.assertEquals("http://www.dianping.com/sh/aa", fixrelativeurl);
         fixrelativeurl = UrlUtils.canonicalizeUrl("../../aa", "http://www.dianping.com/sh/ss/com");
+        Assert.assertEquals("http://www.dianping.com/aa", fixrelativeurl);
     }
 
     @Test

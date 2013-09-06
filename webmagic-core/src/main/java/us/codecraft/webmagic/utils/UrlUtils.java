@@ -2,6 +2,8 @@ package us.codecraft.webmagic.utils;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,45 +20,31 @@ public class UrlUtils {
 
     /**
      * canonicalizeUrl
+     *
+     * Borrowed from Jsoup.
+     *
      * @param url
      * @param refer
      * @return canonicalizeUrl
      */
     public static String canonicalizeUrl(String url, String refer) {
-        if (StringUtils.isBlank(url) || StringUtils.isBlank(refer)) {
-            return url;
-        }
-        if (url.startsWith("http") || url.startsWith("ftp") || url.startsWith("mailto") || url.startsWith("javascript:")) {
-            return url;
-        }
-        if (StringUtils.startsWith(url, "/")) {
-            String host = getHost(refer);
-            return host + url;
-        } else if (!StringUtils.startsWith(url, ".")) {
-            refer = reversePath(refer, 1);
-            return refer + "/" + url;
-        } else {
-            Matcher matcher = relativePathPattern.matcher(url);
-            if (matcher.find()) {
-                int reverseDepth = matcher.group(1).length();
-                refer = reversePath(refer, reverseDepth);
-                String substring = StringUtils.substring(url, matcher.end());
-                return refer + "/" + substring;
-            } else {
-                refer = reversePath(refer, 1);
-                return refer + "/" + url;
+        URL base;
+        try {
+            try {
+                base = new URL(refer);
+            } catch (MalformedURLException e) {
+                // the base is unsuitable, but the attribute may be abs on its own, so try that
+                URL abs = new URL(refer);
+                return abs.toExternalForm();
             }
+            // workaround: java resolves '//path/file + ?foo' to '//path/?foo', not '//path/file?foo' as desired
+            if (url.startsWith("?"))
+                url = base.getPath() + url;
+            URL abs = new URL(base, url);
+            return abs.toExternalForm();
+        } catch (MalformedURLException e) {
+            return "";
         }
-    }
-
-    public static String reversePath(String url, int depth) {
-        int i = StringUtils.lastOrdinalIndexOf(url, "/", depth);
-        if (i < 10) {
-            url = getHost(url);
-        } else {
-            url = StringUtils.substring(url, 0, i);
-        }
-        return url;
     }
 
     public static String getHost(String url) {
