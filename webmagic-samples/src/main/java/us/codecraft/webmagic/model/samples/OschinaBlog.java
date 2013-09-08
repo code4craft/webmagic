@@ -11,8 +11,6 @@ import java.util.List;
 
 /**
  * @author code4crafter@gmail.com <br>
- * Date: 13-8-2 <br>
- * Time: 上午7:52 <br>
  */
 @TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
 public class OschinaBlog implements HasKey{

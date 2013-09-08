@@ -1,2 +1,0 @@
-</channel>
-</rss>
