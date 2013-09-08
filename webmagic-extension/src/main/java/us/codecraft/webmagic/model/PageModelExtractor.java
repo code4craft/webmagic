@@ -184,7 +184,7 @@ class PageModelExtractor {
             return null;
         }
         if (objectExtractor == null) {
-            return processSingle(page, null, false);
+            return processSingle(page, null, true);
         } else {
             if (objectExtractor.multi) {
                 List<Object> os = new ArrayList<Object>();
