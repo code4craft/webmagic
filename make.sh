@@ -1,6 +1,6 @@
 #!/bin/sh
 mvn clean package
-cp ./webmagic-samples/target/webmagic-0.3.0.jar ./bin/
+cp ./webmagic-samples/target/webmagic-0.3.1.jar ./bin/
 rsync -avz --delete ./webmagic-samples/target/lib/ ./bin/lib/
 git add .
 git add -u
