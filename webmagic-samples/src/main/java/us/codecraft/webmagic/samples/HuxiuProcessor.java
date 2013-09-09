@@ -28,7 +28,4 @@ public class HuxiuProcessor implements PageProcessor {
         Spider.create(new HuxiuProcessor()).run();
     }
 
-    public static void main(String[] args) {
-        Spider.create(new HuxiuProcessor()).run();
-    }
 }
