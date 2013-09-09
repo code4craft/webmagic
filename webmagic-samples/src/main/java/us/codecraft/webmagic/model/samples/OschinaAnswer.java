@@ -9,8 +9,6 @@ import us.codecraft.webmagic.model.annotation.TargetUrl;
 
 /**
  * @author code4crafter@gmail.com <br>
- * Date: 13-8-3 <br>
- * Time: 下午8:25 <br>
  */
 @TargetUrl("http://www.oschina.net/question/\\d+_\\d+*")
 @HelpUrl("http://www.oschina.net/question/*")

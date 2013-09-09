@@ -16,8 +16,6 @@ import java.util.List;
 
 /**
  * @author code4crafter@gmail.com <br>
- *         Date: 13-8-4 <br>
- *         Time: 下午8:17 <br>
  */
 @TargetUrl("http://news.163.com/\\d+/\\d+/\\d+/\\w+*.html")
 public class News163 implements MultiPageModel {

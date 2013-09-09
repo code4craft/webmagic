@@ -14,8 +14,6 @@ import java.util.Scanner;
 
 /**
  * @author code4crafter@gmail.com <br>
- * Date: 13-8-7 <br>
- * Time: 下午9:24 <br>
  */
 public class QuickStarter {
 

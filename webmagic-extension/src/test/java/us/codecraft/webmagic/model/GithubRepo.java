@@ -1,14 +1,14 @@
-package us.codecraft.webmagic.model.samples;
+package us.codecraft.webmagic.model;
 
+import junit.framework.Assert;
+import org.junit.Test;
+import us.codecraft.webmagic.MockDownloader;
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.model.HasKey;
-import us.codecraft.webmagic.model.OOSpider;
+import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.model.annotation.HelpUrl;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
-import us.codecraft.webmagic.pipeline.JsonFilePageModelPipeline;
-import us.codecraft.webmagic.scheduler.FileCacheQueueScheduler;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
  * @author code4crafter@gmail.com <br>
  */
 @TargetUrl("https://github.com/\\w+/\\w+")
-@HelpUrl({"https://github.com/\\w+\\?tab=repositories","https://github.com/\\w+","https://github.com/explore/*"})
+@HelpUrl({"https://github.com/\\w+\\?tab=repositories", "https://github.com/\\w+", "https://github.com/explore/*"})
 public class GithubRepo implements HasKey {
 
     @ExtractBy(value = "//h1[@class='entry-title public']/strong/a/text()", notNull = true)
@@ -28,27 +28,33 @@ public class GithubRepo implements HasKey {
     @ExtractBy("//div[@id='readme']")
     private String readme;
 
-    @ExtractBy(value = "//div[@class='repository-lang-stats']//li//span[@class='lang']",multi = true)
+    @ExtractBy(value = "//div[@class='repository-lang-stats']//li//span[@class='lang']", multi = true)
     private List<String> language;
 
-    @ExtractBy("//a[@class='social-count js-social-count']/text()")
+    @ExtractBy("//ul[@class='pagehead-actions']/li[2]//a[@class='social-count js-social-count']/text()")
     private String star;
 
-    @ExtractBy("//a[@class='social-count js-social-count']/text()")
+    @ExtractBy("//ul[@class='pagehead-actions']/li[3]//a[@class='social-count']/text()")
     private String fork;
 
     @ExtractByUrl
     private String url;
 
-    public static void main(String[] args) {
-        OOSpider.create(Site.me().addStartUrl("https://github.com/explore").setSleepTime(0).setRetryTimes(3),
-                new JsonFilePageModelPipeline(), GithubRepo.class)
-                .scheduler(new FileCacheQueueScheduler("/data/webmagic/cache/")).thread(15).run();
+    @Test
+    public void test() {
+        OOSpider.create(Site.me().addStartUrl("https://github.com/code4craft/webmagic").setSleepTime(0)
+                , new PageModelPipeline<GithubRepo>() {
+            @Override
+            public void process(GithubRepo o, Task task) {
+                Assert.assertEquals("78",o.getStar().trim());
+                Assert.assertEquals("65",o.getFork().trim());
+            }
+        }, GithubRepo.class).setDownloader(new MockDownloader()).test("https://github.com/code4craft/webmagic");
     }
 
     @Override
     public String key() {
-        return author+":"+name;
+        return author + ":" + name;
     }
 
     public String getName() {

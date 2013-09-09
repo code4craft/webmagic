@@ -7,8 +7,6 @@ import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
  * @author code4crafter@gmail.com <br>
- * Date: 13-7-26 <br>
- * Time: 上午7:31 <br>
  */
 public class IteyeBlogProcessor implements PageProcessor {
 
@@ -24,8 +22,7 @@ public class IteyeBlogProcessor implements PageProcessor {
     @Override
     public Site getSite() {
         if (site == null) {
-            site = Site.me().setDomain("yanghaoli.iteye.com").addStartUrl("http://yanghaoli.iteye.com/").
-            setSleepTime(100).setRetryTimes(3);
+            site = Site.me().setDomain("yanghaoli.iteye.com").addStartUrl("http://yanghaoli.iteye.com/");
         }
         return site;
     }

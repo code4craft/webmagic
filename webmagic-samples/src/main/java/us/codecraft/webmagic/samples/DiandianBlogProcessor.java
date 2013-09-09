@@ -8,8 +8,6 @@ import java.util.List;
 
 /**
  * @author code4crafter@gmail.com <br>
- * Date: 13-4-21
- * Time: 下午8:08
  */
 public class DiandianBlogProcessor implements PageProcessor {
 
