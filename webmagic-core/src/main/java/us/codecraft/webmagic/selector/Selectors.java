@@ -44,9 +44,4 @@ public abstract class Selectors {
         return new OrSelector(selectors);
     }
 
-    public static void main(String[] args) {
-        String s = "a";
-        or(regex("<title>(.*)</title>"), xpath("//title"), $("title")).select(s);
-    }
-
 }

@@ -234,12 +234,15 @@ public class Spider implements Runnable, Task {
         }
         Request request = scheduler.poll(this);
         //single thread
-        if (executorService == null) {
+        if (threadNum <= 1) {
             while (request != null && stat.compareAndSet(STAT_RUNNING, STAT_RUNNING)) {
                 processRequest(request);
                 request = scheduler.poll(this);
             }
         } else {
+            synchronized (this) {
+                this.executorService = ThreadUtils.newFixedThreadPool(threadNum);
+            }
             //multi thread
             final AtomicInteger threadAlive = new AtomicInteger(0);
             while (true && stat.compareAndSet(STAT_RUNNING, STAT_RUNNING)) {
@@ -363,10 +366,11 @@ public class Spider implements Runnable, Task {
 
     public void stop() {
         stat.compareAndSet(STAT_RUNNING, STAT_STOPPED);
+        executorService.shutdown();
     }
 
     public void stopAndDestroy() {
-        stat.compareAndSet(STAT_RUNNING, STAT_STOPPED);
+        stop();
         destroy();
     }
 
@@ -384,9 +388,6 @@ public class Spider implements Runnable, Task {
         }
         if (threadNum == 1) {
             return this;
-        }
-        synchronized (this) {
-            this.executorService = ThreadUtils.newFixedThreadPool(threadNum);
         }
         return this;
     }
