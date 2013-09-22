@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.model;
 
+import us.codecraft.webmagic.model.formatter.ObjectFormatter;
 import us.codecraft.webmagic.selector.Selector;
 
 import java.lang.reflect.Field;
@@ -15,6 +16,8 @@ class FieldExtractor extends Extractor {
     private final Field field;
 
     private Method setterMethod;
+
+    private ObjectFormatter objectFormatter;
 
     public FieldExtractor(Field field, Selector selector, Source source, boolean notNull, boolean multi) {
         super(selector, source, notNull, multi);
@@ -43,5 +46,13 @@ class FieldExtractor extends Extractor {
 
     boolean isNotNull() {
         return notNull;
+    }
+
+    ObjectFormatter getObjectFormatter() {
+        return objectFormatter;
+    }
+
+    void setObjectFormatter(ObjectFormatter objectFormatter) {
+        this.objectFormatter = objectFormatter;
     }
 }

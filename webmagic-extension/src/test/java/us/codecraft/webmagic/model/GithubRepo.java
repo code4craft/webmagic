@@ -32,10 +32,10 @@ public class GithubRepo implements HasKey {
     private List<String> language;
 
     @ExtractBy("//ul[@class='pagehead-actions']/li[2]//a[@class='social-count js-social-count']/text()")
-    private String star;
+    private int star;
 
     @ExtractBy("//ul[@class='pagehead-actions']/li[3]//a[@class='social-count']/text()")
-    private String fork;
+    private int fork;
 
     @ExtractByUrl
     private String url;
@@ -46,8 +46,8 @@ public class GithubRepo implements HasKey {
                 , new PageModelPipeline<GithubRepo>() {
             @Override
             public void process(GithubRepo o, Task task) {
-                Assert.assertEquals("78",o.getStar().trim());
-                Assert.assertEquals("65",o.getFork().trim());
+                Assert.assertEquals(78, o.getStar());
+                Assert.assertEquals(65, o.getFork());
             }
         }, GithubRepo.class).setDownloader(new MockDownloader()).test("https://github.com/code4craft/webmagic");
     }
@@ -77,11 +77,11 @@ public class GithubRepo implements HasKey {
         return url;
     }
 
-    public String getStar() {
+    public int getStar() {
         return star;
     }
 
-    public String getFork() {
+    public int getFork() {
         return fork;
     }
 }

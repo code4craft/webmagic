@@ -1,8 +1,12 @@
 package us.codecraft.webmagic.model;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.model.annotation.*;
+import us.codecraft.webmagic.model.formatter.BasicTypeFormatter;
+import us.codecraft.webmagic.model.formatter.ObjectFormatter;
+import us.codecraft.webmagic.model.formatter.ObjectFormatters;
 import us.codecraft.webmagic.selector.*;
 import us.codecraft.webmagic.utils.ExtractorUtils;
 
@@ -36,6 +40,8 @@ class PageModelExtractor {
 
     private Extractor objectExtractor;
 
+    private Logger logger = Logger.getLogger(getClass());
+
     public static PageModelExtractor create(Class clazz) {
         PageModelExtractor pageModelExtractor = new PageModelExtractor();
         pageModelExtractor.init(clazz);
@@ -62,14 +68,58 @@ class PageModelExtractor {
                 fieldExtractor = fieldExtractorTmp;
             }
             if (fieldExtractor != null) {
-                if (!fieldExtractor.isMulti() && !String.class.isAssignableFrom(field.getType())) {
-                    throw new IllegalStateException("Field " + field.getName() + " must be string");
-                } else if (fieldExtractor.isMulti() && !List.class.isAssignableFrom(field.getType())) {
-                    throw new IllegalStateException("Field " + field.getName() + " must be list");
-                }
+                checkFormat(field, fieldExtractor);
                 fieldExtractors.add(fieldExtractor);
             }
         }
+    }
+
+    private void checkFormat(Field field, FieldExtractor fieldExtractor) {
+        if (!fieldExtractor.isMulti() && !String.class.isAssignableFrom(field.getType())) {
+            Class<?> fieldClazz = BasicTypeFormatter.detectBasicClass(field.getType());
+            ObjectFormatter objectFormatter = getObjectFormatter(field, fieldClazz);
+            if (objectFormatter == null) {
+                throw new IllegalStateException("Can't find formatter for field " + field.getName() + " of type " + fieldClazz);
+            } else {
+                fieldExtractor.setObjectFormatter(objectFormatter);
+            }
+        } else if (fieldExtractor.isMulti()) {
+            if (!List.class.isAssignableFrom(field.getType())) {
+                throw new IllegalStateException("Field " + field.getName() + " must be list");
+            }
+            Formatter formatter = field.getAnnotation(Formatter.class);
+            if (formatter != null) {
+                if (!formatter.subClazz().equals(Void.class)) {
+                    ObjectFormatter objectFormatter = getObjectFormatter(field, formatter.subClazz());
+                    if (objectFormatter == null) {
+                        throw new IllegalStateException("Can't find formatter for field " + field.getName() + " of type " + formatter.subClazz());
+                    } else {
+                        fieldExtractor.setObjectFormatter(objectFormatter);
+                    }
+                }
+            }
+        }
+    }
+
+    private ObjectFormatter getObjectFormatter(Field field, Class<?> fieldClazz) {
+        Formatter formatter = field.getAnnotation(Formatter.class);
+        if (formatter != null) {
+            if (!formatter.formatter().equals(ObjectFormatter.class)) {
+                return initFormatter(formatter);
+            }
+        }
+        return ObjectFormatters.get(fieldClazz);
+    }
+
+    private ObjectFormatter initFormatter(Formatter formatter) {
+        try {
+            return formatter.formatter().newInstance();
+        } catch (InstantiationException e) {
+            logger.error("init ObjectFormatter fail", e);
+        } catch (IllegalAccessException e) {
+            logger.error("init ObjectFormatter fail", e);
+        }
+        return null;
     }
 
     private FieldExtractor getAnnotationExtractByUrl(Class clazz, Field field) {
@@ -231,7 +281,12 @@ class PageModelExtractor {
                     if ((value == null || value.size() == 0) && fieldExtractor.isNotNull()) {
                         return null;
                     }
-                    setField(o, fieldExtractor, value);
+                    if (fieldExtractor.getObjectFormatter() != null) {
+                        List<Object> converted = convert(value, fieldExtractor.getObjectFormatter());
+                        setField(o, fieldExtractor, converted);
+                    } else {
+                        setField(o, fieldExtractor, value);
+                    }
                 } else {
                     String value;
                     switch (fieldExtractor.getSource()) {
@@ -254,20 +309,45 @@ class PageModelExtractor {
                     if (value == null && fieldExtractor.isNotNull()) {
                         return null;
                     }
-                    setField(o, fieldExtractor, value);
+                    if (fieldExtractor.getObjectFormatter() != null) {
+                        Object converted = convert(value, fieldExtractor.getObjectFormatter());
+                        setField(o, fieldExtractor, converted);
+                    } else {
+                        setField(o, fieldExtractor, value);
+                    }
                 }
             }
             if (AfterExtractor.class.isAssignableFrom(clazz)) {
                 ((AfterExtractor) o).afterProcess(page);
             }
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            logger.error("extract fail", e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            logger.error("extract fail", e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            logger.error("extract fail", e);
         }
         return o;
+    }
+
+    private Object convert(String value, ObjectFormatter objectFormatter) {
+        try {
+            return objectFormatter.format(value);
+        } catch (Exception e) {
+            logger.error("convert " + value + " to " + objectFormatter.clazz() + " error!", e);
+        }
+        return null;
+    }
+
+    private List<Object> convert(List<String> values, ObjectFormatter objectFormatter) {
+        List<Object> objects = new ArrayList<Object>();
+        for (String value : values) {
+            Object converted = convert(value, objectFormatter);
+            if (converted != null) {
+                objects.add(converted);
+            }
+        }
+        return objects;
     }
 
     private void setField(Object o, FieldExtractor fieldExtractor, Object value) throws IllegalAccessException, InvocationTargetException {
