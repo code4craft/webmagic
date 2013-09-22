@@ -18,11 +18,12 @@ public class SpiderTest {
             public void process(ResultItems resultItems, Task task) {
                 System.out.println(1);
             }
-        });
+        }).thread(2);
         spider.start();
         Thread.sleep(10000);
         spider.stop();
-//        spider.run();
+        Thread.sleep(10000);
+        spider.start();
         Thread.sleep(10000);
     }
 }
