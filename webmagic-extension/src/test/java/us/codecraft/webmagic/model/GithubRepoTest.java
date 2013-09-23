@@ -18,8 +18,8 @@ public class GithubRepoTest {
                 , new PageModelPipeline<GithubRepo>() {
             @Override
             public void process(GithubRepo o, Task task) {
-                Assert.assertEquals(78, o.getStar());
-                Assert.assertEquals(65, o.getFork());
+                Assert.assertEquals(86, o.getStar());
+                Assert.assertEquals(70, o.getFork());
             }
         }, GithubRepo.class).setDownloader(new MockDownloader()).test("https://github.com/code4craft/webmagic");
     }

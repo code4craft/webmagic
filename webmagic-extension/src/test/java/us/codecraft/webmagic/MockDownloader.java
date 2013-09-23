@@ -18,7 +18,7 @@ public class MockDownloader implements Downloader{
             "  <head prefix=\"og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# githubog: http://ogp.me/ns/fb/githubog#\">\n" +
             "    <meta charset='utf-8'>\n" +
             "    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n" +
-            "        <title>code4craft/webmagic</title>\n" +
+            "        <title>code4craft/webmagic · GitHub</title>\n" +
             "    <link rel=\"search\" type=\"application/opensearchdescription+xml\" href=\"/opensearch.xml\" title=\"GitHub\" />\n" +
             "    <link rel=\"fluid-icon\" href=\"https://github.com/fluidicon.png\" title=\"GitHub\" />\n" +
             "    <link rel=\"apple-touch-icon\" sizes=\"57x57\" href=\"/apple-touch-icon-114.png\" />\n" +
@@ -27,7 +27,7 @@ public class MockDownloader implements Downloader{
             "    <link rel=\"apple-touch-icon\" sizes=\"144x144\" href=\"/apple-touch-icon-144.png\" />\n" +
             "    <link rel=\"logo\" type=\"image/svg\" href=\"https://github-media-downloads.s3.amazonaws.com/github-logo.svg\" />\n" +
             "    <meta property=\"og:image\" content=\"https://github.global.ssl.fastly.net/images/modules/logos_page/Octocat.png\">\n" +
-            "    <meta name=\"hostname\" content=\"github-fe120-cp1-prd.iad.github.net\">\n" +
+            "    <meta name=\"hostname\" content=\"github-fe114-cp1-prd.iad.github.net\">\n" +
             "    <meta name=\"ruby\" content=\"ruby 1.9.3p194-tcs-github-tcmalloc (2012-05-25, TCS patched 2012-05-27, GitHub v1.0.36) [x86_64-linux]\">\n" +
             "    <link rel=\"assets\" href=\"https://github.global.ssl.fastly.net/\">\n" +
             "    <link rel=\"xhr-socket\" href=\"/_sockets\" />\n" +
@@ -38,7 +38,7 @@ public class MockDownloader implements Downloader{
             "    <meta name=\"msapplication-TileImage\" content=\"/windows-tile.png\" />\n" +
             "    <meta name=\"msapplication-TileColor\" content=\"#ffffff\" />\n" +
             "    <meta name=\"selected-link\" value=\"repo_source\" data-pjax-transient />\n" +
-            "    <meta content=\"collector.githubapp.com\" name=\"octolytics-host\" /><meta content=\"github\" name=\"octolytics-app-id\" /><meta content=\"d70ff776-e041-43ec-9e11-6fff09ae6117\" name=\"octolytics-dimension-request_id\" /><meta content=\"1351884\" name=\"octolytics-actor-id\" /><meta content=\"code4craft\" name=\"octolytics-actor-login\" /><meta content=\"6ba594fdd7b6075190d470f5284075cfe97dcb1f80883d29c3d79d927e87ac85\" name=\"octolytics-actor-hash\" />\n" +
+            "    <meta content=\"collector.githubapp.com\" name=\"octolytics-host\" /><meta content=\"github\" name=\"octolytics-app-id\" /><meta content=\"D2167A02:4E87:89497A:523FCC67\" name=\"octolytics-dimension-request_id\" />\n" +
             "    \n" +
             "\n" +
             "    \n" +
@@ -48,15 +48,16 @@ public class MockDownloader implements Downloader{
             "    <meta content=\"authenticity_token\" name=\"csrf-param\" />\n" +
             "<meta content=\"i4/tXwrpqoMtPPKJTN4eSSPnFfrSzZkuIkeP//SUW34=\" name=\"csrf-token\" />\n" +
             "\n" +
-            "    <link href=\"https://github.global.ssl.fastly.net/assets/github-8d13b140cf7e2873c4dd1e0f589136f0e71bd381.css\" media=\"all\" rel=\"stylesheet\" type=\"text/css\" />\n" +
-            "    <link href=\"https://github.global.ssl.fastly.net/assets/github2-d75c750a6b14571dc070b6570d9224acd7b6795e.css\" media=\"all\" rel=\"stylesheet\" type=\"text/css\" />\n" +
+            "    <link href=\"https://github.global.ssl.fastly.net/assets/github-4d622651f87d0cfd8c33f1c020455121d2af0be0.css\" media=\"all\" rel=\"stylesheet\" type=\"text/css\" />\n" +
+            "    <link href=\"https://github.global.ssl.fastly.net/assets/github2-2c867c2081830b4a942703b9d3d565bf90f6046d.css\" media=\"all\" rel=\"stylesheet\" type=\"text/css\" />\n" +
             "    \n" +
             "\n" +
+            "    \n" +
             "\n" +
-            "      <script src=\"https://github.global.ssl.fastly.net/assets/frameworks-f86a2975a82dceee28e5afe598d1ebbfd7109d79.js\" type=\"text/javascript\"></script>\n" +
-            "      <script src=\"https://github.global.ssl.fastly.net/assets/github-5289a6d6f7dbb5c517007827e10db51fd3ea0251.js\" type=\"text/javascript\"></script>\n" +
+            "      <script src=\"https://github.global.ssl.fastly.net/assets/frameworks-8db79d6d3d61c3bdec72ede901c2b6dbd4a79dad.js\" type=\"text/javascript\"></script>\n" +
+            "      <script src=\"https://github.global.ssl.fastly.net/assets/github-0053cb56d6961482e50d72f8e19dc915009ce6b7.js\" type=\"text/javascript\"></script>\n" +
             "      \n" +
-            "      <meta http-equiv=\"x-pjax-version\" content=\"119d1d5ab0189c49025edd294a6b79f2\">\n" +
+            "      <meta http-equiv=\"x-pjax-version\" content=\"b5479068af2118811ca4dcd8c0c29e66\">\n" +
             "\n" +
             "        <meta property=\"og:title\" content=\"webmagic\"/>\n" +
             "  <meta property=\"og:type\" content=\"githubog:gitrepository\"/>\n" +
@@ -73,37 +74,42 @@ public class MockDownloader implements Downloader{
             "  </head>\n" +
             "\n" +
             "\n" +
-            "  <body class=\"logged_in  env-production macintosh vis-public\">\n" +
+            "  <body class=\"logged_out  env-production macintosh vis-public\">\n" +
             "    <div class=\"wrapper\">\n" +
             "      \n" +
             "      \n" +
             "      \n" +
             "\n" +
             "\n" +
-            "      <div class=\"header header-logged-in true\">\n" +
+            "      \n" +
+            "      <div class=\"header header-logged-out\">\n" +
             "  <div class=\"container clearfix\">\n" +
             "\n" +
-            "    <a class=\"header-logo-invertocat\" href=\"https://github.com/\">\n" +
-            "  <span class=\"mega-octicon octicon-mark-github\"></span>\n" +
-            "</a>\n" +
+            "    <a class=\"header-logo-wordmark\" href=\"https://github.com/\">\n" +
+            "      <span class=\"mega-octicon octicon-logo-github\"></span>\n" +
+            "    </a>\n" +
             "\n" +
-            "    <div class=\"divider-vertical\"></div>\n" +
+            "    <div class=\"header-actions\">\n" +
+            "        <a class=\"button primary\" href=\"/signup\">Sign up</a>\n" +
+            "      <a class=\"button signin\" href=\"/login?return_to=%2Fcode4craft%2Fwebmagic\">Sign in</a>\n" +
+            "    </div>\n" +
             "\n" +
-            "    \n" +
-            "    <a href=\"/notifications\" class=\"notification-indicator tooltipped downwards\" data-gotokey=\"n\" title=\"You have no unread notifications\">\n" +
-            "        <span class=\"mail-status all-read\"></span>\n" +
-            "</a>    <div class=\"divider-vertical\"></div>\n" +
+            "    <div class=\"command-bar js-command-bar  in-repository\">\n" +
             "\n" +
-            "\n" +
-            "      <div class=\"command-bar js-command-bar  in-repository\">\n" +
-            "          <form accept-charset=\"UTF-8\" action=\"/search\" class=\"command-bar-form\" id=\"top_search_form\" method=\"get\">\n" +
+            "      <ul class=\"top-nav\">\n" +
+            "          <li class=\"explore\"><a href=\"/explore\">Explore</a></li>\n" +
+            "        <li class=\"features\"><a href=\"/features\">Features</a></li>\n" +
+            "          <li class=\"enterprise\"><a href=\"https://enterprise.github.com/\">Enterprise</a></li>\n" +
+            "          <li class=\"blog\"><a href=\"/blog\">Blog</a></li>\n" +
+            "      </ul>\n" +
+            "        <form accept-charset=\"UTF-8\" action=\"/search\" class=\"command-bar-form\" id=\"top_search_form\" method=\"get\">\n" +
             "\n" +
             "<input type=\"text\" data-hotkey=\"/ s\" name=\"q\" id=\"js-command-bar-field\" placeholder=\"Search or type a command\" tabindex=\"1\" autocapitalize=\"off\"\n" +
             "    \n" +
-            "    data-username=\"code4craft\"\n" +
+            "    \n" +
             "      data-repo=\"code4craft/webmagic\"\n" +
             "      data-branch=\"master\"\n" +
-            "      data-sha=\"e4a0a442b4476c547e95db5cdaa06e2274cac38f\"\n" +
+            "      data-sha=\"c5ed5916d20b96963d906dde8bccc3627568e486\"\n" +
             "  >\n" +
             "\n" +
             "    <input type=\"hidden\" name=\"nwo\" value=\"code4craft/webmagic\" />\n" +
@@ -140,82 +146,13 @@ public class MockDownloader implements Downloader{
             "  <input type=\"hidden\" name=\"ref\" value=\"cmdform\">\n" +
             "\n" +
             "</form>\n" +
-            "        <ul class=\"top-nav\">\n" +
-            "          <li class=\"explore\"><a href=\"/explore\">Explore</a></li>\n" +
-            "            <li><a href=\"https://gist.github.com\">Gist</a></li>\n" +
-            "            <li><a href=\"/blog\">Blog</a></li>\n" +
-            "          <li><a href=\"https://help.github.com\">Help</a></li>\n" +
-            "        </ul>\n" +
-            "      </div>\n" +
+            "    </div>\n" +
             "\n" +
-            "    \n" +
-            "\n" +
-            "\n" +
-            "  <ul id=\"user-links\">\n" +
-            "    <li>\n" +
-            "      <a href=\"/code4craft\" class=\"name\">\n" +
-            "        <img height=\"20\" src=\"https://2.gravatar.com/avatar/4ce9123a05ae222d71d2857316cbe699?d=https%3A%2F%2Fidenticons.github.com%2F19ef9dc10e8399f81a8944a399812d77.png&amp;s=140\" width=\"20\" /> code4craft\n" +
-            "      </a>\n" +
-            "    </li>\n" +
-            "\n" +
-            "      <li>\n" +
-            "        <a href=\"/new\" id=\"new_repo\" class=\"tooltipped downwards\" title=\"Create a new repo\" aria-label=\"Create a new repo\">\n" +
-            "          <span class=\"octicon octicon-repo-create\"></span>\n" +
-            "        </a>\n" +
-            "      </li>\n" +
-            "\n" +
-            "      <li>\n" +
-            "        <a href=\"/settings/profile\" id=\"account_settings\"\n" +
-            "          class=\"tooltipped downwards\"\n" +
-            "          aria-label=\"Account settings \"\n" +
-            "          title=\"Account settings \">\n" +
-            "          <span class=\"octicon octicon-tools\"></span>\n" +
-            "        </a>\n" +
-            "      </li>\n" +
-            "      <li>\n" +
-            "        <a class=\"tooltipped downwards\" href=\"/logout\" data-method=\"post\" id=\"logout\" title=\"Sign out\" aria-label=\"Sign out\">\n" +
-            "          <span class=\"octicon octicon-log-out\"></span>\n" +
-            "        </a>\n" +
-            "      </li>\n" +
-            "\n" +
-            "  </ul>\n" +
-            "\n" +
-            "<div class=\"js-new-dropdown-contents hidden\">\n" +
-            "  \n" +
-            "\n" +
-            "<ul class=\"dropdown-menu\">\n" +
-            "  <li>\n" +
-            "    <a href=\"/new\"><span class=\"octicon octicon-repo-create\"></span> New repository</a>\n" +
-            "  </li>\n" +
-            "  <li>\n" +
-            "    <a href=\"/organizations/new\"><span class=\"octicon octicon-organization\"></span> New organization</a>\n" +
-            "  </li>\n" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "    <li class=\"section-title\">\n" +
-            "      <span title=\"code4craft/webmagic\">This repository</span>\n" +
-            "    </li>\n" +
-            "    <li>\n" +
-            "      <a href=\"/code4craft/webmagic/issues/new\"><span class=\"octicon octicon-issue-opened\"></span> New issue</a>\n" +
-            "    </li>\n" +
-            "      <li>\n" +
-            "        <a href=\"/code4craft/webmagic/settings/collaboration\"><span class=\"octicon octicon-person-add\"></span> New collaborator</a>\n" +
-            "      </li>\n" +
-            "</ul>\n" +
-            "\n" +
-            "</div>\n" +
-            "\n" +
-            "\n" +
-            "    \n" +
             "  </div>\n" +
             "</div>\n" +
             "\n" +
-            "      \n" +
             "\n" +
             "      \n" +
-            "\n" +
-            "\n" +
             "\n" +
             "\n" +
             "          <div class=\"site\" itemscope itemtype=\"http://schema.org/WebPage\">\n" +
@@ -226,100 +163,29 @@ public class MockDownloader implements Downloader{
             "\n" +
             "<ul class=\"pagehead-actions\">\n" +
             "\n" +
-            "    <li class=\"subscription\">\n" +
-            "      <form accept-charset=\"UTF-8\" action=\"/notifications/subscribe\" class=\"js-social-container\" data-autosubmit=\"true\" data-remote=\"true\" method=\"post\"><div style=\"margin:0;padding:0;display:inline\"><input name=\"authenticity_token\" type=\"hidden\" value=\"i4/tXwrpqoMtPPKJTN4eSSPnFfrSzZkuIkeP//SUW34=\" /></div>  <input id=\"repository_id\" name=\"repository_id\" type=\"hidden\" value=\"9623064\" />\n" +
-            "\n" +
-            "    <div class=\"select-menu js-menu-container js-select-menu\">\n" +
-            "        <a class=\"social-count js-social-count\" href=\"/code4craft/webmagic/watchers\">\n" +
-            "          23\n" +
-            "        </a>\n" +
-            "      <span class=\"minibutton select-menu-button with-count js-menu-target\">\n" +
-            "        <span class=\"js-select-button\">\n" +
-            "          <span class=\"octicon octicon-eye-unwatch\"></span>\n" +
-            "          Unwatch\n" +
-            "        </span>\n" +
-            "      </span>\n" +
-            "\n" +
-            "      <div class=\"select-menu-modal-holder\">\n" +
-            "        <div class=\"select-menu-modal subscription-menu-modal js-menu-content\">\n" +
-            "          <div class=\"select-menu-header\">\n" +
-            "            <span class=\"select-menu-title\">Notification status</span>\n" +
-            "            <span class=\"octicon octicon-remove-close js-menu-close\"></span>\n" +
-            "          </div> <!-- /.select-menu-header -->\n" +
-            "\n" +
-            "          <div class=\"select-menu-list js-navigation-container\">\n" +
-            "\n" +
-            "            <div class=\"select-menu-item js-navigation-item \">\n" +
-            "              <span class=\"select-menu-item-icon octicon octicon-check\"></span>\n" +
-            "              <div class=\"select-menu-item-text\">\n" +
-            "                <input id=\"do_included\" name=\"do\" type=\"radio\" value=\"included\" />\n" +
-            "                <h4>Not watching</h4>\n" +
-            "                <span class=\"description\">You only receive notifications for discussions in which you participate or are @mentioned.</span>\n" +
-            "                <span class=\"js-select-button-text hidden-select-button-text\">\n" +
-            "                  <span class=\"octicon octicon-eye-watch\"></span>\n" +
-            "                  Watch\n" +
-            "                </span>\n" +
-            "              </div>\n" +
-            "            </div> <!-- /.select-menu-item -->\n" +
-            "\n" +
-            "            <div class=\"select-menu-item js-navigation-item selected\">\n" +
-            "              <span class=\"select-menu-item-icon octicon octicon octicon-check\"></span>\n" +
-            "              <div class=\"select-menu-item-text\">\n" +
-            "                <input checked=\"checked\" id=\"do_subscribed\" name=\"do\" type=\"radio\" value=\"subscribed\" />\n" +
-            "                <h4>Watching</h4>\n" +
-            "                <span class=\"description\">You receive notifications for all discussions in this repository.</span>\n" +
-            "                <span class=\"js-select-button-text hidden-select-button-text\">\n" +
-            "                  <span class=\"octicon octicon-eye-unwatch\"></span>\n" +
-            "                  Unwatch\n" +
-            "                </span>\n" +
-            "              </div>\n" +
-            "            </div> <!-- /.select-menu-item -->\n" +
-            "\n" +
-            "            <div class=\"select-menu-item js-navigation-item \">\n" +
-            "              <span class=\"select-menu-item-icon octicon octicon-check\"></span>\n" +
-            "              <div class=\"select-menu-item-text\">\n" +
-            "                <input id=\"do_ignore\" name=\"do\" type=\"radio\" value=\"ignore\" />\n" +
-            "                <h4>Ignoring</h4>\n" +
-            "                <span class=\"description\">You do not receive any notifications for discussions in this repository.</span>\n" +
-            "                <span class=\"js-select-button-text hidden-select-button-text\">\n" +
-            "                  <span class=\"octicon octicon-mute\"></span>\n" +
-            "                  Stop ignoring\n" +
-            "                </span>\n" +
-            "              </div>\n" +
-            "            </div> <!-- /.select-menu-item -->\n" +
-            "\n" +
-            "          </div> <!-- /.select-menu-list -->\n" +
-            "\n" +
-            "        </div> <!-- /.select-menu-modal -->\n" +
-            "      </div> <!-- /.select-menu-modal-holder -->\n" +
-            "    </div> <!-- /.select-menu -->\n" +
-            "\n" +
-            "</form>\n" +
-            "    </li>\n" +
             "\n" +
             "  <li>\n" +
-            "  \n" +
-            "<div class=\"js-toggler-container js-social-container starring-container \">\n" +
-            "  <a href=\"/code4craft/webmagic/unstar\" class=\"minibutton with-count js-toggler-target star-button starred upwards\" title=\"Unstar this repo\" data-remote=\"true\" data-method=\"post\" rel=\"nofollow\">\n" +
-            "    <span class=\"octicon octicon-star-delete\"></span><span class=\"text\">Unstar</span>\n" +
-            "  </a>\n" +
-            "  <a href=\"/code4craft/webmagic/star\" class=\"minibutton with-count js-toggler-target star-button unstarred upwards\" title=\"Star this repo\" data-remote=\"true\" data-method=\"post\" rel=\"nofollow\">\n" +
-            "    <span class=\"octicon octicon-star\"></span><span class=\"text\">Star</span>\n" +
-            "  </a>\n" +
-            "  <a class=\"social-count js-social-count\" href=\"/code4craft/webmagic/stargazers\">78</a>\n" +
-            "</div>\n" +
+            "  <a href=\"/login?return_to=%2Fcode4craft%2Fwebmagic\"\n" +
+            "  class=\"minibutton with-count js-toggler-target star-button entice tooltipped upwards\"\n" +
+            "  title=\"You must be signed in to use this feature\" rel=\"nofollow\">\n" +
+            "  <span class=\"octicon octicon-star\"></span>Star\n" +
+            "</a>\n" +
+            "<a class=\"social-count js-social-count\" href=\"/code4craft/webmagic/stargazers\">\n" +
+            "  86\n" +
+            "</a>\n" +
             "\n" +
             "  </li>\n" +
             "\n" +
-            "\n" +
-            "        <li>\n" +
-            "          <a href=\"/code4craft/webmagic/fork\" class=\"minibutton with-count js-toggler-target fork-button lighter upwards\" title=\"Fork this repo\" rel=\"nofollow\" data-method=\"post\">\n" +
-            "            <span class=\"octicon octicon-git-branch-create\"></span><span class=\"text\">Fork</span>\n" +
-            "          </a>\n" +
-            "          <a href=\"/code4craft/webmagic/network\" class=\"social-count\">65</a>\n" +
-            "        </li>\n" +
-            "\n" +
-            "\n" +
+            "    <li>\n" +
+            "      <a href=\"/login?return_to=%2Fcode4craft%2Fwebmagic\"\n" +
+            "        class=\"minibutton with-count js-toggler-target fork-button entice tooltipped upwards\"\n" +
+            "        title=\"You must be signed in to fork a repository\" rel=\"nofollow\">\n" +
+            "        <span class=\"octicon octicon-git-branch\"></span>Fork\n" +
+            "      </a>\n" +
+            "      <a href=\"/code4craft/webmagic/network\" class=\"social-count\">\n" +
+            "        70\n" +
+            "      </a>\n" +
+            "    </li>\n" +
             "</ul>\n" +
             "\n" +
             "        <h1 itemscope itemtype=\"http://data-vocabulary.org/Breadcrumb\" class=\"entry-title public\">\n" +
@@ -357,7 +223,7 @@ public class MockDownloader implements Downloader{
             "        <li class=\"tooltipped leftwards\" title=\"Issues\">\n" +
             "          <a href=\"/code4craft/webmagic/issues\" aria-label=\"Issues\" class=\"js-selected-navigation-item js-disable-pjax\" data-gotokey=\"i\" data-selected-links=\"repo_issues /code4craft/webmagic/issues\">\n" +
             "            <span class=\"octicon octicon-issue-opened\"></span> <span class=\"full-word\">Issues</span>\n" +
-            "            <span class='counter'>7</span>\n" +
+            "            <span class='counter'>2</span>\n" +
             "            <img alt=\"Octocat-spinner-32\" class=\"mini-loader\" height=\"16\" src=\"https://github.global.ssl.fastly.net/images/spinners/octocat-spinner-32.gif\" width=\"16\" />\n" +
             "</a>        </li>\n" +
             "\n" +
@@ -397,15 +263,6 @@ public class MockDownloader implements Downloader{
             "    </ul>\n" +
             "\n" +
             "\n" +
-            "      <div class=\"repo-menu-separator\"></div>\n" +
-            "      <ul class=\"repo-menu\">\n" +
-            "        <li class=\"tooltipped leftwards\" title=\"Settings\">\n" +
-            "          <a href=\"/code4craft/webmagic/settings\" data-pjax aria-label=\"Settings\">\n" +
-            "            <span class=\"octicon octicon-tools\"></span> <span class=\"full-word\">Settings</span>\n" +
-            "            <img alt=\"Octocat-spinner-32\" class=\"mini-loader\" height=\"16\" src=\"https://github.global.ssl.fastly.net/images/spinners/octocat-spinner-32.gif\" width=\"16\" />\n" +
-            "          </a>\n" +
-            "        </li>\n" +
-            "      </ul>\n" +
             "  </div>\n" +
             "</div>\n" +
             "\n" +
@@ -416,9 +273,8 @@ public class MockDownloader implements Downloader{
             "\n" +
             "<div class=\"clone-url open\"\n" +
             "  data-protocol-type=\"http\"\n" +
-            "  data-url=\"/users/set_protocol?protocol_selector=http&amp;protocol_type=push\">\n" +
+            "  data-url=\"/users/set_protocol?protocol_selector=http&amp;protocol_type=clone\">\n" +
             "  <h3><strong>HTTPS</strong> clone URL</h3>\n" +
-            "\n" +
             "  <div class=\"clone-url-box\">\n" +
             "    <input type=\"text\" class=\"clone js-url-field\"\n" +
             "           value=\"https://github.com/code4craft/webmagic.git\" readonly=\"readonly\">\n" +
@@ -430,25 +286,9 @@ public class MockDownloader implements Downloader{
             "  \n" +
             "\n" +
             "<div class=\"clone-url \"\n" +
-            "  data-protocol-type=\"ssh\"\n" +
-            "  data-url=\"/users/set_protocol?protocol_selector=ssh&amp;protocol_type=push\">\n" +
-            "  <h3><strong>SSH</strong> clone URL</h3>\n" +
-            "\n" +
-            "  <div class=\"clone-url-box\">\n" +
-            "    <input type=\"text\" class=\"clone js-url-field\"\n" +
-            "           value=\"git@github.com:code4craft/webmagic.git\" readonly=\"readonly\">\n" +
-            "\n" +
-            "    <span class=\"js-zeroclipboard url-box-clippy minibutton zeroclipboard-button\" data-clipboard-text=\"git@github.com:code4craft/webmagic.git\" data-copied-hint=\"copied!\" title=\"copy to clipboard\"><span class=\"octicon octicon-clippy\"></span></span>\n" +
-            "  </div>\n" +
-            "</div>\n" +
-            "\n" +
-            "  \n" +
-            "\n" +
-            "<div class=\"clone-url \"\n" +
             "  data-protocol-type=\"subversion\"\n" +
-            "  data-url=\"/users/set_protocol?protocol_selector=subversion&amp;protocol_type=push\">\n" +
+            "  data-url=\"/users/set_protocol?protocol_selector=subversion&amp;protocol_type=clone\">\n" +
             "  <h3><strong>Subversion</strong> checkout URL</h3>\n" +
-            "\n" +
             "  <div class=\"clone-url-box\">\n" +
             "    <input type=\"text\" class=\"clone js-url-field\"\n" +
             "           value=\"https://github.com/code4craft/webmagic\" readonly=\"readonly\">\n" +
@@ -458,15 +298,17 @@ public class MockDownloader implements Downloader{
             "</div>\n" +
             "\n" +
             "\n" +
-            "\n" +
             "<p class=\"clone-options\">You can clone with\n" +
-            "    <a href=\"#\" class=\"js-clone-selector\" data-protocol=\"http\">HTTPS</a>,\n" +
-            "    <a href=\"#\" class=\"js-clone-selector\" data-protocol=\"ssh\">SSH</a>,\n" +
-            "    <a href=\"#\" class=\"js-clone-selector\" data-protocol=\"subversion\">Subversion</a>,\n" +
-            "  and <a href=\"https://help.github.com/articles/which-remote-url-should-i-use\">other methods.</a>\n" +
+            "      <a href=\"#\" class=\"js-clone-selector\" data-protocol=\"http\">HTTPS</a>,\n" +
+            "      or <a href=\"#\" class=\"js-clone-selector\" data-protocol=\"subversion\">Subversion</a>.\n" +
+            "  <span class=\"octicon help tooltipped upwards\" title=\"Get help on which URL is right for you.\">\n" +
+            "    <a href=\"https://help.github.com/articles/which-remote-url-should-i-use\">\n" +
+            "    <span class=\"octicon octicon-question\"></span>\n" +
+            "    </a>\n" +
+            "  </span>\n" +
             "</p>\n" +
             "\n" +
-            "  <a href=\"github-mac://openRepo/https://github.com/code4craft/webmagic\" class=\"minibutton sidebar-button\">\n" +
+            "  <a href=\"http://mac.github.com\" class=\"minibutton sidebar-button\">\n" +
             "    <span class=\"octicon octicon-device-desktop\"></span>\n" +
             "    Clone in Desktop\n" +
             "  </a>\n" +
@@ -492,22 +334,7 @@ public class MockDownloader implements Downloader{
             "    </div>\n" +
             "\n" +
             "\n" +
-            "    <span class=\"edit-link js-details-show js-details-target\">— <a href=\"#\">Edit</a></span>\n" +
-            "    <form accept-charset=\"UTF-8\" action=\"/code4craft/webmagic/settings/update_meta\" class=\"edit-repository-meta js-details-edit\" method=\"post\"><div style=\"margin:0;padding:0;display:inline\"><input name=\"_method\" type=\"hidden\" value=\"put\" /><input name=\"authenticity_token\" type=\"hidden\" value=\"i4/tXwrpqoMtPPKJTN4eSSPnFfrSzZkuIkeP//SUW34=\" /></div>\n" +
             "\n" +
-            "      <div class=\"field description-field\">\n" +
-            "        <label for=\"repo_description\">Description</label>\n" +
-            "        <input type=\"text\" name=\"repo_description\" value=\"A scalable web crawler framework.\" placeholder=\"Short description of this repository\" />\n" +
-            "      </div>\n" +
-            "\n" +
-            "      <div class=\"field website-field\" >\n" +
-            "        <label for=\"repo_homepage\">Website</label>\n" +
-            "        <input type=\"text\" name=\"repo_homepage\" value=\"\" placeholder=\"Website for this repository (optional)\" />\n" +
-            "      </div>\n" +
-            "\n" +
-            "      <button class=\"button classy\">Save</button>\n" +
-            "      <span class=\"cancel\">or <a href=\"#\" class=\"js-details-target\">cancel</a></a>\n" +
-            "</form>\n" +
             "</div>\n" +
             "\n" +
             "<div class=\"capped-box overall-summary \">\n" +
@@ -519,7 +346,7 @@ public class MockDownloader implements Downloader{
             "        <a data-pjax href=\"/code4craft/webmagic/commits/master\">\n" +
             "          <span class=\"num\">\n" +
             "            <span class=\"octicon octicon-history\"></span>\n" +
-            "            299\n" +
+            "            311\n" +
             "          </span>\n" +
             "          commits\n" +
             "        </a>\n" +
@@ -538,7 +365,7 @@ public class MockDownloader implements Downloader{
             "        <a data-pjax href=\"/code4craft/webmagic/releases\">\n" +
             "          <span class=\"num\">\n" +
             "            <span class=\"octicon octicon-tag\"></span>\n" +
-            "            4\n" +
+            "            5\n" +
             "          </span>\n" +
             "          releases\n" +
             "        </a>\n" +
@@ -561,7 +388,7 @@ public class MockDownloader implements Downloader{
             "              <a href=\"/code4craft/webmagic/search?l=java\">\n" +
             "                <span class=\"color-block language-color\" style=\"background-color:#b07219;\"></span>\n" +
             "                <span class=\"lang\">Java</span>\n" +
-            "                <span class=\"percent\">100.0%</span>\n" +
+            "                <span class=\"percent\">100%</span>\n" +
             "              </a>\n" +
             "          </li>\n" +
             "        </ol>\n" +
@@ -574,13 +401,9 @@ public class MockDownloader implements Downloader{
             "     class=\"repository-lang-stats-graph js-toggle-lang-stats tooltipped downwards\"\n" +
             "     title=\"Show language statistics\"\n" +
             "     style=\"background-color:#b07219\">\n" +
-            "  <span class=\"language-color\" style=\"width:100.0%; background-color:#b07219;\" itemprop=\"keywords\">Java</span>\n" +
+            "  <span class=\"language-color\" style=\"width:100%; background-color:#b07219;\" itemprop=\"keywords\">Java</span>\n" +
             "  </a>\n" +
             "\n" +
-            "\n" +
-            "  <div\n" +
-            "    >\n" +
-            "  </div>\n" +
             "\n" +
             "\n" +
             "\n" +
@@ -595,7 +418,8 @@ public class MockDownloader implements Downloader{
             "<div class=\"select-menu js-menu-container js-select-menu\" >\n" +
             "  <span class=\"minibutton select-menu-button js-menu-target\" data-hotkey=\"w\"\n" +
             "    data-master-branch=\"master\"\n" +
-            "    data-ref=\"master\" role=\"button\" aria-label=\"Switch branches or tags\">\n" +
+            "    data-ref=\"master\"\n" +
+            "    role=\"button\" aria-label=\"Switch branches or tags\" tabindex=\"0\">\n" +
             "    <span class=\"octicon octicon-git-branch\"></span>\n" +
             "    <i>branch:</i>\n" +
             "    <span class=\"js-select-button\">master</span>\n" +
@@ -611,7 +435,7 @@ public class MockDownloader implements Downloader{
             "\n" +
             "      <div class=\"select-menu-filters\">\n" +
             "        <div class=\"select-menu-text-filter\">\n" +
-            "          <input type=\"text\" aria-label=\"Find or create a branch…\" id=\"context-commitish-filter-field\" class=\"js-filterable-field js-navigation-enable\" placeholder=\"Find or create a branch…\">\n" +
+            "          <input type=\"text\" aria-label=\"Filter branches/tags\" id=\"context-commitish-filter-field\" class=\"js-filterable-field js-navigation-enable\" placeholder=\"Filter branches/tags\">\n" +
             "        </div>\n" +
             "        <div class=\"select-menu-tabs\">\n" +
             "          <ul>\n" +
@@ -648,23 +472,17 @@ public class MockDownloader implements Downloader{
             "            </div> <!-- /.select-menu-item -->\n" +
             "        </div>\n" +
             "\n" +
-            "          <form accept-charset=\"UTF-8\" action=\"/code4craft/webmagic/branches\" class=\"js-create-branch select-menu-item select-menu-new-item-form js-navigation-item js-new-item-form\" method=\"post\"><div style=\"margin:0;padding:0;display:inline\"><input name=\"authenticity_token\" type=\"hidden\" value=\"i4/tXwrpqoMtPPKJTN4eSSPnFfrSzZkuIkeP//SUW34=\" /></div>\n" +
-            "            <span class=\"octicon octicon-git-branch-create select-menu-item-icon\"></span>\n" +
-            "            <div class=\"select-menu-item-text\">\n" +
-            "              <h4>Create branch: <span class=\"js-new-item-name\"></span></h4>\n" +
-            "              <span class=\"description\">from ‘master’</span>\n" +
-            "            </div>\n" +
-            "            <input type=\"hidden\" name=\"name\" id=\"name\" class=\"js-new-item-value\">\n" +
-            "            <input type=\"hidden\" name=\"branch\" id=\"branch\" value=\"master\" />\n" +
-            "            <input type=\"hidden\" name=\"path\" id=\"branch\" value=\"\" />\n" +
-            "          </form> <!-- /.select-menu-item -->\n" +
-            "\n" +
+            "          <div class=\"select-menu-no-results\">Nothing to show</div>\n" +
             "      </div> <!-- /.select-menu-list -->\n" +
             "\n" +
             "      <div class=\"select-menu-list select-menu-tab-bucket js-select-menu-tab-bucket\" data-tab-filter=\"tags\">\n" +
             "        <div data-filterable-for=\"context-commitish-filter-field\" data-filterable-type=\"substring\">\n" +
             "\n" +
             "\n" +
+            "            <div class=\"select-menu-item js-navigation-item \">\n" +
+            "              <span class=\"select-menu-item-icon octicon octicon-check\"></span>\n" +
+            "              <a href=\"/code4craft/webmagic/tree/webmagic-parent-0.3.1\" class=\"js-navigation-open select-menu-item-text js-select-button-text css-truncate-target\" data-name=\"webmagic-parent-0.3.1\" data-skip-pjax=\"true\" rel=\"nofollow\" title=\"webmagic-parent-0.3.1\">webmagic-parent-0.3.1</a>\n" +
+            "            </div> <!-- /.select-menu-item -->\n" +
             "            <div class=\"select-menu-item js-navigation-item \">\n" +
             "              <span class=\"select-menu-item-icon octicon octicon-check\"></span>\n" +
             "              <a href=\"/code4craft/webmagic/tree/webmagic-parent-0.2.1\" class=\"js-navigation-open select-menu-item-text js-select-button-text css-truncate-target\" data-name=\"webmagic-parent-0.2.1\" data-skip-pjax=\"true\" rel=\"nofollow\" title=\"webmagic-parent-0.2.1\">webmagic-parent-0.2.1</a>\n" +
@@ -691,13 +509,13 @@ public class MockDownloader implements Downloader{
             "</div> <!-- /.select-menu -->\n" +
             "\n" +
             "\n" +
-            "  <div class=\"breadcrumb\"><span class='repo-root js-repo-root'><span itemscope=\"\" itemtype=\"http://data-vocabulary.org/Breadcrumb\"><a href=\"/code4craft/webmagic\" data-branch=\"master\" data-direction=\"back\" data-pjax=\"true\" itemscope=\"url\"><span itemprop=\"title\">webmagic</span></a></span></span><span class=\"separator\"> / </span><form action=\"/code4craft/webmagic/new/master\" class=\"js-new-blob-form tooltipped rightwards new-file-link\" method=\"post\" title=\"Create a new file here\"><span aria-label=\"Create a new file here\" class=\"js-new-blob-submit octicon octicon-file-add\" data-test-id=\"create-new-git-file\" role=\"button\"></span></form></div>\n" +
+            "  <div class=\"breadcrumb\"><span class='repo-root js-repo-root'><span itemscope=\"\" itemtype=\"http://data-vocabulary.org/Breadcrumb\"><a href=\"/code4craft/webmagic\" data-branch=\"master\" data-direction=\"back\" data-pjax=\"true\" itemscope=\"url\"><span itemprop=\"title\">webmagic</span></a></span></span><span class=\"separator\"> / </span><form action=\"/login?return_to=%2Fcode4craft%2Fwebmagic\" class=\"js-new-blob-form tooltipped rightwards new-file-link\" method=\"post\" title=\"Sign in to make or propose changes\"><span aria-label=\"Sign in to make or propose changes\" class=\"js-new-blob-submit octicon octicon-file-add\" data-test-id=\"create-new-git-file\" role=\"button\"></span></form></div>\n" +
             "</div>\n" +
             "\n" +
             "\n" +
             "\n" +
             "<a href=\"/code4craft/webmagic/find/master\"\n" +
-            "  data-hotkey=\"t\" style=\"display:none\" data-pjax>Show File Finder</a>\n" +
+            "  data-hotkey=\"t\" class=\"js-show-file-finder\" style=\"display:none\" data-pjax>Show File Finder</a>\n" +
             "<div class=\"bubble files-bubble\">\n" +
             "  <table class=\"files\" data-pjax>\n" +
             "    <thead>\n" +
@@ -735,12 +553,12 @@ public class MockDownloader implements Downloader{
             "        <img alt=\"Octocat-spinner-32\" class=\"spinner\" height=\"16\" src=\"https://github.global.ssl.fastly.net/images/spinners/octocat-spinner-32.gif\" width=\"16\" />\n" +
             "      </td>\n" +
             "      <td class=\"content\">\n" +
-            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/tree/master/webmagic-core\" class=\"js-directory-link\" id=\"39809e13bc65c3873f79570b81852d62-947dff73c2eda51ae629fa42d6ace984fa044db6\" title=\"webmagic-core\">webmagic-core</a></span>\n" +
+            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/tree/master/webmagic-core\" class=\"js-directory-link\" id=\"39809e13bc65c3873f79570b81852d62-e96da9edd9329cf8448fed332294dd4575549495\" title=\"webmagic-core\">webmagic-core</a></span>\n" +
             "      </td>\n" +
             "      <td class=\"message\">\n" +
-            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/commit/c17a31a21d342ddc4349417557bc8b63aba0ba07\" class=\"message\" data-pjax=\"true\" title=\"fix null pointe exception #26\">fix null pointe exception</a> <a href=\"https://github.com/code4craft/webmagic/issues/26\" class=\"issue-link\" title=\"Annotation extactor does not work\">#26</a></span>\n" +
+            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/commit/b131878123cb90f6123255bbd21e71bc70a480b7\" class=\"message\" data-pjax=\"true\" title=\"add example\">add example</a></span>\n" +
             "      </td>\n" +
-            "      <td class=\"age\"><span class=\"css-truncate css-truncate-target\"><time class=\"js-relative-date\" datetime=\"2013-09-08T06:09:49-07:00\" title=\"2013-09-08 06:09:49\">September 08, 2013</time></span></td>\n" +
+            "      <td class=\"age\"><span class=\"css-truncate css-truncate-target\"><time class=\"js-relative-date\" datetime=\"2013-09-22T22:01:28-07:00\" title=\"2013-09-22 22:01:28\">September 22, 2013</time></span></td>\n" +
             "    </tr>\n" +
             "    <tr class=\"alt\">\n" +
             "      <td class=\"icon\">\n" +
@@ -748,12 +566,12 @@ public class MockDownloader implements Downloader{
             "        <img alt=\"Octocat-spinner-32\" class=\"spinner\" height=\"16\" src=\"https://github.global.ssl.fastly.net/images/spinners/octocat-spinner-32.gif\" width=\"16\" />\n" +
             "      </td>\n" +
             "      <td class=\"content\">\n" +
-            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/tree/master/webmagic-extension\" class=\"js-directory-link\" id=\"dc82c79bcb262e1942088502bb426876-5dd5a5a2f7e9aa32848ac323e26fb29e35117bce\" title=\"webmagic-extension\">webmagic-extension</a></span>\n" +
+            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/tree/master/webmagic-extension\" class=\"js-directory-link\" id=\"dc82c79bcb262e1942088502bb426876-6f4453065d5b11429731e2a3e71e10f944da2180\" title=\"webmagic-extension\">webmagic-extension</a></span>\n" +
             "      </td>\n" +
             "      <td class=\"message\">\n" +
-            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/commit/c17a31a21d342ddc4349417557bc8b63aba0ba07\" class=\"message\" data-pjax=\"true\" title=\"fix null pointe exception #26\">fix null pointe exception</a> <a href=\"https://github.com/code4craft/webmagic/issues/26\" class=\"issue-link\" title=\"Annotation extactor does not work\">#26</a></span>\n" +
+            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/commit/b131878123cb90f6123255bbd21e71bc70a480b7\" class=\"message\" data-pjax=\"true\" title=\"add example\">add example</a></span>\n" +
             "      </td>\n" +
-            "      <td class=\"age\"><span class=\"css-truncate css-truncate-target\"><time class=\"js-relative-date\" datetime=\"2013-09-08T06:09:49-07:00\" title=\"2013-09-08 06:09:49\">September 08, 2013</time></span></td>\n" +
+            "      <td class=\"age\"><span class=\"css-truncate css-truncate-target\"><time class=\"js-relative-date\" datetime=\"2013-09-22T22:01:28-07:00\" title=\"2013-09-22 22:01:28\">September 22, 2013</time></span></td>\n" +
             "    </tr>\n" +
             "    <tr class=\"\">\n" +
             "      <td class=\"icon\">\n" +
@@ -774,12 +592,12 @@ public class MockDownloader implements Downloader{
             "        <img alt=\"Octocat-spinner-32\" class=\"spinner\" height=\"16\" src=\"https://github.global.ssl.fastly.net/images/spinners/octocat-spinner-32.gif\" width=\"16\" />\n" +
             "      </td>\n" +
             "      <td class=\"content\">\n" +
-            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/tree/master/webmagic-samples\" class=\"js-directory-link\" id=\"4284b70d4c5e11003fb292b0d0f7539f-3567f90bdc95fbfe3f18913c7c22c9cce3fe6798\" title=\"webmagic-samples\">webmagic-samples</a></span>\n" +
+            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/tree/master/webmagic-samples\" class=\"js-directory-link\" id=\"4284b70d4c5e11003fb292b0d0f7539f-55f538835cd8b15fb4e34c8a0d6491dc9559e610\" title=\"webmagic-samples\">webmagic-samples</a></span>\n" +
             "      </td>\n" +
             "      <td class=\"message\">\n" +
-            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/commit/e1b6b54097a6657cfe1c43bb99ba8b47518c455f\" class=\"message\" data-pjax=\"true\" title=\"update version for samples\">update version for samples</a></span>\n" +
+            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/commit/95ab4edec3daca3353395909a13085079ff8606b\" class=\"message\" data-pjax=\"true\" title=\"some bugfix\">some bugfix</a></span>\n" +
             "      </td>\n" +
-            "      <td class=\"age\"><span class=\"css-truncate css-truncate-target\"><time class=\"js-relative-date\" datetime=\"2013-09-03T20:07:28-07:00\" title=\"2013-09-03 20:07:28\">September 03, 2013</time></span></td>\n" +
+            "      <td class=\"age\"><span class=\"css-truncate css-truncate-target\"><time class=\"js-relative-date\" datetime=\"2013-09-22T17:38:54-07:00\" title=\"2013-09-22 17:38:54\">September 22, 2013</time></span></td>\n" +
             "    </tr>\n" +
             "    <tr class=\"\">\n" +
             "      <td class=\"icon\">\n" +
@@ -813,12 +631,12 @@ public class MockDownloader implements Downloader{
             "        <img alt=\"Octocat-spinner-32\" class=\"spinner\" height=\"16\" src=\"https://github.global.ssl.fastly.net/images/spinners/octocat-spinner-32.gif\" width=\"16\" />\n" +
             "      </td>\n" +
             "      <td class=\"content\">\n" +
-            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/tree/master/zh_docs\" class=\"js-directory-link\" id=\"bec3b859688b0bbdb94899b1a5b56441-66254ea2ec85e8cf79182bcfe540b699e7e4d206\" title=\"zh_docs\">zh_docs</a></span>\n" +
+            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/tree/master/zh_docs\" class=\"js-directory-link\" id=\"bec3b859688b0bbdb94899b1a5b56441-2cf0c7c178e3e0280b023f54e3ef21e9b7b9e3b3\" title=\"zh_docs\">zh_docs</a></span>\n" +
             "      </td>\n" +
             "      <td class=\"message\">\n" +
-            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/commit/ac4cd391707da1190744a3891af7c62424fd8d37\" class=\"message\" data-pjax=\"true\" title=\"update version\">update version</a></span>\n" +
+            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/commit/81f75347573f70a39a83afd5d2f7d626b3b305bd\" class=\"message\" data-pjax=\"true\" title=\"update version\">update version</a></span>\n" +
             "      </td>\n" +
-            "      <td class=\"age\"><span class=\"css-truncate css-truncate-target\"><time class=\"js-relative-date\" datetime=\"2013-09-04T05:37:42-07:00\" title=\"2013-09-04 05:37:42\">September 04, 2013</time></span></td>\n" +
+            "      <td class=\"age\"><span class=\"css-truncate css-truncate-target\"><time class=\"js-relative-date\" datetime=\"2013-09-12T06:28:42-07:00\" title=\"2013-09-12 06:28:42\">September 12, 2013</time></span></td>\n" +
             "    </tr>\n" +
             "    <tr class=\"alt\">\n" +
             "      <td class=\"icon\">\n" +
@@ -852,12 +670,12 @@ public class MockDownloader implements Downloader{
             "        <img alt=\"Octocat-spinner-32\" class=\"spinner\" height=\"16\" src=\"https://github.global.ssl.fastly.net/images/spinners/octocat-spinner-32.gif\" width=\"16\" />\n" +
             "      </td>\n" +
             "      <td class=\"content\">\n" +
-            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/blob/master/README.md\" class=\"js-directory-link\" id=\"04c6e90faac2675aa89e2176d2eec7d8-5624019f9b5112a3b9d061551c82bf610fbaad7a\" title=\"README.md\">README.md</a></span>\n" +
+            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/blob/master/README.md\" class=\"js-directory-link\" id=\"04c6e90faac2675aa89e2176d2eec7d8-01a868db17802ce7915cc2bcfad10244ef4de064\" title=\"README.md\">README.md</a></span>\n" +
             "      </td>\n" +
             "      <td class=\"message\">\n" +
-            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/commit/ac4cd391707da1190744a3891af7c62424fd8d37\" class=\"message\" data-pjax=\"true\" title=\"update version\">update version</a></span>\n" +
+            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/commit/a0d64b76357a449386755b9867163c91d04a2426\" class=\"message\" data-pjax=\"true\" title=\"update version\">update version</a></span>\n" +
             "      </td>\n" +
-            "      <td class=\"age\"><span class=\"css-truncate css-truncate-target\"><time class=\"js-relative-date\" datetime=\"2013-09-04T05:37:42-07:00\" title=\"2013-09-04 05:37:42\">September 04, 2013</time></span></td>\n" +
+            "      <td class=\"age\"><span class=\"css-truncate css-truncate-target\"><time class=\"js-relative-date\" datetime=\"2013-09-12T06:06:05-07:00\" title=\"2013-09-12 06:06:05\">September 12, 2013</time></span></td>\n" +
             "    </tr>\n" +
             "    <tr class=\"\">\n" +
             "      <td class=\"icon\">\n" +
@@ -865,12 +683,12 @@ public class MockDownloader implements Downloader{
             "        <img alt=\"Octocat-spinner-32\" class=\"spinner\" height=\"16\" src=\"https://github.global.ssl.fastly.net/images/spinners/octocat-spinner-32.gif\" width=\"16\" />\n" +
             "      </td>\n" +
             "      <td class=\"content\">\n" +
-            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/blob/master/pom.xml\" class=\"js-directory-link\" id=\"600376dffeb79835ede4a0b285078036-4fdfeee1be6d6430c6e402b036df6c6947f0d4da\" title=\"pom.xml\">pom.xml</a></span>\n" +
+            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/blob/master/pom.xml\" class=\"js-directory-link\" id=\"600376dffeb79835ede4a0b285078036-e2685a8ad6dbce1421232fced6e46ed3c8c3efa2\" title=\"pom.xml\">pom.xml</a></span>\n" +
             "      </td>\n" +
             "      <td class=\"message\">\n" +
-            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/commit/2e8cf0a3dd27503423afe0bc8f3600bcf8ac832b\" class=\"message\" data-pjax=\"true\" title=\"将单元测试fork独立的JVM来跑。避免少数情况默认maven开的JVM堆太小。\">将单元测试fork独立的JVM来跑。避免少数情况默认maven开的JVM堆太小。</a></span>\n" +
+            "        <span class=\"css-truncate css-truncate-target\"><a href=\"/code4craft/webmagic/commit/fb693a4ac41667ba70f2d7c11c73b364fa569e67\" class=\"message\" data-pjax=\"true\" title=\"[maven-release-plugin] prepare for next development iteration\">[maven-release-plugin] prepare for next development iteration</a></span>\n" +
             "      </td>\n" +
-            "      <td class=\"age\"><span class=\"css-truncate css-truncate-target\"><time class=\"js-relative-date\" datetime=\"2013-09-04T09:30:10-07:00\" title=\"2013-09-04 09:30:10\">September 04, 2013</time></span></td>\n" +
+            "      <td class=\"age\"><span class=\"css-truncate css-truncate-target\"><time class=\"js-relative-date\" datetime=\"2013-09-08T07:25:07-07:00\" title=\"2013-09-08 07:25:07\">September 08, 2013</time></span></td>\n" +
             "    </tr>\n" +
             "    <tr class=\"alt\">\n" +
             "      <td class=\"icon\">\n" +
@@ -932,12 +750,12 @@ public class MockDownloader implements Downloader{
             "<pre><code>    &lt;dependency&gt;\n" +
             "        &lt;groupId&gt;us.codecraft&lt;/groupId&gt;\n" +
             "        &lt;artifactId&gt;webmagic-core&lt;/artifactId&gt;\n" +
-            "        &lt;version&gt;0.3.0&lt;/version&gt;\n" +
+            "        &lt;version&gt;0.3.1&lt;/version&gt;\n" +
             "    &lt;/dependency&gt;\n" +
             "    &lt;dependency&gt;\n" +
             "        &lt;groupId&gt;us.codecraft&lt;/groupId&gt;\n" +
             "        &lt;artifactId&gt;webmagic-extension&lt;/artifactId&gt;\n" +
-            "        &lt;version&gt;0.3.0&lt;/version&gt;\n" +
+            "        &lt;version&gt;0.3.1&lt;/version&gt;\n" +
             "    &lt;/dependency&gt;\n" +
             "</code></pre>\n" +
             "\n" +
@@ -949,7 +767,7 @@ public class MockDownloader implements Downloader{
             "\n" +
             "<p>Write a class implements PageProcessor：</p>\n" +
             "\n" +
-            "<div class=\"highlight\"><pre>    <span class=\"kd\">public</span> <span class=\"kd\">class</span> <span class=\"nc\">OschinaBlogPageProcesser</span> <span class=\"kd\">implements</span> <span class=\"n\">PageProcessor</span> <span class=\"o\">{</span>\n" +
+            "<div class=\"highlight highlight-java\"><pre>    <span class=\"kd\">public</span> <span class=\"kd\">class</span> <span class=\"nc\">OschinaBlogPageProcesser</span> <span class=\"kd\">implements</span> <span class=\"n\">PageProcessor</span> <span class=\"o\">{</span>\n" +
             "\n" +
             "        <span class=\"kd\">private</span> <span class=\"n\">Site</span> <span class=\"n\">site</span> <span class=\"o\">=</span> <span class=\"n\">Site</span><span class=\"o\">.</span><span class=\"na\">me</span><span class=\"o\">().</span><span class=\"na\">setDomain</span><span class=\"o\">(</span><span class=\"s\">\"my.oschina.net\"</span><span class=\"o\">)</span>\n" +
             "           <span class=\"o\">.</span><span class=\"na\">addStartUrl</span><span class=\"o\">(</span><span class=\"s\">\"http://my.oschina.net/flashsword/blog\"</span><span class=\"o\">);</span>\n" +
@@ -984,7 +802,7 @@ public class MockDownloader implements Downloader{
             "</li>\n" +
             "</ul><p>You can also use annotation way:</p>\n" +
             "\n" +
-            "<div class=\"highlight\"><pre>    <span class=\"nd\">@TargetUrl</span><span class=\"o\">(</span><span class=\"s\">\"http://my.oschina.net/flashsword/blog/\\\\d+\"</span><span class=\"o\">)</span>\n" +
+            "<div class=\"highlight highlight-java\"><pre>    <span class=\"nd\">@TargetUrl</span><span class=\"o\">(</span><span class=\"s\">\"http://my.oschina.net/flashsword/blog/\\\\d+\"</span><span class=\"o\">)</span>\n" +
             "    <span class=\"kd\">public</span> <span class=\"kd\">class</span> <span class=\"nc\">OschinaBlog</span> <span class=\"o\">{</span>\n" +
             "\n" +
             "        <span class=\"nd\">@ExtractBy</span><span class=\"o\">(</span><span class=\"s\">\"//title\"</span><span class=\"o\">)</span>\n" +
@@ -1071,7 +889,7 @@ public class MockDownloader implements Downloader{
             "    </a>\n" +
             "\n" +
             "    <ul class=\"site-footer-links\">\n" +
-            "      <li>&copy; 2013 <span title=\"0.08765s from github-fe120-cp1-prd.iad.github.net\">GitHub</span>, Inc.</li>\n" +
+            "      <li>&copy; 2013 <span title=\"0.04752s from github-fe114-cp1-prd.iad.github.net\">GitHub</span>, Inc.</li>\n" +
             "        <li><a href=\"/site/terms\">Terms</a></li>\n" +
             "        <li><a href=\"/site/privacy\">Privacy</a></li>\n" +
             "        <li><a href=\"/security\">Security</a></li>\n" +
@@ -1111,7 +929,6 @@ public class MockDownloader implements Downloader{
             "      Something went wrong with that request. Please try again.\n" +
             "    </div>\n" +
             "\n" +
-            "    \n" +
             "  </body>\n" +
             "</html>\n" +
             "\n";
