@@ -96,11 +96,6 @@ public class Site {
      * @return get domain
      */
     public String getDomain() {
-        if (domain == null) {
-            if (startUrls.size() > 0) {
-                domain = UrlUtils.getDomain(startUrls.get(0));
-            }
-        }
         return domain;
     }
 
@@ -176,6 +171,11 @@ public class Site {
      */
     public Site addStartUrl(String startUrl) {
         this.startUrls.add(startUrl);
+        if (domain == null) {
+            if (startUrls.size() > 0) {
+                domain = UrlUtils.getDomain(startUrls.get(0));
+            }
+        }
         return this;
     }
 
