@@ -25,9 +25,9 @@ public abstract class BasicTypeFormatter<T> implements ObjectFormatter<T> {
 
     protected abstract T formatTrimmed(String raw) throws Exception;
 
-    public static final List<ObjectFormatter> basicTypeFormatters = Arrays.<ObjectFormatter>asList(new IntegerFormatter(),
-            new LongFormatter(), new DoubleFormatter(), new FloatFormatter(), new ShortFormatter(),
-            new CharactorFormatter(), new ByteFormatter(), new BooleanFormatter());
+    public static final List<Class<? extends ObjectFormatter>> basicTypeFormatters = Arrays.<Class<? extends ObjectFormatter>>asList(IntegerFormatter.class,
+            LongFormatter.class, DoubleFormatter.class, FloatFormatter.class, ShortFormatter.class,
+            CharactorFormatter.class, ByteFormatter.class, BooleanFormatter.class);
 
     public static Class<?> detectBasicClass(Class<?> type) {
         if (type.equals(Integer.TYPE) || type.equals(Integer.class)) {

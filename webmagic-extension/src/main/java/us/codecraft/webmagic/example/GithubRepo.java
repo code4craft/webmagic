@@ -1,10 +1,6 @@
-package us.codecraft.webmagic.model;
+package us.codecraft.webmagic.example;
 
-import junit.framework.Assert;
-import org.junit.Test;
-import us.codecraft.webmagic.MockDownloader;
-import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.model.HasKey;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.model.annotation.HelpUrl;
@@ -25,10 +21,10 @@ public class GithubRepo implements HasKey {
     @ExtractByUrl("https://github\\.com/(\\w+)/.*")
     private String author;
 
-    @ExtractBy("//div[@id='readme']")
+    @ExtractBy("//div[@id='readme']/tidyText()")
     private String readme;
 
-    @ExtractBy(value = "//div[@class='repository-lang-stats']//li//span[@class='lang']", multi = true)
+    @ExtractBy(value = "//div[@class='repository-lang-stats']//li//span[@class='lang']/text()", multi = true)
     private List<String> language;
 
     @ExtractBy("//ul[@class='pagehead-actions']/li[2]//a[@class='social-count js-social-count']/text()")
@@ -39,18 +35,6 @@ public class GithubRepo implements HasKey {
 
     @ExtractByUrl
     private String url;
-
-    @Test
-    public void test() {
-        OOSpider.create(Site.me().addStartUrl("https://github.com/code4craft/webmagic").setSleepTime(0)
-                , new PageModelPipeline<GithubRepo>() {
-            @Override
-            public void process(GithubRepo o, Task task) {
-                Assert.assertEquals(78, o.getStar());
-                Assert.assertEquals(65, o.getFork());
-            }
-        }, GithubRepo.class).setDownloader(new MockDownloader()).test("https://github.com/code4craft/webmagic");
-    }
 
     @Override
     public String key() {

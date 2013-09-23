@@ -105,15 +105,15 @@ class PageModelExtractor {
         Formatter formatter = field.getAnnotation(Formatter.class);
         if (formatter != null) {
             if (!formatter.formatter().equals(ObjectFormatter.class)) {
-                return initFormatter(formatter);
+                return initFormatter(formatter.formatter());
             }
         }
-        return ObjectFormatters.get(fieldClazz);
+        return initFormatter(ObjectFormatters.get(fieldClazz));
     }
 
-    private ObjectFormatter initFormatter(Formatter formatter) {
+    private ObjectFormatter initFormatter(Class<? extends ObjectFormatter> formatterClazz) {
         try {
-            return formatter.formatter().newInstance();
+            return formatterClazz.newInstance();
         } catch (InstantiationException e) {
             logger.error("init ObjectFormatter fail", e);
         } catch (IllegalAccessException e) {
