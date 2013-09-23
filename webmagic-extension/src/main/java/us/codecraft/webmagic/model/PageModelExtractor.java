@@ -105,7 +105,8 @@ class PageModelExtractor {
         Formatter formatter = field.getAnnotation(Formatter.class);
         if (formatter != null) {
             if (!formatter.formatter().equals(ObjectFormatter.class)) {
-                return initFormatter(formatter.formatter());
+                ObjectFormatter objectFormatter = initFormatter(formatter.formatter());
+                objectFormatter.initParam(formatter.value());
             }
         }
         return initFormatter(ObjectFormatters.get(fieldClazz));
@@ -311,6 +312,9 @@ class PageModelExtractor {
                     }
                     if (fieldExtractor.getObjectFormatter() != null) {
                         Object converted = convert(value, fieldExtractor.getObjectFormatter());
+                        if (converted == null && fieldExtractor.isNotNull()) {
+                            return null;
+                        }
                         setField(o, fieldExtractor, converted);
                     } else {
                         setField(o, fieldExtractor, value);
@@ -332,7 +336,11 @@ class PageModelExtractor {
 
     private Object convert(String value, ObjectFormatter objectFormatter) {
         try {
-            return objectFormatter.format(value);
+            Object format = objectFormatter.format(value);
+            if (logger.isDebugEnabled()) {
+                logger.debug("String " + value + " is converted to " + format);
+            }
+            return format;
         } catch (Exception e) {
             logger.error("convert " + value + " to " + objectFormatter.clazz() + " error!", e);
         }
@@ -351,6 +359,9 @@ class PageModelExtractor {
     }
 
     private void setField(Object o, FieldExtractor fieldExtractor, Object value) throws IllegalAccessException, InvocationTargetException {
+        if (value==null){
+            return;
+        }
         if (fieldExtractor.getSetterMethod() != null) {
             fieldExtractor.getSetterMethod().invoke(o, value);
         }

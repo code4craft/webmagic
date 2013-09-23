@@ -10,7 +10,7 @@ import java.util.Date;
  */
 public class DateFormatter implements ObjectFormatter<Date> {
 
-    private String[] datePatterns = new String[]{"YYYY-MM-dd HH:mm"};
+    private String[] datePatterns = new String[]{"yyyy-MM-dd HH:mm"};
 
     @Override
     public Date format(String raw) throws Exception {
