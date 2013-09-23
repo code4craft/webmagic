@@ -16,8 +16,6 @@ import java.util.regex.Pattern;
  */
 public class UrlUtils {
 
-    private static Pattern relativePathPattern = Pattern.compile("^([\\.]+)/");
-
     /**
      * canonicalizeUrl
      *

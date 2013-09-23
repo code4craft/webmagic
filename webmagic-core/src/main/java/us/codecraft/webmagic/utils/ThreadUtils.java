@@ -1,7 +1,7 @@
 package us.codecraft.webmagic.utils;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -11,22 +11,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class ThreadUtils {
 
-    public static ExecutorService newFixedThreadPool(int threadSize) {
-        return new ThreadPoolExecutor(threadSize, threadSize, 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(1) {
-
-                    private static final long serialVersionUID = -9028058603126367678L;
-
-                    @Override
-                    public boolean offer(Runnable e) {
-                        try {
-                            put(e);
-                            return true;
-                        } catch (InterruptedException ie) {
-                            Thread.currentThread().interrupt();
-                        }
-                        return false;
-                    }
-                });
-    }
+	public static ExecutorService newFixedThreadPool(int threadSize) {
+		if (threadSize <= 1) {
+			throw new IllegalArgumentException("ThreadSize must be greater than 1!");
+		}
+		return new ThreadPoolExecutor(threadSize - 1, threadSize - 1, 0L, TimeUnit.MILLISECONDS,
+				new SynchronousQueue<Runnable>(), new ThreadPoolExecutor.CallerRunsPolicy());
+	}
 }
