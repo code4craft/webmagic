@@ -1358,7 +1358,7 @@ public class XpathSelectorTest {
     @Test
     public void testOschina() {
         Html html1 = new Html(html);
-        Assert.assertEquals("再次吐槽easyui", html1.xpath(".//*[@class='QTitle']/h1/a").toString());
+        Assert.assertEquals("再次吐槽easyui", html1.xpath("//*[@class='QTitle']/h1/a/text()").toString());
         Assert.assertNotNull(html1.$("a[href]").xpath("//@href").all());
         Selectors.xpath("/abc/").select("");
     }
