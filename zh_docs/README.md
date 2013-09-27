@@ -139,7 +139,7 @@ webmagic-extension包括了注解方式编写爬虫的方法，只需基于一�
 
 ### 详细文档
 
-见[webmagic manual.md](https://github.com/code4craft/webmagic/blob/master/webmagic%20manual.md)。
+见[webmagic manual.md](https://github.com/code4craft/webmagic/blob/master/user-manual.md)。
 
 ### 示例
 
