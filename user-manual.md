@@ -26,12 +26,12 @@ webmagic使用maven管理依赖，在项目中添加对应的依赖即可使用w
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-core</artifactId>
-            <version>0.2.1</version>
+            <version>0.3.2</version>
         </dependency>
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-extension</artifactId>
-            <version>0.2.1</version>
+            <version>0.3.2</version>
         </dependency>
 
 #### 项目结构
@@ -72,6 +72,7 @@ webmagic还包含两个可用的扩展包，因为这两个包都依赖了比较
 
 PageProcessor是webmagic-core的一部分，定制一个PageProcessor即可实现自己的爬虫逻辑。以下是抓取osc博客的一段代码：
 
+```java
     public class OschinaBlogPageProcesser implements PageProcessor {
 
         private Site site = Site.me().setDomain("my.oschina.net")
@@ -97,17 +98,19 @@ PageProcessor是webmagic-core的一部分，定制一个PageProcessor即可实�
                  .pipeline(new ConsolePipeline()).run();
         }
     }
+```
 
 这里通过page.addTargetRequests()方法来增加要抓取的URL，并通过page.putField()来保存抽取结果。page.getHtml().xpath()则是按照某个规则对结果进行抽取，这里抽取支持链式调用。调用结束后，toString()表示转化为单个String，all()则转化为一个String列表。
 
 Spider是爬虫的入口类。Pipeline是结果输出和持久化的接口，这里ConsolePipeline表示结果输出到控制台。
 
-执行这个main方法，即可在控制台看到抓取结果。webmagic默认有3秒抓取间隔，请耐心等待。
+执行这个main方法，即可在控制台看到抓取结果。webmagic默认有3秒抓取间隔，请耐心等待。你可以通过site.setSleepTime(int)修改这个值。site还有一些修改抓取属性的方法。
 
 #### 使用注解
 
 webmagic-extension包括了注解方式编写爬虫的方法，只需基于一个POJO增加注解即可完成一个爬虫。以下仍然是抓取oschina博客的一段代码，功能与OschinaBlogPageProcesser完全相同：
 
+```java
 	@TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
 	public class OschinaBlog {
 
@@ -119,6 +122,10 @@ webmagic-extension包括了注解方式编写爬虫的方法，只需基于一�
 
 	    @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
 	    private List<String> tags;
+	    
+	    @Formatter("yyyy-MM-dd HH:mm")
+	    @ExtractBy("//div[@class='BlogStat']/regex('\\d+-\\d+-\\d+\\s+\\d+:\\d+')")
+	    private Date date; 
 
 	    public static void main(String[] args) {
 	        OOSpider.create(
@@ -126,6 +133,7 @@ webmagic-extension包括了注解方式编写爬虫的方法，只需基于一�
 				new ConsolePageModelPipeline(), OschinaBlog.class).run();
 	    }
 	}
+```
 
 这个例子定义了一个Model类，Model类的字段'title'、'content'、'tags'均为要抽取的属性。这个类在Pipeline里是可以复用的。
 
@@ -152,14 +160,16 @@ webmagic-core参考了scrapy的模块划分，分为Spider(整个爬虫的调度
 
 **Spider**是爬虫的入口类，Spider的接口调用采用了链式的API设计，其他功能全部通过接口注入Spider实现，下面是启动一个比较复杂的Spider的例子。
 
+```java
     Spider.create(sinaBlogProcessor)
 	.scheduler(new FileCacheQueueScheduler("/data/temp/webmagic/cache/"))
 	.pipeline(new FilePipeline())
 	.thread(10).run();	
+```
 
 Spider的核心处理流程非常简单，代码如下：
 
-    <!-- lang: java -->
+```java
     private void processRequest(Request request) {
         Page page = downloader.download(request, this);
         if (page == null) {
@@ -173,6 +183,7 @@ Spider的核心处理流程非常简单，代码如下：
         }
         sleep(site.getSleepTime());
     }
+```
     
 Spider还包括一个方法test(String url)，该方法只抓取一个单独的页面，用于测试抽取效果。
     
@@ -191,15 +202,50 @@ Spider还包括一个方法test(String url)，该方法只抓取一个单独的�
 
 **Selector**是webmagic为了简化页面抽取开发的独立模块，是webmagic-core的主要着力点。这里整合了CSS Selector、XPath和正则表达式，并可以进行链式的抽取。
 		
-    <!-- lang: java -->
+```java
     //content是用别的爬虫工具抽取到的正文
     List<String> links = page.getHtml()
     .$("div.title")  //css 选择，Java里虽然很少有$符号出现，不过貌似$作为方法名是合法的
     .xpath("//@href")  //提取链接
     .regex(".*blog.*") //正则匹配过滤
     .all(); //转换为string列表
+```
 
 webmagic包括一个对于页面正文的自动抽取的类**SmartContentSelector**。相信用过Evernote Clearly都会对其自动抽取正文的技术印象深刻。这个技术又叫**Readability**。当然webmagic对Readability的实现还比较粗略，但是仍有一些学习价值。
+
+webmagic的XPath解析使用了作者另一个开源项目：基于Jsoup的XPath解析器[Xsoup](https://github.com/code4craft/xsoup)，Xsoup对XPath的语法进行了一些扩展，支持一些自定义的函数。
+
+<table>
+    <tr>
+        <td width="100">函数</td>
+        <td>说明</td>
+    </tr>
+    <tr>
+        <td width="100">text(n)</td>
+        <td>第n个文本节点(0表示取所有)</td>
+    </tr>
+        <tr>
+        <td width="100">allText()</td>
+        <td>包括子节点的所有文本</td>
+    </tr>
+    </tr>
+        <tr>
+        <td width="100">tidyText()</td>
+        <td>包括子节点的所有文本，并进行智能换行</td>
+    </tr>
+    <tr>
+        <td width="100">html()</td>
+        <td>内部html(不包括当前标签本身)</td>
+    </tr>
+    <tr>
+        <td width="100">outerHtml()</td>
+        <td>外部html(包括当前标签本身)</td>
+    </tr>
+    <tr>
+        <td width="100">regex(@attr,expr,group)</td>
+        <td>正则表达式，@attr是抽取的属性(可省略)，expr是表达式内容，group为捕获组(可省略，默认为0)</td>
+    </tr>
+</table>
 
 基于Saxon，webmagic提供了XPath2.0语法的支持。XPath2.0语法支持内部函数、逻辑控制等，是一门完整的语言，如果你熟悉XPath2.0语法，倒是不妨一试(需要引入**webmagic-saxon**包)。
 
@@ -296,6 +342,7 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 
 注解方式其实也是通过一个PageProcessor的实现--ModelPageProcessor完成，因此对webmagic-core代码没有任何影响。仍然以抓取OschinaBlog的程序为例：
 
+```java
 	@TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
 	public class OschinaBlog {
 
@@ -314,6 +361,7 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 				new ConsolePageModelPipeline(), OschinaBlog.class).run();
 	    }
 	}
+```	
 
 注解部分包括以下内容：
 
@@ -337,13 +385,20 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 		
 		"ExtractBy"用于类时，则限定了字段抽取的区域。用于类时仍支持multi，multi则表示一个页面可以抽取到多个对象。
 
-	* #### ExtractByRaw & ExtractByUrl
+	* ####  ExtractByUrl
 	
-		在类使用"ExtractBy"修饰后，字段的"ExtractBy"使用的是其抽取的结果，如果仍然想要抽取原HTML，可以使用"ExtractByRaw"。与此类似的还有"ExtractByUrl"，表示从URL中抽取信息。ExtractByUrl只支持正则表达式。
+		ExtractByUrl表示从URL中抽取信息，只支持正则表达式。
 
-	* #### ExtractBy2 ExtractBy3	
+	* #### ComboExtract
+	
+		ComboExtract是对ExtractBy的一个补充，支持将对个抽取规则用and或者or的形式组合起来。
 		
-		"ExtractBy"、"ExtractByRaw"支持链式抽取，通过增加注解"ExtractBy2"、"ExtractBy3"实现。
+* #### 类型转换
+
+	    @Formatter("yyyy-MM-dd HH:mm")
+	    @ExtractBy("//div[@class='BlogStat']/regex('\\d+-\\d+-\\d+\\s+\\d+:\\d+')")
+	    private Date date;
+
 		
 * #### AfterExtractor
 
@@ -352,15 +407,19 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 * #### OOSpider
 	OOSpider是注解式爬虫的入口，这里调用**create()**方法将OschinaBlog这个类加入到爬虫的抽取中，这里是可以传入多个类的，例如：
 	
+```java
 		OOSpider.create(
 			Site.me().addStartUrl("http://www.oschina.net"),
 			new ConsolePageModelPipeline(),
 			OschinaBlog.clas,OschinaAnswer.class).run();
+```
 		
 	OOSpider会根据TargetUrl调用不同的Model进行解析。
 
 * #### PageModelPipeline
 	可以通过定义PageModelPipeline来选择结果输出方式。这里new ConsolePageModelPipeline()是PageModelPipeline的一个实现，会将结果输出到控制台。
+	
+	PageModelPipeline目前包括`ConsolePageModelPipeline`、`JsonFilePageModelPipeline`、`FilePageModelPipeline`三个实现。
 	
 * #### 分页
 
