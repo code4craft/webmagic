@@ -395,7 +395,7 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 		
 * #### 类型转换
 
-	webmagic的注解模式直接对抽取结果进行类型转换，通过`ObjectFormatter`实现。webmagic内置了基本类型的支持，这样抽取结果的字段可以是任意基本类型(需要保证抽取结果能够被转换到对应类型)。
+	webmagic的注解模式支持对抽取结果进行类型转换，这样抽取结果并不需要是String类型，而可以是任意类型。webmagic内置了基本类型的支持(需要保证抽取结果能够被转换到对应类型)。
 
 ```java
 	    @ExtractBy("//ul[@class='pagehead-actions']/li[1]//a[@class='social-count js-social-count']/text()")
@@ -410,7 +410,6 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 ```
 
 你也可以编写一个实现`ObjectFormatter`接口的类，进行自己的类型解析。要使用自己的类，需要调用`ObjectFormatters.put()`对这个类进行注册。
-
 		
 * #### AfterExtractor
 
