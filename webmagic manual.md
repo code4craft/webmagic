@@ -26,12 +26,12 @@ webmagic使用maven管理依赖，在项目中添加对应的依赖即可使用w
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-core</artifactId>
-            <version>0.2.1</version>
+            <version>0.3.2</version>
         </dependency>
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-extension</artifactId>
-            <version>0.2.1</version>
+            <version>0.3.2</version>
         </dependency>
 
 #### 项目结构
@@ -102,7 +102,7 @@ PageProcessor是webmagic-core的一部分，定制一个PageProcessor即可实�
 
 Spider是爬虫的入口类。Pipeline是结果输出和持久化的接口，这里ConsolePipeline表示结果输出到控制台。
 
-执行这个main方法，即可在控制台看到抓取结果。webmagic默认有3秒抓取间隔，请耐心等待。
+执行这个main方法，即可在控制台看到抓取结果。webmagic默认有3秒抓取间隔，请耐心等待。你可以通过site.setSleepTime(int)修改这个值。site还有一些修改抓取属性的方法。
 
 #### 使用注解
 
