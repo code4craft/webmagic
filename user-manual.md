@@ -213,7 +213,7 @@ Spider还包括一个方法test(String url)，该方法只抓取一个单独的�
 
 webmagic包括一个对于页面正文的自动抽取的类**SmartContentSelector**。相信用过Evernote Clearly都会对其自动抽取正文的技术印象深刻。这个技术又叫**Readability**。当然webmagic对Readability的实现还比较粗略，但是仍有一些学习价值。
 
-webmagic的XPath解析使用了作者另一个开源项目：基于Jsoup的XPath解析器[Xsoup](https://github.com/code4craft/xsoup)，Xsoup对XPath的语法进行了一些扩展，支持一些自定义的函数。
+webmagic的XPath解析使用了作者另一个开源项目：基于Jsoup的XPath解析器[Xsoup](https://github.com/code4craft/xsoup)，Xsoup对XPath的语法进行了一些扩展，支持一些自定义的函数。这些函数的使用方式都是在XPath末尾加上`/name-of-function()`，例如：`"//div[@class='BlogStat']/regex('\\d+-\\d+-\\d+\\s+\\d+:\\d+')"`。
 
 <table>
     <tr>
