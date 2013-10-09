@@ -2,7 +2,10 @@ package us.codecraft.webmagic.model;
 
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.model.direct.Param;
 import us.codecraft.webmagic.processor.PageProcessor;
+
+import java.util.Collection;
 
 /**
  * The spider for page model extractor.<br>
@@ -22,13 +25,14 @@ import us.codecraft.webmagic.processor.PageProcessor;
  *      {@literal @}ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
  *      private List<String> tags;
  * }
- </pre>
+ * </pre>
  * And start the spider by:
  * <pre>
  *   OOSpider.create(Site.me().addStartUrl("http://my.oschina.net/flashsword/blog")
  *        ,new JsonFilePageModelPipeline(), OschinaBlog.class).run();
  * }
- </pre>
+ * </pre>
+ *
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
@@ -49,6 +53,7 @@ public class OOSpider extends Spider {
 
     /**
      * create a spider
+     *
      * @param site
      * @param pageModelPipeline
      * @param pageModels
@@ -57,7 +62,7 @@ public class OOSpider extends Spider {
         this(ModelPageProcessor.create(site, pageModels));
         this.modelPipeline = new ModelPipeline();
         super.addPipeline(modelPipeline);
-        if (pageModelPipeline!=null){
+        if (pageModelPipeline != null) {
             for (Class pageModel : pageModels) {
                 this.modelPipeline.put(pageModel, pageModelPipeline);
             }
@@ -70,6 +75,22 @@ public class OOSpider extends Spider {
 
     public static OOSpider create(Site site, PageModelPipeline pageModelPipeline, Class... pageModels) {
         return new OOSpider(site, pageModelPipeline, pageModels);
+    }
+
+    public static OOSpider direct(Site site, PageModelPipeline pageModelPipeline, Class... pageModels) {
+        return new OOSpider(site, pageModelPipeline, pageModels);
+    }
+
+    public static OOSpider direct(PageModelPipeline pageModelPipeline, Class... pageModels) {
+        return new OOSpider(null, pageModelPipeline, pageModels);
+    }
+
+    public static OOSpider direct(Class... pageModels) {
+        return new OOSpider(null, null, pageModels);
+    }
+
+    public static OOSpider direct(Collection<Param> params,Class... pageModels) {
+        return new OOSpider(null, null, pageModels);
     }
 
     public OOSpider addPageModel(PageModelPipeline pageModelPipeline, Class... pageModels) {
