@@ -32,6 +32,8 @@ public class Site {
 
     private int cycleRetryTimes = 0;
 
+    private int timeOut = 2000;
+
     private static final Set<Integer> DEFAULT_STATUS_CODE_SET = new HashSet<Integer>();
 
     private Set<Integer> acceptStatCode = DEFAULT_STATUS_CODE_SET;
@@ -129,6 +131,18 @@ public class Site {
      */
     public String getCharset() {
         return charset;
+    }
+
+    public int getTimeOut() {
+        return timeOut;
+    }
+
+    /**
+     * set timeout for downloader in ms
+     * @param timeOut
+     */
+    public void setTimeOut(int timeOut) {
+        this.timeOut = timeOut;
     }
 
     /**

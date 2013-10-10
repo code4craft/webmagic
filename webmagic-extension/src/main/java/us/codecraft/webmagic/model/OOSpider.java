@@ -89,7 +89,7 @@ public class OOSpider extends Spider {
         return new OOSpider(null, null, pageModels);
     }
 
-    public static OOSpider direct(Collection<Param> params,Class... pageModels) {
+    public static OOSpider direct(Collection<Param> params, Class... pageModels) {
         return new OOSpider(null, null, pageModels);
     }
 

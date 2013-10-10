@@ -52,8 +52,8 @@ public class HttpClientPool {
         if (site != null && site.getUserAgent() != null) {
             params.setParameter(CoreProtocolPNames.USER_AGENT, site.getUserAgent());
         }
-        params.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, 1000);
-        params.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 2000);
+        params.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, site.getTimeOut());
+        params.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, site.getTimeOut());
 
         HttpProtocolParamBean paramsBean = new HttpProtocolParamBean(params);
         paramsBean.setVersion(HttpVersion.HTTP_1_1);
