@@ -54,7 +54,7 @@ public class HttpClientPool {
         }
         params.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, site.getTimeOut());
         params.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, site.getTimeOut());
-
+        params.setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BEST_MATCH);
         HttpProtocolParamBean paramsBean = new HttpProtocolParamBean(params);
         paramsBean.setVersion(HttpVersion.HTTP_1_1);
         if (site != null && site.getCharset() != null) {
@@ -73,8 +73,7 @@ public class HttpClientPool {
         if (site != null) {
             generateCookie(httpClient, site);
         }
-        httpClient.getParams().setIntParameter("http.socket.timeout", 60000);
-        httpClient.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BEST_MATCH);
+
         return httpClient;
     }
 

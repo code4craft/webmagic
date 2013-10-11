@@ -19,6 +19,7 @@ import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -66,10 +67,12 @@ public class HttpClientDownloader implements Downloader {
         int retryTimes = 0;
         Set<Integer> acceptStatCode;
         String charset = null;
+        Map<String,String> headers = null;
         if (site != null) {
             retryTimes = site.getRetryTimes();
             acceptStatCode = site.getAcceptStatCode();
             charset = site.getCharset();
+            headers = site.getHeaders();
         } else {
             acceptStatCode = new HashSet<Integer>();
             acceptStatCode.add(200);
@@ -78,6 +81,11 @@ public class HttpClientDownloader implements Downloader {
         HttpClient httpClient = HttpClientPool.getInstance(poolSize).getClient(site);
         try {
             HttpGet httpGet = new HttpGet(request.getUrl());
+            if (headers!=null){
+                for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
+                    httpGet.addHeader(headerEntry.getKey(),headerEntry.getValue());
+                }
+            }
             HttpResponse httpResponse = null;
             int tried = 0;
             boolean retry;

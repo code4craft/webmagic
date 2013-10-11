@@ -8,8 +8,8 @@ import java.util.*;
  * Object contains setting for crawler.<br>
  *
  * @author code4crafter@gmail.com <br>
- * @since 0.1.0
  * @see us.codecraft.webmagic.processor.PageProcessor
+ * @since 0.1.0
  */
 public class Site {
 
@@ -37,6 +37,14 @@ public class Site {
     private static final Set<Integer> DEFAULT_STATUS_CODE_SET = new HashSet<Integer>();
 
     private Set<Integer> acceptStatCode = DEFAULT_STATUS_CODE_SET;
+
+    private Map<String,String> headers = new HashMap<String, String>();
+
+    public static interface HeaderConst {
+
+        public static final String REFERER = "Referer";
+    }
+
 
     static {
         DEFAULT_STATUS_CODE_SET.add(200);
@@ -139,10 +147,12 @@ public class Site {
 
     /**
      * set timeout for downloader in ms
+     *
      * @param timeOut
      */
-    public void setTimeOut(int timeOut) {
+    public Site setTimeOut(int timeOut) {
         this.timeOut = timeOut;
+        return this;
     }
 
     /**
@@ -216,12 +226,28 @@ public class Site {
     }
 
     /**
-     * Get retry times when download fail immediately, 0 by default.<br>
+     * Get retry times immediately when download fail, 0 by default.<br>
      *
      * @return retry times when download fail
      */
     public int getRetryTimes() {
         return retryTimes;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    /**
+     * Put an Http header for downloader. <br/>
+     * Use {@link #addCookie(String, String)} for cookie and {@link #setUserAgent(String)} for user-agent. <br/>
+     * @param key key of http header, there are some keys constant in {@link HeaderConst}
+     * @param value value of header
+     * @return
+     */
+    public Site addHeader(String key, String value){
+        headers.put(key,value);
+        return this;
     }
 
     /**
