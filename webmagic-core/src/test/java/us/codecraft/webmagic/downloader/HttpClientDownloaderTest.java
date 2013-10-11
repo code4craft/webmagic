@@ -22,4 +22,5 @@ public class HttpClientDownloaderTest {
         Page download = httpClientDownloader.download(new Request("http://www.diandian.com"), site.toTask());
         Assert.assertTrue(download.getHtml().toString().contains("flashsword30"));
     }
+
 }
