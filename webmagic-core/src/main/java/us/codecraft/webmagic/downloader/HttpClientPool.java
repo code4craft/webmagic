@@ -24,23 +24,19 @@ import java.util.Map;
  */
 public class HttpClientPool {
 
-    public static volatile HttpClientPool INSTANCE;
-
-    public static HttpClientPool getInstance(int poolSize) {
-        if (INSTANCE == null) {
-            synchronized (HttpClientPool.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new HttpClientPool(poolSize);
-                }
-            }
-        }
-        return INSTANCE;
-    }
-
     private int poolSize;
 
-    private HttpClientPool(int poolSize) {
+    private PoolingClientConnectionManager connectionManager;
+
+    public HttpClientPool(int poolSize) {
         this.poolSize = poolSize;
+        SchemeRegistry schemeRegistry = new SchemeRegistry();
+        schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
+        schemeRegistry.register(new Scheme("https", 443, SSLSocketFactory.getSocketFactory()));
+
+        connectionManager = new PoolingClientConnectionManager(schemeRegistry);
+        connectionManager.setMaxTotal(poolSize);
+        connectionManager.setDefaultMaxPerRoute(100);
     }
 
     public HttpClient getClient(Site site) {
@@ -58,7 +54,6 @@ public class HttpClientPool {
             params.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 3000);
         }
 
-
         params.setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BEST_MATCH);
         HttpProtocolParamBean paramsBean = new HttpProtocolParamBean(params);
         paramsBean.setVersion(HttpVersion.HTTP_1_1);
@@ -67,13 +62,6 @@ public class HttpClientPool {
         }
         paramsBean.setUseExpectContinue(false);
 
-        SchemeRegistry schemeRegistry = new SchemeRegistry();
-        schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
-        schemeRegistry.register(new Scheme("https", 443, SSLSocketFactory.getSocketFactory()));
-
-        PoolingClientConnectionManager connectionManager = new PoolingClientConnectionManager(schemeRegistry);
-        connectionManager.setMaxTotal(poolSize);
-        connectionManager.setDefaultMaxPerRoute(100);
         DefaultHttpClient httpClient = new DefaultHttpClient(connectionManager, params);
         if (site != null) {
             generateCookie(httpClient, site);

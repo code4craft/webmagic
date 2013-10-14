@@ -34,6 +34,8 @@ public class HttpClientDownloader implements Downloader {
 
     private Logger logger = Logger.getLogger(getClass());
 
+    private HttpClientPool httpClientPool;
+
     private int poolSize = 1;
 
     /**
@@ -58,6 +60,13 @@ public class HttpClientDownloader implements Downloader {
         return (Html) page.getHtml();
     }
 
+    private HttpClientPool getHttpClientPool(){
+        if (httpClientPool==null){
+            httpClientPool = new HttpClientPool(poolSize);
+        }
+        return httpClientPool;
+    }
+
     @Override
     public Page download(Request request, Task task) {
         Site site = null;
@@ -78,7 +87,7 @@ public class HttpClientDownloader implements Downloader {
             acceptStatCode.add(200);
         }
         logger.info("downloading page " + request.getUrl());
-        HttpClient httpClient = HttpClientPool.getInstance(poolSize).getClient(site);
+        HttpClient httpClient = getHttpClientPool().getClient(site);
         try {
             HttpGet httpGet = new HttpGet(request.getUrl());
             if (headers!=null){
@@ -150,6 +159,7 @@ public class HttpClientDownloader implements Downloader {
     @Override
     public void setThread(int thread) {
         poolSize = thread;
+        httpClientPool = new HttpClientPool(thread);
     }
 
     private void handleGzip(HttpResponse httpResponse) {
