@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * @since 0.3.3
+ *   NO implement yet!!!!!!!!!!!!
  * @author code4crafter@gmail.com
  */
 @UrlTemplate("http://baike.baidu.com/search/word?word=${word}&enc=utf8")

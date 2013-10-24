@@ -77,14 +77,26 @@ public class OOSpider extends Spider {
         return new OOSpider(site, pageModelPipeline, pageModels);
     }
 
+    /**
+     * @since 0.3.3
+     * NO implement yet!
+     */
     public static OOSpider direct(Site site, PageModelPipeline pageModelPipeline, Class... pageModels) {
         return new OOSpider(site, pageModelPipeline, pageModels);
     }
 
+    /**
+     * @since 0.3.3
+     * NO implement yet!
+     */
     public static OOSpider direct(PageModelPipeline pageModelPipeline, Class... pageModels) {
         return new OOSpider(null, pageModelPipeline, pageModels);
     }
 
+    /**
+     * @since 0.3.3
+     * NO implement yet!
+     */
     public static OOSpider direct(Class... pageModels) {
         return new OOSpider(null, null, pageModels);
     }
