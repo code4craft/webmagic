@@ -1,5 +1,5 @@
 webmagic使用手册
-------
+========
 >webmagic是一个开源的Java垂直爬虫框架，目标是简化爬虫的开发流程，让开发者专注于逻辑功能的开发。webmagic的核心非常简单，但是覆盖爬虫的整个流程，也是很好的学习爬虫开发的材料。
 
 >web爬虫是一种技术，webmagic致力于将这种技术的实现成本降低，但是出于对资源提供者的尊重，webmagic不会做反封锁的事情，包括：验证码破解、代理切换、自动登录等。
@@ -16,8 +16,9 @@ webmagic使用手册
 
 <div style="page-break-after:always"></div>
 
+--------
 
-## 快速开始
+## 下载及安装
 
 ### 使用maven
 
@@ -66,9 +67,11 @@ webmagic还包含两个可用的扩展包，因为这两个包都依赖了比较
 
 在**bin/lib**目录下，有项目依赖的所有jar包，直接在IDE里import即可。
 
-### 第一个爬虫
+--------
 
-#### 定制PageProcessor
+## 第一个爬虫
+
+### 定制PageProcessor
 
 PageProcessor是webmagic-core的一部分，定制一个PageProcessor即可实现自己的爬虫逻辑。以下是抓取osc博客的一段代码：
 
@@ -141,6 +144,9 @@ webmagic-extension包括了注解方式编写爬虫的方法，只需基于一�
 
 <div style="page-break-after:always"></div>
 
+--------
+
+## 详细介绍
 
 ## webmagic-core
 
@@ -324,6 +330,8 @@ webmagic包括以下几个Pipeline的实现：
 webmagic目前不支持持久化到数据库，但是结合其他工具，持久化到数据库也是很容易的。这里不妨看一下[webmagic结合JFinal持久化到数据库的一段代码](http://www.oschina.net/code/snippet_190591_23456)。因为JFinal目前还不支持maven，所以这段代码并没有放到webmagic-samples里来。
 
 <div style="page-break-after:always"></div>
+
+-----
 
 ## webmagic-extension
 
