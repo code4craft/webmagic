@@ -74,6 +74,8 @@ public class Spider implements Runnable, Task {
 
     protected AtomicInteger stat = new AtomicInteger(STAT_INIT);
 
+    protected boolean exitWhenComplete = false;
+
     protected final static int STAT_INIT = 0;
 
     protected final static int STAT_RUNNING = 1;
@@ -240,7 +242,7 @@ public class Spider implements Runnable, Task {
         while (!Thread.currentThread().isInterrupted() && stat.get() == STAT_RUNNING) {
             Request request = scheduler.poll(this);
             if (request == null) {
-                if (threadAlive.get() == 0) {
+                if (threadAlive.get() == 0 && exitWhenComplete) {
                     break;
                 }
                 // when no request found but some thread is alive, sleep a
@@ -258,7 +260,7 @@ public class Spider implements Runnable, Task {
                         try {
                             processRequest(requestFinal);
                         } catch (Exception e) {
-                            logger.error("download "+requestFinal+" error",e);
+                            logger.error("download " + requestFinal + " error", e);
                         } finally {
                             threadAlive.decrementAndGet();
                         }
@@ -372,18 +374,10 @@ public class Spider implements Runnable, Task {
 
     public void stop() {
         if (stat.compareAndSet(STAT_RUNNING, STAT_STOPPED)) {
-            if (executorService != null) {
-                executorService.shutdown();
-            }
             logger.info("Spider " + getUUID() + " stop success!");
         } else {
             logger.info("Spider " + getUUID() + " stop fail!");
         }
-    }
-
-    public void stopAndDestroy() {
-        stop();
-        destroy();
     }
 
     /**
@@ -411,6 +405,23 @@ public class Spider implements Runnable, Task {
      */
     public static void xsoupOff() {
         EnvironmentUtil.setUseXsoup(false);
+    }
+
+    public boolean isExitWhenComplete() {
+        return exitWhenComplete;
+    }
+
+    /**
+     * Exit when complete. <br/>
+     * True: exit when all url of the site is downloaded. <br/>
+     * False: not exit until call stop manually.<br/>
+     *
+     * @param exitWhenComplete
+     * @return
+     */
+    public Spider setExitWhenComplete(boolean exitWhenComplete) {
+        this.exitWhenComplete = exitWhenComplete;
+        return this;
     }
 
     @Override
