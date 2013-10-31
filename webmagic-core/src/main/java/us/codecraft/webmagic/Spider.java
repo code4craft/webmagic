@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Entrance of a crawler.<br>
@@ -74,13 +76,17 @@ public class Spider implements Runnable, Task {
 
     protected AtomicInteger stat = new AtomicInteger(STAT_INIT);
 
-    protected boolean exitWhenComplete = false;
+    protected boolean exitWhenComplete = true;
 
     protected final static int STAT_INIT = 0;
 
     protected final static int STAT_RUNNING = 1;
 
     protected final static int STAT_STOPPED = 2;
+
+    private ReentrantLock newUrlLock = new ReentrantLock();
+
+    private Condition newUrlCondition = newUrlLock.newCondition();
 
     /**
      * create a spider with pageProcessor.
@@ -245,11 +251,15 @@ public class Spider implements Runnable, Task {
                 if (threadAlive.get() == 0 && exitWhenComplete) {
                     break;
                 }
-                // when no request found but some thread is alive, sleep a
-                // while.
+                // wait until new url added
                 try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
+                    newUrlLock.lock();
+                    try {
+                        newUrlCondition.await();
+                    } catch (InterruptedException e) {
+                    }
+                } finally {
+                    newUrlLock.unlock();
                 }
             } else {
                 final Request requestFinal = request;
@@ -263,6 +273,7 @@ public class Spider implements Runnable, Task {
                             logger.error("download " + requestFinal + " error", e);
                         } finally {
                             threadAlive.decrementAndGet();
+                            signalNewUrl();
                         }
                     }
                 });
@@ -351,9 +362,14 @@ public class Spider implements Runnable, Task {
     protected void addRequest(Page page) {
         if (CollectionUtils.isNotEmpty(page.getTargetRequests())) {
             for (Request request : page.getTargetRequests()) {
-                scheduler.push(request, this);
+                addRequest(request);
             }
         }
+    }
+
+    private void addRequest(Request request) {
+        scheduler.push(request, this);
+
     }
 
     protected void checkIfRunning() {
@@ -366,6 +382,29 @@ public class Spider implements Runnable, Task {
         Thread thread = new Thread(this);
         thread.setDaemon(false);
         thread.start();
+    }
+
+    /**
+     * Add urls to crawl.<br/>
+     *
+     * @param urls
+     * @return
+     */
+    public Spider addUrl(String... urls) {
+        for (String url : urls) {
+            addRequest(new Request(url));
+        }
+        signalNewUrl();
+        return this;
+    }
+
+    private void signalNewUrl() {
+        try {
+            newUrlLock.lock();
+            newUrlCondition.signalAll();
+        } finally {
+            newUrlLock.unlock();
+        }
     }
 
     public void start() {

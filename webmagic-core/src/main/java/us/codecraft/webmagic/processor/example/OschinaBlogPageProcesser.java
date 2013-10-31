@@ -34,6 +34,6 @@ public class OschinaBlogPageProcesser implements PageProcessor {
     }
 
     public static void main(String[] args) {
-        Spider.create(new OschinaBlogPageProcesser()).thread(2).run();
+        Spider.create(new OschinaBlogPageProcesser()).thread(10).run();
     }
 }
