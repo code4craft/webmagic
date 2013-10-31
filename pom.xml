@@ -64,6 +64,11 @@
                 <version>4.2.4</version>
             </dependency>
             <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>15.0</version>
+            </dependency>
+            <dependency>
                 <groupId>us.codecraft</groupId>
                 <artifactId>xsoup</artifactId>
                 <version>0.1.0</version>
