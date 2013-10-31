@@ -252,15 +252,7 @@ public class Spider implements Runnable, Task {
                     break;
                 }
                 // wait until new url added
-                try {
-                    newUrlLock.lock();
-                    try {
-                        newUrlCondition.await();
-                    } catch (InterruptedException e) {
-                    }
-                } finally {
-                    newUrlLock.unlock();
-                }
+                waitNewUrl();
             } else {
                 final Request requestFinal = request;
                 threadAlive.incrementAndGet();
@@ -396,6 +388,18 @@ public class Spider implements Runnable, Task {
         }
         signalNewUrl();
         return this;
+    }
+
+    private void waitNewUrl() {
+        try {
+            newUrlLock.lock();
+            try {
+                newUrlCondition.await();
+            } catch (InterruptedException e) {
+            }
+        } finally {
+            newUrlLock.unlock();
+        }
     }
 
     private void signalNewUrl() {
