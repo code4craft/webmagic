@@ -1,12 +1,13 @@
 package us.codecraft.webmagic.model.samples;
 
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.model.OOSpider;
+import us.codecraft.webmagic.model.PageModelPipeline;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.model.annotation.HelpUrl;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
-import us.codecraft.webmagic.pipeline.JsonFilePageModelPipeline;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -25,8 +26,13 @@ public class Kr36NewsModel {
     private String url;
 
     public static void main(String[] args) {
-        OOSpider.create(Site.me().addStartUrl("http://www.36kr.com/").setSleepTime(0),new JsonFilePageModelPipeline(),
-                Kr36NewsModel.class).thread(20).run();
+        //Just for benchmark
+        OOSpider.create(Site.me().addStartUrl("http://www.36kr.com/").setSleepTime(0), new PageModelPipeline() {
+            @Override
+            public void process(Object o, Task task) {
+
+            }
+        },Kr36NewsModel.class).thread(20).run();
     }
 
     public String getTitle() {
