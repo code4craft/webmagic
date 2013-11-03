@@ -3,6 +3,7 @@ package us.codecraft.webmagic.downloader;
 import com.google.common.collect.Sets;
 import org.apache.http.HttpResponse;
 import org.apache.http.annotation.ThreadSafe;
+import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
@@ -102,8 +103,9 @@ public class HttpClientDownloader implements Downloader {
         }
         RequestConfig.Builder requestConfigBuilder = RequestConfig.custom()
                 .setConnectionRequestTimeout(site.getTimeOut())
-                .setConnectTimeout(site.getTimeOut());
-        if (site.getHttpProxy()!=null){
+                .setConnectTimeout(site.getTimeOut())
+                .setCookieSpec(CookieSpecs.BEST_MATCH);
+        if (site.getHttpProxy() != null) {
             requestConfigBuilder.setProxy(site.getHttpProxy());
         }
         requestBuilder.setConfig(requestConfigBuilder.build());

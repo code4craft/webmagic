@@ -81,10 +81,11 @@ public class HttpClientPool {
         if (site!=null){
             httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(site.getRetryTimes(),true));
         }
+        generateCookie(httpClientBuilder,site);
         return httpClientBuilder.build();
     }
 
-    private void generateCookie(DefaultHttpClient httpClient, Site site) {
+    private void generateCookie(HttpClientBuilder httpClientBuilder, Site site) {
         CookieStore cookieStore = new BasicCookieStore();
         if (site.getCookies() != null) {
             for (Map.Entry<String, String> cookieEntry : site.getCookies().entrySet()) {
@@ -93,7 +94,7 @@ public class HttpClientPool {
                 cookieStore.addCookie(cookie);
             }
         }
-        httpClient.setCookieStore(cookieStore);
+        httpClientBuilder.setDefaultCookieStore(cookieStore);
     }
 
 }
