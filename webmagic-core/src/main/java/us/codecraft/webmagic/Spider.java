@@ -343,12 +343,12 @@ public class Spider implements Runnable, Task {
         }
         // for cycle retry
         if (page.getHtml() == null) {
-            addRequest(page);
+            extractAndAddRequests(page);
             sleep(site.getSleepTime());
             return;
         }
         pageProcessor.process(page);
-        addRequest(page);
+        extractAndAddRequests(page);
         if (!page.getResultItems().isSkip()) {
             for (Pipeline pipeline : pipelines) {
                 pipeline.process(page.getResultItems(), this);
@@ -365,7 +365,7 @@ public class Spider implements Runnable, Task {
         }
     }
 
-    protected void addRequest(Page page) {
+    protected void extractAndAddRequests(Page page) {
         if (CollectionUtils.isNotEmpty(page.getTargetRequests())) {
             for (Request request : page.getTargetRequests()) {
                 addRequest(request);
