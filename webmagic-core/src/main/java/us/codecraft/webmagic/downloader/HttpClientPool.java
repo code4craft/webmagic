@@ -30,7 +30,7 @@ public class HttpClientPool {
                 .register("http", PlainConnectionSocketFactory.INSTANCE)
                 .register("https", SSLConnectionSocketFactory.getSocketFactory())
                 .build();
-        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(reg);
+        connectionManager = new PoolingHttpClientConnectionManager(reg);
         connectionManager.setMaxTotal(poolSize);
         connectionManager.setDefaultMaxPerRoute(100);
     }
