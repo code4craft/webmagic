@@ -21,11 +21,11 @@ import java.util.Map;
  * @author code4crafter@gmail.com <br>
  * @since 0.3.3
  */
-public class HttpClientPool {
+public class HttpClientGenerator {
 
     private PoolingHttpClientConnectionManager connectionManager;
 
-    public HttpClientPool(int poolSize) {
+    public HttpClientGenerator(int poolSize) {
         Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory>create()
                 .register("http", PlainConnectionSocketFactory.INSTANCE)
                 .register("https", SSLConnectionSocketFactory.getSocketFactory())

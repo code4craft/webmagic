@@ -63,14 +63,14 @@ public class HttpClientDownloader implements Downloader {
 
     private CloseableHttpClient getHttpClient(Site site) {
         if (site == null) {
-            return new HttpClientPool(poolSize).getClient(null);
+            return new HttpClientGenerator(poolSize).getClient(null);
         }
         String domain = site.getDomain();
         CloseableHttpClient httpClient = httpClients.get(domain);
         if (httpClient == null) {
             synchronized (this) {
                 if (httpClient == null) {
-                    httpClient = new HttpClientPool(poolSize).getClient(site);
+                    httpClient = new HttpClientGenerator(poolSize).getClient(site);
                     httpClients.put(domain, httpClient);
                 }
             }
