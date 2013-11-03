@@ -1,6 +1,5 @@
 package us.codecraft.webmagic.model.samples;
 
-import org.apache.http.HttpHost;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.model.OOSpider;
@@ -26,7 +25,10 @@ public class OschinaBlog{
     private List<String> tags;
 
     public static void main(String[] args) {
-        OOSpider.create(Site.me().setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36").addStartUrl("http://my.oschina.net/flashsword/blog").setSleepTime(0).setHttpProxy(new HttpHost("127.0.0.1",8888))
+        OOSpider.create(Site.me()
+                .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36").addStartUrl("http://my.oschina.net/flashsword/blog")
+                .setSleepTime(0)
+                .setRetryTimes(3)
                 ,new PageModelPipeline() {
             @Override
             public void process(Object o, Task task) {
