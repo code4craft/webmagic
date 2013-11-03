@@ -1,72 +1,85 @@
 package us.codecraft.webmagic.downloader;
 
-import org.apache.http.HttpVersion;
+import org.apache.http.*;
 import org.apache.http.client.CookieStore;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.params.ClientPNames;
-import org.apache.http.client.params.CookiePolicy;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.client.entity.GzipDecompressingEntity;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.client.*;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.cookie.BasicClientCookie;
-import org.apache.http.params.*;
+import org.apache.http.protocol.HttpContext;
 import us.codecraft.webmagic.Site;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
  * @author code4crafter@gmail.com <br>
- * @since 0.1.0
+ * @since 0.3.3
  */
 public class HttpClientPool {
 
-    private int poolSize;
-
-    private PoolingClientConnectionManager connectionManager;
+    private PoolingHttpClientConnectionManager connectionManager;
 
     public HttpClientPool(int poolSize) {
-        this.poolSize = poolSize;
-        SchemeRegistry schemeRegistry = new SchemeRegistry();
-        schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
-        schemeRegistry.register(new Scheme("https", 443, SSLSocketFactory.getSocketFactory()));
-
-        connectionManager = new PoolingClientConnectionManager(schemeRegistry);
+        Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory>create()
+                .register("http", PlainConnectionSocketFactory.INSTANCE)
+                .register("https", SSLConnectionSocketFactory.getSocketFactory())
+                .build();
+        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(reg);
         connectionManager.setMaxTotal(poolSize);
         connectionManager.setDefaultMaxPerRoute(100);
     }
 
-    public HttpClient getClient(Site site) {
+    public CloseableHttpClient getClient(Site site) {
         return generateClient(site);
     }
 
-    private HttpClient generateClient(Site site) {
-        HttpParams params = new BasicHttpParams();
+    private CloseableHttpClient generateClient(Site site) {
+        HttpClientBuilder httpClientBuilder = HttpClients.custom().setConnectionManager(connectionManager);
         if (site != null && site.getUserAgent() != null) {
-            params.setParameter(CoreProtocolPNames.USER_AGENT, site.getUserAgent());
-            params.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, site.getTimeOut());
-            params.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, site.getTimeOut());
+            httpClientBuilder.setUserAgent(site.getUserAgent());
         } else {
-            params.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, 3000);
-            params.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 3000);
+            httpClientBuilder.setUserAgent("");
         }
+        httpClientBuilder.addInterceptorFirst(new HttpRequestInterceptor() {
 
-        params.setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BEST_MATCH);
-        HttpProtocolParamBean paramsBean = new HttpProtocolParamBean(params);
-        paramsBean.setVersion(HttpVersion.HTTP_1_1);
-        if (site != null && site.getCharset() != null) {
-            paramsBean.setContentCharset(site.getCharset());
-        }
-        paramsBean.setUseExpectContinue(false);
+            public void process(
+                    final HttpRequest request,
+                    final HttpContext context) throws HttpException, IOException {
+                if (!request.containsHeader("Accept-Encoding")) {
+                    request.addHeader("Accept-Encoding", "gzip");
+                }
 
-        DefaultHttpClient httpClient = new DefaultHttpClient(connectionManager, params);
-        if (site != null) {
-            generateCookie(httpClient, site);
-        }
-        return httpClient;
+            }
+        }).addInterceptorFirst(new HttpResponseInterceptor() {
+
+            public void process(
+                    final HttpResponse response,
+                    final HttpContext context) throws HttpException, IOException {
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
+                    Header ceheader = entity.getContentEncoding();
+                    if (ceheader != null) {
+                        HeaderElement[] codecs = ceheader.getElements();
+                        for (int i = 0; i < codecs.length; i++) {
+                            if (codecs[i].getName().equalsIgnoreCase("gzip")) {
+                                response.setEntity(
+                                        new GzipDecompressingEntity(response.getEntity()));
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
+        });
+        httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(site.getRetryTimes(),true));
+        return httpClientBuilder.build();
     }
 
     private void generateCookie(DefaultHttpClient httpClient, Site site) {

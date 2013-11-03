@@ -1,13 +1,11 @@
 package us.codecraft.webmagic.downloader;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.http.Header;
-import org.apache.http.HeaderElement;
 import org.apache.http.HttpResponse;
 import org.apache.http.annotation.ThreadSafe;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.GzipDecompressingEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
@@ -34,7 +32,7 @@ public class HttpClientDownloader implements Downloader {
 
     private Logger logger = Logger.getLogger(getClass());
 
-    private HttpClientPool httpClientPool;
+    private volatile CloseableHttpClient httpClient;
 
     private int poolSize = 1;
 
@@ -60,11 +58,15 @@ public class HttpClientDownloader implements Downloader {
         return (Html) page.getHtml();
     }
 
-    private HttpClientPool getHttpClientPool(){
-        if (httpClientPool==null){
-            httpClientPool = new HttpClientPool(poolSize);
+    private CloseableHttpClient getHttpClient(Site site) {
+        if (httpClient == null) {
+            synchronized (this) {
+                if (httpClient == null) {
+                    httpClient = new HttpClientPool(poolSize).getClient(site);
+                }
+            }
         }
-        return httpClientPool;
+        return httpClient;
     }
 
     @Override
@@ -73,12 +75,10 @@ public class HttpClientDownloader implements Downloader {
         if (task != null) {
             site = task.getSite();
         }
-        int retryTimes = 0;
         Set<Integer> acceptStatCode;
         String charset = null;
-        Map<String,String> headers = null;
+        Map<String, String> headers = null;
         if (site != null) {
-            retryTimes = site.getRetryTimes();
             acceptStatCode = site.getAcceptStatCode();
             charset = site.getCharset();
             headers = site.getHeaders();
@@ -87,54 +87,17 @@ public class HttpClientDownloader implements Downloader {
             acceptStatCode.add(200);
         }
         logger.info("downloading page " + request.getUrl());
-        HttpClient httpClient = getHttpClientPool().getClient(site);
+        HttpGet httpGet = new HttpGet(request.getUrl());
+        if (headers != null) {
+            for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
+                httpGet.addHeader(headerEntry.getKey(), headerEntry.getValue());
+            }
+        }
+        CloseableHttpResponse httpResponse = null;
         try {
-            HttpGet httpGet = new HttpGet(request.getUrl());
-
-            if (headers!=null){
-                for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
-                    httpGet.addHeader(headerEntry.getKey(),headerEntry.getValue());
-                }
-            }
-            if (!httpGet.containsHeader("Accept-Encoding")) {
-                httpGet.addHeader("Accept-Encoding", "gzip");
-            }
-            HttpResponse httpResponse = null;
-            int tried = 0;
-            boolean retry;
-            do {
-                try {
-                    httpResponse = httpClient.execute(httpGet);
-                    retry = false;
-                } catch (IOException e) {
-                    tried++;
-
-                    if (tried > retryTimes) {
-                        logger.warn("download page " + request.getUrl() + " error", e);
-                        if (site.getCycleRetryTimes() > 0) {
-                            Page page = new Page();
-                            Object cycleTriedTimesObject = request.getExtra(Request.CYCLE_TRIED_TIMES);
-                            if (cycleTriedTimesObject == null) {
-                                page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, 1));
-                            } else {
-                                int cycleTriedTimes = (Integer) cycleTriedTimesObject;
-                                cycleTriedTimes++;
-                                if (cycleTriedTimes >= site.getCycleRetryTimes()) {
-                                    return null;
-                                }
-                                page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, 1));
-                            }
-                            return page;
-                        }
-                        return null;
-                    }
-                    logger.info("download page " + request.getUrl() + " error, retry the " + tried + " time!");
-                    retry = true;
-                }
-            } while (retry);
+            httpResponse = getHttpClient(site).execute(httpGet);
             int statusCode = httpResponse.getStatusLine().getStatusCode();
             if (acceptStatCode.contains(statusCode)) {
-                handleGzip(httpResponse);
                 //charset
                 if (charset == null) {
                     String value = httpResponse.getEntity().getContentType().getValue();
@@ -143,16 +106,43 @@ public class HttpClientDownloader implements Downloader {
                 return handleResponse(request, charset, httpResponse, task);
             } else {
                 logger.warn("code error " + statusCode + "\t" + request.getUrl());
+                return null;
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             logger.warn("download page " + request.getUrl() + " error", e);
+            if (site.getCycleRetryTimes() > 0) {
+                return addToCycleRetry(request, site);
+            }
+            return null;
+        } finally {
+            try {
+                if (httpResponse != null) {
+                    httpResponse.close();
+                }
+            } catch (IOException e) {
+                logger.warn("close response fail", e);
+            }
         }
-        return null;
+    }
+
+    private Page addToCycleRetry(Request request, Site site) {
+        Page page = new Page();
+        Object cycleTriedTimesObject = request.getExtra(Request.CYCLE_TRIED_TIMES);
+        if (cycleTriedTimesObject == null) {
+            page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, 1));
+        } else {
+            int cycleTriedTimes = (Integer) cycleTriedTimesObject;
+            cycleTriedTimes++;
+            if (cycleTriedTimes >= site.getCycleRetryTimes()) {
+                return null;
+            }
+            page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, 1));
+        }
+        return page;
     }
 
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
-        String content = IOUtils.toString(httpResponse.getEntity().getContent(),
-                charset);
+        String content = EntityUtils.toString(httpResponse.getEntity(), charset);
         Page page = new Page();
         page.setHtml(new Html(UrlUtils.fixAllRelativeHrefs(content, request.getUrl())));
         page.setUrl(new PlainText(request.getUrl()));
@@ -163,20 +153,5 @@ public class HttpClientDownloader implements Downloader {
     @Override
     public void setThread(int thread) {
         poolSize = thread;
-        httpClientPool = new HttpClientPool(thread);
-    }
-
-    private void handleGzip(HttpResponse httpResponse) {
-        Header ceheader = httpResponse.getEntity().getContentEncoding();
-        if (ceheader != null) {
-            HeaderElement[] codecs = ceheader.getElements();
-            for (HeaderElement codec : codecs) {
-                if (codec.getName().equalsIgnoreCase("gzip")) {
-                    //todo bugfix
-                    httpResponse.setEntity(
-                            new GzipDecompressingEntity(httpResponse.getEntity()));
-                }
-            }
-        }
     }
 }
