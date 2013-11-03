@@ -482,7 +482,7 @@ public class Spider implements Runnable, Task {
     /**
      * Exit when complete. <br/>
      * True: exit when all url of the site is downloaded. <br/>
-     * False: not exit until call stop manually.<br/>
+     * False: not exit until call stop() manually.<br/>
      *
      * @param exitWhenComplete
      * @return

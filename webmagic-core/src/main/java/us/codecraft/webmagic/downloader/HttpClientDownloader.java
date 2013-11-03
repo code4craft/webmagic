@@ -90,10 +90,14 @@ public class HttpClientDownloader implements Downloader {
         HttpClient httpClient = getHttpClientPool().getClient(site);
         try {
             HttpGet httpGet = new HttpGet(request.getUrl());
+
             if (headers!=null){
                 for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
                     httpGet.addHeader(headerEntry.getKey(),headerEntry.getValue());
                 }
+            }
+            if (!httpGet.containsHeader("Accept-Encoding")) {
+                httpGet.addHeader("Accept-Encoding", "gzip");
             }
             HttpResponse httpResponse = null;
             int tried = 0;
@@ -168,6 +172,7 @@ public class HttpClientDownloader implements Downloader {
             HeaderElement[] codecs = ceheader.getElements();
             for (HeaderElement codec : codecs) {
                 if (codec.getName().equalsIgnoreCase("gzip")) {
+                    //todo bugfix
                     httpResponse.setEntity(
                             new GzipDecompressingEntity(httpResponse.getEntity()));
                 }
