@@ -11,6 +11,7 @@ import us.codecraft.webmagic.scheduler.QueueScheduler;
 import us.codecraft.webmagic.scheduler.Scheduler;
 import us.codecraft.webmagic.utils.EnvironmentUtil;
 import us.codecraft.webmagic.utils.ThreadUtils;
+import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -60,7 +61,7 @@ public class Spider implements Runnable, Task {
 
     protected PageProcessor pageProcessor;
 
-    protected List<String> startUrls;
+    protected List<Request> startRequests;
 
     protected Site site;
 
@@ -107,7 +108,7 @@ public class Spider implements Runnable, Task {
     public Spider(PageProcessor pageProcessor) {
         this.pageProcessor = pageProcessor;
         this.site = pageProcessor.getSite();
-        this.startUrls = pageProcessor.getSite().getStartUrls();
+        this.startRequests = pageProcessor.getSite().getStartRequests();
     }
 
     /**
@@ -119,7 +120,20 @@ public class Spider implements Runnable, Task {
      */
     public Spider startUrls(List<String> startUrls) {
         checkIfRunning();
-        this.startUrls = startUrls;
+        this.startRequests = UrlUtils.convertToRequests(startUrls);
+        return this;
+    }
+
+    /**
+     * Set startUrls of Spider.<br>
+     * Prior to startUrls of Site.
+     *
+     * @param startUrls
+     * @return this
+     */
+    public Spider startRequest(List<Request> startRequests) {
+        checkIfRunning();
+        this.startRequests = startRequests;
         return this;
     }
 
@@ -231,11 +245,11 @@ public class Spider implements Runnable, Task {
         }
         downloader.setThread(threadNum);
         executorService = ThreadUtils.newFixedThreadPool(threadNum);
-        if (startUrls != null) {
-            for (String startUrl : startUrls) {
-                scheduler.push(new Request(startUrl), this);
+        if (startRequests != null) {
+            for (Request request : startRequests) {
+                scheduler.push(request, this);
             }
-            startUrls.clear();
+            startRequests.clear();
         }
     }
 
@@ -385,6 +399,20 @@ public class Spider implements Runnable, Task {
     public Spider addUrl(String... urls) {
         for (String url : urls) {
             addRequest(new Request(url));
+        }
+        signalNewUrl();
+        return this;
+    }
+
+    /**
+     * Add urls with information to crawl.<br/>
+     *
+     * @param urls
+     * @return
+     */
+    public Spider addRequest(Request... requests) {
+        for (Request request : requests) {
+            addRequest(request);
         }
         signalNewUrl();
         return this;

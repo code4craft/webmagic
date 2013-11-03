@@ -24,7 +24,7 @@ public class Site {
     /**
      * startUrls is the urls the crawler to start with.
      */
-    private List<String> startUrls = new ArrayList<String>();
+    private List<Request> startRequests = new ArrayList<Request>();
 
     private int sleepTime = 3000;
 
@@ -38,7 +38,7 @@ public class Site {
 
     private Set<Integer> acceptStatCode = DEFAULT_STATUS_CODE_SET;
 
-    private Map<String,String> headers = new HashMap<String, String>();
+    private Map<String, String> headers = new HashMap<String, String>();
 
     public static interface HeaderConst {
 
@@ -182,9 +182,16 @@ public class Site {
      * get start urls
      *
      * @return start urls
+     * @see #getStartRequests
+     * @deprecated
      */
+    @Deprecated
     public List<String> getStartUrls() {
-        return startUrls;
+        return UrlUtils.convertToUrls(startRequests);
+    }
+
+    public List<Request> getStartRequests() {
+        return startRequests;
     }
 
     /**
@@ -194,11 +201,19 @@ public class Site {
      * @return this
      */
     public Site addStartUrl(String startUrl) {
-        this.startUrls.add(startUrl);
-        if (domain == null) {
-            if (startUrls.size() > 0) {
-                domain = UrlUtils.getDomain(startUrls.get(0));
-            }
+        return addStartRequest(new Request(startUrl));
+    }
+
+    /**
+     * Add a url to start url.<br>
+     *
+     * @param startUrl
+     * @return this
+     */
+    public Site addStartRequest(Request startRequest) {
+        this.startRequests.add(startRequest);
+        if (domain == null && startRequest.getUrl() != null) {
+            domain = UrlUtils.getDomain(startRequest.getUrl());
         }
         return this;
     }
@@ -241,12 +256,13 @@ public class Site {
     /**
      * Put an Http header for downloader. <br/>
      * Use {@link #addCookie(String, String)} for cookie and {@link #setUserAgent(String)} for user-agent. <br/>
-     * @param key key of http header, there are some keys constant in {@link HeaderConst}
+     *
+     * @param key   key of http header, there are some keys constant in {@link HeaderConst}
      * @param value value of header
      * @return
      */
-    public Site addHeader(String key, String value){
-        headers.put(key,value);
+    public Site addHeader(String key, String value) {
+        headers.put(key, value);
         return this;
     }
 
@@ -279,23 +295,6 @@ public class Site {
         return this;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Site site = (Site) o;
-
-        if (acceptStatCode != null ? !acceptStatCode.equals(site.acceptStatCode) : site.acceptStatCode != null)
-            return false;
-        if (!domain.equals(site.domain)) return false;
-        if (!startUrls.equals(site.startUrls)) return false;
-        if (charset != null ? !charset.equals(site.charset) : site.charset != null) return false;
-        if (userAgent != null ? !userAgent.equals(site.userAgent) : site.userAgent != null) return false;
-
-        return true;
-    }
-
     public Task toTask() {
         return new Task() {
             @Override
@@ -311,12 +310,59 @@ public class Site {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Site site = (Site) o;
+
+        if (cycleRetryTimes != site.cycleRetryTimes) return false;
+        if (retryTimes != site.retryTimes) return false;
+        if (sleepTime != site.sleepTime) return false;
+        if (timeOut != site.timeOut) return false;
+        if (acceptStatCode != null ? !acceptStatCode.equals(site.acceptStatCode) : site.acceptStatCode != null)
+            return false;
+        if (charset != null ? !charset.equals(site.charset) : site.charset != null) return false;
+        if (cookies != null ? !cookies.equals(site.cookies) : site.cookies != null) return false;
+        if (domain != null ? !domain.equals(site.domain) : site.domain != null) return false;
+        if (headers != null ? !headers.equals(site.headers) : site.headers != null) return false;
+        if (startRequests != null ? !startRequests.equals(site.startRequests) : site.startRequests != null)
+            return false;
+        if (userAgent != null ? !userAgent.equals(site.userAgent) : site.userAgent != null) return false;
+
+        return true;
+    }
+
+    @Override
     public int hashCode() {
-        int result = domain.hashCode();
-        result = 31 * result + (startUrls != null ? startUrls.hashCode() : 0);
+        int result = domain != null ? domain.hashCode() : 0;
         result = 31 * result + (userAgent != null ? userAgent.hashCode() : 0);
+        result = 31 * result + (cookies != null ? cookies.hashCode() : 0);
         result = 31 * result + (charset != null ? charset.hashCode() : 0);
+        result = 31 * result + (startRequests != null ? startRequests.hashCode() : 0);
+        result = 31 * result + sleepTime;
+        result = 31 * result + retryTimes;
+        result = 31 * result + cycleRetryTimes;
+        result = 31 * result + timeOut;
         result = 31 * result + (acceptStatCode != null ? acceptStatCode.hashCode() : 0);
+        result = 31 * result + (headers != null ? headers.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Site{" +
+                "domain='" + domain + '\'' +
+                ", userAgent='" + userAgent + '\'' +
+                ", cookies=" + cookies +
+                ", charset='" + charset + '\'' +
+                ", startRequests=" + startRequests +
+                ", sleepTime=" + sleepTime +
+                ", retryTimes=" + retryTimes +
+                ", cycleRetryTimes=" + cycleRetryTimes +
+                ", timeOut=" + timeOut +
+                ", acceptStatCode=" + acceptStatCode +
+                ", headers=" + headers +
+                '}';
     }
 }
