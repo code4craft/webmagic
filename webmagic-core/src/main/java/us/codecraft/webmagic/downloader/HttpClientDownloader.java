@@ -1,9 +1,11 @@
 package us.codecraft.webmagic.downloader;
 
+import com.google.common.collect.Sets;
 import org.apache.http.HttpResponse;
 import org.apache.http.annotation.ThreadSafe;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
@@ -16,7 +18,7 @@ import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,7 +34,7 @@ public class HttpClientDownloader implements Downloader {
 
     private Logger logger = Logger.getLogger(getClass());
 
-    private volatile CloseableHttpClient httpClient;
+    private final Map<String, CloseableHttpClient> httpClients = new HashMap<String, CloseableHttpClient>();
 
     private int poolSize = 1;
 
@@ -59,10 +61,16 @@ public class HttpClientDownloader implements Downloader {
     }
 
     private CloseableHttpClient getHttpClient(Site site) {
+        if (site == null) {
+            return new HttpClientPool(poolSize).getClient(null);
+        }
+        String domain = site.getDomain();
+        CloseableHttpClient httpClient = httpClients.get(domain);
         if (httpClient == null) {
             synchronized (this) {
                 if (httpClient == null) {
                     httpClient = new HttpClientPool(poolSize).getClient(site);
+                    httpClients.put(domain, httpClient);
                 }
             }
         }
@@ -83,19 +91,25 @@ public class HttpClientDownloader implements Downloader {
             charset = site.getCharset();
             headers = site.getHeaders();
         } else {
-            acceptStatCode = new HashSet<Integer>();
-            acceptStatCode.add(200);
+            acceptStatCode = Sets.newHashSet(200);
         }
         logger.info("downloading page " + request.getUrl());
-        HttpGet httpGet = new HttpGet(request.getUrl());
+        RequestBuilder requestBuilder = RequestBuilder.get().setUri(request.getUrl());
         if (headers != null) {
             for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
-                httpGet.addHeader(headerEntry.getKey(), headerEntry.getValue());
+                requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
             }
         }
+        RequestConfig.Builder requestConfigBuilder = RequestConfig.custom()
+                .setConnectionRequestTimeout(site.getTimeOut())
+                .setConnectTimeout(site.getTimeOut());
+        if (site.getHttpProxy()!=null){
+            requestConfigBuilder.setProxy(site.getHttpProxy());
+        }
+        requestBuilder.setConfig(requestConfigBuilder.build());
         CloseableHttpResponse httpResponse = null;
         try {
-            httpResponse = getHttpClient(site).execute(httpGet);
+            httpResponse = getHttpClient(site).execute(requestBuilder.build());
             int statusCode = httpResponse.getStatusLine().getStatusCode();
             if (acceptStatCode.contains(statusCode)) {
                 //charset

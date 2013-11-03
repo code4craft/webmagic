@@ -1,10 +1,12 @@
 package us.codecraft.webmagic.model.samples;
 
+import org.apache.http.HttpHost;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.model.OOSpider;
+import us.codecraft.webmagic.model.PageModelPipeline;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
-import us.codecraft.webmagic.pipeline.JsonFilePageModelPipeline;
 
 import java.util.List;
 
@@ -24,8 +26,13 @@ public class OschinaBlog{
     private List<String> tags;
 
     public static void main(String[] args) {
-        OOSpider.create(Site.me().addStartUrl("http://my.oschina.net/flashsword/blog")
-                ,new JsonFilePageModelPipeline(), OschinaBlog.class).run();
+        OOSpider.create(Site.me().setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36").addStartUrl("http://my.oschina.net/flashsword/blog").setSleepTime(0).setHttpProxy(new HttpHost("127.0.0.1",8888))
+                ,new PageModelPipeline() {
+            @Override
+            public void process(Object o, Task task) {
+
+            }
+        }, OschinaBlog.class).thread(10).run();
     }
 
     public String getTitle() {

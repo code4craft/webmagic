@@ -78,7 +78,9 @@ public class HttpClientPool {
             }
 
         });
-        httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(site.getRetryTimes(),true));
+        if (site!=null){
+            httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(site.getRetryTimes(),true));
+        }
         return httpClientBuilder.build();
     }
 

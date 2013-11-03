@@ -1,5 +1,6 @@
 package us.codecraft.webmagic;
 
+import org.apache.http.HttpHost;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.util.*;
@@ -39,6 +40,8 @@ public class Site {
     private Set<Integer> acceptStatCode = DEFAULT_STATUS_CODE_SET;
 
     private Map<String, String> headers = new HashMap<String, String>();
+
+    private HttpHost httpProxy;
 
     public static interface HeaderConst {
 
@@ -292,6 +295,20 @@ public class Site {
      */
     public Site setCycleRetryTimes(int cycleRetryTimes) {
         this.cycleRetryTimes = cycleRetryTimes;
+        return this;
+    }
+
+    public HttpHost getHttpProxy() {
+        return httpProxy;
+    }
+
+    /**
+     * set up httpProxy for this site
+     * @param httpProxy
+     * @return
+     */
+    public Site setHttpProxy(HttpHost httpProxy) {
+        this.httpProxy = httpProxy;
         return this;
     }
 
