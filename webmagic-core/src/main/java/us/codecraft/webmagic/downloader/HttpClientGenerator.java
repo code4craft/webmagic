@@ -1,9 +1,8 @@
 package us.codecraft.webmagic.downloader;
 
-import org.apache.http.HttpException;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpRequestInterceptor;
+import org.apache.http.*;
 import org.apache.http.client.CookieStore;
+import org.apache.http.client.protocol.ResponseContentEncoding;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -60,31 +59,24 @@ public class HttpClientGenerator {
                 }
             });
         }
-//        httpClientBuilder.disableContentCompression().addInterceptorFirst(new HttpResponseInterceptor() {
-//
-//            public void process(
-//                    final HttpResponse response,
-//                    final HttpContext context) throws HttpException, IOException {
-//                if (response.getStatusLine().getStatusCode() != 200) {
-//                    return;
-//                }
-//                HttpEntity entity = response.getEntity();
-//                if (entity != null) {
-//                    Header ceheader = entity.getContentEncoding();
-//                    if (ceheader != null) {
-//                        HeaderElement[] codecs = ceheader.getElements();
-//                        for (int i = 0; i < codecs.length; i++) {
-//                            if (codecs[i].getName().equalsIgnoreCase("gzip")) {
-//                                response.setEntity(
-//                                        new GzipDecompressingEntity(response.getEntity()));
-//                                return;
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//
-//        });
+        // Http client has some problem handling compressing entity for redirect
+        // So I disable it and do it manually
+        // https://issues.apache.org/jira/browse/HTTPCLIENT-1432
+        httpClientBuilder.disableContentCompression();
+        httpClientBuilder.addInterceptorFirst(new HttpResponseInterceptor() {
+
+            private ResponseContentEncoding contentEncoding = new ResponseContentEncoding();
+
+            public void process(
+                    final HttpResponse response,
+                    final HttpContext context) throws HttpException, IOException {
+                if (response.getStatusLine().getStatusCode() == 301 || response.getStatusLine().getStatusCode() == 302) {
+                    return;
+                }
+                contentEncoding.process(response, context);
+            }
+
+        });
         if (site != null) {
             httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(site.getRetryTimes(), true));
         }
