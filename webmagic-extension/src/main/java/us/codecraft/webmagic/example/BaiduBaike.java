@@ -4,7 +4,6 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.model.AfterExtractor;
 import us.codecraft.webmagic.model.OOSpider;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
-import us.codecraft.webmagic.model.annotation.UrlTemplate;
 import us.codecraft.webmagic.model.direct.Param;
 
 import java.util.ArrayList;
@@ -12,10 +11,8 @@ import java.util.List;
 
 /**
  * @since 0.4.0
- *   NO implement yet!!!!!!!!!!!!
  * @author code4crafter@gmail.com
  */
-@UrlTemplate("http://baike.baidu.com/search/word?word=${word}&enc=utf8")
 public class BaiduBaike implements AfterExtractor{
 
     private String word;

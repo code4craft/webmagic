@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.downloader;
 
 import com.google.common.collect.Sets;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.annotation.ThreadSafe;
 import org.apache.http.client.config.CookieSpecs;
@@ -8,7 +9,6 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
@@ -158,7 +158,7 @@ public class HttpClientDownloader implements Downloader {
     }
 
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
-        String content = EntityUtils.toString(httpResponse.getEntity(), charset);
+        String content = IOUtils.toString(httpResponse.getEntity().getContent(), charset);
         Page page = new Page();
         page.setHtml(new Html(UrlUtils.fixAllRelativeHrefs(content, request.getUrl())));
         page.setUrl(new PlainText(request.getUrl()));
