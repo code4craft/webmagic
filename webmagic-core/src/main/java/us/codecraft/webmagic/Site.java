@@ -43,6 +43,8 @@ public class Site {
 
     private HttpHost httpProxy;
 
+    private boolean useGzip = true;
+
     public static interface HeaderConst {
 
         public static final String REFERER = "Referer";
@@ -199,7 +201,10 @@ public class Site {
 
     /**
      * Add a url to start url.<br>
+     * Because urls are more a Spider's property than Site, move it to {@link Spider#addUrl(String...)}}
      *
+     * @deprecated
+     * @see Spider#addUrl(String...)
      * @param startUrl
      * @return this
      */
@@ -209,7 +214,10 @@ public class Site {
 
     /**
      * Add a url to start url.<br>
+     * Because urls are more a Spider's property than Site, move it to {@link Spider#addRequest(Request...)}}
      *
+     * @deprecated
+     * @see Spider#addRequest(Request...)
      * @param startUrl
      * @return this
      */
@@ -309,6 +317,22 @@ public class Site {
      */
     public Site setHttpProxy(HttpHost httpProxy) {
         this.httpProxy = httpProxy;
+        return this;
+    }
+
+    public boolean isUseGzip() {
+        return useGzip;
+    }
+
+    /**
+     * Whether use gzip. <br>
+     * Default is true, you can set it to false to disable gzip.
+     *
+     * @param useGzip
+     * @return
+     */
+    public Site setUseGzip(boolean useGzip) {
+        this.useGzip = useGzip;
         return this;
     }
 

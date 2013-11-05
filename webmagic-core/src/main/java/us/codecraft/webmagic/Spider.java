@@ -1,9 +1,11 @@
 package us.codecraft.webmagic;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
+import us.codecraft.webmagic.pipeline.CollectorPipeline;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
@@ -16,7 +18,9 @@ import us.codecraft.webmagic.utils.UrlUtils;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
@@ -84,6 +88,10 @@ public class Spider implements Runnable, Task {
     protected final static int STAT_RUNNING = 1;
 
     protected final static int STAT_STOPPED = 2;
+
+    protected boolean spawnUrl = true;
+
+    protected boolean destroyWhenExit = true;
 
     private ReentrantLock newUrlLock = new ReentrantLock();
 
@@ -244,7 +252,9 @@ public class Spider implements Runnable, Task {
             pipelines.add(new ConsolePipeline());
         }
         downloader.setThread(threadNum);
-        executorService = ThreadUtils.newFixedThreadPool(threadNum);
+        if (executorService == null || executorService.isShutdown()) {
+            executorService = ThreadUtils.newFixedThreadPool(threadNum);
+        }
         if (startRequests != null) {
             for (Request request : startRequests) {
                 scheduler.push(request, this);
@@ -285,10 +295,11 @@ public class Spider implements Runnable, Task {
                 });
             }
         }
-        executorService.shutdown();
         stat.set(STAT_STOPPED);
         // release some resources
-        destroy();
+        if (destroyWhenExit) {
+            close();
+        }
     }
 
     private void checkRunningStat() {
@@ -303,12 +314,13 @@ public class Spider implements Runnable, Task {
         }
     }
 
-    protected void destroy() {
+    public void close() {
         destroyEach(downloader);
         destroyEach(pageProcessor);
         for (Pipeline pipeline : pipelines) {
             destroyEach(pipeline);
         }
+        executorService.shutdown();
     }
 
     private void destroyEach(Object object) {
@@ -366,7 +378,7 @@ public class Spider implements Runnable, Task {
     }
 
     protected void extractAndAddRequests(Page page) {
-        if (CollectionUtils.isNotEmpty(page.getTargetRequests())) {
+        if (spawnUrl && CollectionUtils.isNotEmpty(page.getTargetRequests())) {
             for (Request request : page.getTargetRequests()) {
                 addRequest(request);
             }
@@ -374,8 +386,10 @@ public class Spider implements Runnable, Task {
     }
 
     private void addRequest(Request request) {
+        if (site.getDomain() == null && request != null && request.getUrl() != null) {
+            site.setDomain(UrlUtils.getDomain(request.getUrl()));
+        }
         scheduler.push(request, this);
-
     }
 
     protected void checkIfRunning() {
@@ -391,7 +405,7 @@ public class Spider implements Runnable, Task {
     }
 
     /**
-     * Add urls to crawl.<br/>
+     * Add urls to crawl. <br/>
      *
      * @param urls
      * @return
@@ -402,6 +416,34 @@ public class Spider implements Runnable, Task {
         }
         signalNewUrl();
         return this;
+    }
+
+    /**
+     * Download urls synchronizing.
+     *
+     * @param urls
+     * @return
+     */
+    public List<ResultItems> getAll(Collection<String> urls) {
+        destroyWhenExit = false;
+        spawnUrl = false;
+        startRequests = UrlUtils.convertToRequests(urls);
+        CollectorPipeline collectorPipeline = new CollectorPipeline();
+        pipelines.add(collectorPipeline);
+        run();
+        spawnUrl = true;
+        destroyWhenExit = true;
+        return collectorPipeline.getCollector();
+    }
+
+    public ResultItems get(String url) {
+        List<String> urls = Lists.newArrayList(url);
+        List<ResultItems> resultItemses = getAll(urls);
+        if (resultItemses != null && resultItemses.size() > 0) {
+            return resultItemses.get(0);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -492,6 +534,24 @@ public class Spider implements Runnable, Task {
         return this;
     }
 
+    public boolean isSpawnUrl() {
+        return spawnUrl;
+    }
+
+    /**
+     * Whether add urls extracted to download.<br>
+     * Add urls to download when it is true, and just download seed urls when it is false. <br>
+     * DO NOT set it unless you know what it means!
+     *
+     * @param spawnUrl
+     * @return
+     * @since 0.4.0
+     */
+    public Spider setSpawnUrl(boolean spawnUrl) {
+        this.spawnUrl = spawnUrl;
+        return this;
+    }
+
     @Override
     public String getUUID() {
         if (uuid != null) {
@@ -500,7 +560,8 @@ public class Spider implements Runnable, Task {
         if (site != null) {
             return site.getDomain();
         }
-        return null;
+        uuid = UUID.randomUUID().toString();
+        return uuid;
     }
 
     @Override

@@ -1,8 +1,9 @@
 package us.codecraft.webmagic.downloader;
 
-import org.apache.http.*;
+import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.CookieStore;
-import org.apache.http.client.entity.GzipDecompressingEntity;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 /**
  * @author code4crafter@gmail.com <br>
- * @since 0.3.3
+ * @since 0.4.0
  */
 public class HttpClientGenerator {
 
@@ -46,42 +47,48 @@ public class HttpClientGenerator {
         } else {
             httpClientBuilder.setUserAgent("");
         }
-        httpClientBuilder.addInterceptorFirst(new HttpRequestInterceptor() {
+        if (site == null || site.isUseGzip()) {
+            httpClientBuilder.addInterceptorFirst(new HttpRequestInterceptor() {
 
-            public void process(
-                    final HttpRequest request,
-                    final HttpContext context) throws HttpException, IOException {
-                if (!request.containsHeader("Accept-Encoding")) {
-                    request.addHeader("Accept-Encoding", "gzip");
-                }
-
-            }
-        }).addInterceptorFirst(new HttpResponseInterceptor() {
-
-            public void process(
-                    final HttpResponse response,
-                    final HttpContext context) throws HttpException, IOException {
-                HttpEntity entity = response.getEntity();
-                if (entity != null) {
-                    Header ceheader = entity.getContentEncoding();
-                    if (ceheader != null) {
-                        HeaderElement[] codecs = ceheader.getElements();
-                        for (int i = 0; i < codecs.length; i++) {
-                            if (codecs[i].getName().equalsIgnoreCase("gzip")) {
-                                response.setEntity(
-                                        new GzipDecompressingEntity(response.getEntity()));
-                                return;
-                            }
-                        }
+                public void process(
+                        final HttpRequest request,
+                        final HttpContext context) throws HttpException, IOException {
+                    if (!request.containsHeader("Accept-Encoding")) {
+                        request.addHeader("Accept-Encoding", "gzip");
                     }
-                }
-            }
 
-        });
-        if (site!=null){
-            httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(site.getRetryTimes(),true));
+                }
+            });
         }
-        generateCookie(httpClientBuilder,site);
+//        httpClientBuilder.disableContentCompression().addInterceptorFirst(new HttpResponseInterceptor() {
+//
+//            public void process(
+//                    final HttpResponse response,
+//                    final HttpContext context) throws HttpException, IOException {
+//                if (response.getStatusLine().getStatusCode() != 200) {
+//                    return;
+//                }
+//                HttpEntity entity = response.getEntity();
+//                if (entity != null) {
+//                    Header ceheader = entity.getContentEncoding();
+//                    if (ceheader != null) {
+//                        HeaderElement[] codecs = ceheader.getElements();
+//                        for (int i = 0; i < codecs.length; i++) {
+//                            if (codecs[i].getName().equalsIgnoreCase("gzip")) {
+//                                response.setEntity(
+//                                        new GzipDecompressingEntity(response.getEntity()));
+//                                return;
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//
+//        });
+        if (site != null) {
+            httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(site.getRetryTimes(), true));
+        }
+        generateCookie(httpClientBuilder, site);
         return httpClientBuilder.build();
     }
 

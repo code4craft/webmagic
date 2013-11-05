@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -88,7 +89,7 @@ public class UrlUtils {
         return stringBuilder.toString();
     }
 
-    public static List<Request> convertToRequests(List<String> urls) {
+    public static List<Request> convertToRequests(Collection<String> urls) {
         List<Request> requestList = new ArrayList<Request>(urls.size());
         for (String url : urls) {
             requestList.add(new Request(url));
@@ -96,7 +97,7 @@ public class UrlUtils {
         return requestList;
     }
 
-    public static List<String> convertToUrls(List<Request> requests) {
+    public static List<String> convertToUrls(Collection<Request> requests) {
         List<String> urlList = new ArrayList<String>(requests.size());
         for (Request request : requests) {
             urlList.add(request.getUrl());
