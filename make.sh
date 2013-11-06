@@ -1,7 +1,6 @@
 #!/bin/sh
 mvn clean package
-cp ./webmagic-samples/target/webmagic-0.3.2.jar ./bin/
-rsync -avz --delete ./webmagic-samples/target/lib/ ./bin/lib/
+rsync -avz --delete ./webmagic-extension/target/lib/ ./lib/
 git add .
 git add -u
 git cim "update jar"
