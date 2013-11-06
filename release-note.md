@@ -1,5 +1,7 @@
 Release Notes
 ----
+See old versions in [https://github.com/code4craft/webmagic/releases](https://github.com/code4craft/webmagic/releases)
+
 *2012-9-4* `version：0.3.0`
 
 * Change default XPath selector from HtmlCleaner to [Xsoup](https://github.com/code4craft/xsoup).
