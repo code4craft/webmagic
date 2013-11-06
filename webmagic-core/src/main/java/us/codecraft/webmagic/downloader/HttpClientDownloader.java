@@ -9,6 +9,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
@@ -133,7 +134,8 @@ public class HttpClientDownloader implements Downloader {
         } finally {
             try {
                 if (httpResponse != null) {
-                    httpResponse.close();
+                    //ensure the connection is released back to pool
+                    EntityUtils.consume(httpResponse.getEntity());
                 }
             } catch (IOException e) {
                 logger.warn("close response fail", e);
