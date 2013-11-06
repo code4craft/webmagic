@@ -27,12 +27,12 @@ webmagic使用maven管理依赖，在项目中添加对应的依赖即可使用w
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-core</artifactId>
-            <version>0.3.2</version>
+            <version>0.4.0</version>
         </dependency>
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-extension</artifactId>
-            <version>0.3.2</version>
+            <version>0.4.0</version>
         </dependency>
 
 #### 项目结构
@@ -140,7 +140,7 @@ webmagic-extension包括了注解方式编写爬虫的方法，只需基于一�
 
 这个例子定义了一个Model类，Model类的字段'title'、'content'、'tags'均为要抽取的属性。这个类在Pipeline里是可以复用的。
 
-注解的详细使用方式见后文中得webmagic-extension注解模块。
+注解的详细使用方式见后文中的webmagic-extension注解模块。
 
 <div style="page-break-after:always"></div>
 
