@@ -1,25 +1,20 @@
 package us.codecraft.webmagic.pipeline;
 
-import us.codecraft.webmagic.ResultItems;
-import us.codecraft.webmagic.Task;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Pipeline that can collect and store results. <br>
+ * Used for {@link us.codecraft.webmagic.Spider#getAll(java.util.Collection)}
+ *
  * @author code4crafter@gmail.com
  * @since 0.4.0
  */
-public class CollectorPipeline implements Pipeline{
+public interface CollectorPipeline<T> extends Pipeline {
 
-    private List<ResultItems> collector = new ArrayList<ResultItems>();
-
-    @Override
-    public void process(ResultItems resultItems, Task task) {
-        collector.add(resultItems);
-    }
-
-    public List<ResultItems> getCollector() {
-        return collector;
-    }
+    /**
+     * Get all results collected.
+     *
+     * @return collected results
+     */
+    public List<T> getCollected();
 }

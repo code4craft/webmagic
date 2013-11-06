@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.CollectorPipeline;
+import us.codecraft.webmagic.pipeline.ResultItemsCollectorPipeline;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
@@ -424,21 +425,25 @@ public class Spider implements Runnable, Task {
      * @param urls
      * @return
      */
-    public List<ResultItems> getAll(Collection<String> urls) {
+    public <T> List<T> getAll(Collection<String> urls) {
         destroyWhenExit = false;
         spawnUrl = false;
         startRequests = UrlUtils.convertToRequests(urls);
-        CollectorPipeline collectorPipeline = new CollectorPipeline();
+        CollectorPipeline collectorPipeline = getCollectorPipeline();
         pipelines.add(collectorPipeline);
         run();
         spawnUrl = true;
         destroyWhenExit = true;
-        return collectorPipeline.getCollector();
+        return collectorPipeline.getCollected();
     }
 
-    public ResultItems get(String url) {
+    protected CollectorPipeline getCollectorPipeline() {
+        return new ResultItemsCollectorPipeline();
+    }
+
+    public <T> T get(String url) {
         List<String> urls = Lists.newArrayList(url);
-        List<ResultItems> resultItemses = getAll(urls);
+        List<T> resultItemses = getAll(urls);
         if (resultItemses != null && resultItemses.size() > 0) {
             return resultItemses.get(0);
         } else {

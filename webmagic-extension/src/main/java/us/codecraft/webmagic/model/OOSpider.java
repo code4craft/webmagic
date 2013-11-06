@@ -2,10 +2,12 @@ package us.codecraft.webmagic.model;
 
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.model.direct.Param;
+import us.codecraft.webmagic.pipeline.CollectorPipeline;
+import us.codecraft.webmagic.pipeline.PageModelPipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The spider for page model extractor.<br>
@@ -36,11 +38,15 @@ import java.util.Collection;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-public class OOSpider extends Spider {
+public class OOSpider<T> extends Spider {
 
     private ModelPageProcessor modelPageProcessor;
 
     private ModelPipeline modelPipeline;
+
+    private PageModelPipeline pageModelPipeline;
+
+    private List<Class> pageModelClasses = new ArrayList<Class>();
 
     protected OOSpider(ModelPageProcessor modelPageProcessor) {
         super(modelPageProcessor);
@@ -62,11 +68,17 @@ public class OOSpider extends Spider {
         this(ModelPageProcessor.create(site, pageModels));
         this.modelPipeline = new ModelPipeline();
         super.addPipeline(modelPipeline);
-        if (pageModelPipeline != null) {
-            for (Class pageModel : pageModels) {
+        for (Class pageModel : pageModels) {
+            if (pageModelPipeline != null) {
                 this.modelPipeline.put(pageModel, pageModelPipeline);
             }
+            pageModelClasses.add(pageModel);
         }
+    }
+
+    @Override
+    protected CollectorPipeline getCollectorPipeline() {
+        return new PageModelCollectorPipeline<T>(pageModelClasses.get(0));
     }
 
     public static OOSpider create(Site site, Class... pageModels) {
@@ -75,34 +87,6 @@ public class OOSpider extends Spider {
 
     public static OOSpider create(Site site, PageModelPipeline pageModelPipeline, Class... pageModels) {
         return new OOSpider(site, pageModelPipeline, pageModels);
-    }
-
-    /**
-     * @since 0.3.3
-     * NO implement yet!
-     */
-    public static OOSpider direct(Site site, PageModelPipeline pageModelPipeline, Class... pageModels) {
-        return new OOSpider(site, pageModelPipeline, pageModels);
-    }
-
-    /**
-     * @since 0.3.3
-     * NO implement yet!
-     */
-    public static OOSpider direct(PageModelPipeline pageModelPipeline, Class... pageModels) {
-        return new OOSpider(null, pageModelPipeline, pageModels);
-    }
-
-    /**
-     * @since 0.3.3
-     * NO implement yet!
-     */
-    public static OOSpider direct(Class... pageModels) {
-        return new OOSpider(null, null, pageModels);
-    }
-
-    public static OOSpider direct(Collection<Param> params, Class... pageModels) {
-        return new OOSpider(null, null, pageModels);
     }
 
     public OOSpider addPageModel(PageModelPipeline pageModelPipeline, Class... pageModels) {

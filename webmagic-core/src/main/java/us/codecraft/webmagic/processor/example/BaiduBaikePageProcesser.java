@@ -38,7 +38,7 @@ public class BaiduBaikePageProcesser implements PageProcessor {
         list.add(String.format(urlTemplate,"太阳能"));
         list.add(String.format(urlTemplate,"地热发电"));
         list.add(String.format(urlTemplate,"地热发电"));
-        List<ResultItems> resultItemses = spider.getAll(list);
+        List<ResultItems> resultItemses = spider.<ResultItems>getAll(list);
         for (ResultItems resultItemse : resultItemses) {
             System.out.println(resultItemse.getAll());
         }
