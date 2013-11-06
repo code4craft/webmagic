@@ -428,7 +428,10 @@ public class Spider implements Runnable, Task {
     public <T> List<T> getAll(Collection<String> urls) {
         destroyWhenExit = false;
         spawnUrl = false;
-        startRequests = UrlUtils.convertToRequests(urls);
+        startRequests.clear();
+        for (Request request : UrlUtils.convertToRequests(urls)) {
+            addRequest(request);
+        }
         CollectorPipeline collectorPipeline = getCollectorPipeline();
         pipelines.add(collectorPipeline);
         run();

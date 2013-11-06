@@ -28,14 +28,22 @@ public class BaiduBaike{
     }
 
     public static void main(String[] args) {
-        List<String> list = new ArrayList<String>();
+        OOSpider ooSpider = OOSpider.create(Site.me().setSleepTime(0), BaiduBaike.class);
+        //single download
         String urlTemplate = "http://baike.baidu.com/search/word?word=%s&pic=1&sug=1&enc=utf8";
-        list.add(String.format(urlTemplate,"水力发电"));
+        BaiduBaike baike = ooSpider.<BaiduBaike>get("http://baike.baidu.com/search/word?word=httpclient&pic=1&sug=1&enc=utf8");
+        System.out.println(baike);
+
+        //multidownload
+        List<String> list = new ArrayList<String>();
         list.add(String.format(urlTemplate,"风力发电"));
         list.add(String.format(urlTemplate,"太阳能"));
         list.add(String.format(urlTemplate,"地热发电"));
-        list.add(String.format(urlTemplate, "地热发电"));
-        List<BaiduBaike> baiduBaikes = OOSpider.create(Site.me().setSleepTime(100), BaiduBaike.class).<BaiduBaike>getAll(list);
-        System.out.println(baiduBaikes);
+        list.add(String.format(urlTemplate,"地热发电"));
+        List<BaiduBaike> resultItemses = ooSpider.<BaiduBaike>getAll(list);
+        for (BaiduBaike resultItemse : resultItemses) {
+            System.out.println(resultItemse);
+        }
+        ooSpider.close();
     }
 }

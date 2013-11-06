@@ -31,7 +31,7 @@ public class OschinaBlog {
     private Date date;
 
     public static void main(String[] args) {
-        OOSpider.create(Site.me()
+        OOSpider.create(Site.me().setSleepTime(0)
                 , new JsonFilePageModelPipeline("/data/webmagic/"), OschinaBlog.class)
                 .addUrl("http://my.oschina.net/flashsword/blog").run();
     }

@@ -37,7 +37,7 @@ public class HttpClientDownloader implements Downloader {
 
     private final Map<String, CloseableHttpClient> httpClients = new HashMap<String, CloseableHttpClient>();
 
-    private int poolSize = 1;
+    private HttpClientGenerator httpClientGenerator = new HttpClientGenerator();
 
     /**
      * A simple method to download a url.
@@ -63,14 +63,14 @@ public class HttpClientDownloader implements Downloader {
 
     private CloseableHttpClient getHttpClient(Site site) {
         if (site == null) {
-            return new HttpClientGenerator(poolSize).getClient(null);
+            return httpClientGenerator.getClient(null);
         }
         String domain = site.getDomain();
         CloseableHttpClient httpClient = httpClients.get(domain);
         if (httpClient == null) {
             synchronized (this) {
                 if (httpClient == null) {
-                    httpClient = new HttpClientGenerator(poolSize).getClient(site);
+                    httpClient = httpClientGenerator.getClient(site);
                     httpClients.put(domain, httpClient);
                 }
             }
@@ -105,7 +105,7 @@ public class HttpClientDownloader implements Downloader {
                 .setConnectionRequestTimeout(site.getTimeOut())
                 .setConnectTimeout(site.getTimeOut())
                 .setCookieSpec(CookieSpecs.BEST_MATCH);
-        if (site.getHttpProxy() != null) {
+        if (site != null && site.getHttpProxy() != null) {
             requestConfigBuilder.setProxy(site.getHttpProxy());
         }
         requestBuilder.setConfig(requestConfigBuilder.build());
@@ -168,6 +168,6 @@ public class HttpClientDownloader implements Downloader {
 
     @Override
     public void setThread(int thread) {
-        poolSize = thread;
+        httpClientGenerator.setPoolSize(thread);
     }
 }

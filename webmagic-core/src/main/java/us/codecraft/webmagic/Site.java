@@ -27,13 +27,13 @@ public class Site {
      */
     private List<Request> startRequests = new ArrayList<Request>();
 
-    private int sleepTime = 3000;
+    private int sleepTime = 5000;
 
     private int retryTimes = 0;
 
     private int cycleRetryTimes = 0;
 
-    private int timeOut = 2000;
+    private int timeOut = 5000;
 
     private static final Set<Integer> DEFAULT_STATUS_CODE_SET = new HashSet<Integer>();
 

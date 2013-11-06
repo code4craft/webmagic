@@ -5,6 +5,7 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.client.protocol.ResponseContentEncoding;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
+import org.apache.http.config.SocketConfig;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
@@ -25,14 +26,18 @@ public class HttpClientGenerator {
 
     private PoolingHttpClientConnectionManager connectionManager;
 
-    public HttpClientGenerator(int poolSize) {
+    public HttpClientGenerator() {
         Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory>create()
                 .register("http", PlainConnectionSocketFactory.INSTANCE)
                 .register("https", SSLConnectionSocketFactory.getSocketFactory())
                 .build();
         connectionManager = new PoolingHttpClientConnectionManager(reg);
-        connectionManager.setMaxTotal(poolSize);
         connectionManager.setDefaultMaxPerRoute(100);
+    }
+
+    public HttpClientGenerator setPoolSize(int poolSize){
+        connectionManager.setMaxTotal(poolSize);
+        return this;
     }
 
     public CloseableHttpClient getClient(Site site) {
@@ -59,6 +64,8 @@ public class HttpClientGenerator {
                 }
             });
         }
+        SocketConfig socketConfig = SocketConfig.custom().setSoKeepAlive(true).setTcpNoDelay(true).build();
+        httpClientBuilder.setDefaultSocketConfig(socketConfig);
         // Http client has some problem handling compressing entity for redirect
         // So I disable it and do it manually
         // https://issues.apache.org/jira/browse/HTTPCLIENT-1432
