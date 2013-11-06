@@ -1,13 +1,15 @@
 package us.codecraft.webmagic.downloader;
 
+import com.google.common.collect.Sets;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.Header;
-import org.apache.http.HeaderElement;
 import org.apache.http.HttpResponse;
 import org.apache.http.annotation.ThreadSafe;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.GzipDecompressingEntity;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
@@ -18,7 +20,8 @@ import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -33,7 +36,9 @@ public class HttpClientDownloader implements Downloader {
 
     private Logger logger = Logger.getLogger(getClass());
 
-    private int poolSize = 1;
+    private final Map<String, CloseableHttpClient> httpClients = new HashMap<String, CloseableHttpClient>();
+
+    private HttpClientGenerator httpClientGenerator = new HttpClientGenerator();
 
     /**
      * A simple method to download a url.
@@ -57,63 +62,59 @@ public class HttpClientDownloader implements Downloader {
         return (Html) page.getHtml();
     }
 
+    private CloseableHttpClient getHttpClient(Site site) {
+        if (site == null) {
+            return httpClientGenerator.getClient(null);
+        }
+        String domain = site.getDomain();
+        CloseableHttpClient httpClient = httpClients.get(domain);
+        if (httpClient == null) {
+            synchronized (this) {
+                if (httpClient == null) {
+                    httpClient = httpClientGenerator.getClient(site);
+                    httpClients.put(domain, httpClient);
+                }
+            }
+        }
+        return httpClient;
+    }
+
     @Override
     public Page download(Request request, Task task) {
         Site site = null;
         if (task != null) {
             site = task.getSite();
         }
-        int retryTimes = 0;
         Set<Integer> acceptStatCode;
         String charset = null;
+        Map<String, String> headers = null;
         if (site != null) {
-            retryTimes = site.getRetryTimes();
             acceptStatCode = site.getAcceptStatCode();
             charset = site.getCharset();
+            headers = site.getHeaders();
         } else {
-            acceptStatCode = new HashSet<Integer>();
-            acceptStatCode.add(200);
+            acceptStatCode = Sets.newHashSet(200);
         }
         logger.info("downloading page " + request.getUrl());
-        HttpClient httpClient = HttpClientPool.getInstance(poolSize).getClient(site);
+        RequestBuilder requestBuilder = RequestBuilder.get().setUri(request.getUrl());
+        if (headers != null) {
+            for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
+                requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
+            }
+        }
+        RequestConfig.Builder requestConfigBuilder = RequestConfig.custom()
+                .setConnectionRequestTimeout(site.getTimeOut())
+                .setConnectTimeout(site.getTimeOut())
+                .setCookieSpec(CookieSpecs.BEST_MATCH);
+        if (site != null && site.getHttpProxy() != null) {
+            requestConfigBuilder.setProxy(site.getHttpProxy());
+        }
+        requestBuilder.setConfig(requestConfigBuilder.build());
+        CloseableHttpResponse httpResponse = null;
         try {
-            HttpGet httpGet = new HttpGet(request.getUrl());
-            HttpResponse httpResponse = null;
-            int tried = 0;
-            boolean retry;
-            do {
-                try {
-                    httpResponse = httpClient.execute(httpGet);
-                    retry = false;
-                } catch (IOException e) {
-                    tried++;
-
-                    if (tried > retryTimes) {
-                        logger.warn("download page " + request.getUrl() + " error", e);
-                        if (site.getCycleRetryTimes() > 0) {
-                            Page page = new Page();
-                            Object cycleTriedTimesObject = request.getExtra(Request.CYCLE_TRIED_TIMES);
-                            if (cycleTriedTimesObject == null) {
-                                page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, 1));
-                            } else {
-                                int cycleTriedTimes = (Integer) cycleTriedTimesObject;
-                                cycleTriedTimes++;
-                                if (cycleTriedTimes >= site.getCycleRetryTimes()) {
-                                    return null;
-                                }
-                                page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, 1));
-                            }
-                            return page;
-                        }
-                        return null;
-                    }
-                    logger.info("download page " + request.getUrl() + " error, retry the " + tried + " time!");
-                    retry = true;
-                }
-            } while (retry);
+            httpResponse = getHttpClient(site).execute(requestBuilder.build());
             int statusCode = httpResponse.getStatusLine().getStatusCode();
             if (acceptStatCode.contains(statusCode)) {
-                handleGzip(httpResponse);
                 //charset
                 if (charset == null) {
                     String value = httpResponse.getEntity().getContentType().getValue();
@@ -122,16 +123,44 @@ public class HttpClientDownloader implements Downloader {
                 return handleResponse(request, charset, httpResponse, task);
             } else {
                 logger.warn("code error " + statusCode + "\t" + request.getUrl());
+                return null;
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             logger.warn("download page " + request.getUrl() + " error", e);
+            if (site.getCycleRetryTimes() > 0) {
+                return addToCycleRetry(request, site);
+            }
+            return null;
+        } finally {
+            try {
+                if (httpResponse != null) {
+                    //ensure the connection is released back to pool
+                    EntityUtils.consume(httpResponse.getEntity());
+                }
+            } catch (IOException e) {
+                logger.warn("close response fail", e);
+            }
         }
-        return null;
+    }
+
+    private Page addToCycleRetry(Request request, Site site) {
+        Page page = new Page();
+        Object cycleTriedTimesObject = request.getExtra(Request.CYCLE_TRIED_TIMES);
+        if (cycleTriedTimesObject == null) {
+            page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, 1));
+        } else {
+            int cycleTriedTimes = (Integer) cycleTriedTimesObject;
+            cycleTriedTimes++;
+            if (cycleTriedTimes >= site.getCycleRetryTimes()) {
+                return null;
+            }
+            page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, 1));
+        }
+        return page;
     }
 
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
-        String content = IOUtils.toString(httpResponse.getEntity().getContent(),
-                charset);
+        String content = IOUtils.toString(httpResponse.getEntity().getContent(), charset);
         Page page = new Page();
         page.setHtml(new Html(UrlUtils.fixAllRelativeHrefs(content, request.getUrl())));
         page.setUrl(new PlainText(request.getUrl()));
@@ -141,19 +170,6 @@ public class HttpClientDownloader implements Downloader {
 
     @Override
     public void setThread(int thread) {
-        poolSize = thread;
-    }
-
-    private void handleGzip(HttpResponse httpResponse) {
-        Header ceheader = httpResponse.getEntity().getContentEncoding();
-        if (ceheader != null) {
-            HeaderElement[] codecs = ceheader.getElements();
-            for (HeaderElement codec : codecs) {
-                if (codec.getName().equalsIgnoreCase("gzip")) {
-                    httpResponse.setEntity(
-                            new GzipDecompressingEntity(httpResponse.getEntity()));
-                }
-            }
-        }
+        httpClientGenerator.setPoolSize(thread);
     }
 }

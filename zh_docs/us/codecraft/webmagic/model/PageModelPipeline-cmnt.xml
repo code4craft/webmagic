@@ -4,7 +4,7 @@
 <date-generated>Sat Aug 17 14:14:46 CST 2013</date-generated>
 </meta>
 <comment>
-<key><![CDATA[us.codecraft.webmagic.model.PageModelPipeline]]></key>
+<key><![CDATA[us.codecraft.webmagic.pipeline.PageModelPipeline]]></key>
 <data><![CDATA[ @author code4crafter@gmail.com <br>
  Date: 13-8-3 <br>
  Time: 上午9:34 <br>

@@ -12,7 +12,7 @@
 ]]></data>
 </comment>
 <comment>
-<key><![CDATA[us.codecraft.webmagic.model.OOSpider(us.codecraft.webmagic.Site, us.codecraft.webmagic.model.PageModelPipeline, java.lang.Class...)]]></key>
+<key><![CDATA[us.codecraft.webmagic.model.OOSpider(us.codecraft.webmagic.Site, us.codecraft.webmagic.pipeline.PageModelPipeline, java.lang.Class...)]]></key>
 <data><![CDATA[ 创建一个爬虫。<br>
  @param site
  @param pageModelPipeline

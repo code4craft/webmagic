@@ -1,5 +1,5 @@
 webmagic使用手册
-------
+========
 >webmagic是一个开源的Java垂直爬虫框架，目标是简化爬虫的开发流程，让开发者专注于逻辑功能的开发。webmagic的核心非常简单，但是覆盖爬虫的整个流程，也是很好的学习爬虫开发的材料。
 
 >web爬虫是一种技术，webmagic致力于将这种技术的实现成本降低，但是出于对资源提供者的尊重，webmagic不会做反封锁的事情，包括：验证码破解、代理切换、自动登录等。
@@ -16,8 +16,9 @@ webmagic使用手册
 
 <div style="page-break-after:always"></div>
 
+--------
 
-## 快速开始
+## 下载及安装
 
 ### 使用maven
 
@@ -26,12 +27,12 @@ webmagic使用maven管理依赖，在项目中添加对应的依赖即可使用w
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-core</artifactId>
-            <version>0.3.2</version>
+            <version>0.4.0</version>
         </dependency>
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-extension</artifactId>
-            <version>0.3.2</version>
+            <version>0.4.0</version>
         </dependency>
 
 #### 项目结构
@@ -66,9 +67,11 @@ webmagic还包含两个可用的扩展包，因为这两个包都依赖了比较
 
 在**bin/lib**目录下，有项目依赖的所有jar包，直接在IDE里import即可。
 
-### 第一个爬虫
+--------
 
-#### 定制PageProcessor
+## 第一个爬虫
+
+### 定制PageProcessor
 
 PageProcessor是webmagic-core的一部分，定制一个PageProcessor即可实现自己的爬虫逻辑。以下是抓取osc博客的一段代码：
 
@@ -137,10 +140,13 @@ webmagic-extension包括了注解方式编写爬虫的方法，只需基于一�
 
 这个例子定义了一个Model类，Model类的字段'title'、'content'、'tags'均为要抽取的属性。这个类在Pipeline里是可以复用的。
 
-注解的详细使用方式见后文中得webmagic-extension注解模块。
+注解的详细使用方式见后文中的webmagic-extension注解模块。
 
 <div style="page-break-after:always"></div>
 
+--------
+
+## 模块详细介绍
 
 ## webmagic-core
 
@@ -213,7 +219,7 @@ Spider还包括一个方法test(String url)，该方法只抓取一个单独的�
 
 webmagic包括一个对于页面正文的自动抽取的类**SmartContentSelector**。相信用过Evernote Clearly都会对其自动抽取正文的技术印象深刻。这个技术又叫**Readability**。当然webmagic对Readability的实现还比较粗略，但是仍有一些学习价值。
 
-webmagic的XPath解析使用了作者另一个开源项目：基于Jsoup的XPath解析器[Xsoup](https://github.com/code4craft/xsoup)，Xsoup对XPath的语法进行了一些扩展，支持一些自定义的函数。
+webmagic的XPath解析使用了作者另一个开源项目：基于Jsoup的XPath解析器[Xsoup](https://github.com/code4craft/xsoup)，Xsoup对XPath的语法进行了一些扩展，支持一些自定义的函数。这些函数的使用方式都是在XPath末尾加上`/name-of-function()`，例如：`"//div[@class='BlogStat']/regex('\\d+-\\d+-\\d+\\s+\\d+:\\d+')"`。
 
 <table>
     <tr>
@@ -325,6 +331,8 @@ webmagic目前不支持持久化到数据库，但是结合其他工具，持久
 
 <div style="page-break-after:always"></div>
 
+-----
+
 ## webmagic-extension
 
 webmagic-extension是为了开发爬虫更方便而实现的一些功能模块。这些功能完全基于webmagic-core的框架，包括注解形式编写爬虫、分页、分布式等功能。
@@ -354,6 +362,10 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 
 	    @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
 	    private List<String> tags;
+	    
+	    @Formatter("yyyy-MM-dd HH:mm")
+	    @ExtractBy("//div[@class='BlogStat']/regex('\\d+-\\d+-\\d+\\s+\\d+:\\d+')")
+	    private Date date; 
 
 	    public static void main(String[] args) {
 	        OOSpider.create(
@@ -395,10 +407,21 @@ webmagic-extension包括注解模块。为什么会有注解方式？
 		
 * #### 类型转换
 
+	webmagic的注解模式支持对抽取结果进行类型转换，这样抽取结果并不需要是String类型，而可以是任意类型。webmagic内置了基本类型的支持(需要保证抽取结果能够被转换到对应类型)。
+
+```java
+	    @ExtractBy("//ul[@class='pagehead-actions']/li[1]//a[@class='social-count js-social-count']/text()")
+	    private int star;
+```
+抽取结果也可以是`java.util.Date`类型，不过需要指定日期格式化的方式：
+
+```java
 	    @Formatter("yyyy-MM-dd HH:mm")
 	    @ExtractBy("//div[@class='BlogStat']/regex('\\d+-\\d+-\\d+\\s+\\d+:\\d+')")
 	    private Date date;
+```
 
+你也可以编写一个实现`ObjectFormatter`接口的类，进行自己的类型解析。要使用自己的类，需要调用`ObjectFormatters.put()`对这个类进行注册。
 		
 * #### AfterExtractor
 

@@ -13,6 +13,11 @@
         <appender-ref ref="stdout" />
     </logger>
 
+    <logger name="org.apache" additivity="false">
+        <level value="warn" />
+        <appender-ref ref="stdout" />
+    </logger>
+
     <logger name="net.sf.ehcache" additivity="false">
         <level value="warn" />
         <appender-ref ref="stdout" />

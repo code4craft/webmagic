@@ -4,6 +4,7 @@ import org.apache.http.annotation.ThreadSafe;
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.utils.NumberUtils;
 
 import java.util.Comparator;
 import java.util.HashSet;
@@ -30,14 +31,14 @@ public class PriorityScheduler implements Scheduler {
     private PriorityBlockingQueue<Request> priorityQueuePlus = new PriorityBlockingQueue<Request>(INITIAL_CAPACITY, new Comparator<Request>() {
         @Override
         public int compare(Request o1, Request o2) {
-            return -(new Long(o1.getPriority()).compareTo(o2.getPriority()));
+            return -NumberUtils.compareLong(o1.getPriority(), o2.getPriority());
         }
     });
 
     private PriorityBlockingQueue<Request> priorityQueueMinus = new PriorityBlockingQueue<Request>(INITIAL_CAPACITY, new Comparator<Request>() {
         @Override
         public int compare(Request o1, Request o2) {
-            return -(new Long(o1.getPriority()).compareTo(o2.getPriority()));
+            return -NumberUtils.compareLong(o1.getPriority(), o2.getPriority());
         }
     });
 

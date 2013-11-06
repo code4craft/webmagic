@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class OschinaBlogPageProcesser implements PageProcessor {
 
-    private Site site = Site.me().setDomain("my.oschina.net").addStartUrl("http://my.oschina.net/flashsword/blog");
+    private Site site = Site.me().setDomain("my.oschina.net");
 
     @Override
     public void process(Page page) {
@@ -34,6 +34,6 @@ public class OschinaBlogPageProcesser implements PageProcessor {
     }
 
     public static void main(String[] args) {
-        Spider.create(new OschinaBlogPageProcesser()).thread(2).run();
+        Spider.create(new OschinaBlogPageProcesser()).addUrl("http://my.oschina.net/flashsword/blog").thread(2).run();
     }
 }
