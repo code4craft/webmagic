@@ -17,7 +17,6 @@ webmagic
 * Multi-thread and Distribution support.
 * Easy to be integrated.
 
-
 ## Install:
   
 Add dependencies to your pom.xml:
@@ -125,3 +124,6 @@ To write webmagic, I refered to the projects below :
 	
 	[https://gitcafe.com/laiweiwei/Spiderman](https://gitcafe.com/laiweiwei/Spiderman)
 
+### Mail-list:
+
+[https://groups.google.com/forum/#!forum/webmagic-java](https://groups.google.com/forum/#!forum/webmagic-java)
