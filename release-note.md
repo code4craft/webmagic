@@ -1,6 +1,6 @@
 Release Notes
 ----
-See old versions in [https://github.com/code4craft/webmagic/releases](https://github.com/code4craft/webmagic/releases)
+See latest versions in [https://github.com/code4craft/webmagic/releases](https://github.com/code4craft/webmagic/releases)
 
 *2012-9-4* `version：0.3.0`
 
