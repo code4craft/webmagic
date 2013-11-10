@@ -15,39 +15,39 @@ import java.io.InputStream;
 /**
  * @author code4crafter@gmail.com
  */
-public class ScriptProcessor implements PageProcessor{
+public class JsScriptProcessor implements PageProcessor{
 
     private ScriptEngine rubyEngine;
 
     private String defines;
 
-    ScriptProcessor(){
+    private String script;
+
+    public JsScriptProcessor(String filename){
         ScriptEngineManager manager = new ScriptEngineManager();
-        rubyEngine = manager.getEngineByName("jruby");
-        InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("ruby/defines.rb");
+        rubyEngine = manager.getEngineByName("javascript");
+        InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("js/defines.js");
         try {
             defines = IOUtils.toString(resourceAsStream);
+            resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(filename);
+            script = IOUtils.toString(resourceAsStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
     @Override
     public void process(Page page) {
         ScriptContext context = rubyEngine.getContext();
         context.setAttribute("page", page, ScriptContext.ENGINE_SCOPE);
-        String script;
         try {
-            InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("ruby/oschina.rb");
-            try {
-                script = IOUtils.toString(resourceAsStream);
-                rubyEngine.eval(defines+script, context);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            rubyEngine.eval(defines+script, context);
         } catch (ScriptException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
@@ -56,6 +56,6 @@ public class ScriptProcessor implements PageProcessor{
     }
 
     public static void main(String[] args) {
-        Spider.create(new ScriptProcessor()).addUrl("http://my.oschina.net/flashsword/blog").run();
+        Spider.create(new JsScriptProcessor("js/oschina.js")).addUrl("http://my.oschina.net/flashsword/blog").run();
     }
 }
