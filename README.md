@@ -70,11 +70,7 @@ webmagic还包含两个可用的扩展包，因为这两个包都依赖了比较
 
 ### 不使用maven
 
-不使用maven的用户，可以下载这个二进制打包版本(感谢[oschina](http://www.oschina.net/))：
-
-	git clone http://git.oschina.net/flashsword20/webmagic-bin.git
-
-在**bin/lib**目录下，有项目依赖的所有jar包，直接在IDE里import即可。
+在项目的**lib**目录下，有依赖的所有jar包，直接在IDE里import即可。
 
 ### 第一个爬虫
 
