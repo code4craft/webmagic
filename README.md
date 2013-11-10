@@ -27,6 +27,8 @@ python爬虫 **scrapy** [https://github.com/scrapy/scrapy](https://github.com/sc
 
 Java爬虫 **Spiderman** [https://gitcafe.com/laiweiwei/Spiderman](https://gitcafe.com/laiweiwei/Spiderman)
 
+webmagic的github地址：[https://github.com/code4craft/webmagic](https://github.com/code4craft/webmagic)。
+
 ## 快速开始
 
 ### 使用maven
