@@ -105,6 +105,7 @@ public class ScriptConsole {
             options.addOption(new Option("l", true, "language"));
             options.addOption(new Option("t", true, "thread"));
             options.addOption(new Option("f", true, "script file"));
+            options.addOption(new Option("s", true, "sleep time"));
             CommandLineParser commandLineParser = new PosixParser();
             CommandLine commandLine = commandLineParser.parse(options, args);
             return readOptions(commandLine);

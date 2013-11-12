@@ -50,7 +50,7 @@ public class ScriptProcessor implements PageProcessor {
         context.setAttribute("page", page, ScriptContext.ENGINE_SCOPE);
         context.setAttribute("config", site, ScriptContext.ENGINE_SCOPE);
         try {
-            engine.eval(defines + script, context);
+            engine.eval(defines + "\n" + script, context);
         } catch (ScriptException e) {
             e.printStackTrace();
         }
