@@ -18,6 +18,8 @@ public class ScriptProcessorBuilder {
 
     private String script;
 
+    private int threadNum = 1;
+
     private ScriptProcessorBuilder() {
     }
 
@@ -57,8 +59,13 @@ public class ScriptProcessorBuilder {
         return this;
     }
 
+    public ScriptProcessorBuilder thread(int threadNum) {
+        this.threadNum = threadNum;
+        return this;
+    }
+
     public ScriptProcessor build(){
-        return new ScriptProcessor(language,script);
+        return new ScriptProcessor(language,script,threadNum);
     }
 
 }

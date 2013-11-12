@@ -7,7 +7,6 @@ import us.codecraft.webmagic.processor.PageProcessor;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +17,7 @@ import java.io.InputStream;
  */
 public class ScriptProcessor implements PageProcessor {
 
-    private ScriptEngine engine;
+    private ScriptEnginePool enginePool;
 
     private String defines;
 
@@ -28,13 +27,12 @@ public class ScriptProcessor implements PageProcessor {
 
     private Site site = Site.me();
 
-    public ScriptProcessor(Language language, String script) {
+    public ScriptProcessor(Language language, String script, int threadNum) {
         if (language == null || script == null) {
             throw new IllegalArgumentException("language and script must not be null!");
         }
         this.language = language;
-        ScriptEngineManager manager = new ScriptEngineManager();
-        engine = manager.getEngineByName(language.getEngineName());
+        enginePool = new ScriptEnginePool(language, threadNum);
         InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(language.getDefineFile());
         try {
             defines = IOUtils.toString(resourceAsStream);
@@ -46,11 +44,13 @@ public class ScriptProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        ScriptContext context = engine.getContext();
-        context.setAttribute("page", page, ScriptContext.ENGINE_SCOPE);
-        context.setAttribute("config", site, ScriptContext.ENGINE_SCOPE);
+        ScriptEngine engine = enginePool.getEngine();
         try {
-            engine.eval(defines + "\n" + script, context);
+            ScriptContext context = engine.getContext();
+            context.setAttribute("page", page, ScriptContext.ENGINE_SCOPE);
+            context.setAttribute("config", site, ScriptContext.ENGINE_SCOPE);
+            try {
+                engine.eval(defines + "\n" + script, context);
 //            switch (language) {
 //                case JavaScript:
 //                    NativeObject o = (NativeObject) engine.get("result");
@@ -64,8 +64,11 @@ public class ScriptProcessor implements PageProcessor {
 //                    Object o1 = engine.get("result");
 //                    break;
 //            }
-        } catch (ScriptException e) {
-            e.printStackTrace();
+            } catch (ScriptException e) {
+                e.printStackTrace();
+            }
+        } finally {
+            enginePool.release(engine);
         }
     }
 

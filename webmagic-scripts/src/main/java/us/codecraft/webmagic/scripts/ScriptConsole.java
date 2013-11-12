@@ -2,6 +2,8 @@ package us.codecraft.webmagic.scripts;
 
 import com.google.common.collect.Sets;
 import org.apache.commons.cli.*;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Spider;
 
 import java.util.HashMap;
@@ -85,7 +87,7 @@ public class ScriptConsole {
 
     private static void startSpider(Params params) {
         ScriptProcessor pageProcessor = ScriptProcessorBuilder.custom()
-                .language(params.getLanguage()).scriptFromFile(params.getScriptFileName()).build();
+                .language(params.getLanguage()).scriptFromFile(params.getScriptFileName()).thread(params.getThread()).build();
         pageProcessor.getSite().setSleepTime(params.getSleepTime());
         pageProcessor.getSite().setAcceptStatCode(Sets.<Integer>newHashSet(200, 404, 500));
         Spider spider = Spider.create(pageProcessor).thread(params.getThread());
@@ -100,13 +102,15 @@ public class ScriptConsole {
         spider.run();
     }
 
+
     private static Params parseCommand(String[] args) {
         try {
             Options options = new Options();
-            options.addOption(new Option("l", true, "language"));
-            options.addOption(new Option("t", true, "thread"));
-            options.addOption(new Option("f", true, "script file"));
-            options.addOption(new Option("s", true, "sleep time"));
+            options.addOption(new Option("l", "language", true, "language"));
+            options.addOption(new Option("t", "thread", true, "thread"));
+            options.addOption(new Option("f", "file", true, "script file"));
+            options.addOption(new Option("s", "sleep", true, "sleep time"));
+            options.addOption(new Option("g", "logger", true, "sleep time"));
             CommandLineParser commandLineParser = new PosixParser();
             CommandLine commandLine = commandLineParser.parse(options, args);
             return readOptions(commandLine);
@@ -143,7 +147,27 @@ public class ScriptConsole {
             Integer thread = Integer.parseInt(commandLine.getOptionValue("t"));
             params.setThread(thread);
         }
+        if (commandLine.hasOption("g")) {
+            configLogger(commandLine.getOptionValue("g"));
+        }
         params.setUrls(commandLine.getArgList());
         return params;
+    }
+
+    private static void configLogger(String value) {
+        Logger rootLogger = Logger.getRootLogger();
+        if ("debug".equalsIgnoreCase(value)) {
+            rootLogger.setLevel(Level.DEBUG);
+        } else if ("info".equalsIgnoreCase(value)) {
+            rootLogger.setLevel(Level.INFO);
+        } else if ("warn".equalsIgnoreCase(value)) {
+            rootLogger.setLevel(Level.WARN);
+        } else if ("trace".equalsIgnoreCase(value)) {
+            rootLogger.setLevel(Level.TRACE);
+        } else if ("off".equalsIgnoreCase(value)) {
+            rootLogger.setLevel(Level.OFF);
+        } else if ("error".equalsIgnoreCase(value)) {
+            rootLogger.setLevel(Level.ERROR);
+        }
     }
 }

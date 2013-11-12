@@ -9,7 +9,7 @@
     </appender>
 
     <logger name="org.apache" additivity="false">
-        <level value="warn" />
+        <level value="error" />
         <appender-ref ref="stdout" />
     </logger>
 
