@@ -4,7 +4,10 @@ import com.google.common.collect.Sets;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.pipeline.Pipeline;
 
 import java.util.HashMap;
 import java.util.List;
@@ -91,6 +94,12 @@ public class ScriptConsole {
         pageProcessor.getSite().setSleepTime(params.getSleepTime());
         pageProcessor.getSite().setAcceptStatCode(Sets.<Integer>newHashSet(200, 404, 500));
         Spider spider = Spider.create(pageProcessor).thread(params.getThread());
+        spider.clearPipeline().addPipeline(new Pipeline() {
+            @Override
+            public void process(ResultItems resultItems, Task task) {
+
+            }
+        });
         if (params.getUrls() == null || params.getUrls().size() == 0) {
             System.err.println("Need at least one argument");
             System.out.println("Usage: java -jar webmagic.jar [-l language] -f script file [-t threadnum] [-s sleep time] url1 [url2 url3]");
