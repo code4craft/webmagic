@@ -1,7 +1,6 @@
 package us.codecraft.webmagic.scripts;
 
 import org.apache.commons.io.IOUtils;
-import sun.org.mozilla.javascript.internal.NativeObject;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
@@ -12,7 +11,6 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 /**
  * @author code4crafter@gmail.com
@@ -53,19 +51,19 @@ public class ScriptProcessor implements PageProcessor {
         context.setAttribute("config", site, ScriptContext.ENGINE_SCOPE);
         try {
             engine.eval(defines + "\n" + script, context);
-            switch (language) {
-                case JavaScript:
-                    NativeObject o = (NativeObject) engine.get("result");
-                    if (o != null) {
-                        for (Map.Entry<Object, Object> objectObjectEntry : o.entrySet()) {
-                            page.getResultItems().put(objectObjectEntry.getKey().toString(), objectObjectEntry.getValue());
-                        }
-                    }
-                    break;
-                case JRuby:
-                    Object o1 = engine.get("result");
-                    break;
-            }
+//            switch (language) {
+//                case JavaScript:
+//                    NativeObject o = (NativeObject) engine.get("result");
+//                    if (o != null) {
+//                        for (Map.Entry<Object, Object> objectObjectEntry : o.entrySet()) {
+//                            page.getResultItems().put(objectObjectEntry.getKey().toString(), objectObjectEntry.getValue());
+//                        }
+//                    }
+//                    break;
+//                case JRuby:
+//                    Object o1 = engine.get("result");
+//                    break;
+//            }
         } catch (ScriptException e) {
             e.printStackTrace();
         }
