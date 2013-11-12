@@ -165,6 +165,7 @@ public class HttpClientDownloader implements Downloader {
         page.setHtml(new Html(UrlUtils.fixAllRelativeHrefs(content, request.getUrl())));
         page.setUrl(new PlainText(request.getUrl()));
         page.setRequest(request);
+        page.setStatusCode(httpResponse.getStatusLine().getStatusCode());
         return page;
     }
 

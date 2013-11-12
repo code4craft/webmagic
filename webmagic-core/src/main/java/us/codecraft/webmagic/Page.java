@@ -33,6 +33,8 @@ public class Page {
 
     private Selectable url;
 
+    private int statusCode;
+
     private List<Request> targetRequests = new ArrayList<Request>();
 
     public Page() {
@@ -160,6 +162,14 @@ public class Page {
 
     public ResultItems getResultItems() {
         return resultItems;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
     }
 
     @Override
