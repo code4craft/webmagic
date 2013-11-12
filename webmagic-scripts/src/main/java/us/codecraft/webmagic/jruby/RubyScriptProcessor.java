@@ -1,9 +1,10 @@
-package us.codecraft.webmagic.processor;
+package us.codecraft.webmagic.jruby;
 
 import org.apache.commons.io.IOUtils;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.processor.PageProcessor;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
@@ -15,7 +16,7 @@ import java.io.InputStream;
 /**
  * @author code4crafter@gmail.com
  */
-public class JsScriptProcessor implements PageProcessor{
+public class RubyScriptProcessor implements PageProcessor {
 
     private ScriptEngine rubyEngine;
 
@@ -23,10 +24,10 @@ public class JsScriptProcessor implements PageProcessor{
 
     private String script;
 
-    public JsScriptProcessor(String filename){
+    public RubyScriptProcessor(String filename){
         ScriptEngineManager manager = new ScriptEngineManager();
-        rubyEngine = manager.getEngineByName("javascript");
-        InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("js/defines.js");
+        rubyEngine = manager.getEngineByName("jruby");
+        InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("ruby/defines.rb");
         try {
             defines = IOUtils.toString(resourceAsStream);
             resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(filename);
@@ -56,6 +57,6 @@ public class JsScriptProcessor implements PageProcessor{
     }
 
     public static void main(String[] args) {
-        Spider.create(new JsScriptProcessor("js/oschina.js")).addUrl("http://my.oschina.net/flashsword/blog").run();
+        Spider.create(new RubyScriptProcessor("ruby/oschina.rb")).addUrl("http://my.oschina.net/flashsword/blog").run();
     }
 }
