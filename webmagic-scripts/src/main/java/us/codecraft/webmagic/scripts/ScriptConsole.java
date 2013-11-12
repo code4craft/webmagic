@@ -87,6 +87,7 @@ public class ScriptConsole {
         ScriptProcessor pageProcessor = ScriptProcessorBuilder.custom()
                 .language(params.getLanguage()).scriptFromFile(params.getScriptFileName()).build();
         pageProcessor.getSite().setSleepTime(params.getSleepTime());
+        pageProcessor.getSite().setAcceptStatCode(Sets.<Integer>newHashSet(200, 404, 500));
         Spider spider = Spider.create(pageProcessor).thread(params.getThread());
         if (params.getUrls() == null || params.getUrls().size() == 0) {
             System.err.println("Need at least one argument");
