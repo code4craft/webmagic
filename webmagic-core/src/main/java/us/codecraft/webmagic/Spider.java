@@ -189,7 +189,7 @@ public class Spider implements Runnable, Task {
      *
      * @param pipeline
      * @return this
-     * @see #setPipeline(us.codecraft.webmagic.pipeline.Pipeline)
+     * @see #addPipeline(us.codecraft.webmagic.pipeline.Pipeline)
      * @deprecated
      */
     public Spider pipeline(Pipeline pipeline) {
@@ -207,6 +207,20 @@ public class Spider implements Runnable, Task {
     public Spider addPipeline(Pipeline pipeline) {
         checkIfRunning();
         this.pipelines.add(pipeline);
+        return this;
+    }
+
+    /**
+     * set pipelines for Spider
+     *
+     * @param pipeline
+     * @return this
+     * @see Pipeline
+     * @since 0.4.1
+     */
+    public Spider setPipelines(List<Pipeline> pipelines) {
+        checkIfRunning();
+        this.pipelines = pipelines;
         return this;
     }
 
