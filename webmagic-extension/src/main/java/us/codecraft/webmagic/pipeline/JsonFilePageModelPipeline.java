@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.model.HasKey;
-import us.codecraft.webmagic.model.PageModelPipeline;
 import us.codecraft.webmagic.utils.FilePersistentBase;
 
 import java.io.FileWriter;

@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.model;
+package us.codecraft.webmagic.pipeline;
 
 import us.codecraft.webmagic.Task;
 

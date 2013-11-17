@@ -6,6 +6,7 @@ import us.codecraft.webmagic.MockDownloader;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.example.GithubRepo;
+import us.codecraft.webmagic.pipeline.PageModelPipeline;
 
 /**
  * @author code4crafter@gmail.com <br>

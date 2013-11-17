@@ -195,7 +195,7 @@ class PageModelExtractor {
     private void initClassExtractors() {
         Annotation annotation = clazz.getAnnotation(TargetUrl.class);
         if (annotation == null) {
-            targetUrlPatterns.add(Pattern.compile(".*"));
+            targetUrlPatterns.add(Pattern.compile("(.*)"));
         } else {
             TargetUrl targetUrl = (TargetUrl) annotation;
             String[] value = targetUrl.value();

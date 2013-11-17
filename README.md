@@ -1,5 +1,5 @@
-webmagic
----
+![logo](https://raw.github.com/code4craft/webmagic/master/asserts/logo.jpg)
+
 [Readme in Chinese](https://github.com/code4craft/webmagic/tree/master/zh_docs)
 
 [User Manual (Chinese)](https://github.com/code4craft/webmagic/blob/master/user-manual.md)
@@ -17,7 +17,6 @@ webmagic
 * Multi-thread and Distribution support.
 * Easy to be integrated.
 
-
 ## Install:
   
 Add dependencies to your pom.xml:
@@ -25,12 +24,12 @@ Add dependencies to your pom.xml:
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-core</artifactId>
-            <version>0.3.2</version>
+            <version>0.4.0</version>
         </dependency>
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-extension</artifactId>
-            <version>0.3.2</version>
+            <version>0.4.0</version>
         </dependency>
 
 ## Get Started:
@@ -125,3 +124,6 @@ To write webmagic, I refered to the projects below :
 	
 	[https://gitcafe.com/laiweiwei/Spiderman](https://gitcafe.com/laiweiwei/Spiderman)
 
+### Mail-list:
+
+[https://groups.google.com/forum/#!forum/webmagic-java](https://groups.google.com/forum/#!forum/webmagic-java)

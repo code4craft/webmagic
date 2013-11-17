@@ -3,6 +3,7 @@ package us.codecraft.webmagic.model;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
+import us.codecraft.webmagic.pipeline.PageModelPipeline;
 import us.codecraft.webmagic.pipeline.Pipeline;
 
 import java.lang.annotation.Annotation;
