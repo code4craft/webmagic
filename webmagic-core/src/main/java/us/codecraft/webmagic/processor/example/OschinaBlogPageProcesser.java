@@ -23,7 +23,7 @@ public class OschinaBlogPageProcesser implements PageProcessor {
             //skip this page
             page.setSkip(true);
         }
-        page.putField("content", page.getHtml().xpath("//div[@class='BlogContent']/tidyText()").toString());
+        page.putField("content", page.getHtml().smartContent().toString());
         page.putField("tags", page.getHtml().xpath("//div[@class='BlogTags']/a/text()").all());
     }
 
