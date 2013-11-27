@@ -23,10 +23,10 @@ public interface Scheduler {
     public void push(Request request, Task task);
 
     /**
-     * 返回下一个要抓取的链接
+     * get an url to crawl
      *
-     * @param task 定义的任务，以满足单Scheduler多Task的情况
-     * @return 下一个要抓取的链接
+     * @param task the task of spider
+     * @return the url to crawl
      */
     public Request poll(Task task);
 
