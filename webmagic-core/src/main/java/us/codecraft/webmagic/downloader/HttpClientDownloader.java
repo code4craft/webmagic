@@ -162,7 +162,7 @@ public class HttpClientDownloader implements Downloader {
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
         String content = IOUtils.toString(httpResponse.getEntity().getContent(), charset);
         Page page = new Page();
-        page.setHtml(new Html(UrlUtils.fixAllRelativeHrefs(content, request.getUrl())));
+        page.setRawText(content);
         page.setUrl(new PlainText(request.getUrl()));
         page.setRequest(request);
         page.setStatusCode(httpResponse.getStatusLine().getStatusCode());
