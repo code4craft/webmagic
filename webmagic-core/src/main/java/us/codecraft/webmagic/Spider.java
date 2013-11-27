@@ -98,6 +98,8 @@ public class Spider implements Runnable, Task {
 
     private Condition newUrlCondition = newUrlLock.newCondition();
 
+    private final AtomicInteger threadAlive = new AtomicInteger(0);
+
     /**
      * create a spider with pageProcessor.
      *
@@ -276,6 +278,7 @@ public class Spider implements Runnable, Task {
             }
             startRequests.clear();
         }
+        threadAlive.set(0);
     }
 
     @Override
@@ -283,7 +286,6 @@ public class Spider implements Runnable, Task {
         checkRunningStat();
         initComponent();
         logger.info("Spider " + getUUID() + " started!");
-        final AtomicInteger threadAlive = new AtomicInteger(0);
         while (!Thread.currentThread().isInterrupted() && stat.get() == STAT_RUNNING) {
             Request request = scheduler.poll(this);
             if (request == null) {
@@ -369,7 +371,7 @@ public class Spider implements Runnable, Task {
             return;
         }
         // for cycle retry
-        if (page.getHtml() == null) {
+        if (page.getRawText() == null) {
             extractAndAddRequests(page);
             sleep(site.getSleepTime());
             return;
@@ -485,6 +487,10 @@ public class Spider implements Runnable, Task {
     private void waitNewUrl() {
         try {
             newUrlLock.lock();
+            //double check
+            if (threadAlive.get() == 0 && exitWhenComplete) {
+                return;
+            }
             try {
                 newUrlCondition.await();
             } catch (InterruptedException e) {

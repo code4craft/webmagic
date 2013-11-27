@@ -186,8 +186,9 @@ public class Page {
         return rawText;
     }
 
-    public void setRawText(String rawText) {
+    public Page setRawText(String rawText) {
         this.rawText = rawText;
+        return this;
     }
 
     @Override
