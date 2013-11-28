@@ -1,4 +1,4 @@
-WebMagic-Avalon项目手册
+WebMagic-Avalon项目计划
 =======
 WebMagic-Avalon项目的目标是打造一个可配置、可管理的爬虫，以及一个可分享配置/脚本的平台，从而减少熟悉的开发者的开发量，并且让**不熟悉Java技术的人**也能简单的使用一个爬虫。
 
@@ -21,4 +21,10 @@ WebMagic-Avalon项目的目标是打造一个可配置、可管理的爬虫，�
 
 ## 如何参与
 
-webmagic目前
+webmagic目前由作者业余维护，仅仅为了分享和个人提高，没有任何盈利，也没有商业化打算。
+
+欢迎以下几种形式的贡献：
+
+1. 为webmagic项目本身提出改进意见，可以通过邮件组、qq、oschina或者在github提交issue(推荐)的方式。
+2. 参与WebMagic-Avalon计划的建设讨论，包括产品设计、技术选型等，可以直接回复这个issue。
+3. 参与webmagic代码开发，请fork一份代码，修改后提交pull request给我。请使用尽量新的版本，并说明修改内容。pull request接受后，我会将你加为committer，共同参与开发。
