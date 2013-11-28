@@ -33,6 +33,8 @@ public @interface ExtractByUrl {
      * Define whether the extractor return more than one result.
      * When set to 'true', the extractor return a list of string (so you should define the field as List). <br>
      *
+     * Deprecated since 0.4.2. This option is determined automatically by the class of field.
+     * @deprecated since 0.4.2
      * @return whether the extractor return more than one result
      */
     boolean multi() default false;
