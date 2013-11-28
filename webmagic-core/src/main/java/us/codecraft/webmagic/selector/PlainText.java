@@ -46,6 +46,16 @@ public class PlainText implements Selectable {
     }
 
     @Override
+    public Selectable css(String selector) {
+        return $(selector);
+    }
+
+    @Override
+    public Selectable css(String selector, String attrName) {
+        return $(selector, attrName);
+    }
+
+    @Override
     public Selectable smartContent() {
         throw new UnsupportedOperationException();
     }

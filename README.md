@@ -1,6 +1,6 @@
 ![http://static.oschina.net/uploads/space/2013/1110/200709_oP1e_190591.jpg](http://static.oschina.net/uploads/space/2013/1110/200709_oP1e_190591.jpg)
----------
 [![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
+![logo](https://raw.github.com/code4craft/webmagic/master/asserts/logo.jpg)
 
 [Readme in English](https://github.com/code4craft/webmagic/tree/master/en_docs)
 
@@ -38,12 +38,12 @@ webmagic使用maven管理依赖，在项目中添加对应的依赖即可使用w
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-core</artifactId>
-            <version>0.4.0</version>
+            <version>0.4.1</version>
         </dependency>
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-extension</artifactId>
-            <version>0.4.0</version>
+            <version>0.4.1</version>
         </dependency>
 
 #### 项目结构
@@ -152,3 +152,6 @@ webmagic-samples目录里有一些定制PageProcessor以抽取不同站点的例
 webmagic遵循[Apache 2.0协议](http://opensource.org/licenses/Apache-2.0)
 
 
+### Mail-list:
+
+[https://groups.google.com/forum/#!forum/webmagic-java](https://groups.google.com/forum/#!forum/webmagic-java)

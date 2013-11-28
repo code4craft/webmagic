@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * Object storing extracted result and urls to fetch.<br>
+ * Not thread safe.<br>
  * Main method：                                               <br>
  * {@link #getUrl()} get url of current page                   <br>
  * {@link #getHtml()}  get content of current page                 <br>
@@ -19,9 +19,9 @@ import java.util.List;
  * {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} add urls to fetch                 <br>
  *
  * @author code4crafter@gmail.com <br>
- * @since 0.1.0
  * @see us.codecraft.webmagic.downloader.Downloader
  * @see us.codecraft.webmagic.processor.PageProcessor
+ * @since 0.1.0
  */
 public class Page {
 
@@ -31,7 +31,11 @@ public class Page {
 
     private Html html;
 
+    private String rawText;
+
     private Selectable url;
+
+    private int statusCode;
 
     private List<Request> targetRequests = new ArrayList<Request>();
 
@@ -60,9 +64,17 @@ public class Page {
      * @return html
      */
     public Html getHtml() {
+        if (html == null) {
+            html = new Html(UrlUtils.fixAllRelativeHrefs(rawText, request.getUrl()));
+        }
         return html;
     }
 
+    /**
+     * @param html
+     * @deprecated since 0.4.0
+     *             The html is parse just when first time of calling {@link #getHtml()}, so use {@link #setRawText(String)} instead.
+     */
     public void setHtml(Html html) {
         this.html = html;
     }
@@ -93,7 +105,7 @@ public class Page {
      *
      * @param requests
      */
-    public void addTargetRequests(List<String> requests,long priority) {
+    public void addTargetRequests(List<String> requests, long priority) {
         synchronized (targetRequests) {
             for (String s : requests) {
                 if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
@@ -162,13 +174,31 @@ public class Page {
         return resultItems;
     }
 
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public String getRawText() {
+        return rawText;
+    }
+
+    public Page setRawText(String rawText) {
+        this.rawText = rawText;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Page{" +
                 "request=" + request +
                 ", resultItems=" + resultItems +
-                ", html=" + html +
+                ", rawText='" + rawText + '\'' +
                 ", url=" + url +
+                ", statusCode=" + statusCode +
                 ", targetRequests=" + targetRequests +
                 '}';
     }

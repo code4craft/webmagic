@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Define a extractor for url. Only regex can be used. <br>
+ * Define a extractor to extract data in url of current page. Only regex can be used. <br>
  *
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0

@@ -27,6 +27,9 @@ public class ExtractorUtils {
             case XPath:
                 selector = getXpathSelector(value);
                 break;
+            case JsonPath:
+                selector = new JsonPathSelector(value);
+                break;
             default:
                 selector = getXpathSelector(value);
         }

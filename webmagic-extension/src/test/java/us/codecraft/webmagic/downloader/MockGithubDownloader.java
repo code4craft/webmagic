@@ -1,13 +1,15 @@
-package us.codecraft.webmagic;
+package us.codecraft.webmagic.downloader;
 
-import us.codecraft.webmagic.downloader.Downloader;
+import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.PlainText;
 
 /**
  * @author code4crafter@gmail.com
  */
-public class MockDownloader implements Downloader{
+public class MockGithubDownloader implements Downloader{
 
     private String html = "\n" +
             "\n" +

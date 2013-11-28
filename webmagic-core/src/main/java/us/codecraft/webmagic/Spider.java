@@ -6,9 +6,9 @@ import org.apache.log4j.Logger;
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.CollectorPipeline;
-import us.codecraft.webmagic.pipeline.ResultItemsCollectorPipeline;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.Pipeline;
+import us.codecraft.webmagic.pipeline.ResultItemsCollectorPipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.scheduler.QueueScheduler;
 import us.codecraft.webmagic.scheduler.Scheduler;
@@ -18,12 +18,10 @@ import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -97,6 +95,10 @@ public class Spider implements Runnable, Task {
     private ReentrantLock newUrlLock = new ReentrantLock();
 
     private Condition newUrlCondition = newUrlLock.newCondition();
+
+    private final AtomicInteger threadAlive = new AtomicInteger(0);
+
+    private final AtomicLong pageCount = new AtomicLong(0);
 
     /**
      * create a spider with pageProcessor.
@@ -189,7 +191,7 @@ public class Spider implements Runnable, Task {
      *
      * @param pipeline
      * @return this
-     * @see #setPipeline(us.codecraft.webmagic.pipeline.Pipeline)
+     * @see #addPipeline(us.codecraft.webmagic.pipeline.Pipeline)
      * @deprecated
      */
     public Spider pipeline(Pipeline pipeline) {
@@ -207,6 +209,20 @@ public class Spider implements Runnable, Task {
     public Spider addPipeline(Pipeline pipeline) {
         checkIfRunning();
         this.pipelines.add(pipeline);
+        return this;
+    }
+
+    /**
+     * set pipelines for Spider
+     *
+     * @param pipeline
+     * @return this
+     * @see Pipeline
+     * @since 0.4.1
+     */
+    public Spider setPipelines(List<Pipeline> pipelines) {
+        checkIfRunning();
+        this.pipelines = pipelines;
         return this;
     }
 
@@ -262,6 +278,7 @@ public class Spider implements Runnable, Task {
             }
             startRequests.clear();
         }
+        threadAlive.set(0);
     }
 
     @Override
@@ -269,7 +286,6 @@ public class Spider implements Runnable, Task {
         checkRunningStat();
         initComponent();
         logger.info("Spider " + getUUID() + " started!");
-        final AtomicInteger threadAlive = new AtomicInteger(0);
         while (!Thread.currentThread().isInterrupted() && stat.get() == STAT_RUNNING) {
             Request request = scheduler.poll(this);
             if (request == null) {
@@ -290,6 +306,7 @@ public class Spider implements Runnable, Task {
                             logger.error("download " + requestFinal + " error", e);
                         } finally {
                             threadAlive.decrementAndGet();
+                            pageCount.incrementAndGet();
                             signalNewUrl();
                         }
                     }
@@ -355,7 +372,7 @@ public class Spider implements Runnable, Task {
             return;
         }
         // for cycle retry
-        if (page.getHtml() == null) {
+        if (page.getRawText() == null) {
             extractAndAddRequests(page);
             sleep(site.getSleepTime());
             return;
@@ -471,6 +488,10 @@ public class Spider implements Runnable, Task {
     private void waitNewUrl() {
         try {
             newUrlLock.lock();
+            //double check
+            if (threadAlive.get() == 0 && exitWhenComplete) {
+                return;
+            }
             try {
                 newUrlCondition.await();
             } catch (InterruptedException e) {
@@ -544,6 +565,61 @@ public class Spider implements Runnable, Task {
 
     public boolean isSpawnUrl() {
         return spawnUrl;
+    }
+
+    /**
+     * Get page count downloaded by spider.
+     *
+     * @return total downloaded page count
+     * @since 0.4.1
+     */
+    public long getPageCount() {
+        return pageCount.get();
+    }
+
+    /**
+     * Get running status by spider.
+     *
+     * @return running status
+     * @see Status
+     * @since 0.4.1
+     */
+    public Status getStatus(){
+           return Status.fromValue(stat.get());
+    }
+
+
+    public enum Status {
+        Init(0), Running(1), Stopped(2);
+
+        private Status(int value) {
+            this.value = value;
+        }
+
+        private int value;
+
+        int getValue() {
+            return value;
+        }
+
+        public static Status fromValue(int value) {
+            for (Status status : Status.values()) {
+                if (status.getValue() == value) {
+                    return status;
+                }
+            }
+            //default value
+            return Init;
+        }
+    }
+
+    /**
+     * Get thread count which is running
+     * @return thread count which is running
+     * @since 0.4.1
+     */
+    public int getThreadAlive() {
+        return threadAlive.get();
     }
 
     /**

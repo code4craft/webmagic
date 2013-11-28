@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.scheduler;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Request;
@@ -94,6 +95,9 @@ public class FileCacheQueueScheduler implements Scheduler {
             urls = new LinkedHashSet<String>();
             readCursorFile();
             readUrlFile();
+        } catch (FileNotFoundException e) {
+            //init
+            logger.info("init cache file " + getFileName(fileUrlAllName));
         } catch (IOException e) {
             logger.error("init file error", e);
         }
@@ -101,23 +105,37 @@ public class FileCacheQueueScheduler implements Scheduler {
 
     private void readUrlFile() throws IOException {
         String line;
-        BufferedReader fileUrlReader = new BufferedReader(new FileReader(getFileName(fileUrlAllName)));
-        int lineReaded = 0;
-        while ((line = fileUrlReader.readLine()) != null) {
-            urls.add(line.trim());
-            lineReaded++;
-            if (lineReaded > cursor.get()) {
-                queue.add(new Request(line));
+        BufferedReader fileUrlReader = null;
+        try {
+            fileUrlReader = new BufferedReader(new FileReader(getFileName(fileUrlAllName)));
+            int lineReaded = 0;
+            while ((line = fileUrlReader.readLine()) != null) {
+                urls.add(line.trim());
+                lineReaded++;
+                if (lineReaded > cursor.get()) {
+                    queue.add(new Request(line));
+                }
+            }
+        } finally {
+            if (fileUrlReader != null) {
+                IOUtils.closeQuietly(fileUrlReader);
             }
         }
     }
 
     private void readCursorFile() throws IOException {
-        BufferedReader fileCursorReader = new BufferedReader(new FileReader(getFileName(fileCursor)));
-        String line;
-        //read the last number
-        while ((line = fileCursorReader.readLine()) != null) {
-            cursor = new AtomicInteger(NumberUtils.toInt(line));
+        BufferedReader fileCursorReader = null;
+        try {
+            new BufferedReader(new FileReader(getFileName(fileCursor)));
+            String line;
+            //read the last number
+            while ((line = fileCursorReader.readLine()) != null) {
+                cursor = new AtomicInteger(NumberUtils.toInt(line));
+            }
+        } finally {
+            if (fileCursorReader != null) {
+                IOUtils.closeQuietly(fileCursorReader);
+            }
         }
     }
 
