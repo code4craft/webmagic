@@ -70,6 +70,7 @@ public class HttpClientDownloader implements Downloader {
         CloseableHttpClient httpClient = httpClients.get(domain);
         if (httpClient == null) {
             synchronized (this) {
+                httpClient = httpClients.get(domain);
                 if (httpClient == null) {
                     httpClient = httpClientGenerator.getClient(site);
                     httpClients.put(domain, httpClient);
