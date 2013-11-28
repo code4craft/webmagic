@@ -239,7 +239,7 @@ class PageModelExtractor {
         } else {
             if (objectExtractor.multi) {
                 List<Object> os = new ArrayList<Object>();
-                List<String> list = objectExtractor.getSelector().selectList(page.getHtml().toString());
+                List<String> list = objectExtractor.getSelector().selectList(page.getRawText());
                 for (String s : list) {
                     Object o = processSingle(page, s, false);
                     if (o != null) {
@@ -248,7 +248,7 @@ class PageModelExtractor {
                 }
                 return os;
             } else {
-                String select = objectExtractor.getSelector().select(page.getHtml().toString());
+                String select = objectExtractor.getSelector().select(page.getRawText());
                 Object o = processSingle(page, select, false);
                 return o;
             }

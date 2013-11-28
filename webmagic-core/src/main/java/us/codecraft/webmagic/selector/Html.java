@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Selectable plain text.<br>
+ * Selectable html.<br>
  *
  * @author code4crafter@gmail.com <br>
  * @since 0.1.0
@@ -23,16 +23,28 @@ public class Html extends PlainText {
      */
     private Document document;
 
+    private boolean init = false;
+
     public Html(List<String> strings) {
         super(strings);
     }
 
     public Html(String text) {
         super(text);
-        try {
-            this.document = Jsoup.parse(text);
-        } catch (Exception e) {
-            logger.warn("parse document error ", e);
+    }
+
+    /**
+     * lazy init
+     */
+    private void initDocument() {
+        if (this.document == null && !init) {
+            init = true;
+            //just init once whether the parsing succeeds or not
+            try {
+                this.document = Jsoup.parse(getText());
+            } catch (Exception e) {
+                logger.warn("parse document error ", e);
+            }
         }
     }
 
@@ -47,6 +59,7 @@ public class Html extends PlainText {
 
     @Override
     protected Selectable select(Selector selector, List<String> strings) {
+        initDocument();
         List<String> results = new ArrayList<String>();
         for (String string : strings) {
             String result = selector.select(string);
@@ -59,6 +72,7 @@ public class Html extends PlainText {
 
     @Override
     protected Selectable selectList(Selector selector, List<String> strings) {
+        initDocument();
         List<String> results = new ArrayList<String>();
         for (String string : strings) {
             List<String> result = selector.selectList(string);
@@ -69,6 +83,7 @@ public class Html extends PlainText {
 
     @Override
     public Selectable smartContent() {
+        initDocument();
         SmartContentSelector smartContentSelector = Selectors.smartContent();
         return select(smartContentSelector, strings);
     }
