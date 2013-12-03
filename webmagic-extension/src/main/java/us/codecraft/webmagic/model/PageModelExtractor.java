@@ -131,7 +131,9 @@ class PageModelExtractor {
             if (regexPattern.trim().equals("")) {
                 regexPattern = ".*";
             }
-            fieldExtractor = new FieldExtractor(field, new RegexSelector(regexPattern), FieldExtractor.Source.Url, extractByUrl.notNull(), extractByUrl.multi());
+            fieldExtractor = new FieldExtractor(field,
+                    new RegexSelector(regexPattern), FieldExtractor.Source.Url, extractByUrl.notNull(),
+                    extractByUrl.multi() || List.class.isAssignableFrom(field.getType()));
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
                 fieldExtractor.setSetterMethod(setterMethod);
@@ -157,7 +159,7 @@ class PageModelExtractor {
                     selector = new AndSelector(ExtractorUtils.getSelectors(extractBies));
             }
             fieldExtractor = new FieldExtractor(field, selector, comboExtract.source() == ComboExtract.Source.RawHtml ? FieldExtractor.Source.RawHtml : FieldExtractor.Source.Html,
-                    comboExtract.notNull(), comboExtract.multi());
+                    comboExtract.notNull(), comboExtract.multi() || List.class.isAssignableFrom(field.getType()));
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
                 fieldExtractor.setSetterMethod(setterMethod);
@@ -172,7 +174,7 @@ class PageModelExtractor {
         if (extractBy != null) {
             Selector selector = ExtractorUtils.getSelector(extractBy);
             fieldExtractor = new FieldExtractor(field, selector, extractBy.source() == ExtractBy.Source.RawHtml ? FieldExtractor.Source.RawHtml : FieldExtractor.Source.Html,
-                    extractBy.notNull(), extractBy.multi());
+                    extractBy.notNull(), extractBy.multi() || List.class.isAssignableFrom(field.getType()));
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
                 fieldExtractor.setSetterMethod(setterMethod);
@@ -359,7 +361,7 @@ class PageModelExtractor {
     }
 
     private void setField(Object o, FieldExtractor fieldExtractor, Object value) throws IllegalAccessException, InvocationTargetException {
-        if (value==null){
+        if (value == null) {
             return;
         }
         if (fieldExtractor.getSetterMethod() != null) {
