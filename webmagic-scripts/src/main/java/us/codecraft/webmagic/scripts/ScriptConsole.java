@@ -93,6 +93,7 @@ public class ScriptConsole {
                 .language(params.getLanguage()).scriptFromFile(params.getScriptFileName()).thread(params.getThread()).build();
         pageProcessor.getSite().setSleepTime(params.getSleepTime());
         pageProcessor.getSite().setAcceptStatCode(Sets.<Integer>newHashSet(200, 404, 500));
+        pageProcessor.getSite().setUserAgent("Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_8; en-US) AppleWebKit/532.5 (KHTML, like Gecko) Chrome/4.0.249.0 Safari/532.5");
         Spider spider = Spider.create(pageProcessor).thread(params.getThread());
         spider.clearPipeline().addPipeline(new Pipeline() {
             @Override
