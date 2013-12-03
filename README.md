@@ -1,6 +1,8 @@
-![http://static.oschina.net/uploads/space/2013/1110/200709_oP1e_190591.jpg](http://static.oschina.net/uploads/space/2013/1110/200709_oP1e_190591.jpg)
-[![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
 ![logo](https://raw.github.com/code4craft/webmagic/master/asserts/logo.jpg)
+
+
+[![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
+
 
 [Readme in English](https://github.com/code4craft/webmagic/tree/master/en_docs)
 
