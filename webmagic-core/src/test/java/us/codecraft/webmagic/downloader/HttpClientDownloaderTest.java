@@ -6,6 +6,7 @@ import org.junit.Test;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.selector.Html;
 
 /**
  * Author: code4crafer@gmail.com
@@ -21,6 +22,13 @@ public class HttpClientDownloaderTest {
         HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
         Page download = httpClientDownloader.download(new Request("http://www.diandian.com"), site.toTask());
         Assert.assertTrue(download.getHtml().toString().contains("flashsword30"));
+    }
+
+    @Test
+    public void testDownloader() {
+        HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+        Html html = httpClientDownloader.download("http://www.oschina.net");
+        Assert.assertTrue(!html.getText().isEmpty());
     }
 
 }
