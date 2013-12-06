@@ -12,6 +12,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <spring-version>3.1.1.RELEASE</spring-version>
+
     </properties>
     <artifactId>webmagic-parent</artifactId>
     <name>webmagic-parent</name>
@@ -49,6 +51,8 @@
         <module>webmagic-core</module>
         <module>webmagic-extension/</module>
         <module>webmagic-scripts/</module>
+        <module>webmagic-panel</module>
+        <module>webmagic-worker</module>
     </modules>
 
     <dependencyManagement>
