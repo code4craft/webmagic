@@ -26,12 +26,21 @@ public class RegexSelector implements Selector {
         if (StringUtils.isBlank(regexStr)) {
             throw new IllegalArgumentException("regex must not be empty");
         }
+        /* Can't detect '\(', '(?:)' so that would be result in ArrayIndexOutOfBoundsException
         if (!StringUtils.contains(regexStr, "(") && !StringUtils.contains(regexStr, ")")) {
             regexStr = "(" + regexStr + ")";
         }
         if (!StringUtils.contains(regexStr, "(") || !StringUtils.contains(regexStr, ")")) {
             throw new IllegalArgumentException("regex must have capture group 1");
         }
+        */
+        
+        // Try to fix: Only check if there exists the valid left parenthesis, leave regexp validation for Pattern
+        if (StringUtils.countMatches(regexStr, "(") - StringUtils.countMatches(regexStr, "\\\\\\(") ==
+                StringUtils.countMatches(regexStr, "(?:") - StringUtils.countMatches(regexStr, "\\\\\\(?:")) {
+            regexStr = "(" + regexStr + ")";
+        }
+        
         this.regexStr = regexStr;
         try {
             regex = Pattern.compile(regexStr, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
