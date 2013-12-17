@@ -26,11 +26,11 @@ public class RegexSelector implements Selector {
         if (StringUtils.isBlank(regexStr)) {
             throw new IllegalArgumentException("regex must not be empty");
         }
-        if (!StringUtils.contains(regexStr, "(") && !StringUtils.contains(regexStr, ")")) {
+        // Check bracket for regex group. Add default group 1 if there is no group.
+        // Only check if there exists the valid left parenthesis, leave regexp validation for Pattern.
+        if (StringUtils.countMatches(regexStr, "(") - StringUtils.countMatches(regexStr, "\\(") ==
+                StringUtils.countMatches(regexStr, "(?:") - StringUtils.countMatches(regexStr, "\\(?:")) {
             regexStr = "(" + regexStr + ")";
-        }
-        if (!StringUtils.contains(regexStr, "(") || !StringUtils.contains(regexStr, ")")) {
-            throw new IllegalArgumentException("regex must have capture group 1");
         }
         this.regexStr = regexStr;
         try {
