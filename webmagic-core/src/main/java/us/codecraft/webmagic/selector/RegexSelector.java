@@ -26,7 +26,7 @@ public class RegexSelector implements Selector {
         if (StringUtils.isBlank(regexStr)) {
             throw new IllegalArgumentException("regex must not be empty");
         }
-        /* Can't detect '\(', '(?:)' so that would be result in ArrayIndexOutOfBoundsException
+        /* Can't detect '\(', '(?:)' so that would result in ArrayIndexOutOfBoundsException
         if (!StringUtils.contains(regexStr, "(") && !StringUtils.contains(regexStr, ")")) {
             regexStr = "(" + regexStr + ")";
         }
