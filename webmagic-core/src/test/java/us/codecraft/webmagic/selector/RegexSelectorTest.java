@@ -1,6 +1,6 @@
 package us.codecraft.webmagic.selector;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -8,14 +8,18 @@ import org.junit.Test;
  */
 public class RegexSelectorTest {
 
-    @Test
-    public void testInvalidRegex() {
+    @Test(expected = IllegalArgumentException.class)
+    public void testRegexWithSingleLeftBracket() {
         String regex = "\\d+(";
-        try {
-            new RegexSelector(regex);
-            Assert.assertNotNull(regex);
-        } catch (Exception e) {
+        new RegexSelector(regex);
+    }
 
-        }
+    @Test
+    public void testRegexWithLeftBracketQuoted() {
+        String regex = "\\(.+";
+        String source = "(hello world";
+        RegexSelector regexSelector = new RegexSelector(regex);
+        String select = regexSelector.select(source);
+        Assert.assertEquals(source,select);
     }
 }
