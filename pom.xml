@@ -51,8 +51,11 @@
         <module>webmagic-core</module>
         <module>webmagic-extension/</module>
         <module>webmagic-scripts/</module>
-        <module>webmagic-panel</module>
         <module>webmagic-worker</module>
+        <module>webmagic-lucene</module>
+        <module>webmagic-samples</module>
+        <module>webmagic-saxon</module>
+        <module>webmagic-selenium</module>
     </modules>
 
     <dependencyManagement>
