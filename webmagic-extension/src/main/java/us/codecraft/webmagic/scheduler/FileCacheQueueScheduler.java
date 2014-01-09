@@ -126,7 +126,7 @@ public class FileCacheQueueScheduler implements Scheduler {
     private void readCursorFile() throws IOException {
         BufferedReader fileCursorReader = null;
         try {
-            new BufferedReader(new FileReader(getFileName(fileCursor)));
+        	fileCursorReader = new BufferedReader(new FileReader(getFileName(fileCursor)));
             String line;
             //read the last number
             while ((line = fileCursorReader.readLine()) != null) {
