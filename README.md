@@ -127,3 +127,7 @@ To write webmagic, I refered to the projects below :
 ### Mail-list:
 
 [https://groups.google.com/forum/#!forum/webmagic-java](https://groups.google.com/forum/#!forum/webmagic-java)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/code4craft/webmagic/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
