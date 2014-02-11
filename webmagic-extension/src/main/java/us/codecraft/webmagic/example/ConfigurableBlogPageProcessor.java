@@ -10,7 +10,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 /**
  * @author code4crafter@gmail.com <br>
  */
-public class ConfigurableBlogPageProcesser implements PageProcessor {
+public class ConfigurableBlogPageProcessor implements PageProcessor {
 
     private Site site = Site.me().setDomain("my.oschina.net");
 
@@ -46,6 +46,6 @@ public class ConfigurableBlogPageProcesser implements PageProcessor {
     }
 
     public static void main(String[] args) {
-        Spider.create(new ConfigurableBlogPageProcesser()).addUrl("http://my.oschina.net/flashsword/blog").thread(2).run();
+        Spider.create(new ConfigurableBlogPageProcessor()).addUrl("http://my.oschina.net/flashsword/blog").thread(2).run();
     }
 }

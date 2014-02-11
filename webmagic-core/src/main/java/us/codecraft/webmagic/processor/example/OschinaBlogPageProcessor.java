@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author code4crafter@gmail.com <br>
  */
-public class OschinaBlogPageProcesser implements PageProcessor {
+public class OschinaBlogPageProcessor implements PageProcessor {
 
     private Site site = Site.me().setDomain("my.oschina.net");
 
@@ -34,6 +34,6 @@ public class OschinaBlogPageProcesser implements PageProcessor {
     }
 
     public static void main(String[] args) {
-        Spider.create(new OschinaBlogPageProcesser()).addUrl("http://my.oschina.net/flashsword/blog").thread(2).run();
+        Spider.create(new OschinaBlogPageProcessor()).addUrl("http://my.oschina.net/flashsword/blog").thread(2).run();
     }
 }

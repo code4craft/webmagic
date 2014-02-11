@@ -13,7 +13,7 @@ import java.util.List;
  * @author code4crafter@gmail.com <br>
  * @since 0.4.0
  */
-public class BaiduBaikePageProcesser implements PageProcessor {
+public class BaiduBaikePageProcessor implements PageProcessor {
 
     private Site site = Site.me()//.setHttpProxy(new HttpHost("127.0.0.1",8888))
             .setRetryTimes(3).setSleepTime(1000).setUseGzip(true);
@@ -31,7 +31,7 @@ public class BaiduBaikePageProcesser implements PageProcessor {
 
     public static void main(String[] args) {
         //single download
-        Spider spider = Spider.create(new BaiduBaikePageProcesser()).thread(2);
+        Spider spider = Spider.create(new BaiduBaikePageProcessor()).thread(2);
         String urlTemplate = "http://baike.baidu.com/search/word?word=%s&pic=1&sug=1&enc=utf8";
         ResultItems resultItems = spider.<ResultItems>get(String.format(urlTemplate, "水力发电"));
         System.out.println(resultItems);

@@ -9,7 +9,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
  * @author code4crafter@gmail.com <br>
  * @since 0.3.2
  */
-public class GithubRepoPageProcesser implements PageProcessor {
+public class GithubRepoPageProcessor implements PageProcessor {
 
     private Site site = Site.me().setRetryTimes(3).setSleepTime(100);
 
@@ -31,6 +31,6 @@ public class GithubRepoPageProcesser implements PageProcessor {
     }
 
     public static void main(String[] args) {
-        Spider.create(new GithubRepoPageProcesser()).addUrl("https://github.com/code4craft").thread(5).run();
+        Spider.create(new GithubRepoPageProcessor()).addUrl("https://github.com/code4craft").thread(5).run();
     }
 }
