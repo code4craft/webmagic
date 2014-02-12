@@ -1,7 +1,8 @@
 package us.codecraft.webmagic.scheduler;
 
 import org.apache.http.annotation.ThreadSafe;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.utils.NumberUtils;
@@ -24,7 +25,7 @@ public class PriorityScheduler implements Scheduler {
 
     public static final int INITIAL_CAPACITY = 5;
 
-    private Logger logger = Logger.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private BlockingQueue<Request> noPriorityQueue = new LinkedBlockingQueue<Request>();
 
@@ -46,9 +47,7 @@ public class PriorityScheduler implements Scheduler {
 
     @Override
     public synchronized void push(Request request, Task task) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("push to queue " + request.getUrl());
-        }
+        logger.debug("push to queue " + request.getUrl());
         if (urls.add(request.getUrl())) {
             if (request.getPriority() == 0) {
                 noPriorityQueue.add(request);

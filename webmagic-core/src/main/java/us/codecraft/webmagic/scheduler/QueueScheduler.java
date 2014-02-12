@@ -1,7 +1,8 @@
 package us.codecraft.webmagic.scheduler;
 
 import org.apache.http.annotation.ThreadSafe;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 
@@ -9,6 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
 
 /**
  * Basic Scheduler implementation.<br>
@@ -20,7 +22,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 @ThreadSafe
 public class QueueScheduler implements Scheduler {
 
-    private Logger logger = Logger.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private BlockingQueue<Request> queue = new LinkedBlockingQueue<Request>();
 

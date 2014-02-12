@@ -5,11 +5,14 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import java.util.Map;
 
 /**
+ * Inject property to object by {@link Inject} annotation.
+ *
  * @author yihua.huang@dianping.com
  */
-public interface PropertyLoader<T> {
+public class PropertyLoader<T> {
 
-    PropertyLoader<T> clazz(Class<?> clazz);
+    public T load(T object, Map<String, String> properties) {
+        return object;
+    }
 
-    T load(Map<String, String> properties);
 }
