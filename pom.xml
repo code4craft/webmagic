@@ -51,7 +51,7 @@
         <module>webmagic-core</module>
         <module>webmagic-extension/</module>
         <module>webmagic-scripts/</module>
-        <module>webmagic-worker</module>
+        <module>webmagic-avalon</module>
         <module>webmagic-lucene</module>
         <module>webmagic-samples</module>
         <module>webmagic-saxon</module>
