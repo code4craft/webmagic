@@ -1,6 +1,6 @@
 <#assign staticPath="/static">
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <!--
         Charisma v1.0.0
@@ -13,7 +13,7 @@
         http://twitter.com/halalit_usman
     -->
     <meta charset="utf-8">
-    <title>Free HTML5 Bootstrap Admin Template</title>
+    <title>WebMaigc Avalon</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Charisma, a fully featured, responsive, HTML5, Bootstrap admin template.">
     <meta name="author" content="Muhammad Usman">
@@ -51,7 +51,7 @@
     <![endif]-->
 
     <!-- The fav icon -->
-    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="shortcut icon" href="/static/favicon.jpg">
 
 </head>
 
@@ -65,7 +65,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="index.html"> <img alt="Charisma Logo" src="${staticPath}/img/logo20.png" /> <span>Charisma</span></a>
+            <a class="brand" href="index.html"> <img alt="WebMagic Logo" src="${staticPath}/favicon.jpg" /> <span>WebMagic</span></a>
 
             <!-- theme selector starts -->
             <div class="btn-group pull-right theme-container" >
@@ -124,8 +124,8 @@
         <ul class="nav nav-tabs nav-stacked main-menu">
             <li class="nav-header hidden-tablet">Main</li>
             <li><a class="ajax-link" href="index.html"><i class="icon-home"></i><span class="hidden-tablet"> Dashboard</span></a></li>
-            <li><a class="ajax-link" href="ui.html"><i class="icon-eye-open"></i><span class="hidden-tablet"> UI Features</span></a></li>
-            <li><a class="ajax-link" href="form.html"><i class="icon-edit"></i><span class="hidden-tablet"> Forms</span></a></li>
+            <li><a class="ajax-link" href="ui.html"><i class="icon-eye-open"></i><span class="hidden-tablet">Spider</span></a></li>
+            <li><a class="ajax-link" href="form.html"><i class="icon-edit"></i><span class="hidden-tablet">Charts</span></a></li>
             <li><a class="ajax-link" href="chart.html"><i class="icon-list-alt"></i><span class="hidden-tablet"> Charts</span></a></li>
             <li><a class="ajax-link" href="typography.html"><i class="icon-font"></i><span class="hidden-tablet"> Typography</span></a></li>
             <li><a class="ajax-link" href="gallery.html"><i class="icon-picture"></i><span class="hidden-tablet"> Gallery</span></a></li>
@@ -251,54 +251,6 @@
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at. Nulla tellus elit, varius non commodo eget, mattis vel eros. In sed ornare nulla. Donec consectetur, velit a pharetra ultricies, diam lorem lacinia risus, ac commodo orci erat eu massa. Sed sit amet nulla ipsum. Donec felis mauris, vulputate sed tempor at, aliquam a ligula. Pellentesque non pulvinar nisi.</p>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor.</p>
                 </div>
-            </div>
-        </div>
-    </div><!--/span-->
-
-    <div class="box span4">
-        <div class="box-header well" data-original-title>
-            <h2><i class="icon-user"></i> Member Activity</h2>
-            <div class="box-icon">
-                <a href="#" class="btn btn-minimize btn-round"><i class="icon-chevron-up"></i></a>
-                <a href="#" class="btn btn-close btn-round"><i class="icon-remove"></i></a>
-            </div>
-        </div>
-        <div class="box-content">
-            <div class="box-content">
-                <ul class="dashboard-list">
-                    <li>
-                        <a href="#">
-                            <img class="dashboard-avatar" alt="Usman" src="http://www.gravatar.com/avatar/f0ea51fa1e4fae92608d8affee12f67b.png?s=50"></a>
-                        <strong>Name:</strong> <a href="#">Usman
-                    </a><br>
-                        <strong>Since:</strong> 17/05/2012<br>
-                        <strong>Status:</strong> <span class="label label-success">Approved</span>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <img class="dashboard-avatar" alt="Sheikh Heera" src="http://www.gravatar.com/avatar/3232415a0380253cfffe19163d04acab.png?s=50"></a>
-                        <strong>Name:</strong> <a href="#">Sheikh Heera
-                    </a><br>
-                        <strong>Since:</strong> 17/05/2012<br>
-                        <strong>Status:</strong> <span class="label label-warning">Pending</span>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <img class="dashboard-avatar" alt="Abdullah" src="http://www.gravatar.com/avatar/46056f772bde7c536e2086004e300a04.png?s=50"></a>
-                        <strong>Name:</strong> <a href="#">Abdullah
-                    </a><br>
-                        <strong>Since:</strong> 25/05/2012<br>
-                        <strong>Status:</strong> <span class="label label-important">Banned</span>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <img class="dashboard-avatar" alt="Saruar Ahmed" src="http://www.gravatar.com/avatar/564e1bb274c074dc4f6823af229d9dbb.png?s=50"></a>
-                        <strong>Name:</strong> <a href="#">Saruar Ahmed
-                    </a><br>
-                        <strong>Since:</strong> 17/05/2012<br>
-                        <strong>Status:</strong> <span class="label label-info">Updates</span>
-                    </li>
-                </ul>
             </div>
         </div>
     </div><!--/span-->
