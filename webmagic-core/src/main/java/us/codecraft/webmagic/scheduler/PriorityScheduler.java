@@ -37,7 +37,6 @@ public class PriorityScheduler extends LocalDuplicatedRemovedScheduler {
         }
     });
 
-
     @Override
     public void pushWhenNoDuplicate(Request request, Task task) {
         if (request.getPriority() == 0) {
