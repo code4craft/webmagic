@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class DashBoardController {
 
     @RequestMapping
-    public ModelAndView create() {
+    public ModelAndView index() {
         ModelAndView map = new ModelAndView("dashboard");
         return map;
     }

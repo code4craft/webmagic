@@ -156,7 +156,7 @@ public class HttpClientDownloader implements Downloader {
             if (cycleTriedTimes >= site.getCycleRetryTimes()) {
                 return null;
             }
-            page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, 1));
+            page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, cycleTriedTimes));
         }
         return page;
     }
