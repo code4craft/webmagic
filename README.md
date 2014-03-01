@@ -103,10 +103,29 @@ Javadocs: [http://code4craft.github.io/webmagic/docs/en/](http://code4craft.gith
 
 There are some samples in `webmagic-samples` package.
 
-
 ### Lisence:
 
 Lisenced under [Apache 2.0 lisence](http://opensource.org/licenses/Apache-2.0)
+
+### Contributors:
+
+Thanks these people for commiting source code, reporting bugs or suggesting for new feature:
+
+* [yuany](https://github.com/yuany)
+* [yxssfxwzy](https://github.com/yxssfxwzy)
+* [linkerlin](https://github.com/linkerlin)
+* [d0ngw](https://github.com/d0ngw)
+* [xuchaoo](https://github.com/xuchaoo)
+* [supermicah](https://github.com/supermicah)
+* [SimpleExpress](https://github.com/SimpleExpress)
+* [aruanruan](https://github.com/aruanruan)
+* [l1z2g9](https://github.com/l1z2g9)
+* [zhegexiaohuozi](https://github.com/zhegexiaohuozi)
+* [ywooer](https://github.com/ywooer)
+* [yyw258520](https://github.com/yyw258520)
+* [perfecking](https://github.com/perfecking)
+* [lidongyang](http://my.oschina.net/lidongyang)
+
 
 ### Thanks:
 
