@@ -16,7 +16,6 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.UrlUtils;
 
@@ -33,34 +32,13 @@ import java.util.Set;
  * @since 0.1.0
  */
 @ThreadSafe
-public class HttpClientDownloader implements Downloader {
+public class HttpClientDownloader extends AbstractDownloader {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     private final Map<String, CloseableHttpClient> httpClients = new HashMap<String, CloseableHttpClient>();
 
     private HttpClientGenerator httpClientGenerator = new HttpClientGenerator();
-
-    /**
-     * A simple method to download a url.
-     *
-     * @param url
-     * @return html
-     */
-    public Html download(String url) {
-        return download(url, null);
-    }
-
-    /**
-     * A simple method to download a url.
-     *
-     * @param url
-     * @return html
-     */
-    public Html download(String url, String charset) {
-        Page page = download(new Request(url), Site.me().setCharset(charset).toTask());
-        return (Html) page.getHtml();
-    }
 
     private CloseableHttpClient getHttpClient(Site site) {
         if (site == null) {
@@ -143,22 +121,6 @@ public class HttpClientDownloader implements Downloader {
                 logger.warn("close response fail", e);
             }
         }
-    }
-
-    private Page addToCycleRetry(Request request, Site site) {
-        Page page = new Page();
-        Object cycleTriedTimesObject = request.getExtra(Request.CYCLE_TRIED_TIMES);
-        if (cycleTriedTimesObject == null) {
-            page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, 1));
-        } else {
-            int cycleTriedTimes = (Integer) cycleTriedTimesObject;
-            cycleTriedTimes++;
-            if (cycleTriedTimes >= site.getCycleRetryTimes()) {
-                return null;
-            }
-            page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, cycleTriedTimes));
-        }
-        return page;
     }
 
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {

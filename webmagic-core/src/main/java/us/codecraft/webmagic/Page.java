@@ -37,6 +37,8 @@ public class Page {
 
     private int statusCode;
 
+    private boolean needCycleRetry;
+
     private List<Request> targetRequests = new ArrayList<Request>();
 
     public Page() {
@@ -163,6 +165,14 @@ public class Page {
      */
     public Request getRequest() {
         return request;
+    }
+
+    public boolean isNeedCycleRetry() {
+        return needCycleRetry;
+    }
+
+    public void setNeedCycleRetry(boolean needCycleRetry) {
+        this.needCycleRetry = needCycleRetry;
     }
 
     public void setRequest(Request request) {

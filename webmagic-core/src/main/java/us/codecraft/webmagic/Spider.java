@@ -376,13 +376,13 @@ public class Spider implements Runnable, Task {
             return;
         }
         // for cycle retry
-        if (page.getRawText() == null) {
-            extractAndAddRequests(page);
+        if (page.isNeedCycleRetry()) {
+            extractAndAddRequests(page, true);
             sleep(site.getSleepTime());
             return;
         }
         pageProcessor.process(page);
-        extractAndAddRequests(page);
+        extractAndAddRequests(page, spawnUrl);
         if (!page.getResultItems().isSkip()) {
             for (Pipeline pipeline : pipelines) {
                 pipeline.process(page.getResultItems(), this);
@@ -399,7 +399,7 @@ public class Spider implements Runnable, Task {
         }
     }
 
-    protected void extractAndAddRequests(Page page) {
+    protected void extractAndAddRequests(Page page, boolean spawnUrl) {
         if (spawnUrl && CollectionUtils.isNotEmpty(page.getTargetRequests())) {
             for (Request request : page.getTargetRequests()) {
                 addRequest(request);
@@ -588,8 +588,8 @@ public class Spider implements Runnable, Task {
      * @see Status
      * @since 0.4.1
      */
-    public Status getStatus(){
-           return Status.fromValue(stat.get());
+    public Status getStatus() {
+        return Status.fromValue(stat.get());
     }
 
 
@@ -619,6 +619,7 @@ public class Spider implements Runnable, Task {
 
     /**
      * Get thread count which is running
+     *
      * @return thread count which is running
      * @since 0.4.1
      */
