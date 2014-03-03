@@ -41,8 +41,7 @@ Write a class implements PageProcessor：
 ```java
     public class OschinaBlogPageProcesser implements PageProcessor {
 
-        private Site site = Site.me().setDomain("my.oschina.net")
-           .addStartUrl("http://my.oschina.net/flashsword/blog");
+        private Site site = Site.me().setDomain("my.oschina.net");
 
         @Override
         public void process(Page page) {
@@ -60,8 +59,8 @@ Write a class implements PageProcessor：
         }
 
         public static void main(String[] args) {
-            Spider.create(new OschinaBlogPageProcesser())
-                 .pipeline(new ConsolePipeline()).run();
+            Spider.create(new OschinaBlogPageProcesser()).addUrl("http://my.oschina.net/flashsword/blog")
+                 .addPipeline(new ConsolePipeline()).run();
         }
     }
 ```
@@ -87,8 +86,8 @@ You can also use annotation way:
 
 	    public static void main(String[] args) {
 	        OOSpider.create(
-	        	Site.me().addStartUrl("http://my.oschina.net/flashsword/blog"),
-				new ConsolePageModelPipeline(), OschinaBlog.class).run();
+	        	Site.me(),
+				new ConsolePageModelPipeline(), OschinaBlog.class).addUrl("http://my.oschina.net/flashsword/blog").run();
 	    }
 	}
 ```
