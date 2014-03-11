@@ -2,6 +2,8 @@ package us.codecraft.webmagic.selector;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -33,9 +35,24 @@ public class CssSelector extends BaseElementSelector {
             return element.outerHtml();
         } else if ("innerHtml".equalsIgnoreCase(attrName)) {
             return element.html();
+        } else if ("text".equalsIgnoreCase(attrName)) {
+            return getText(element);
+        } else if ("allText".equalsIgnoreCase(attrName)) {
+            return element.text();
         } else {
             return element.attr(attrName);
         }
+    }
+
+    protected String getText(Element element) {
+        StringBuilder accum = new StringBuilder();
+        for (Node node : element.childNodes()) {
+            if (node instanceof TextNode) {
+                TextNode textNode = (TextNode) node;
+                accum.append(textNode.text());
+            }
+        }
+        return accum.toString();
     }
 
     @Override
