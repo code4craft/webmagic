@@ -3,7 +3,8 @@ package us.codecraft.webmagic.pipeline;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.model.HasKey;
 import us.codecraft.webmagic.utils.FilePersistentBase;
@@ -22,7 +23,7 @@ import java.io.PrintWriter;
  */
 public class JsonFilePageModelPipeline extends FilePersistentBase implements PageModelPipeline {
 
-    private Logger logger = Logger.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * new JsonFilePageModelPipeline with default path "/data/webmagic/"

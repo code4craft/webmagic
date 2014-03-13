@@ -2,7 +2,8 @@ package us.codecraft.webmagic.pipeline;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.utils.FilePersistentBase;
@@ -20,7 +21,7 @@ import java.io.PrintWriter;
  */
 public class JsonFilePipeline extends FilePersistentBase implements Pipeline {
 
-    private Logger logger = Logger.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * new JsonFilePageModelPipeline with default path "/data/webmagic/"

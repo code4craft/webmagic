@@ -1,14 +1,11 @@
 package us.codecraft.webmagic.scheduler;
 
 import org.apache.http.annotation.ThreadSafe;
-import org.apache.log4j.Logger;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.utils.NumberUtils;
 
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -20,11 +17,9 @@ import java.util.concurrent.PriorityBlockingQueue;
  * @since 0.2.1
  */
 @ThreadSafe
-public class PriorityScheduler implements Scheduler {
+public class PriorityScheduler extends LocalDuplicatedRemovedScheduler {
 
     public static final int INITIAL_CAPACITY = 5;
-
-    private Logger logger = Logger.getLogger(getClass());
 
     private BlockingQueue<Request> noPriorityQueue = new LinkedBlockingQueue<Request>();
 
@@ -42,21 +37,14 @@ public class PriorityScheduler implements Scheduler {
         }
     });
 
-    private Set<String> urls = new HashSet<String>();
-
     @Override
-    public synchronized void push(Request request, Task task) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("push to queue " + request.getUrl());
-        }
-        if (urls.add(request.getUrl())) {
-            if (request.getPriority() == 0) {
-                noPriorityQueue.add(request);
-            } else if (request.getPriority() > 0) {
-                priorityQueuePlus.put(request);
-            } else {
-                priorityQueueMinus.put(request);
-            }
+    public void pushWhenNoDuplicate(Request request, Task task) {
+        if (request.getPriority() == 0) {
+            noPriorityQueue.add(request);
+        } else if (request.getPriority() > 0) {
+            priorityQueuePlus.put(request);
+        } else {
+            priorityQueueMinus.put(request);
         }
     }
 

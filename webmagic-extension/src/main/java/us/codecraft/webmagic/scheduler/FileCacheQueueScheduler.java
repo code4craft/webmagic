@@ -2,7 +2,8 @@ package us.codecraft.webmagic.scheduler;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 
@@ -24,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class FileCacheQueueScheduler implements Scheduler {
 
-    private Logger logger = Logger.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private String filePath = System.getProperty("java.io.tmpdir");
 
@@ -126,7 +127,7 @@ public class FileCacheQueueScheduler implements Scheduler {
     private void readCursorFile() throws IOException {
         BufferedReader fileCursorReader = null;
         try {
-            new BufferedReader(new FileReader(getFileName(fileCursor)));
+        	fileCursorReader = new BufferedReader(new FileReader(getFileName(fileCursor)));
             String line;
             //read the last number
             while ((line = fileCursorReader.readLine()) != null) {

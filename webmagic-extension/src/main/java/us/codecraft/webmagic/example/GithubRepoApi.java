@@ -27,7 +27,7 @@ public class GithubRepoApi implements HasKey {
     @ExtractBy(type = ExtractBy.Type.JsonPath, value = "$.stargazers_count")
     private int star;
 
-    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "$.forks_count")
+    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "$.homepage")
     private int fork;
 
     @ExtractByUrl

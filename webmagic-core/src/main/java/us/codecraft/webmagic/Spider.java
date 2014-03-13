@@ -2,7 +2,8 @@ package us.codecraft.webmagic;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.CollectorPipeline;
@@ -18,7 +19,10 @@ import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -72,7 +76,7 @@ public class Spider implements Runnable, Task {
 
     protected Scheduler scheduler = new QueueScheduler();
 
-    protected Logger logger = Logger.getLogger(getClass());
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     protected ExecutorService executorService;
 
@@ -372,13 +376,13 @@ public class Spider implements Runnable, Task {
             return;
         }
         // for cycle retry
-        if (page.getRawText() == null) {
-            extractAndAddRequests(page);
+        if (page.isNeedCycleRetry()) {
+            extractAndAddRequests(page, true);
             sleep(site.getSleepTime());
             return;
         }
         pageProcessor.process(page);
-        extractAndAddRequests(page);
+        extractAndAddRequests(page, spawnUrl);
         if (!page.getResultItems().isSkip()) {
             for (Pipeline pipeline : pipelines) {
                 pipeline.process(page.getResultItems(), this);
@@ -395,7 +399,7 @@ public class Spider implements Runnable, Task {
         }
     }
 
-    protected void extractAndAddRequests(Page page) {
+    protected void extractAndAddRequests(Page page, boolean spawnUrl) {
         if (spawnUrl && CollectionUtils.isNotEmpty(page.getTargetRequests())) {
             for (Request request : page.getTargetRequests()) {
                 addRequest(request);
@@ -584,8 +588,8 @@ public class Spider implements Runnable, Task {
      * @see Status
      * @since 0.4.1
      */
-    public Status getStatus(){
-           return Status.fromValue(stat.get());
+    public Status getStatus() {
+        return Status.fromValue(stat.get());
     }
 
 
@@ -615,6 +619,7 @@ public class Spider implements Runnable, Task {
 
     /**
      * Get thread count which is running
+     *
      * @return thread count which is running
      * @since 0.4.1
      */
