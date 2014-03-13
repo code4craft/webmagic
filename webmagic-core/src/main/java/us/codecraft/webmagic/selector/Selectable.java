@@ -100,6 +100,13 @@ public interface Selectable {
     public String toString();
 
     /**
+     * single string result
+     *
+     * @return single string result
+     */
+    public String get();
+
+    /**
      * if result exist for select
      *
      * @return true if result exist

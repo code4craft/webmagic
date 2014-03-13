@@ -109,12 +109,17 @@ public class PlainText implements Selectable {
     }
 
     @Override
-    public String toString() {
+    public String get() {
         if (CollectionUtils.isNotEmpty(all())) {
             return all().get(0);
         } else {
             return null;
         }
+    }
+
+    @Override
+    public String toString() {
+        return get();
     }
 
     @Override
