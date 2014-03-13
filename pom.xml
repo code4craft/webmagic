@@ -50,16 +50,12 @@
     <modules>
         <module>webmagic-core</module>
         <module>webmagic-extension/</module>
-<<<<<<< HEAD
-        <module>webmagic-samples/</module>
-=======
         <module>webmagic-scripts/</module>
         <module>webmagic-avalon</module>
         <module>webmagic-lucene</module>
         <module>webmagic-samples</module>
         <module>webmagic-saxon</module>
         <module>webmagic-selenium</module>
->>>>>>> 757cc9b9427ee26d1aed9d5cbf365c0654ebb7b0
     </modules>
 
     <dependencyManagement>
