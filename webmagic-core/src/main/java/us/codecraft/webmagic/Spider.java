@@ -13,7 +13,6 @@ import us.codecraft.webmagic.pipeline.ResultItemsCollectorPipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.scheduler.QueueScheduler;
 import us.codecraft.webmagic.scheduler.Scheduler;
-import us.codecraft.webmagic.utils.EnvironmentUtil;
 import us.codecraft.webmagic.utils.ThreadUtils;
 import us.codecraft.webmagic.utils.UrlUtils;
 
@@ -539,15 +538,6 @@ public class Spider implements Runnable, Task {
             throw new IllegalArgumentException("threadNum should be more than one!");
         }
         return this;
-    }
-
-    /**
-     * switch off xsoup
-     *
-     * @return
-     */
-    public static void xsoupOff() {
-        EnvironmentUtil.setUseXsoup(false);
     }
 
     public boolean isExitWhenComplete() {

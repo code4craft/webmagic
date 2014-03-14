@@ -4,7 +4,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.codecraft.webmagic.utils.EnvironmentUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,16 +95,11 @@ public class Html extends PlainText {
 
     @Override
     public Selectable xpath(String xpath) {
-        if (EnvironmentUtil.useXsoup()) {
-            XsoupSelector xsoupSelector = new XsoupSelector(xpath);
-            if (document != null) {
-                return new Html(xsoupSelector.selectList(document));
-            }
-            return selectList(xsoupSelector, strings);
-        } else {
-            XpathSelector xpathSelector = new XpathSelector(xpath);
-            return selectList(xpathSelector, strings);
+        XpathSelector xpathSelector = new XpathSelector(xpath);
+        if (document != null) {
+            return new Html(xpathSelector.selectList(document));
         }
+        return selectList(xpathSelector, strings);
     }
 
     @Override

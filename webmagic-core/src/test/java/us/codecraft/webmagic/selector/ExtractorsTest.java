@@ -29,6 +29,6 @@ public class ExtractorsTest {
         Assert.assertEquals("bb", and($("title"), regex("aa(bb)cc")).select(html2));
         OrSelector or = or($("div h1 a", "innerHtml"), xpath("//title"));
         Assert.assertEquals("aabbcc", or.select(html));
-        Assert.assertEquals("aabbcc", or.select(html2));
+        Assert.assertEquals("<title>aabbcc</title>", or.select(html2));
     }
 }

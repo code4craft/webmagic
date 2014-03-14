@@ -6,7 +6,7 @@
         <version>7</version>
     </parent>
     <groupId>us.codecraft</groupId>
-    <version>0.4.4-SNAPSHOT</version>
+    <version>0.5.0-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <properties>
@@ -51,11 +51,11 @@
         <module>webmagic-core</module>
         <module>webmagic-extension/</module>
         <module>webmagic-scripts/</module>
-        <module>webmagic-avalon</module>
-        <module>webmagic-lucene</module>
-        <module>webmagic-samples</module>
-        <module>webmagic-saxon</module>
         <module>webmagic-selenium</module>
+        <module>webmagic-saxon</module>
+        <module>webmagic-samples</module>
+        <module>webmagic-admin</module>
+        <module>webmagic-worker</module>
     </modules>
 
     <dependencyManagement>
@@ -63,7 +63,7 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.7</version>
+                <version>4.11</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -92,11 +92,6 @@
                 <version>0.2.0</version>
             </dependency>
             <dependency>
-                <groupId>net.sf.saxon</groupId>
-                <artifactId>Saxon-HE</artifactId>
-                <version>9.5.1-1</version>
-            </dependency>
-            <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>1.1.37</version>
@@ -120,11 +115,6 @@
                 <groupId>commons-collections</groupId>
                 <artifactId>commons-collections</artifactId>
                 <version>3.2.1</version>
-            </dependency>
-            <dependency>
-                <groupId>net.sourceforge.htmlcleaner</groupId>
-                <artifactId>htmlcleaner</artifactId>
-                <version>2.5</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
