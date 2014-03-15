@@ -1,6 +1,6 @@
 CREATE TABLE `DynamicClass` (
   `Id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `ClassName` varchar(20) NOT NULL,
+  `ClassName` varchar(200) NOT NULL,
   `SourceCode` text NOT NULL,
   `AddTime` datetime NOT NULL,
   `UpdateTime` datetime NOT NULL,
