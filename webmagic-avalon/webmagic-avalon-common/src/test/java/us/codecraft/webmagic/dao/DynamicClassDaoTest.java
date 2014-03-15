@@ -1,4 +1,4 @@
-package us.codecraft.dao;
+package us.codecraft.webmagic.dao;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -8,7 +8,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-import us.codecraft.webmagic.dao.DynamicClassDao;
 import us.codecraft.webmagic.model.DynamicClass;
 
 /**
