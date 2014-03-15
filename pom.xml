@@ -54,8 +54,7 @@
         <module>webmagic-selenium</module>
         <module>webmagic-saxon</module>
         <module>webmagic-samples</module>
-        <module>webmagic-admin</module>
-        <module>webmagic-worker</module>
+        <module>webmagic-avalon</module>
     </modules>
 
     <dependencyManagement>

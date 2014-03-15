@@ -8,8 +8,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>us.codecraft</groupId>
-    <artifactId>webmagic-admin</artifactId>
-    <packaging>war</packaging>
+    <artifactId>webmagic-avalon</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>forger</module>
+        <module>webmagic-admin</module>
+        <module>webmagic-worker</module>
+    </modules>
 
     <dependencies>
         <dependency>
@@ -31,10 +37,17 @@
         </dependency>
 
         <dependency>
+            <groupId>us.codecraft</groupId>
+            <artifactId>forger</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>2.3.19</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
