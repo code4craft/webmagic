@@ -2,15 +2,13 @@ package us.codecraft.webmagic.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import us.codecraft.forger.ForgerFactory;
+import us.codecraft.webmagic.AbstractTest;
 import us.codecraft.webmagic.Foo;
 import us.codecraft.webmagic.dao.DynamicClassDao;
 import us.codecraft.webmagic.exception.DynamicClassCompileException;
@@ -22,9 +20,7 @@ import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 /**
  * @author code4crafter@gmail.com
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath*:/spring/applicationContext*.xml"})
-public class DynamicClassServiceImplTest {
+public class DynamicClassServiceImplTest extends AbstractTest {
 
     @Before
     public void setUp() {

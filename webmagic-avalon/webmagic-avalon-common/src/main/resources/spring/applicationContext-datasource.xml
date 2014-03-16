@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-4.0.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/WebMagic?characterEncoding=UTF-8"/>
+        <property name="username" value="webmagic"/>
+        <property name="password" value="webmagic"/>
+    </bean>
+
+    <beans profile="test">
+        <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+              destroy-method="close">
+            <property name="driverClassName" value="org.h2.Driver"/>
+            <property name="url" value="jdbc:h2:mem:WebMagic;DB_CLOSE_DELAY=-1"/>
+        </bean>
+        <!--Refer to https://github.com/springside/springside4/wiki/H2-Database -->
+        <jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
+            <jdbc:script location="classpath:sql/h2/schema.sql" />
+            <!--<jdbc:script location="classpath:data/h2/import-data.sql" encoding="UTF-8"/>-->
+        </jdbc:initialize-database>
+    </beans>
+
+    <beans profile="standalone">
+        <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+              destroy-method="close">
+            <property name="driverClassName" value="org.h2.Driver"/>
+            <property name="url" value="jdbc:h2:file:~/.h2/WebMagic;AUTO_SERVER=TRUE"/>
+        </bean>
+        <!--Refer to https://github.com/springside/springside4/wiki/H2-Database -->
+        <jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
+            <jdbc:script location="classpath:sql/h2/schema.sql" />
+            <!--<jdbc:script location="classpath:data/h2/import-data.sql" encoding="UTF-8"/>-->
+        </jdbc:initialize-database>
+    </beans>
+
+</beans>
