@@ -13,9 +13,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import us.codecraft.forger.ForgerFactory;
 import us.codecraft.webmagic.Foo;
 import us.codecraft.webmagic.dao.DynamicClassDao;
+import us.codecraft.webmagic.exception.DynamicClassCompileException;
 import us.codecraft.webmagic.service.impl.DynamicClassServiceImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 /**
  * @author code4crafter@gmail.com
@@ -25,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DynamicClassServiceImplTest {
 
     @Before
-    public void setUp(){
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
 
@@ -41,7 +43,16 @@ public class DynamicClassServiceImplTest {
 
     @Test
     public void testCompileAndSave() throws Exception {
-        String className = dynamicClassService.compileAndSave(Foo.SOURCE_CODE);
-        assertThat(className).isEqualTo("us.codecraft.webmagic.Foo");
+        Class aClass = dynamicClassService.compileAndSave(Foo.SOURCE_CODE);
+        assertThat(aClass.getCanonicalName()).isEqualTo("us.codecraft.webmagic.Foo");
+    }
+
+    @Test
+    public void testCompileFail() {
+        try {
+            dynamicClassService.compileAndSave("class s((");
+            failBecauseExceptionWasNotThrown(DynamicClassCompileException.class);
+        } catch (DynamicClassCompileException e) {
+        }
     }
 }
