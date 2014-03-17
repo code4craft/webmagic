@@ -643,6 +643,11 @@ public class Spider implements Runnable, Task {
         return uuid;
     }
 
+    public Spider setExecutorService(ExecutorService executorService) {
+        this.executorService = executorService;
+        return this;
+    }
+
     @Override
     public Site getSite() {
         return site;
