@@ -8,6 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 
 /**
+ * Container of Spiders.
+ *
  * @author code4crafter@gmail.com
  */
 public class Worker {
