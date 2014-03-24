@@ -1,10 +1,13 @@
-webmagic
----
+![logo](https://raw.github.com/code4craft/webmagic/master/asserts/logo.jpg)
+
 [Readme in Chinese](https://github.com/code4craft/webmagic/tree/master/zh_docs)
+
+[User Manual (Chinese)](https://github.com/code4craft/webmagic/blob/master/user-manual.md)
+
 
 [![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
 
->A scalable crawler framework. It covers the whole lifecycle of crawler: downloading, url management, content extraction and persistent. It can simply the development of a  specific crawler.
+>A scalable crawler framework. It covers the whole lifecycle of crawler: downloading, url management, content extraction and persistent. It can simplify the development of a  specific crawler.
 
 ## Features:
 
@@ -14,26 +17,19 @@ webmagic
 * Multi-thread and Distribution support.
 * Easy to be integrated.
 
-
 ## Install:
-
-Clone the repo and build:
-
-	git clone https://github.com/code4craft/webmagic.git
-	cd webmagic
-	mvn clean install	  
-
-Add dependencies to your project:
+  
+Add dependencies to your pom.xml:
 
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-core</artifactId>
-            <version>0.4.2</version>
+            <version>0.4.3</version>
         </dependency>
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-extension</artifactId>
-            <version>0.4.2</version>
+            <version>0.4.3</version>
         </dependency>
 
 ## Get Started:
@@ -42,10 +38,10 @@ Add dependencies to your project:
 
 Write a class implements PageProcessor：
 
+```java
     public class OschinaBlogPageProcesser implements PageProcessor {
 
-        private Site site = Site.me().setDomain("my.oschina.net")
-           .addStartUrl("http://my.oschina.net/flashsword/blog");
+        private Site site = Site.me().setDomain("my.oschina.net");
 
         @Override
         public void process(Page page) {
@@ -63,10 +59,11 @@ Write a class implements PageProcessor：
         }
 
         public static void main(String[] args) {
-            Spider.create(new OschinaBlogPageProcesser())
-                 .pipeline(new ConsolePipeline()).run();
+            Spider.create(new OschinaBlogPageProcesser()).addUrl("http://my.oschina.net/flashsword/blog")
+                 .addPipeline(new ConsolePipeline()).run();
         }
     }
+```
 
 * `page.addTargetRequests(links)`
 	
@@ -74,6 +71,7 @@ Write a class implements PageProcessor：
     
 You can also use annotation way:
 
+```java
 	@TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
 	public class OschinaBlog {
 
@@ -88,10 +86,11 @@ You can also use annotation way:
 
 	    public static void main(String[] args) {
 	        OOSpider.create(
-	        	Site.me().addStartUrl("http://my.oschina.net/flashsword/blog"),
-				new ConsolePageModelPipeline(), OschinaBlog.class).run();
+	        	Site.me(),
+				new ConsolePageModelPipeline(), OschinaBlog.class).addUrl("http://my.oschina.net/flashsword/blog").run();
 	    }
 	}
+```
 		
 ### Docs and samples:
 
@@ -103,10 +102,29 @@ Javadocs: [http://code4craft.github.io/webmagic/docs/en/](http://code4craft.gith
 
 There are some samples in `webmagic-samples` package.
 
-
 ### Lisence:
 
 Lisenced under [Apache 2.0 lisence](http://opensource.org/licenses/Apache-2.0)
+
+### Contributors:
+
+Thanks these people for commiting source code, reporting bugs or suggesting for new feature:
+
+* [yuany](https://github.com/yuany)
+* [yxssfxwzy](https://github.com/yxssfxwzy)
+* [linkerlin](https://github.com/linkerlin)
+* [d0ngw](https://github.com/d0ngw)
+* [xuchaoo](https://github.com/xuchaoo)
+* [supermicah](https://github.com/supermicah)
+* [SimpleExpress](https://github.com/SimpleExpress)
+* [aruanruan](https://github.com/aruanruan)
+* [l1z2g9](https://github.com/l1z2g9)
+* [zhegexiaohuozi](https://github.com/zhegexiaohuozi)
+* [ywooer](https://github.com/ywooer)
+* [yyw258520](https://github.com/yyw258520)
+* [perfecking](https://github.com/perfecking)
+* [lidongyang](http://my.oschina.net/lidongyang)
+
 
 ### Thanks:
 
@@ -123,4 +141,11 @@ To write webmagic, I refered to the projects below :
 	Another crawler framework in Java.
 	
 	[https://gitcafe.com/laiweiwei/Spiderman](https://gitcafe.com/laiweiwei/Spiderman)
+
+### Mail-list:
+
+[https://groups.google.com/forum/#!forum/webmagic-java](https://groups.google.com/forum/#!forum/webmagic-java)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/code4craft/webmagic/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
