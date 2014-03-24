@@ -26,11 +26,11 @@ public class OschinaBlog {
     @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
     private List<String> tags;
 
-    @Formatter("yyyy-MM-dd HH:mm")
     @ExtractBy("//div[@class='BlogStat']/regex('\\d+-\\d+-\\d+\\s+\\d+:\\d+')")
     private Date date;
 
     public static void main(String[] args) {
+        //results will be saved to "/data/webmagic/" in json format
         OOSpider.create(Site.me(), new JsonFilePageModelPipeline("/data/webmagic/"), OschinaBlog.class)
                 .addUrl("http://my.oschina.net/flashsword/blog").run();
     }
