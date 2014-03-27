@@ -1,0 +1,13 @@
+us.codecraft.webmagic
+us.codecraft.webmagic.configurable
+us.codecraft.webmagic.downloader
+us.codecraft.webmagic.example
+us.codecraft.webmagic.model
+us.codecraft.webmagic.model.annotation
+us.codecraft.webmagic.model.formatter
+us.codecraft.webmagic.pipeline
+us.codecraft.webmagic.processor
+us.codecraft.webmagic.processor.example
+us.codecraft.webmagic.scheduler
+us.codecraft.webmagic.selector
+us.codecraft.webmagic.utils
