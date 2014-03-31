@@ -6,7 +6,7 @@ import us.codecraft.webmagic.AbstractSpockTest
  */
 class UtilTest extends AbstractSpockTest{
 
-    def "You shall pass!"(){
+    def "You shall pass! "(){
         expect:
             1==1
     }
