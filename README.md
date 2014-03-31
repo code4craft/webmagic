@@ -21,6 +21,7 @@
   
 Add dependencies to your pom.xml:
 
+```xml
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-core</artifactId>
@@ -31,6 +32,19 @@ Add dependencies to your pom.xml:
             <artifactId>webmagic-extension</artifactId>
             <version>0.4.3</version>
         </dependency>
+```
+        
+WebMagic use slf4j with slf4j-log4j12 implementation. If you customized your slf4j implementation, please exclude slf4j-log4j12.
+
+```xml
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+```
+
 
 ## Get Started:
 
