@@ -26,6 +26,8 @@
         </property>
     </bean>
 
+    <mvc:resources mapping="/static/**" location="/static/" />
+
     <mvc:annotation-driven/>
 
 </beans>
