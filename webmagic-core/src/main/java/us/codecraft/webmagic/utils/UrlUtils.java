@@ -43,10 +43,20 @@ public class UrlUtils {
             if (url.startsWith("?"))
                 url = base.getPath() + url;
             URL abs = new URL(base, url);
-            return abs.toExternalForm();
+            return encodeIllegalCharacterInUrl(abs.toExternalForm());
         } catch (MalformedURLException e) {
             return "";
         }
+    }
+
+    /**
+     *
+     * @param url
+     * @return
+     */
+    public static String encodeIllegalCharacterInUrl(String url) {
+        //TODO more charator support
+        return url.replace(" ", "%20");
     }
 
     public static String getHost(String url) {
@@ -101,9 +111,9 @@ public class UrlUtils {
             stringBuilder.append("\"").append(canonicalizeUrl(matcher.group(2), url)).append("\"");
             lastEnd = matcher.end();
         }
-		if (!modified) {
-			return html;
-		}
+        if (!modified) {
+            return html;
+        }
         stringBuilder.append(StringUtils.substring(html, lastEnd));
         return stringBuilder.toString();
     }

@@ -38,15 +38,20 @@ public class UrlUtilsTest {
 
         originHtml = "<a href=\"/start a\">";
         replacedHtml = UrlUtils.fixAllRelativeHrefs(originHtml, "http://www.dianping.com/");
-        assertThat(replacedHtml).isEqualTo("<a href=\"http://www.dianping.com/start a\">");
+        assertThat(replacedHtml).isEqualTo("<a href=\"http://www.dianping.com/start%20a\">");
 
         originHtml = "<a href='/start a'>";
         replacedHtml = UrlUtils.fixAllRelativeHrefs(originHtml, "http://www.dianping.com/");
-        assertThat(replacedHtml).isEqualTo("<a href=\"http://www.dianping.com/start a\">");
+        assertThat(replacedHtml).isEqualTo("<a href=\"http://www.dianping.com/start%20a\">");
 
         originHtml = "<a href=/start tag>";
         replacedHtml = UrlUtils.fixAllRelativeHrefs(originHtml, "http://www.dianping.com/");
         assertThat(replacedHtml).isEqualTo("<a href=\"http://www.dianping.com/start\" tag>");
+    }
+
+    @Test
+    public void test(){
+        UrlUtils.canonicalizeUrl("start tag", "http://www.dianping.com/");
     }
 
     @Test

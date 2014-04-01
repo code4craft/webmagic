@@ -8,6 +8,8 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.selector.Html;
 
+import java.io.UnsupportedEncodingException;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -30,6 +32,12 @@ public class HttpClientDownloaderTest {
         HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
         Html html = httpClientDownloader.download("http://www.oschina.net");
         assertTrue(!html.getText().isEmpty());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDownloaderInIllegalUrl() throws UnsupportedEncodingException {
+        HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+        httpClientDownloader.download("http://www.oschina.net/>");
     }
 
     @Test
