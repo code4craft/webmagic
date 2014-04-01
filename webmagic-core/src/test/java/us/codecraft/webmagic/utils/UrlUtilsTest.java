@@ -3,6 +3,8 @@ package us.codecraft.webmagic.utils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-21
@@ -12,19 +14,39 @@ public class UrlUtilsTest {
 
     @Test
     public void testFixRelativeUrl() {
-        String fixrelativeurl = UrlUtils.canonicalizeUrl("aa", "http://www.dianping.com/sh/ss/com");
-        System.out.println("fix: " + fixrelativeurl);
-        Assert.assertEquals("http://www.dianping.com/sh/ss/aa", fixrelativeurl);
+        String absoluteUrl = UrlUtils.canonicalizeUrl("aa", "http://www.dianping.com/sh/ss/com");
+        assertThat(absoluteUrl).isEqualTo("http://www.dianping.com/sh/ss/aa");
 
-        fixrelativeurl = UrlUtils.canonicalizeUrl("../aa", "http://www.dianping.com/sh/ss/com");
-        Assert.assertEquals("http://www.dianping.com/sh/aa", fixrelativeurl);
+        absoluteUrl = UrlUtils.canonicalizeUrl("../aa", "http://www.dianping.com/sh/ss/com");
+        assertThat(absoluteUrl).isEqualTo("http://www.dianping.com/sh/aa");
 
-        fixrelativeurl = UrlUtils.canonicalizeUrl("..aa", "http://www.dianping.com/sh/ss/com");
-        Assert.assertEquals("http://www.dianping.com/sh/ss/..aa", fixrelativeurl);
-        fixrelativeurl = UrlUtils.canonicalizeUrl("../../aa", "http://www.dianping.com/sh/ss/com/");
-        Assert.assertEquals("http://www.dianping.com/sh/aa", fixrelativeurl);
-        fixrelativeurl = UrlUtils.canonicalizeUrl("../../aa", "http://www.dianping.com/sh/ss/com");
-        Assert.assertEquals("http://www.dianping.com/aa", fixrelativeurl);
+        absoluteUrl = UrlUtils.canonicalizeUrl("..aa", "http://www.dianping.com/sh/ss/com");
+        assertThat(absoluteUrl).isEqualTo("http://www.dianping.com/sh/ss/..aa");
+
+        absoluteUrl = UrlUtils.canonicalizeUrl("../../aa", "http://www.dianping.com/sh/ss/com/");
+        assertThat(absoluteUrl).isEqualTo("http://www.dianping.com/sh/aa");
+
+        absoluteUrl = UrlUtils.canonicalizeUrl("../../aa", "http://www.dianping.com/sh/ss/com");
+        assertThat(absoluteUrl).isEqualTo("http://www.dianping.com/aa");
+    }
+
+    @Test
+    public void testFixAllRelativeHrefs() {
+        String originHtml = "<a href=\"/start\">";
+        String replacedHtml = UrlUtils.fixAllRelativeHrefs(originHtml, "http://www.dianping.com/");
+        assertThat(replacedHtml).isEqualTo("<a href=\"http://www.dianping.com/start\">");
+
+        originHtml = "<a href=\"/start a\">";
+        replacedHtml = UrlUtils.fixAllRelativeHrefs(originHtml, "http://www.dianping.com/");
+        assertThat(replacedHtml).isEqualTo("<a href=\"http://www.dianping.com/start a\">");
+
+        originHtml = "<a href='/start a'>";
+        replacedHtml = UrlUtils.fixAllRelativeHrefs(originHtml, "http://www.dianping.com/");
+        assertThat(replacedHtml).isEqualTo("<a href=\"http://www.dianping.com/start a\">");
+
+        originHtml = "<a href=/start tag>";
+        replacedHtml = UrlUtils.fixAllRelativeHrefs(originHtml, "http://www.dianping.com/");
+        assertThat(replacedHtml).isEqualTo("<a href=\"http://www.dianping.com/start\" tag>");
     }
 
     @Test
