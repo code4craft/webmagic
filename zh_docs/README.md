@@ -37,6 +37,7 @@ webmagic的github地址：[https://github.com/code4craft/webmagic](https://githu
 
 webmagic使用maven管理依赖，在项目中添加对应的依赖即可使用webmagic：
 
+```xml
 		<dependency>
             <groupId>us.codecraft</groupId>
             <artifactId>webmagic-core</artifactId>
@@ -47,6 +48,18 @@ webmagic使用maven管理依赖，在项目中添加对应的依赖即可使用w
             <artifactId>webmagic-extension</artifactId>
             <version>0.4.3</version>
         </dependency>
+```
+        
+WebMagic 使用slf4j-log4j12作为slf4j的实现.如果你自己定制了slf4j的实现，请在项目中去掉此依赖。
+
+```xml
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+```
 
 #### 项目结构
 	
