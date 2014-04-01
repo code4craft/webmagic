@@ -188,6 +188,7 @@ webmagic遵循[Apache 2.0协议](http://opensource.org/licenses/Apache-2.0)
 * [ywooer](https://github.com/ywooer)
 * [yyw258520](https://github.com/yyw258520)
 * [perfecking](https://github.com/perfecking)
+* [ccliangbo](https://github.com/ccliangbo)
 * [lidongyang](http://my.oschina.net/lidongyang)
 
 ### 邮件组:

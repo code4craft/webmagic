@@ -137,6 +137,7 @@ Thanks these people for commiting source code, reporting bugs or suggesting for 
 * [ywooer](https://github.com/ywooer)
 * [yyw258520](https://github.com/yyw258520)
 * [perfecking](https://github.com/perfecking)
+* [ccliangbo](https://github.com/ccliangbo)
 * [lidongyang](http://my.oschina.net/lidongyang)
 
 
