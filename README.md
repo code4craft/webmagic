@@ -22,27 +22,27 @@
 Add dependencies to your pom.xml:
 
 ```xml
-		<dependency>
-            <groupId>us.codecraft</groupId>
-            <artifactId>webmagic-core</artifactId>
-            <version>0.4.3</version>
-        </dependency>
-		<dependency>
-            <groupId>us.codecraft</groupId>
-            <artifactId>webmagic-extension</artifactId>
-            <version>0.4.3</version>
-        </dependency>
+<dependency>
+    <groupId>us.codecraft</groupId>
+    <artifactId>webmagic-core</artifactId>
+    <version>0.4.3</version>
+</dependency>
+<dependency>
+    <groupId>us.codecraft</groupId>
+    <artifactId>webmagic-extension</artifactId>
+    <version>0.4.3</version>
+</dependency>
 ```
         
 WebMagic use slf4j with slf4j-log4j12 implementation. If you customized your slf4j implementation, please exclude slf4j-log4j12.
 
 ```xml
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-            </exclusions>
+<exclusions>
+    <exclusion>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+    </exclusion>
+</exclusions>
 ```
 
 
@@ -53,30 +53,30 @@ WebMagic use slf4j with slf4j-log4j12 implementation. If you customized your slf
 Write a class implements PageProcessor：
 
 ```java
-    public class OschinaBlogPageProcesser implements PageProcessor {
+public class OschinaBlogPageProcesser implements PageProcessor {
 
-        private Site site = Site.me().setDomain("my.oschina.net");
+    private Site site = Site.me().setDomain("my.oschina.net");
 
-        @Override
-        public void process(Page page) {
-            List<String> links = page.getHtml().links().regex("http://my\\.oschina\\.net/flashsword/blog/\\d+").all();
-            page.addTargetRequests(links);
-            page.putField("title", page.getHtml().xpath("//div[@class='BlogEntity']/div[@class='BlogTitle']/h1").toString());
-            page.putField("content", page.getHtml().$("div.content").toString());
-            page.putField("tags",page.getHtml().xpath("//div[@class='BlogTags']/a/text()").all());
-        }
-
-        @Override
-        public Site getSite() {
-            return site;
-
-        }
-
-        public static void main(String[] args) {
-            Spider.create(new OschinaBlogPageProcesser()).addUrl("http://my.oschina.net/flashsword/blog")
-                 .addPipeline(new ConsolePipeline()).run();
-        }
+    @Override
+    public void process(Page page) {
+        List<String> links = page.getHtml().links().regex("http://my\\.oschina\\.net/flashsword/blog/\\d+").all();
+        page.addTargetRequests(links);
+        page.putField("title", page.getHtml().xpath("//div[@class='BlogEntity']/div[@class='BlogTitle']/h1").toString());
+        page.putField("content", page.getHtml().$("div.content").toString());
+        page.putField("tags",page.getHtml().xpath("//div[@class='BlogTags']/a/text()").all());
     }
+
+    @Override
+    public Site getSite() {
+        return site;
+
+    }
+
+    public static void main(String[] args) {
+        Spider.create(new OschinaBlogPageProcesser()).addUrl("http://my.oschina.net/flashsword/blog")
+             .addPipeline(new ConsolePipeline()).run();
+    }
+}
 ```
 
 * `page.addTargetRequests(links)`
@@ -86,24 +86,24 @@ Write a class implements PageProcessor：
 You can also use annotation way:
 
 ```java
-	@TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
-	public class OschinaBlog {
+@TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
+public class OschinaBlog {
 
-	    @ExtractBy("//title")
-	    private String title;
+    @ExtractBy("//title")
+    private String title;
 
-	    @ExtractBy(value = "div.BlogContent",type = ExtractBy.Type.Css)
-	    private String content;
+    @ExtractBy(value = "div.BlogContent",type = ExtractBy.Type.Css)
+    private String content;
 
-	    @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
-	    private List<String> tags;
+    @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
+    private List<String> tags;
 
-	    public static void main(String[] args) {
-	        OOSpider.create(
-	        	Site.me(),
-				new ConsolePageModelPipeline(), OschinaBlog.class).addUrl("http://my.oschina.net/flashsword/blog").run();
-	    }
-	}
+    public static void main(String[] args) {
+        OOSpider.create(
+        	Site.me(),
+			new ConsolePageModelPipeline(), OschinaBlog.class).addUrl("http://my.oschina.net/flashsword/blog").run();
+    }
+}
 ```
 		
 ### Docs and samples:
