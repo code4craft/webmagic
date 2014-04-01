@@ -38,27 +38,27 @@ webmagic的github地址：[https://github.com/code4craft/webmagic](https://githu
 webmagic使用maven管理依赖，在项目中添加对应的依赖即可使用webmagic：
 
 ```xml
-		<dependency>
-            <groupId>us.codecraft</groupId>
-            <artifactId>webmagic-core</artifactId>
-            <version>0.4.3</version>
-        </dependency>
-		<dependency>
-            <groupId>us.codecraft</groupId>
-            <artifactId>webmagic-extension</artifactId>
-            <version>0.4.3</version>
-        </dependency>
+<dependency>
+    <groupId>us.codecraft</groupId>
+    <artifactId>webmagic-core</artifactId>
+    <version>0.4.3</version>
+</dependency>
+<dependency>
+    <groupId>us.codecraft</groupId>
+    <artifactId>webmagic-extension</artifactId>
+    <version>0.4.3</version>
+</dependency>
 ```
         
 WebMagic 使用slf4j-log4j12作为slf4j的实现.如果你自己定制了slf4j的实现，请在项目中去掉此依赖。
 
 ```xml
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-            </exclusions>
+<exclusions>
+    <exclusion>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+    </exclusion>
+</exclusions>
 ```
 
 #### 项目结构
@@ -96,30 +96,30 @@ webmagic还包含两个可用的扩展包，因为这两个包都依赖了比较
 PageProcessor是webmagic-core的一部分，定制一个PageProcessor即可实现自己的爬虫逻辑。以下是抓取osc博客的一段代码：
 
 ```java
-    public class OschinaBlogPageProcesser implements PageProcessor {
+public class OschinaBlogPageProcesser implements PageProcessor {
 
-        private Site site = Site.me().setDomain("my.oschina.net");
+    private Site site = Site.me().setDomain("my.oschina.net");
 
-        @Override
-        public void process(Page page) {
-            List<String> links = page.getHtml().links().regex("http://my\\.oschina\\.net/flashsword/blog/\\d+").all();
-            page.addTargetRequests(links);
-            page.putField("title", page.getHtml().xpath("//div[@class='BlogEntity']/div[@class='BlogTitle']/h1").toString());
-            page.putField("content", page.getHtml().$("div.content").toString());
-            page.putField("tags",page.getHtml().xpath("//div[@class='BlogTags']/a/text()").all());
-        }
-
-        @Override
-        public Site getSite() {
-            return site;
-
-        }
-
-        public static void main(String[] args) {
-            Spider.create(new OschinaBlogPageProcesser()).addUrl("http://my.oschina.net/flashsword/blog")
-                 .addPipeline(new ConsolePipeline()).run();
-        }
+    @Override
+    public void process(Page page) {
+        List<String> links = page.getHtml().links().regex("http://my\\.oschina\\.net/flashsword/blog/\\d+").all();
+        page.addTargetRequests(links);
+        page.putField("title", page.getHtml().xpath("//div[@class='BlogEntity']/div[@class='BlogTitle']/h1").toString());
+        page.putField("content", page.getHtml().$("div.content").toString());
+        page.putField("tags",page.getHtml().xpath("//div[@class='BlogTags']/a/text()").all());
     }
+
+    @Override
+    public Site getSite() {
+        return site;
+
+    }
+
+    public static void main(String[] args) {
+        Spider.create(new OschinaBlogPageProcesser()).addUrl("http://my.oschina.net/flashsword/blog")
+             .addPipeline(new ConsolePipeline()).run();
+    }
+}
 ```
 
 
@@ -134,24 +134,24 @@ Spider是爬虫的入口类。Pipeline是结果输出和持久化的接口，这
 webmagic-extension包括了注解方式编写爬虫的方法，只需基于一个POJO增加注解即可完成一个爬虫。以下仍然是抓取oschina博客的一段代码，功能与OschinaBlogPageProcesser完全相同：
 
 ```java
-	@TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
-	public class OschinaBlog {
+@TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
+public class OschinaBlog {
 
-	    @ExtractBy("//title")
-	    private String title;
+    @ExtractBy("//title")
+    private String title;
 
-	    @ExtractBy(value = "div.BlogContent",type = ExtractBy.Type.Css)
-	    private String content;
+    @ExtractBy(value = "div.BlogContent",type = ExtractBy.Type.Css)
+    private String content;
 
-	    @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
-	    private List<String> tags;
+    @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
+    private List<String> tags;
 
-	    public static void main(String[] args) {
-	        OOSpider.create(
-	        	Site.me(),
-				new ConsolePageModelPipeline(), OschinaBlog.class).addUrl("http://my.oschina.net/flashsword/blog").run();
-	    }
-	}
+    public static void main(String[] args) {
+        OOSpider.create(
+        	Site.me(),
+			new ConsolePageModelPipeline(), OschinaBlog.class).addUrl("http://my.oschina.net/flashsword/blog").run();
+    }
+}
 ```
 
 这个例子定义了一个Model类，Model类的字段'title'、'content'、'tags'均为要抽取的属性。这个类在Pipeline里是可以复用的。
