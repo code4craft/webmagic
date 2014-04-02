@@ -15,8 +15,8 @@
     <meta charset="utf-8">
     <title>WebMaigc Avalon</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Charisma, a fully featured, responsive, HTML5, Bootstrap admin template.">
-    <meta name="author" content="Muhammad Usman">
+    <meta name="description" content="WebMagic, a scalable crawler framework.">
+    <meta name="author" content="code4crafter@gmail.com">
 
     <!-- The styles -->
     <link id="bs-css" href="${staticPath}/css/bootstrap-cerulean.css" rel="stylesheet">
@@ -123,23 +123,10 @@
     <div class="well nav-collapse sidebar-nav">
         <ul class="nav nav-tabs nav-stacked main-menu">
             <li class="nav-header hidden-tablet">Main</li>
-            <li><a class="ajax-link" href="index.html"><i class="icon-home"></i><span class="hidden-tablet"> Dashboard</span></a></li>
-            <li><a class="ajax-link" href="ui.html"><i class="icon-eye-open"></i><span class="hidden-tablet">Spider</span></a></li>
-            <li><a class="ajax-link" href="form.html"><i class="icon-edit"></i><span class="hidden-tablet">Charts</span></a></li>
-            <li><a class="ajax-link" href="chart.html"><i class="icon-list-alt"></i><span class="hidden-tablet"> Charts</span></a></li>
-            <li><a class="ajax-link" href="typography.html"><i class="icon-font"></i><span class="hidden-tablet"> Typography</span></a></li>
-            <li><a class="ajax-link" href="gallery.html"><i class="icon-picture"></i><span class="hidden-tablet"> Gallery</span></a></li>
-            <li class="nav-header hidden-tablet">Sample Section</li>
-            <li><a class="ajax-link" href="table.html"><i class="icon-align-justify"></i><span class="hidden-tablet"> Tables</span></a></li>
-            <li><a class="ajax-link" href="calendar.html"><i class="icon-calendar"></i><span class="hidden-tablet"> Calendar</span></a></li>
-            <li><a class="ajax-link" href="grid.html"><i class="icon-th"></i><span class="hidden-tablet"> Grid</span></a></li>
-            <li><a class="ajax-link" href="file-manager.html"><i class="icon-folder-open"></i><span class="hidden-tablet"> File Manager</span></a></li>
-            <li><a href="tour.html"><i class="icon-globe"></i><span class="hidden-tablet"> Tour</span></a></li>
-            <li><a class="ajax-link" href="icon.html"><i class="icon-star"></i><span class="hidden-tablet"> Icons</span></a></li>
-            <li><a href="error.html"><i class="icon-ban-circle"></i><span class="hidden-tablet"> Error Page</span></a></li>
-            <li><a href="login.html"><i class="icon-lock"></i><span class="hidden-tablet"> Login Page</span></a></li>
+            <li><a class="ajax-link" href="dashboard"><i class="icon-home"></i><span class="hidden-tablet">Dashboard</span></a></li>
+            <li><a class="ajax-link" href="spider"><i class="icon-eye-open"></i><span class="hidden-tablet">Spider</span></a></li>
+            <li><a class="ajax-link" href="charts"><i class="icon-edit"></i><span class="hidden-tablet">Charts</span></a></li>
         </ul>
-        <label id="for-is-ajax" class="hidden-tablet" for="is-ajax"><input id="is-ajax" type="checkbox"> Ajax on menu</label>
     </div><!--/.well -->
 </div><!--/span-->
 <!-- left menu ends -->
@@ -173,26 +160,6 @@
         <span class="notification">6</span>
     </a>
 
-    <a data-rel="tooltip" title="4 new pro members." class="well span3 top-block" href="#">
-        <span class="icon32 icon-color icon-star-on"></span>
-        <div>Pro Members</div>
-        <div>228</div>
-        <span class="notification green">4</span>
-    </a>
-
-    <a data-rel="tooltip" title="$34 new sales." class="well span3 top-block" href="#">
-        <span class="icon32 icon-color icon-cart"></span>
-        <div>Sales</div>
-        <div>$13320</div>
-        <span class="notification yellow">$34</span>
-    </a>
-
-    <a data-rel="tooltip" title="12 new messages." class="well span3 top-block" href="#">
-        <span class="icon32 icon-color icon-envelope-closed"></span>
-        <div>Messages</div>
-        <div>25</div>
-        <span class="notification red">12</span>
-    </a>
 </div>
 
 <div class="row-fluid">
