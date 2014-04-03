@@ -45,7 +45,7 @@ WebMagic使用slf4j-log4j12作为slf4j的实现.如果你自己定制了slf4j的
 
 在**lib**目录下，有项目依赖的所有jar包，直接在IDE里，将这些jar添加到Libraries即可。
 
-![import jars](http://static.oschina.net/uploads/space/2014/0403/102848_ETcU_190591.png)
+![import jars](http://static.oschina.net/uploads/space/2014/0403/143318_gBQE_190591.jpeg)
 
 ### 1.3 第一个项目
 
@@ -153,6 +153,8 @@ Intellij Idea默认自带Maven支持，import项目时选择Maven项目即可。
 同样，看到控制台输出如下，则表示源码编译和执行成功了！
 
 ![runlog](http://static.oschina.net/uploads/space/2014/0403/103741_3Gf5_190591.png)
+
+<div style="page-break-after:always"></div>
 
 ## 3. 基本的爬虫
 
