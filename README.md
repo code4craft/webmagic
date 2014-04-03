@@ -50,33 +50,35 @@ WebMagic use slf4j with slf4j-log4j12 implementation. If you customized your slf
 
 ### First crawler:
 
-Write a class implements PageProcessor：
+Write a class implements PageProcessor. For example, I wrote a crawler of github repository infomation.
 
 ```java
-public class OschinaBlogPageProcesser implements PageProcessor {
+public class GithubRepoPageProcessor implements PageProcessor {
 
-    private Site site = Site.me().setDomain("my.oschina.net");
+    private Site site = Site.me().setRetryTimes(3).setSleepTime(1000);
 
     @Override
     public void process(Page page) {
-        List<String> links = page.getHtml().links().regex("http://my\\.oschina\\.net/flashsword/blog/\\d+").all();
-        page.addTargetRequests(links);
-        page.putField("title", page.getHtml().xpath("//div[@class='BlogEntity']/div[@class='BlogTitle']/h1").toString());
-        page.putField("content", page.getHtml().$("div.content").toString());
-        page.putField("tags",page.getHtml().xpath("//div[@class='BlogTags']/a/text()").all());
+        page.addTargetRequests(page.getHtml().links().regex("(https://github\\.com/\\w+/\\w+)").all());
+        page.putField("author", page.getUrl().regex("https://github\\.com/(\\w+)/.*").toString());
+        page.putField("name", page.getHtml().xpath("//h1[@class='entry-title public']/strong/a/text()").toString());
+        if (page.getResultItems().get("name")==null){
+            //skip this page
+            page.setSkip(true);
+        }
+        page.putField("readme", page.getHtml().xpath("//div[@id='readme']/tidyText()"));
     }
 
     @Override
     public Site getSite() {
         return site;
-
     }
 
     public static void main(String[] args) {
-        Spider.create(new OschinaBlogPageProcesser()).addUrl("http://my.oschina.net/flashsword/blog")
-             .addPipeline(new ConsolePipeline()).run();
+        Spider.create(new GithubRepoPageProcessor()).addUrl("https://github.com/code4craft").thread(5).run();
     }
 }
+
 ```
 
 * `page.addTargetRequests(links)`
@@ -86,22 +88,23 @@ public class OschinaBlogPageProcesser implements PageProcessor {
 You can also use annotation way:
 
 ```java
-@TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
-public class OschinaBlog {
+@TargetUrl("https://github.com/\\w+/\\w+")
+@HelpUrl("https://github.com/\\w+")
+public class GithubRepo {
 
-    @ExtractBy("//title")
-    private String title;
+    @ExtractBy(value = "//h1[@class='entry-title public']/strong/a/text()", notNull = true)
+    private String name;
 
-    @ExtractBy(value = "div.BlogContent",type = ExtractBy.Type.Css)
-    private String content;
+    @ExtractByUrl("https://github\\.com/(\\w+)/.*")
+    private String author;
 
-    @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
-    private List<String> tags;
+    @ExtractBy("//div[@id='readme']/tidyText()")
+    private String readme;
 
     public static void main(String[] args) {
-        OOSpider.create(
-        	Site.me(),
-			new ConsolePageModelPipeline(), OschinaBlog.class).addUrl("http://my.oschina.net/flashsword/blog").run();
+        OOSpider.create(Site.me().setSleepTime(1000)
+                , new ConsolePageModelPipeline(), GithubRepo.class)
+                .addUrl("https://github.com/code4craft").thread(5).run();
     }
 }
 ```
