@@ -78,7 +78,6 @@ public class GithubRepoPageProcessor implements PageProcessor {
         Spider.create(new GithubRepoPageProcessor()).addUrl("https://github.com/code4craft").thread(5).run();
     }
 }
-
 ```
 
 * `page.addTargetRequests(links)`
