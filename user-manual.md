@@ -65,7 +65,7 @@ webmagic还包含两个可用的扩展包，因为这两个包都依赖了比较
 
 	git clone http://git.oschina.net/flashsword20/webmagic.git
 
-在**bin/lib**目录下，有项目依赖的所有jar包，直接在IDE里import即可。
+在**lib**目录下，有项目依赖的所有jar包，直接在IDE里import即可。
 
 --------
 
