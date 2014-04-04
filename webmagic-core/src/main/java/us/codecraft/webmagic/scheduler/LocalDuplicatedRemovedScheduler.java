@@ -23,9 +23,9 @@ public abstract class LocalDuplicatedRemovedScheduler implements Scheduler {
 
     @Override
     public void push(Request request, Task task) {
-        logger.trace("get a candidate url " + request.getUrl());
+        logger.trace("get a candidate url ", request.getUrl());
         if (request.getExtra(Request.CYCLE_TRIED_TIMES) != null || urls.add(request.getUrl())) {
-        	logger.debug("push to queue " + request.getUrl());
+            logger.debug("push to queue ", request.getUrl());
             pushWhenNoDuplicate(request, task);
         }
     }
