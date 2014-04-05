@@ -25,8 +25,6 @@ class ModelPageProcessor implements PageProcessor {
 
     private Site site;
 
-    private Set<Pattern> targetUrlPatterns = new HashSet<Pattern>();
-
     public static ModelPageProcessor create(Site site, Class... clazzs) {
         ModelPageProcessor modelPageProcessor = new ModelPageProcessor(site);
         for (Class clazz : clazzs) {
@@ -38,8 +36,6 @@ class ModelPageProcessor implements PageProcessor {
 
     public ModelPageProcessor addPageModel(Class clazz) {
         PageModelExtractor pageModelExtractor = PageModelExtractor.create(clazz);
-        targetUrlPatterns.addAll(pageModelExtractor.getTargetUrlPatterns());
-        targetUrlPatterns.addAll(pageModelExtractor.getHelpUrlPatterns());
         pageModelExtractorList.add(pageModelExtractor);
         return this;
     }
