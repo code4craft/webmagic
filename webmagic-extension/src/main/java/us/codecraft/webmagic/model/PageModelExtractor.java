@@ -340,9 +340,7 @@ class PageModelExtractor {
     private Object convert(String value, ObjectFormatter objectFormatter) {
         try {
             Object format = objectFormatter.format(value);
-            if (logger.isDebugEnabled()) {
-                logger.debug("String " + value + " is converted to " + format);
-            }
+            logger.debug("String {} is converted to {}", value, format);
             return format;
         } catch (Exception e) {
             logger.error("convert " + value + " to " + objectFormatter.clazz() + " error!", e);

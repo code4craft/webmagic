@@ -149,9 +149,7 @@ public class FileCacheQueueScheduler implements Scheduler {
         if (!inited.get()) {
             init(task);
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("push to queue " + request.getUrl());
-        }
+        logger.debug("push to queue {}" , request.getUrl());
         if (urls.add(request.getUrl())) {
             queue.add(request);
             fileUrlWriter.println(request.getUrl());

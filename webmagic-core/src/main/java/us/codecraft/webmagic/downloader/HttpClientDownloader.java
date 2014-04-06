@@ -74,7 +74,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         } else {
             acceptStatCode = Sets.newHashSet(200);
         }
-        logger.info("downloading page " + request.getUrl());
+        logger.info("downloading page {}" , request.getUrl());
         RequestBuilder requestBuilder = RequestBuilder.get().setUri(request.getUrl());
         if (headers != null) {
             for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
