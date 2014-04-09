@@ -3,7 +3,6 @@ package us.codecraft.webmagic.scripts;
 import org.apache.commons.io.IOUtils;
 import org.jruby.RubyHash;
 import org.python.core.PyDictionary;
-import sun.org.mozilla.javascript.internal.NativeObject;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
@@ -58,13 +57,13 @@ public class ScriptProcessor implements PageProcessor {
                 switch (language) {
                     case JavaScript:
                         engine.eval(defines + "\n" + script, context);
-                        NativeObject o = (NativeObject) engine.get("result");
-                        if (o != null) {
-                            for (Object o1 : o.getIds()) {
-                                String key = String.valueOf(o1);
-                                page.getResultItems().put(key, NativeObject.getProperty(o, key));
-                            }
-                        }
+//                        NativeObject o = (NativeObject) engine.get("result");
+//                        if (o != null) {
+//                            for (Object o1 : o.getIds()) {
+//                                String key = String.valueOf(o1);
+//                                page.getResultItems().put(key, NativeObject.getProperty(o, key));
+//                            }
+//                        }
                         break;
                     case JRuby:
                         RubyHash oRuby = (RubyHash) engine.eval(defines + "\n" + script, context);
