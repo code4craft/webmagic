@@ -22,4 +22,12 @@ public class ScriptProcessorTest {
         pageProcessor.getSite().setSleepTime(0);
         Spider.create(pageProcessor).addUrl("http://my.oschina.net/flashsword/blog").setSpawnUrl(false).run();
     }
+
+
+    @Test
+    public void testPythonProcessor() {
+        ScriptProcessor pageProcessor = ScriptProcessorBuilder.custom().language(Language.Jython).scriptFromClassPathFile("python/oschina.py").build();
+        pageProcessor.getSite().setSleepTime(0);
+        Spider.create(pageProcessor).addUrl("http://my.oschina.net/flashsword/blog").setSpawnUrl(false).run();
+    }
 }

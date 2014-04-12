@@ -131,6 +131,7 @@ public class Html extends PlainText {
     }
 
     public Document getDocument() {
+        initDocument();
         return document;
     }
 
