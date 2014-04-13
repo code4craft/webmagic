@@ -218,7 +218,7 @@ public class Site {
      *
      * @deprecated
      * @see Spider#addRequest(Request...)
-     * @param startUrl
+     * @param startRequest
      * @return this
      */
     public Site addStartRequest(Request startRequest) {
