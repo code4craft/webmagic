@@ -47,18 +47,16 @@ public class PatternPageProcessor implements PageProcessor {
 		page.addTargetRequests(requests);
 		for(PatternHandler handler : handlers) {
 			if(handler.match(page.getUrl().toString())) {
-				handler.process(page);
+				handler.processPage(page);
 			}
 		}
 	}
 
 	/**
-	 * A handler works only if it is added to BOTH the page processor and the pipeline.
-	 * Uses PatternHandler's register instead.
 	 *
 	 * @param handler the pattern handler
 	 *
-	 * @see PatternHandler#register
+	 *
 	 */
 	public void addHandler(PatternHandler handler) {
 

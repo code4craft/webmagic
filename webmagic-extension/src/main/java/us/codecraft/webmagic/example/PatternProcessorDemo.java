@@ -6,6 +6,7 @@ import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.handler.PatternHandler;
+import us.codecraft.webmagic.handler.SubPageProcessor;
 import us.codecraft.webmagic.pipeline.PatternPipeline;
 import us.codecraft.webmagic.processor.PatternPageProcessor;
 
@@ -32,21 +33,23 @@ public class PatternProcessorDemo {
 		PatternHandler handler = new PatternHandler("http://item.jd.com/.*") {
 
 			@Override
-			public void onExtract(Page page) {
+			public SubPageProcessor.MatchOtherProcessor process(Page page) {
 
 				log.info("Extracting from " + page.getUrl());
 				page.putField("test", "hello world:)");
+				return MatchOtherProcessor.YES;
 			}
 
 			@Override
-			public void onHandle(ResultItems result, Task task) {
+			public void handle(ResultItems result, Task task) {
 
 				log.info("Handling " + result.getRequest().getUrl());
 				log.info("Retrieved test=" + result.get("test"));
 			}
 		};
 
-		handler.register(processor, pipeline);
+		processor.addHandler(handler);
+		pipeline.addHandler(handler);
 
 		Spider.create(processor).thread(5).addPipeline(pipeline).runAsync();
 	}

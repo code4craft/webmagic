@@ -3,8 +3,6 @@ package us.codecraft.webmagic.handler;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.pipeline.PatternPipeline;
-import us.codecraft.webmagic.processor.PatternPageProcessor;
 
 import java.util.UUID;
 
@@ -17,7 +15,7 @@ import java.util.UUID;
  * A PatternHandler is in charge of both page extraction and data processing by implementing
  * its two abstract methods.
  */
-public abstract class PatternHandler {
+public abstract class PatternHandler implements SubPageProcessor {
 
 	/**
 	 * identity of the handler.
@@ -47,46 +45,25 @@ public abstract class PatternHandler {
 		return url.matches(pattern);
 	}
 
-	/**
-	 * registers to both the page processor and the pipeline so the handler could take charge of
-	 * both end of procedure.
-	 *
-	 * @param processor
-	 * 		the processor to handle
-	 * @param pipeline
-	 * 		the pipeline to handle
-	 */
-	public void register(PatternPageProcessor processor, PatternPipeline pipeline) {
-
-		processor.addHandler(this);
-		pipeline.addHandler(this);
-	}
-
-	public void unregister(PatternPageProcessor processor, PatternPipeline pipeline) {
-
-		processor.removeHandler(this);
-		pipeline.removeHandler(this);
-	}
-
-	public boolean process(Page page) {
+	public boolean processPage(Page page) {
 
 		if(match(page.getUrl().toString())) {
 			page.putField(id, true);
-			onExtract(page);
+			process(page);
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public boolean process(ResultItems resultItems, Task task) {
+	public boolean processResult(ResultItems resultItems, Task task) {
 
 		if(resultItems.isSkip()) {
 			return false;
 		}
 
 		if(match(resultItems.getRequest().getUrl()) && resultItems.get(id) != null) {
-			onHandle(resultItems, task);
+			handle(resultItems, task);
 			return true;
 		} else {
 			return false;
@@ -94,20 +71,20 @@ public abstract class PatternHandler {
 	}
 
 	/**
-	 * implements this method to extract from page.
-	 *
-	 * @param page
-	 * 		the page to extract
-	 */
-	public abstract void onExtract(Page page);
-
-	/**
-	 * implements this method to handle the extraction result.
+	 * override this method to handle the extraction result. this method MUST use
+	 * with PatternPipeline
 	 *
 	 * @param result
 	 * 		extraction result
 	 * @param task
 	 */
-	public abstract void onHandle(ResultItems result, Task task);
+	public void handle(ResultItems result, Task task) {
 
+	}
+
+	@Override
+	public boolean match(Page page) {
+
+		return match(page.getUrl().toString());
+	}
 }
