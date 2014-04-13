@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.selector;
 
 import org.junit.Test;
+import us.codecraft.webmagic.Page;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,5 +17,9 @@ public class JsonTest {
     public void testRemovePadding() throws Exception {
         String name = new Json(text).removePadding("callback").jsonPath("$.name").get();
         assertThat(name).isEqualTo("json");
+        Page page = null;
+
+        page.getJson().jsonPath("$.name").get();
+        page.getJson().removePadding("callback").jsonPath("$.name").get();
     }
 }

@@ -1,7 +1,6 @@
 package us.codecraft.webmagic.selector;
 
 import com.jayway.jsonpath.JsonPath;
-import us.codecraft.webmagic.utils.Experimental;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.List;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.1
  */
-@Experimental
 public class JsonPathSelector implements Selector {
 
     private String jsonPathStr;
