@@ -22,7 +22,7 @@ public class JsonPathSelector implements Selector {
 
     public JsonPathSelector(String jsonPathStr) {
         this.jsonPathStr = jsonPathStr;
-        this.jsonPath = JsonPath.compile(jsonPathStr);
+        this.jsonPath = JsonPath.compile(this.jsonPathStr);
     }
 
     @Override

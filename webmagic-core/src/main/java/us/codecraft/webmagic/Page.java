@@ -2,6 +2,7 @@ package us.codecraft.webmagic;
 
 import org.apache.commons.lang3.StringUtils;
 import us.codecraft.webmagic.selector.Html;
+import us.codecraft.webmagic.selector.Json;
 import us.codecraft.webmagic.selector.Selectable;
 import us.codecraft.webmagic.utils.UrlUtils;
 
@@ -30,6 +31,8 @@ public class Page {
     private ResultItems resultItems = new ResultItems();
 
     private Html html;
+
+    private Json json;
 
     private String rawText;
 
@@ -73,9 +76,22 @@ public class Page {
     }
 
     /**
+     * get json content of page
+     *
+     * @return json
+     * @since 0.5.0
+     */
+    public Json getJson() {
+        if (json == null) {
+            json = new Json(rawText);
+        }
+        return json;
+    }
+
+    /**
      * @param html
      * @deprecated since 0.4.0
-     *             The html is parse just when first time of calling {@link #getHtml()}, so use {@link #setRawText(String)} instead.
+     * The html is parse just when first time of calling {@link #getHtml()}, so use {@link #setRawText(String)} instead.
      */
     public void setHtml(Html html) {
         this.html = html;
