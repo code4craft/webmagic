@@ -127,7 +127,7 @@ public class Page {
         synchronized (targetRequests) {
             for (String s : requests) {
                 if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
-                    break;
+                    continue;
                 }
                 s = UrlUtils.canonicalizeUrl(s, url.toString());
                 targetRequests.add(new Request(s).setPriority(priority));
