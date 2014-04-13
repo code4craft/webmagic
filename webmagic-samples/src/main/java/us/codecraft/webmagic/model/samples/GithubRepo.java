@@ -3,11 +3,9 @@ package us.codecraft.webmagic.model.samples;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.HasKey;
 import us.codecraft.webmagic.model.OOSpider;
-import us.codecraft.webmagic.model.annotation.ExtractBy;
-import us.codecraft.webmagic.model.annotation.ExtractByUrl;
-import us.codecraft.webmagic.model.annotation.HelpUrl;
-import us.codecraft.webmagic.model.annotation.TargetUrl;
+import us.codecraft.webmagic.model.annotation.*;
 import us.codecraft.webmagic.pipeline.JsonFilePageModelPipeline;
+import us.codecraft.webmagic.samples.formatter.StringTemplateFormatter;
 import us.codecraft.webmagic.scheduler.FileCacheQueueScheduler;
 
 import java.util.List;
@@ -22,6 +20,7 @@ public class GithubRepo implements HasKey {
     @ExtractBy(value = "//h1[@class='entry-title public']/strong/a/text()", notNull = true)
     private String name;
 
+    @Formatter(value = "author%s",formatter = StringTemplateFormatter.class)
     @ExtractByUrl("https://github\\.com/(\\w+)/.*")
     private String author;
 

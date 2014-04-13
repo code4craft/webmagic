@@ -76,9 +76,21 @@ class PageModelExtractor {
     }
 
     private void checkFormat(Field field, FieldExtractor fieldExtractor) {
+        //check custom formatter
+        Formatter formatter = field.getAnnotation(Formatter.class);
+        if (formatter != null && !formatter.formatter().equals(ObjectFormatter.class)) {
+            if (formatter != null) {
+                if (!formatter.formatter().equals(ObjectFormatter.class)) {
+                    ObjectFormatter objectFormatter = initFormatter(formatter.formatter());
+                    objectFormatter.initParam(formatter.value());
+                    fieldExtractor.setObjectFormatter(objectFormatter);
+                    return;
+                }
+            }
+        }
         if (!fieldExtractor.isMulti() && !String.class.isAssignableFrom(field.getType())) {
             Class<?> fieldClazz = BasicTypeFormatter.detectBasicClass(field.getType());
-            ObjectFormatter objectFormatter = getObjectFormatter(field, fieldClazz);
+            ObjectFormatter objectFormatter = getObjectFormatter(field, fieldClazz, formatter);
             if (objectFormatter == null) {
                 throw new IllegalStateException("Can't find formatter for field " + field.getName() + " of type " + fieldClazz);
             } else {
@@ -88,10 +100,9 @@ class PageModelExtractor {
             if (!List.class.isAssignableFrom(field.getType())) {
                 throw new IllegalStateException("Field " + field.getName() + " must be list");
             }
-            Formatter formatter = field.getAnnotation(Formatter.class);
             if (formatter != null) {
                 if (!formatter.subClazz().equals(Void.class)) {
-                    ObjectFormatter objectFormatter = getObjectFormatter(field, formatter.subClazz());
+                    ObjectFormatter objectFormatter = getObjectFormatter(field, formatter.subClazz(), formatter);
                     if (objectFormatter == null) {
                         throw new IllegalStateException("Can't find formatter for field " + field.getName() + " of type " + formatter.subClazz());
                     } else {
@@ -102,14 +113,7 @@ class PageModelExtractor {
         }
     }
 
-    private ObjectFormatter getObjectFormatter(Field field, Class<?> fieldClazz) {
-        Formatter formatter = field.getAnnotation(Formatter.class);
-        if (formatter != null) {
-            if (!formatter.formatter().equals(ObjectFormatter.class)) {
-                ObjectFormatter objectFormatter = initFormatter(formatter.formatter());
-                objectFormatter.initParam(formatter.value());
-            }
-        }
+    private ObjectFormatter getObjectFormatter(Field field, Class<?> fieldClazz, Formatter formatter) {
         return initFormatter(ObjectFormatters.get(fieldClazz));
     }
 
