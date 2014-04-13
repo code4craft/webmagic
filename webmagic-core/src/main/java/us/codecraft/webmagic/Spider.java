@@ -142,7 +142,7 @@ public class Spider implements Runnable, Task {
      * Set startUrls of Spider.<br>
      * Prior to startUrls of Site.
      *
-     * @param startUrls
+     * @param startRequests
      * @return this
      */
     public Spider startRequest(List<Request> startRequests) {
@@ -218,7 +218,7 @@ public class Spider implements Runnable, Task {
     /**
      * set pipelines for Spider
      *
-     * @param pipeline
+     * @param pipelines
      * @return this
      * @see Pipeline
      * @since 0.4.1
@@ -477,7 +477,7 @@ public class Spider implements Runnable, Task {
     /**
      * Add urls with information to crawl.<br/>
      *
-     * @param urls
+     * @param requests
      * @return
      */
     public Spider addRequest(Request... requests) {
