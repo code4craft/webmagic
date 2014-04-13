@@ -22,7 +22,6 @@ public class PatternPipeline implements Pipeline {
 	 *
 	 * @param handler the pattern handler
 	 *
-	 * @see PatternHandler#register
 	 */
 	public void addHandler(PatternHandler handler) {
 
@@ -38,7 +37,7 @@ public class PatternPipeline implements Pipeline {
 	public void process(ResultItems resultItems, Task task) {
 
 		for(PatternHandler handler : handlers) {
-			handler.process(resultItems, task);
+			handler.processResult(resultItems, task);
 		}
 	}
 }
