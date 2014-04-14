@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+  <classpathentry kind="src" path="src/test/java" output="target/test-classes" including="**/*.java"/>
+  <classpathentry kind="src" path="src/test/resources" output="target/test-classes" excluding="**/*.java"/>
+  <classpathentry kind="src" path="src/main/java" including="**/*.java"/>
+  <classpathentry kind="src" path="src/main/resources" excluding="**/*.java"/>
+  <classpathentry kind="output" path="target/classes"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/httpcomponents/httpclient/4.3.3/httpclient-4.3.3.jar" sourcepath="M2_REPO/org/apache/httpcomponents/httpclient/4.3.3/httpclient-4.3.3-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/httpcomponents/httpcore/4.3.2/httpcore-4.3.2.jar" sourcepath="M2_REPO/org/apache/httpcomponents/httpcore/4.3.2/httpcore-4.3.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.1.3/commons-logging-1.1.3.jar"/>
+  <classpathentry kind="var" path="M2_REPO/commons-codec/commons-codec/1.6/commons-codec-1.6.jar" sourcepath="M2_REPO/commons-codec/commons-codec/1.6/commons-codec-1.6-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/junit/junit/4.7/junit-4.7.jar" sourcepath="M2_REPO/junit/junit/4.7/junit-4.7-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/google/guava/guava/15.0/guava-15.0.jar" sourcepath="M2_REPO/com/google/guava/guava/15.0/guava-15.0-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar" sourcepath="M2_REPO/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/us/codecraft/xsoup/0.2.0/xsoup-0.2.0.jar" sourcepath="M2_REPO/us/codecraft/xsoup/0.2.0/xsoup-0.2.0-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/Users/yihua/.m2/repository/us/codecraft/xsoup/0.2.0/xsoup-0.2.0-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/org/jsoup/jsoup/1.7.2/jsoup-1.7.2.jar" sourcepath="M2_REPO/org/jsoup/jsoup/1.7.2/jsoup-1.7.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/assertj/assertj-core/1.5.0/assertj-core-1.5.0.jar" sourcepath="M2_REPO/org/assertj/assertj-core/1.5.0/assertj-core-1.5.0-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.7.6/slf4j-api-1.7.6.jar" sourcepath="M2_REPO/org/slf4j/slf4j-api/1.7.6/slf4j-api-1.7.6-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-log4j12/1.7.6/slf4j-log4j12-1.7.6.jar" sourcepath="M2_REPO/org/slf4j/slf4j-log4j12/1.7.6/slf4j-log4j12-1.7.6-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.17/log4j-1.2.17.jar" sourcepath="M2_REPO/log4j/log4j/1.2.17/log4j-1.2.17-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar" sourcepath="M2_REPO/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/net/sourceforge/htmlcleaner/htmlcleaner/2.5/htmlcleaner-2.5.jar" sourcepath="M2_REPO/net/sourceforge/htmlcleaner/htmlcleaner/2.5/htmlcleaner-2.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/jdom/jdom2/2.0.4/jdom2-2.0.4.jar"/>
+  <classpathentry kind="var" path="M2_REPO/commons-io/commons-io/1.3.2/commons-io-1.3.2.jar" sourcepath="M2_REPO/commons-io/commons-io/1.3.2/commons-io-1.3.2-sources.jar"/>
+</classpath>
