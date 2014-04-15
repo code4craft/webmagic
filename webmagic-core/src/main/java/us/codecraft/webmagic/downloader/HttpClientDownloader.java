@@ -7,6 +7,7 @@ import org.apache.http.annotation.ThreadSafe;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -75,26 +76,12 @@ public class HttpClientDownloader extends AbstractDownloader {
             acceptStatCode = Sets.newHashSet(200);
         }
         logger.info("downloading page {}" , request.getUrl());
-        RequestBuilder requestBuilder = RequestBuilder.get().setUri(request.getUrl());
-        if (headers != null) {
-            for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
-                requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
-            }
-        }
-        RequestConfig.Builder requestConfigBuilder = RequestConfig.custom()
-                .setConnectionRequestTimeout(site.getTimeOut())
-                .setSocketTimeout(site.getTimeOut())
-                .setConnectTimeout(site.getTimeOut())
-                .setCookieSpec(CookieSpecs.BEST_MATCH);
-        if (site != null && site.getHttpProxy() != null) {
-            requestConfigBuilder.setProxy(site.getHttpProxy());
-        }
-        requestBuilder.setConfig(requestConfigBuilder.build());
         CloseableHttpResponse httpResponse = null;
         try {
-            httpResponse = getHttpClient(site).execute(requestBuilder.build());
+            HttpUriRequest httpUriRequest = getHttpUriRequest(request, site, headers);
+            httpResponse = getHttpClient(site).execute(httpUriRequest);
             int statusCode = httpResponse.getStatusLine().getStatusCode();
-            if (acceptStatCode.contains(statusCode)) {
+            if (statusAccept(acceptStatCode, statusCode)) {
                 //charset
                 if (charset == null) {
                     String value = httpResponse.getEntity().getContentType().getValue();
@@ -123,6 +110,34 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
     }
 
+    @Override
+    public void setThread(int thread) {
+        httpClientGenerator.setPoolSize(thread);
+    }
+
+    protected boolean statusAccept(Set<Integer> acceptStatCode, int statusCode) {
+        return acceptStatCode.contains(statusCode);
+    }
+
+    protected HttpUriRequest getHttpUriRequest(Request request, Site site, Map<String, String> headers) {
+        RequestBuilder requestBuilder = RequestBuilder.get().setUri(request.getUrl());
+        if (headers != null) {
+            for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
+                requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
+            }
+        }
+        RequestConfig.Builder requestConfigBuilder = RequestConfig.custom()
+                .setConnectionRequestTimeout(site.getTimeOut())
+                .setSocketTimeout(site.getTimeOut())
+                .setConnectTimeout(site.getTimeOut())
+                .setCookieSpec(CookieSpecs.BEST_MATCH);
+        if (site != null && site.getHttpProxy() != null) {
+            requestConfigBuilder.setProxy(site.getHttpProxy());
+        }
+        requestBuilder.setConfig(requestConfigBuilder.build());
+        return requestBuilder.build();
+    }
+
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
         String content = IOUtils.toString(httpResponse.getEntity().getContent(), charset);
         Page page = new Page();
@@ -131,10 +146,5 @@ public class HttpClientDownloader extends AbstractDownloader {
         page.setRequest(request);
         page.setStatusCode(httpResponse.getStatusLine().getStatusCode());
         return page;
-    }
-
-    @Override
-    public void setThread(int thread) {
-        httpClientGenerator.setPoolSize(thread);
     }
 }
