@@ -1,4 +1,4 @@
-![logo](https://raw.github.com/code4craft/webmagic/master/asserts/logo.jpg)
+![logo](https://raw.github.com/code4craft/webmagic/master/assets/logo.jpg)
 
 [Readme in Chinese](https://github.com/code4craft/webmagic/tree/master/zh_docs)
 
