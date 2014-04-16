@@ -53,7 +53,6 @@ class PageModelExtractor {
     private void init(Class clazz) {
         this.clazz = clazz;
         initClassExtractors();
-        clazz.getDeclaredFields()
         fieldExtractors = new ArrayList<FieldExtractor>();
         for (Field field : ClassUtils.getFieldsIncludeSuperClass(clazz)) {
             field.setAccessible(true);
