@@ -29,4 +29,9 @@ public class QueueScheduler extends LocalDuplicatedRemovedScheduler {
     public synchronized Request poll(Task task) {
         return queue.poll();
     }
+
+    @Override
+    public int getLeftRequestsCount(Task task) {
+        return queue.size();
+    }
 }

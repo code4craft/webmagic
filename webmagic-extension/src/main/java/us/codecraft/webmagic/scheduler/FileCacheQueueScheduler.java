@@ -161,4 +161,9 @@ public class FileCacheQueueScheduler extends LocalDuplicatedRemovedScheduler {
         fileCursorWriter.println(cursor.incrementAndGet());
         return queue.poll();
     }
+
+    @Override
+    public int getLeftRequestsCount(Task task) {
+        return queue.size();
+    }
 }

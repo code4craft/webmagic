@@ -60,4 +60,9 @@ public class PriorityScheduler extends LocalDuplicatedRemovedScheduler {
         }
         return priorityQueueMinus.poll();
     }
+
+    @Override
+    public int getLeftRequestsCount(Task task) {
+        return noPriorityQueue.size();
+    }
 }

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
+import us.codecraft.webmagic.monitor.SpiderListener;
 import us.codecraft.webmagic.pipeline.CollectorPipeline;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.Pipeline;
@@ -100,6 +101,8 @@ public class Spider implements Runnable, Task {
     private Condition newUrlCondition = newUrlLock.newCondition();
 
     private final AtomicInteger threadAlive = new AtomicInteger(0);
+
+    private List<SpiderListener> spiderListeners;
 
     private final AtomicLong pageCount = new AtomicLong(0);
 
@@ -312,7 +315,9 @@ public class Spider implements Runnable, Task {
                     public void run() {
                         try {
                             processRequest(requestFinal);
+                            onSuccess(requestFinal);
                         } catch (Exception e) {
+                            onError(requestFinal);
                             logger.error("download " + requestFinal + " error", e);
                         } finally {
                             threadAlive.decrementAndGet();
@@ -327,6 +332,22 @@ public class Spider implements Runnable, Task {
         // release some resources
         if (destroyWhenExit) {
             close();
+        }
+    }
+
+    protected void onError(Request request) {
+        if (CollectionUtils.isNotEmpty(spiderListeners)){
+            for (SpiderListener spiderListener : spiderListeners) {
+                spiderListener.onError(request);
+            }
+        }
+    }
+
+    protected void onSuccess(Request request) {
+        if (CollectionUtils.isNotEmpty(spiderListeners)){
+            for (SpiderListener spiderListener : spiderListeners) {
+                spiderListener.onSuccess(request);
+            }
         }
     }
 
@@ -378,6 +399,7 @@ public class Spider implements Runnable, Task {
     protected void processRequest(Request request) {
         Page page = downloader.download(request, this);
         if (page == null) {
+            onError(request);
             sleep(site.getSleepTime());
             return;
         }
@@ -658,5 +680,18 @@ public class Spider implements Runnable, Task {
     @Override
     public Site getSite() {
         return site;
+    }
+
+    public List<SpiderListener> getSpiderListeners() {
+        return spiderListeners;
+    }
+
+    public Spider setSpiderListeners(List<SpiderListener> spiderListeners) {
+        this.spiderListeners = spiderListeners;
+        return this;
+    }
+
+    public Scheduler getScheduler() {
+        return scheduler;
     }
 }

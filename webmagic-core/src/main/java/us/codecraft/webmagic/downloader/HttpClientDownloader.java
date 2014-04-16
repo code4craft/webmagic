@@ -87,7 +87,9 @@ public class HttpClientDownloader extends AbstractDownloader {
                     String value = httpResponse.getEntity().getContentType().getValue();
                     charset = UrlUtils.getCharset(value);
                 }
-                return handleResponse(request, charset, httpResponse, task);
+                Page page = handleResponse(request, charset, httpResponse, task);
+                onSuccess(request);
+                return page;
             } else {
                 logger.warn("code error " + statusCode + "\t" + request.getUrl());
                 return null;
@@ -97,6 +99,7 @@ public class HttpClientDownloader extends AbstractDownloader {
             if (site.getCycleRetryTimes() > 0) {
                 return addToCycleRetry(request, site);
             }
+            onError(request);
             return null;
         } finally {
             try {

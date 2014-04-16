@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.monitor.MonitorableScheduler;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author code4crafter@gmail.com
  * @since 0.5.0
  */
-public abstract class LocalDuplicatedRemovedScheduler implements Scheduler {
+public abstract class LocalDuplicatedRemovedScheduler implements MonitorableScheduler {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -32,6 +33,11 @@ public abstract class LocalDuplicatedRemovedScheduler implements Scheduler {
 
     protected boolean shouldReserved(Request request) {
         return request.getExtra(Request.CYCLE_TRIED_TIMES) != null;
+    }
+
+    @Override
+    public int getTotalRequestsCount(Task task) {
+        return urls.size();
     }
 
     protected abstract void pushWhenNoDuplicate(Request request, Task task);
