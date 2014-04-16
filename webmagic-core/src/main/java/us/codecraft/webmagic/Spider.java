@@ -187,9 +187,11 @@ public class Spider implements Runnable, Task {
         checkIfRunning();
         Scheduler oldScheduler = this.scheduler;
         this.scheduler = scheduler;
-        Request request;
-        while ((request = oldScheduler.poll(this)) != null) {
-            this.scheduler.push(request, this);
+        if (oldScheduler != null) {
+            Request request;
+            while ((request = oldScheduler.poll(this)) != null) {
+                this.scheduler.push(request, this);
+            }
         }
         return this;
     }
