@@ -489,17 +489,17 @@ public class Spider implements Runnable, Task {
     }
 
     private void waitNewUrl() {
+        newUrlLock.lock();
         try {
-            newUrlLock.lock();
             //double check
             if (threadAlive.get() == 0 && exitWhenComplete) {
                 return;
             }
-            try {
-                newUrlCondition.await();
-            } catch (InterruptedException e) {
-            }
-        } finally {
+            newUrlCondition.await();
+        } catch (InterruptedException e) {
+            logger.warn("waitNewUrl - interrupted, error {}", e);
+        }
+        finally {
             newUrlLock.unlock();
         }
     }
