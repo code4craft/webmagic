@@ -9,6 +9,7 @@ import us.codecraft.webmagic.model.formatter.BasicTypeFormatter;
 import us.codecraft.webmagic.model.formatter.ObjectFormatter;
 import us.codecraft.webmagic.model.formatter.ObjectFormatters;
 import us.codecraft.webmagic.selector.*;
+import us.codecraft.webmagic.utils.ClassUtils;
 import us.codecraft.webmagic.utils.ExtractorUtils;
 
 import java.lang.annotation.Annotation;
@@ -52,8 +53,9 @@ class PageModelExtractor {
     private void init(Class clazz) {
         this.clazz = clazz;
         initClassExtractors();
+        clazz.getDeclaredFields()
         fieldExtractors = new ArrayList<FieldExtractor>();
-        for (Field field : clazz.getDeclaredFields()) {
+        for (Field field : ClassUtils.getFieldsIncludeSuperClass(clazz)) {
             field.setAccessible(true);
             FieldExtractor fieldExtractor = getAnnotationExtractBy(clazz, field);
             FieldExtractor fieldExtractorTmp = getAnnotationExtractCombo(clazz, field);
