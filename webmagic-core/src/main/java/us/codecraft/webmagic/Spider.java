@@ -1,9 +1,11 @@
 package us.codecraft.webmagic;
 
 import com.google.common.collect.Lists;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.monitor.SpiderListener;
@@ -318,7 +320,7 @@ public class Spider implements Runnable, Task {
                             onSuccess(requestFinal);
                         } catch (Exception e) {
                             onError(requestFinal);
-                            logger.error("download " + requestFinal + " error", e);
+                            logger.error("process request " + requestFinal + " error", e);
                         } finally {
                             threadAlive.decrementAndGet();
                             pageCount.incrementAndGet();
@@ -399,9 +401,8 @@ public class Spider implements Runnable, Task {
     protected void processRequest(Request request) {
         Page page = downloader.download(request, this);
         if (page == null) {
-            onError(request);
             sleep(site.getSleepTime());
-            return;
+            throw new IllegalStateException("download error");
         }
         // for cycle retry
         if (page.isNeedCycleRetry()) {
