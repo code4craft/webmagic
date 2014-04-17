@@ -1,0 +1,29 @@
+<!--This is a draft of config file.
+If you have any advice, go https://github.com/code4craft/webmagic/issues/106 and comment!-->
+<spider>
+    <site>
+        <charset>utf-8</charset>
+        <user-agent></user-agent>
+        <cookies>
+            <cookie domain="" path="" name="" value="">
+            </cookie>
+        </cookies>
+        <heads>
+            <head name="" value=""/>
+        </heads>
+    </site>
+
+    <startUrls>
+        <url></url>
+    </startUrls>
+
+    <extraction targetUrl="" helpUrl="">
+        <field name="title">
+            <extractor type="xpath" value="//div[@class='title']"/>
+        </field>
+        <field name="content">
+            <extractor type="xpath" value="//div[@class='content']"/>
+        </field>
+    </extraction>
+
+</spider>
