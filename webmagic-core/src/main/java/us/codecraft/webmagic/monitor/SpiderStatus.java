@@ -1,5 +1,7 @@
 package us.codecraft.webmagic.monitor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Spider;
 
 import java.util.List;
@@ -8,11 +10,13 @@ import java.util.List;
  * @author code4crafer@gmail.com
  * @since 0.5.0
  */
-public class SpiderStatus implements SpiderStatusMBean{
+public class SpiderStatus implements SpiderStatusMBean {
 
-    private final Spider spider;
+    protected final Spider spider;
 
-    private final SpiderMonitor.MonitorSpiderListener monitorSpiderListener;
+    protected Logger logger = LoggerFactory.getLogger(getClass());
+
+    protected final SpiderMonitor.MonitorSpiderListener monitorSpiderListener;
 
     public SpiderStatus(Spider spider, SpiderMonitor.MonitorSpiderListener monitorSpiderListener) {
         this.spider = spider;
@@ -23,22 +27,44 @@ public class SpiderStatus implements SpiderStatusMBean{
         return spider.getUUID();
     }
 
-    public int getLeftPages() {
+    public int getLeftPageCount() {
         if (spider.getScheduler() instanceof MonitorableScheduler) {
             return ((MonitorableScheduler) spider.getScheduler()).getLeftRequestsCount(spider);
         }
+        logger.warn("Get leftPageCount fail, try to use a Scheduler implement MonitorableScheduler for monitor count!");
         return -1;
     }
 
-    public int getTotalPages() {
+    public int getTotalPageCount() {
         if (spider.getScheduler() instanceof MonitorableScheduler) {
             return ((MonitorableScheduler) spider.getScheduler()).getTotalRequestsCount(spider);
         }
+        logger.warn("Get totalPageCount fail, try to use a Scheduler implement MonitorableScheduler for monitor count!");
         return -1;
+    }
+
+    @Override
+    public int getSuccessPageCount() {
+        return monitorSpiderListener.getSuccessCount().get();
+    }
+
+    @Override
+    public int getErrorPageCount() {
+        return monitorSpiderListener.getErrorCount().get();
     }
 
     public List<String> getErrorPages() {
         return monitorSpiderListener.getErrorUrls();
+    }
+
+    @Override
+    public String getStatus() {
+        return spider.getStatus().name();
+    }
+
+    @Override
+    public int getThread() {
+        return spider.getThreadAlive();
     }
 
     public void start() {
