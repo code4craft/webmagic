@@ -7,9 +7,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Selector;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,7 +64,7 @@ class ModelPageProcessor implements PageProcessor {
         if (urlRegionSelector == null) {
             links = page.getHtml().links().all();
         } else {
-            links = urlRegionSelector.selectList(page.getHtml().toString());
+            links = page.getHtml().selectList(urlRegionSelector).links().all();
         }
         for (String link : links) {
             for (Pattern targetUrlPattern : urlPatterns) {

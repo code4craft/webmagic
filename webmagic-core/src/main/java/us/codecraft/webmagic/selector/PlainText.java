@@ -123,6 +123,16 @@ public class PlainText implements Selectable {
     }
 
     @Override
+    public Selectable select(Selector selector) {
+        return select(selector, strings);
+    }
+
+    @Override
+    public Selectable selectList(Selector selector) {
+        return selectList(selector, strings);
+    }
+
+    @Override
     public String toString() {
         return get();
     }
