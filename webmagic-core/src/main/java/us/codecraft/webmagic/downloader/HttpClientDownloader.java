@@ -3,6 +3,7 @@ package us.codecraft.webmagic.downloader;
 import com.google.common.collect.Sets;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.annotation.ThreadSafe;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
@@ -124,7 +125,7 @@ public class HttpClientDownloader extends AbstractDownloader {
     }
 
     protected HttpUriRequest getHttpUriRequest(Request request, Site site, Map<String, String> headers) {
-        RequestBuilder requestBuilder = selectRequestMethod(request.getMethod()).setUri(request.getUrl());
+        RequestBuilder requestBuilder = selectRequestMethod(request).setUri(request.getUrl());
         if (headers != null) {
             for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
                 requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
@@ -142,12 +143,18 @@ public class HttpClientDownloader extends AbstractDownloader {
         return requestBuilder.build();
     }
 
-    protected RequestBuilder selectRequestMethod(String method) {
+    protected RequestBuilder selectRequestMethod(Request request) {
+        String method = request.getMethod();
         if (method == null || method.equalsIgnoreCase(HttpConstant.Method.GET)) {
             //default get
             return RequestBuilder.get();
         } else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
-            return RequestBuilder.post();
+            RequestBuilder requestBuilder = RequestBuilder.post();
+            NameValuePair[] nameValuePair = (NameValuePair[]) request.getExtra("nameValuePair");
+            if (nameValuePair.length > 0) {
+                requestBuilder.addParameters(nameValuePair);
+            }
+            return requestBuilder;
         } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
             return RequestBuilder.head();
         } else if (method.equalsIgnoreCase(HttpConstant.Method.PUT)) {
