@@ -36,7 +36,7 @@ public class HttpClientGenerator {
         connectionManager.setDefaultMaxPerRoute(100);
     }
 
-    public HttpClientGenerator setPoolSize(int poolSize){
+    public HttpClientGenerator setPoolSize(int poolSize) {
         connectionManager.setMaxTotal(poolSize);
         return this;
     }
@@ -76,10 +76,15 @@ public class HttpClientGenerator {
 
     private void generateCookie(HttpClientBuilder httpClientBuilder, Site site) {
         CookieStore cookieStore = new BasicCookieStore();
-        if (site.getCookies() != null) {
-            for (Map.Entry<String, String> cookieEntry : site.getCookies().entrySet()) {
+        for (Map.Entry<String, String> cookieEntry : site.getCookies().entrySet()) {
+            BasicClientCookie cookie = new BasicClientCookie(cookieEntry.getKey(), cookieEntry.getValue());
+            cookie.setDomain(site.getDomain());
+            cookieStore.addCookie(cookie);
+        }
+        for (Map.Entry<String, Map<String, String>> domainEntry : site.getAllCookies().entrySet()) {
+            for (Map.Entry<String, String> cookieEntry : domainEntry.getValue().entrySet()) {
                 BasicClientCookie cookie = new BasicClientCookie(cookieEntry.getKey(), cookieEntry.getValue());
-                cookie.setDomain(site.getDomain());
+                cookie.setDomain(domainEntry.getKey());
                 cookieStore.addCookie(cookie);
             }
         }

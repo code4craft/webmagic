@@ -25,10 +25,14 @@ public abstract class LocalDuplicatedRemovedScheduler implements MonitorableSche
     @Override
     public void push(Request request, Task task) {
         logger.trace("get a candidate url {}", request.getUrl());
-        if (urls.add(request.getUrl()) || shouldReserved(request)) {
+        if (isDuplicate(request) || shouldReserved(request)) {
             logger.debug("push to queue {}", request.getUrl());
             pushWhenNoDuplicate(request, task);
         }
+    }
+
+    protected boolean isDuplicate(Request request) {
+        return urls.add(request.getUrl());
     }
 
     protected boolean shouldReserved(Request request) {

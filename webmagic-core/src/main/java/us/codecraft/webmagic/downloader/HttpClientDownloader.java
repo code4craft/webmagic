@@ -17,6 +17,7 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.constant.HttpConstant;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.UrlUtils;
 
@@ -75,7 +76,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         } else {
             acceptStatCode = Sets.newHashSet(200);
         }
-        logger.info("downloading page {}" , request.getUrl());
+        logger.info("downloading page {}", request.getUrl());
         CloseableHttpResponse httpResponse = null;
         try {
             HttpUriRequest httpUriRequest = getHttpUriRequest(request, site, headers);
@@ -123,7 +124,7 @@ public class HttpClientDownloader extends AbstractDownloader {
     }
 
     protected HttpUriRequest getHttpUriRequest(Request request, Site site, Map<String, String> headers) {
-        RequestBuilder requestBuilder = RequestBuilder.get().setUri(request.getUrl());
+        RequestBuilder requestBuilder = selectRequestMethod(request.getMethod()).setUri(request.getUrl());
         if (headers != null) {
             for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
                 requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
@@ -139,6 +140,24 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
         requestBuilder.setConfig(requestConfigBuilder.build());
         return requestBuilder.build();
+    }
+
+    protected RequestBuilder selectRequestMethod(String method) {
+        if (method == null || method.equalsIgnoreCase(HttpConstant.Method.GET)) {
+            //default get
+            return RequestBuilder.get();
+        } else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
+            return RequestBuilder.post();
+        } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
+            return RequestBuilder.head();
+        } else if (method.equalsIgnoreCase(HttpConstant.Method.PUT)) {
+            return RequestBuilder.put();
+        } else if (method.equalsIgnoreCase(HttpConstant.Method.DELETE)) {
+            return RequestBuilder.delete();
+        } else if (method.equalsIgnoreCase(HttpConstant.Method.TRACE)) {
+            return RequestBuilder.trace();
+        }
+        throw new IllegalArgumentException("Illegal HTTP Method " + method);
     }
 
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
