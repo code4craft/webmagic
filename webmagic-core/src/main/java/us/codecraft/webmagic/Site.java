@@ -127,16 +127,6 @@ public class Site {
     }
 
     /**
-     * get cookies
-     *
-     * @return get cookies
-     */
-    public Table<String,String, String> getaCookies() {
-        cookies.columnMap();
-        return cookies;
-    }
-
-    /**
      * get user agent
      *
      * @return user agent
