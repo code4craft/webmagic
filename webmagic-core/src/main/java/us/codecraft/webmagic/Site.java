@@ -123,7 +123,7 @@ public class Site {
      * @return get cookies
      */
     public Map<String,Map<String, String>> getAllCookies() {
-        return cookies.columnMap();
+        return cookies.rowMap();
     }
 
     /**
