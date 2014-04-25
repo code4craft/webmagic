@@ -53,10 +53,11 @@ public class ThreadPool {
                 }
             }
             threadAlive++;
+            System.out.println(threadAlive);
             executorService.execute(runnable);
         } finally {
-            condition.notify();
             threadAlive--;
+            condition.signal();
             reentrantLock.unlock();
         }
     }
