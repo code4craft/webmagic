@@ -18,10 +18,7 @@ import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -102,6 +99,8 @@ public class Spider implements Runnable, Task {
     private List<SpiderListener> spiderListeners;
 
     private final AtomicLong pageCount = new AtomicLong(0);
+
+    private Date startTime;
 
     /**
      * create a spider with pageProcessor.
@@ -288,6 +287,7 @@ public class Spider implements Runnable, Task {
             }
             startRequests.clear();
         }
+        startTime = new Date();
     }
 
     @Override
@@ -683,6 +683,10 @@ public class Spider implements Runnable, Task {
     public Spider setSpiderListeners(List<SpiderListener> spiderListeners) {
         this.spiderListeners = spiderListeners;
         return this;
+    }
+
+    public Date getStartTime() {
+        return startTime;
     }
 
     public Scheduler getScheduler() {

@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.monitor;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,4 +28,8 @@ public interface SpiderStatusMXBean {
     public void start();
 
     public void stop();
+
+    public Date getStartTime();
+
+    public int getPagePerSecond();
 }

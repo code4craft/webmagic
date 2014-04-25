@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.scheduler.MonitorableScheduler;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -74,6 +75,17 @@ public class SpiderStatus implements SpiderStatusMXBean {
 
     public void stop() {
         spider.stop();
+    }
+
+    @Override
+    public Date getStartTime() {
+        return spider.getStartTime();
+    }
+
+    @Override
+    public int getPagePerSecond() {
+        int runSeconds = (int) (System.currentTimeMillis() - getStartTime().getTime()) / 1000;
+        return getSuccessPageCount() / runSeconds;
     }
 
 }
