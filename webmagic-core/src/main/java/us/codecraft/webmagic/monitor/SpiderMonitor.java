@@ -5,11 +5,14 @@ import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.example.GithubRepoPageProcessor;
 import us.codecraft.webmagic.processor.example.OschinaBlogPageProcessor;
 
-import javax.management.*;
+import javax.management.JMException;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 import javax.management.remote.JMXConnectorServer;
 import javax.management.remote.JMXConnectorServerFactory;
 import javax.management.remote.JMXServiceURL;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
@@ -23,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class SpiderMonitor {
 
+    public static final int RMI_PORT = 14721;
     private List<SpiderStatusMBean> spiderStatuses = new ArrayList<SpiderStatusMBean>();
 
     public List<SpiderStatusMBean> getSpiders() {
@@ -52,7 +56,7 @@ public class SpiderMonitor {
         return new SpiderStatus(spider, monitorSpiderListener);
     }
 
-    public static SpiderMonitor create(){
+    public static SpiderMonitor create() {
         return new SpiderMonitor();
     }
 
@@ -89,31 +93,41 @@ public class SpiderMonitor {
     }
 
 
-    public void jmxStart() throws IOException, JMException {
-        jmxStart(14721);
+    public SpiderMonitor jndiStart(int port) throws IOException, JMException {
+        Registry registry = LocateRegistry.createRegistry(port);
+        return this;
     }
 
-    public void jmxStart(int rmiPort) throws IOException, JMException {
-        String jmxServerName = "WebMagic";
-        // jdkfolder/bin/rmiregistry.exe 9999
-        Registry registry = LocateRegistry.createRegistry(rmiPort);
+    public SpiderMonitor jndiStart() throws IOException, JMException {
+        return jndiStart(RMI_PORT);
+    }
 
-        MBeanServer mbs = MBeanServerFactory.createMBeanServer(jmxServerName);
-        //MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+    public SpiderMonitor jmxStart() throws IOException, JMException {
+        return jmxStart("localhost", RMI_PORT);
+    }
+
+    public SpiderMonitor jmxStart(String jndiServer, int rmiPort) throws IOException, JMException {
+        String jmxServerName = "WebMagic";
+
+        // start JNDI
+        MBeanServer localServer = ManagementFactory.getPlatformMBeanServer();
 
         ObjectName objName;
 
-        JMXServiceURL url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://localhost:" + rmiPort + "/" + jmxServerName);
+        JMXServiceURL url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + jndiServer + ":" + rmiPort + "/" + jmxServerName);
         System.out.println("JMXServiceURL: " + url.toString());
-        JMXConnectorServer jmxConnServer = JMXConnectorServerFactory.newJMXConnectorServer(url, null, mbs);
+        System.out.println("Please replace localhost of your ip if you want to connect it in remote server.");
+        JMXConnectorServer jmxConnServer = JMXConnectorServerFactory.newJMXConnectorServer(url, null, localServer);
         jmxConnServer.start();
+
 
         for (SpiderStatusMBean spiderStatus : spiderStatuses) {
             objName = new ObjectName(jmxServerName + ":name=" + spiderStatus.getName());
-            mbs.registerMBean(spiderStatus, objName);
+            localServer.registerMBean(spiderStatus, objName);
         }
-    }
 
+        return this;
+    }
 
     public static void main(String[] args) throws JMException,
             NullPointerException,
@@ -126,7 +140,7 @@ public class SpiderMonitor {
 
         SpiderMonitor spiderMonitor = new SpiderMonitor();
         spiderMonitor.register(oschinaSpider, githubSpider);
-        spiderMonitor.jmxStart();
+        spiderMonitor.jndiStart().jmxStart();
 
     }
 
