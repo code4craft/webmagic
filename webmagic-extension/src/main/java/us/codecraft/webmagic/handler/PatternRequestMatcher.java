@@ -32,6 +32,6 @@ public abstract class PatternRequestMatcher implements RequestMatcher {
 
     @Override
     public boolean match(Request request) {
-        return patternCompiled.matcher(request.getUrl()).find();
+        return patternCompiled.matcher(request.getUrl()).matches();
     }
 }

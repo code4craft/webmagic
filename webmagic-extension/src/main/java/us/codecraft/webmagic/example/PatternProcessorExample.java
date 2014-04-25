@@ -31,7 +31,7 @@ public class PatternProcessorExample {
             @Override
             public RequestMatcher.MatchOther processResult(ResultItems resultItems, Task task) {
                 log.info("Extracting from repo" + resultItems.getRequest());
-                System.out.println(resultItems.get("reponame"));
+                System.out.println("Repo name: "+resultItems.get("reponame"));
                 return RequestMatcher.MatchOther.YES;
             }
         };
@@ -49,12 +49,12 @@ public class PatternProcessorExample {
 
             @Override
             public RequestMatcher.MatchOther processResult(ResultItems resultItems, Task task) {
-                System.out.println(resultItems.get("username"));
+                System.out.println("User name: "+resultItems.get("username"));
                 return RequestMatcher.MatchOther.YES;
             }
         };
 
-        CompositePageProcessor pageProcessor = new CompositePageProcessor(Site.me().setDomain("github.com"));
+        CompositePageProcessor pageProcessor = new CompositePageProcessor(Site.me().setDomain("github.com").setRetryTimes(0).setSleepTime(0));
         CompositePipeline pipeline = new CompositePipeline();
 
         pageProcessor.setSubPageProcessors(githubRepoProcessor, githubUserProcessor);
