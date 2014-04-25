@@ -7,7 +7,6 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.monitor.MonitorableScheduler;
 
 /**
  * Use Redis as url scheduler for distributed crawlers.<br>

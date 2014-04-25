@@ -111,7 +111,7 @@ public class Request implements Serializable {
     /**
      * The http method of the request. Get for default.
      * @return httpMethod
-     * @see us.codecraft.webmagic.constant.HttpConstant.Method
+     * @see us.codecraft.webmagic.utils.HttpConstant.Method
      * @since 0.5.0
      */
     public String getMethod() {

@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.constant;
+package us.codecraft.webmagic.utils;
 
 /**
  * Some constants of Http protocal.

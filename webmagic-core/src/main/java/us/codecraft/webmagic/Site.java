@@ -50,7 +50,7 @@ public class Site {
     private boolean useGzip = true;
 
     /**
-     * @see us.codecraft.webmagic.constant.HttpConstant.Header
+     * @see us.codecraft.webmagic.utils.HttpConstant.Header
      * @deprecated
      */
     public static interface HeaderConst {

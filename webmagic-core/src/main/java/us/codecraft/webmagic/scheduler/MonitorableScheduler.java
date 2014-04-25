@@ -1,7 +1,6 @@
-package us.codecraft.webmagic.monitor;
+package us.codecraft.webmagic.scheduler;
 
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.scheduler.Scheduler;
 
 /**
  * The scheduler whose requests can be counted for monitor.

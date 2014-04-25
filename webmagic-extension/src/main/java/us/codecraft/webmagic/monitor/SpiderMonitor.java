@@ -1,9 +1,13 @@
 package us.codecraft.webmagic.monitor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.SpiderListener;
 import us.codecraft.webmagic.processor.example.GithubRepoPageProcessor;
 import us.codecraft.webmagic.processor.example.OschinaBlogPageProcessor;
+import us.codecraft.webmagic.utils.IPUtils;
 
 import javax.management.JMException;
 import javax.management.MBeanServer;
@@ -15,6 +19,7 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.ExportException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +34,8 @@ public class SpiderMonitor {
     private enum Type {
         Server, Client, Local;
     }
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final int DEFAULT_SERVER_PORT = 14721;
 
@@ -52,6 +59,7 @@ public class SpiderMonitor {
 
     /**
      * Register spider for monitor.
+     *
      * @param spiders
      * @return
      */
@@ -113,13 +121,18 @@ public class SpiderMonitor {
 
     /**
      * Start monitor as server mode.
+     *
      * @param port
      * @return
      * @throws IOException
      * @throws JMException
      */
     public SpiderMonitor server(int port) throws IOException, JMException {
-        Registry registry = LocateRegistry.createRegistry(port);
+        try {
+            Registry registry = LocateRegistry.createRegistry(port);
+        } catch (ExportException e) {
+            logger.warn("Start server fail, maybe the address is in using.", e);
+        }
         serverPort = port;
         serverHost = "localhost";
         type = Type.Server;
@@ -128,6 +141,7 @@ public class SpiderMonitor {
 
     /**
      * Start monitor as server mode.
+     *
      * @return
      * @throws IOException
      * @throws JMException
@@ -139,6 +153,7 @@ public class SpiderMonitor {
 
     /**
      * Start monitor as client mode.
+     *
      * @param serverHost
      * @param serverPort
      * @return
@@ -154,6 +169,7 @@ public class SpiderMonitor {
 
     /**
      * Start monitor as client mode.
+     *
      * @return
      * @throws IOException
      * @throws JMException
@@ -167,7 +183,7 @@ public class SpiderMonitor {
     }
 
     public SpiderMonitor jmxStart(String jndiServer, int rmiPort) throws IOException, JMException {
-        String jmxServerName = "WebMagic";
+        String jmxServerName = "WebMagic-"+ IPUtils.getFirstNoLoopbackIPAddresses();
 
         // start JNDI
         MBeanServer localServer = ManagementFactory.getPlatformMBeanServer();
@@ -199,7 +215,10 @@ public class SpiderMonitor {
 
         SpiderMonitor spiderMonitor = new SpiderMonitor();
         spiderMonitor.register(oschinaSpider, githubSpider);
-        //
+        //If you want to connect it from remote, use spiderMonitor.server().jmxStart();
+        //ONLY ONE server can start for a machine.
+        //Others will be registered
+        spiderMonitor.server().server();
         spiderMonitor.jmxStart();
         oschinaSpider.start();
         githubSpider.start();

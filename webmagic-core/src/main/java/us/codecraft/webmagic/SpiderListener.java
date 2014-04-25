@@ -1,8 +1,8 @@
-package us.codecraft.webmagic.monitor;
-
-import us.codecraft.webmagic.Request;
+package us.codecraft.webmagic;
 
 /**
+ * Listener of Spider on page processing. Used for monitor and such on.
+ *
  * @author code4crafer@gmail.com
  * @since 0.5.0
  */
