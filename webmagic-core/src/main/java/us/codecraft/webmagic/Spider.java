@@ -13,7 +13,7 @@ import us.codecraft.webmagic.pipeline.ResultItemsCollectorPipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.scheduler.QueueScheduler;
 import us.codecraft.webmagic.scheduler.Scheduler;
-import us.codecraft.webmagic.selector.thread.ThreadPool;
+import us.codecraft.webmagic.selector.thread.CountableThreadPool;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.io.Closeable;
@@ -74,7 +74,9 @@ public class Spider implements Runnable, Task {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    protected ThreadPool threadPool;
+    protected CountableThreadPool threadPool;
+
+    protected ExecutorService executorService;
 
     protected int threadNum = 1;
 
@@ -279,7 +281,11 @@ public class Spider implements Runnable, Task {
         }
         downloader.setThread(threadNum);
         if (threadPool == null || threadPool.isShutdown()) {
-            threadPool = new ThreadPool(threadNum);
+            if (executorService != null && !executorService.isShutdown()) {
+                threadPool = new CountableThreadPool(threadNum, executorService);
+            } else {
+                threadPool = new CountableThreadPool(threadNum);
+            }
         }
         if (startRequests != null) {
             for (Request request : startRequests) {
@@ -330,7 +336,7 @@ public class Spider implements Runnable, Task {
     }
 
     protected void onError(Request request) {
-        if (CollectionUtils.isNotEmpty(spiderListeners)){
+        if (CollectionUtils.isNotEmpty(spiderListeners)) {
             for (SpiderListener spiderListener : spiderListeners) {
                 spiderListener.onError(request);
             }
@@ -338,7 +344,7 @@ public class Spider implements Runnable, Task {
     }
 
     protected void onSuccess(Request request) {
-        if (CollectionUtils.isNotEmpty(spiderListeners)){
+        if (CollectionUtils.isNotEmpty(spiderListeners)) {
             for (SpiderListener spiderListener : spiderListeners) {
                 spiderListener.onSuccess(request);
             }
@@ -521,8 +527,7 @@ public class Spider implements Runnable, Task {
             newUrlCondition.await();
         } catch (InterruptedException e) {
             logger.warn("waitNewUrl - interrupted, error {}", e);
-        }
-        finally {
+        } finally {
             newUrlLock.unlock();
         }
     }
@@ -555,6 +560,21 @@ public class Spider implements Runnable, Task {
      * @return this
      */
     public Spider thread(int threadNum) {
+        checkIfRunning();
+        this.threadNum = threadNum;
+        if (threadNum <= 0) {
+            throw new IllegalArgumentException("threadNum should be more than one!");
+        }
+        return this;
+    }
+
+    /**
+     * start with more than one threads
+     *
+     * @param threadNum
+     * @return this
+     */
+    public Spider thread(ExecutorService executorService, int threadNum) {
         checkIfRunning();
         this.threadNum = threadNum;
         if (threadNum <= 0) {
@@ -637,6 +657,9 @@ public class Spider implements Runnable, Task {
      * @since 0.4.1
      */
     public int getThreadAlive() {
+        if (threadPool == null) {
+            return 0;
+        }
         return threadPool.getThreadAlive();
     }
 
@@ -667,7 +690,8 @@ public class Spider implements Runnable, Task {
     }
 
     public Spider setExecutorService(ExecutorService executorService) {
-        this.threadPool.setExecutorService(executorService);
+        checkIfRunning();
+        this.executorService = executorService;
         return this;
     }
 

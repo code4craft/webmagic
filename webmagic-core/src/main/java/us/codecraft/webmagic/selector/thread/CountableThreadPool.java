@@ -7,10 +7,16 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * Thread pool for workers.<br></br>
+ * Use {@link java.util.concurrent.ExecutorService} as inner implement. <br></br>
+ * New feature: <br></br>
+ * 1. Block when thread pool is full to avoid poll many urls but not process. <br></br>
+ * 2. Count of thread alive for monitor.
+ *
  * @author code4crafer@gmail.com
  * @since 0.5.0
  */
-public class ThreadPool {
+public class CountableThreadPool {
 
     private int threadNum;
 
@@ -20,12 +26,12 @@ public class ThreadPool {
 
     private Condition condition = reentrantLock.newCondition();
 
-    public ThreadPool(int threadNum) {
+    public CountableThreadPool(int threadNum) {
         this.threadNum = threadNum;
         this.executorService = Executors.newFixedThreadPool(threadNum);
     }
 
-    public ThreadPool(int threadNum, ExecutorService executorService) {
+    public CountableThreadPool(int threadNum, ExecutorService executorService) {
         this.threadNum = threadNum;
         this.executorService = executorService;
     }

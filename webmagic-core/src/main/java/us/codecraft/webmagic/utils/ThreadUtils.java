@@ -13,6 +13,12 @@ import java.util.concurrent.TimeUnit;
  */
 public class ThreadUtils {
 
+    /**
+     * @Deprecated
+     * @param threadSize
+     * @return
+     * @see us.codecraft.webmagic.selector.thread.CountableThreadPool
+     */
     public static ExecutorService newFixedThreadPool(int threadSize) {
         if (threadSize <= 0) {
             throw new IllegalArgumentException("ThreadSize must be greater than 0!");
