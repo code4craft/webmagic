@@ -240,7 +240,7 @@ public class SpiderMonitor {
         //Others will be registered
         spiderMonitor.server().jmxStart();
         oschinaSpider.start();
-        githubSpider.start();
+        githubSpider.thread(10).start();
 
     }
 

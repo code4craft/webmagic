@@ -19,7 +19,6 @@ public class ThreadUtils {
         }
         if (threadSize == 1) {
             return MoreExecutors.sameThreadExecutor();
-
         }
         return new ThreadPoolExecutor(threadSize - 1, threadSize - 1, 0L, TimeUnit.MILLISECONDS,
                 new SynchronousQueue<Runnable>(), new ThreadPoolExecutor.CallerRunsPolicy());

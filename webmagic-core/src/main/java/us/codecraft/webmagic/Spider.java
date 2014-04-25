@@ -1,11 +1,9 @@
 package us.codecraft.webmagic;
 
 import com.google.common.collect.Lists;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.CollectorPipeline;
@@ -15,7 +13,7 @@ import us.codecraft.webmagic.pipeline.ResultItemsCollectorPipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.scheduler.QueueScheduler;
 import us.codecraft.webmagic.scheduler.Scheduler;
-import us.codecraft.webmagic.utils.ThreadUtils;
+import us.codecraft.webmagic.selector.thread.ThreadPool;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.io.Closeable;
@@ -79,7 +77,7 @@ public class Spider implements Runnable, Task {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    protected ExecutorService executorService;
+    protected ThreadPool threadPool;
 
     protected int threadNum = 1;
 
@@ -100,8 +98,6 @@ public class Spider implements Runnable, Task {
     private ReentrantLock newUrlLock = new ReentrantLock();
 
     private Condition newUrlCondition = newUrlLock.newCondition();
-
-    private final AtomicInteger threadAlive = new AtomicInteger(0);
 
     private List<SpiderListener> spiderListeners;
 
@@ -283,8 +279,8 @@ public class Spider implements Runnable, Task {
             pipelines.add(new ConsolePipeline());
         }
         downloader.setThread(threadNum);
-        if (executorService == null || executorService.isShutdown()) {
-            executorService = ThreadUtils.newFixedThreadPool(threadNum);
+        if (threadPool == null || threadPool.isShutdown()) {
+            threadPool = new ThreadPool(threadNum);
         }
         if (startRequests != null) {
             for (Request request : startRequests) {
@@ -292,7 +288,6 @@ public class Spider implements Runnable, Task {
             }
             startRequests.clear();
         }
-        threadAlive.set(0);
     }
 
     @Override
@@ -303,15 +298,14 @@ public class Spider implements Runnable, Task {
         while (!Thread.currentThread().isInterrupted() && stat.get() == STAT_RUNNING) {
             Request request = scheduler.poll(this);
             if (request == null) {
-                if (threadAlive.get() == 0 && exitWhenComplete) {
+                if (threadPool.getThreadAlive() == 0 && exitWhenComplete) {
                     break;
                 }
                 // wait until new url added
                 waitNewUrl();
             } else {
                 final Request requestFinal = request;
-                threadAlive.incrementAndGet();
-                executorService.execute(new Runnable() {
+                threadPool.execute(new Runnable() {
                     @Override
                     public void run() {
                         try {
@@ -321,7 +315,6 @@ public class Spider implements Runnable, Task {
                             onError(requestFinal);
                             logger.error("process request " + requestFinal + " error", e);
                         } finally {
-                            threadAlive.decrementAndGet();
                             pageCount.incrementAndGet();
                             signalNewUrl();
                         }
@@ -370,7 +363,7 @@ public class Spider implements Runnable, Task {
         for (Pipeline pipeline : pipelines) {
             destroyEach(pipeline);
         }
-        executorService.shutdown();
+        threadPool.shutdown();
     }
 
     private void destroyEach(Object object) {
@@ -522,7 +515,7 @@ public class Spider implements Runnable, Task {
         newUrlLock.lock();
         try {
             //double check
-            if (threadAlive.get() == 0 && exitWhenComplete) {
+            if (threadPool.getThreadAlive() == 0 && exitWhenComplete) {
                 return;
             }
             newUrlCondition.await();
@@ -644,7 +637,7 @@ public class Spider implements Runnable, Task {
      * @since 0.4.1
      */
     public int getThreadAlive() {
-        return threadAlive.get();
+        return threadPool.getThreadAlive();
     }
 
     /**
@@ -674,7 +667,7 @@ public class Spider implements Runnable, Task {
     }
 
     public Spider setExecutorService(ExecutorService executorService) {
-        this.executorService = executorService;
+        this.threadPool.setExecutorService(executorService);
         return this;
     }
 
