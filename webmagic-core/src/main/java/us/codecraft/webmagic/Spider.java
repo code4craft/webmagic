@@ -401,7 +401,7 @@ public class Spider implements Runnable, Task {
         Page page = downloader.download(request, this);
         if (page == null) {
             sleep(site.getSleepTime());
-            throw new IllegalStateException("download error");
+            onError(request);
         }
         // for cycle retry
         if (page.isNeedCycleRetry()) {
