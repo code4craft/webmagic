@@ -2,6 +2,7 @@ package us.codecraft.webmagic.selector.thread;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -13,7 +14,7 @@ public class ThreadPool {
 
     private int threadNum;
 
-    private int threadAlive;
+    private AtomicInteger threadAlive = new AtomicInteger();
 
     private ReentrantLock reentrantLock = new ReentrantLock();
 
@@ -34,7 +35,7 @@ public class ThreadPool {
     }
 
     public int getThreadAlive() {
-        return threadAlive;
+        return threadAlive.get();
     }
 
     public int getThreadNum() {
@@ -43,22 +44,39 @@ public class ThreadPool {
 
     private ExecutorService executorService;
 
-    public void execute(Runnable runnable) {
+    public void execute(final Runnable runnable) {
         try {
-            reentrantLock.lock();
-            while (threadAlive >= threadNum) {
-                try {
-                    condition.await();
-                } catch (InterruptedException e) {
+
+            if (threadAlive.get() >= threadNum) {
+                reentrantLock.lock();
+                while (threadAlive.get() >= threadNum) {
+                    try {
+                        condition.await();
+                    } catch (InterruptedException e) {
+                    }
                 }
             }
-            threadAlive++;
-            System.out.println(threadAlive);
-            executorService.execute(runnable);
+            threadAlive.incrementAndGet();
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        runnable.run();
+                    } finally {
+                        try {
+                            reentrantLock.lock();
+                            threadAlive.decrementAndGet();
+                            condition.signal();
+                        } finally {
+                            reentrantLock.unlock();
+                        }
+                    }
+                }
+            });
         } finally {
-            threadAlive--;
-            condition.signal();
-            reentrantLock.unlock();
+            if (reentrantLock.isLocked()) {
+                reentrantLock.unlock();
+            }
         }
     }
 
