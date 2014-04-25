@@ -26,7 +26,20 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class SpiderMonitor {
 
-    public static final int RMI_PORT = 14721;
+    private enum Type {
+        Server, Client, Local;
+    }
+
+    private static final int DEFAULT_SERVER_PORT = 14721;
+
+    private static final String DEFAULT_SERVER_HOST = "localhost";
+
+    private int serverPort;
+
+    private String serverHost;
+
+    private Type type = Type.Local;
+
     private List<SpiderStatusMBean> spiderStatuses = new ArrayList<SpiderStatusMBean>();
 
     public List<SpiderStatusMBean> getSpiders() {
@@ -37,6 +50,11 @@ public class SpiderMonitor {
         return spiderStatuses.get(0);
     }
 
+    /**
+     * Register spider for monitor.
+     * @param spiders
+     * @return
+     */
     public SpiderMonitor register(Spider... spiders) {
         for (Spider spider : spiders) {
             MonitorSpiderListener monitorSpiderListener = new MonitorSpiderListener();
@@ -93,17 +111,59 @@ public class SpiderMonitor {
     }
 
 
-    public SpiderMonitor jndiStart(int port) throws IOException, JMException {
+    /**
+     * Start monitor as server mode.
+     * @param port
+     * @return
+     * @throws IOException
+     * @throws JMException
+     */
+    public SpiderMonitor server(int port) throws IOException, JMException {
         Registry registry = LocateRegistry.createRegistry(port);
+        serverPort = port;
+        serverHost = "localhost";
+        type = Type.Server;
         return this;
     }
 
-    public SpiderMonitor jndiStart() throws IOException, JMException {
-        return jndiStart(RMI_PORT);
+    /**
+     * Start monitor as server mode.
+     * @return
+     * @throws IOException
+     * @throws JMException
+     */
+    public SpiderMonitor server() throws IOException, JMException {
+        return server(DEFAULT_SERVER_PORT);
+    }
+
+
+    /**
+     * Start monitor as client mode.
+     * @param serverHost
+     * @param serverPort
+     * @return
+     * @throws IOException
+     * @throws JMException
+     */
+    public SpiderMonitor client(String serverHost, int serverPort) throws IOException, JMException {
+        type = Type.Client;
+        this.serverHost = serverHost;
+        this.serverPort = serverPort;
+        return this;
+    }
+
+    /**
+     * Start monitor as client mode.
+     * @return
+     * @throws IOException
+     * @throws JMException
+     */
+    public SpiderMonitor client() throws IOException, JMException {
+        return client(DEFAULT_SERVER_HOST, DEFAULT_SERVER_PORT);
     }
 
     public SpiderMonitor jmxStart() throws IOException, JMException {
-        return jmxStart("localhost", RMI_PORT);
+        return jmxStart("localhost", DEFAULT_SERVER_PORT);
     }
 
     public SpiderMonitor jmxStart(String jndiServer, int rmiPort) throws IOException, JMException {
@@ -114,12 +174,13 @@ public class SpiderMonitor {
 
         ObjectName objName;
 
-        JMXServiceURL url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + jndiServer + ":" + rmiPort + "/" + jmxServerName);
-        System.out.println("JMXServiceURL: " + url.toString());
-        System.out.println("Please replace localhost of your ip if you want to connect it in remote server.");
-        JMXConnectorServer jmxConnServer = JMXConnectorServerFactory.newJMXConnectorServer(url, null, localServer);
-        jmxConnServer.start();
-
+        if (type != Type.Local) {
+            JMXServiceURL url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + jndiServer + ":" + rmiPort + "/" + jmxServerName);
+            System.out.println("JMXServiceURL: " + url.toString());
+            System.out.println("Please replace localhost of your ip if you want to connect it in remote server.");
+            JMXConnectorServer jmxConnServer = JMXConnectorServerFactory.newJMXConnectorServer(url, null, localServer);
+            jmxConnServer.start();
+        }
 
         for (SpiderStatusMBean spiderStatus : spiderStatuses) {
             objName = new ObjectName(jmxServerName + ":name=" + spiderStatus.getName());
@@ -129,9 +190,7 @@ public class SpiderMonitor {
         return this;
     }
 
-    public static void main(String[] args) throws JMException,
-            NullPointerException,
-            IOException {
+    public static void main(String[] args) throws Exception {
 
         Spider oschinaSpider = Spider.create(new OschinaBlogPageProcessor())
                 .addUrl("http://my.oschina.net/flashsword/blog").thread(2);
@@ -140,7 +199,9 @@ public class SpiderMonitor {
 
         SpiderMonitor spiderMonitor = new SpiderMonitor();
         spiderMonitor.register(oschinaSpider, githubSpider);
-        spiderMonitor.jndiStart().jmxStart();
+        spiderMonitor.jmxStart();
+        oschinaSpider.start();
+        githubSpider.start();
 
     }
 
