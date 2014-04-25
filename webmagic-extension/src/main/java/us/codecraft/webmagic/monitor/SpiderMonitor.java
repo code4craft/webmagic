@@ -5,8 +5,7 @@ import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.SpiderListener;
-import us.codecraft.webmagic.processor.example.GithubRepoPageProcessor;
-import us.codecraft.webmagic.processor.example.OschinaBlogPageProcessor;
+import us.codecraft.webmagic.utils.Experimental;
 import us.codecraft.webmagic.utils.IPUtils;
 
 import javax.management.JMException;
@@ -30,6 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author code4crafer@gmail.com
  * @since 0.5.0
  */
+@Experimental
 public class SpiderMonitor {
 
     private enum Type {
@@ -224,24 +224,6 @@ public class SpiderMonitor {
         }
 
         return this;
-    }
-
-    public static void main(String[] args) throws Exception {
-
-        Spider oschinaSpider = Spider.create(new OschinaBlogPageProcessor())
-                .addUrl("http://my.oschina.net/flashsword/blog").thread(2);
-        Spider githubSpider = Spider.create(new GithubRepoPageProcessor())
-                .addUrl("https://github.com/code4craft");
-
-        SpiderMonitor spiderMonitor = new SpiderMonitor();
-        spiderMonitor.register(oschinaSpider, githubSpider);
-        //If you want to connect it from remote, use spiderMonitor.server().jmxStart();
-        //ONLY ONE server can start for a machine.
-        //Others will be registered
-        spiderMonitor.server().jmxStart();
-        oschinaSpider.start();
-        githubSpider.thread(10).start();
-
     }
 
 }

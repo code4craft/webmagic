@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Thread pool for workers.<br></br>
  * Use {@link java.util.concurrent.ExecutorService} as inner implement. <br></br>
  * New feature: <br></br>
- * 1. Block when thread pool is full to avoid poll many urls but not process. <br></br>
+ * 1. Block when thread pool is full to avoid poll many urls without process. <br></br>
  * 2. Count of thread alive for monitor.
  *
  * @author code4crafer@gmail.com
