@@ -1,11 +1,11 @@
 package us.codecraft.webmagic.worker;
 
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.utils.ThreadUtils;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Container of Spiders.
@@ -33,7 +33,7 @@ public class Worker {
     }
 
     protected ExecutorService initExecutorService() {
-        return ThreadUtils.newFixedThreadPool(poolSize);
+        return Executors.newFixedThreadPool(poolSize);
     }
 
     public void addSpider(Spider spider) {
