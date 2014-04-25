@@ -30,7 +30,7 @@ public class HttpClientDownloaderTest {
     @Test
     public void testDownloader() {
         HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
-        Html html = httpClientDownloader.download("http://www.oschina.net");
+        Html html = httpClientDownloader.download("https://github.com");
         assertTrue(!html.getText().isEmpty());
     }
 
