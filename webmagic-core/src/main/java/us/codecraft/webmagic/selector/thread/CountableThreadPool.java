@@ -51,9 +51,10 @@ public class CountableThreadPool {
     private ExecutorService executorService;
 
     public void execute(final Runnable runnable) {
-        try {
 
-            if (threadAlive.get() >= threadNum) {
+
+        if (threadAlive.get() >= threadNum) {
+            try {
                 reentrantLock.lock();
                 while (threadAlive.get() >= threadNum) {
                     try {
@@ -61,29 +62,27 @@ public class CountableThreadPool {
                     } catch (InterruptedException e) {
                     }
                 }
-            }
-            threadAlive.incrementAndGet();
-            executorService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        runnable.run();
-                    } finally {
-                        try {
-                            reentrantLock.lock();
-                            threadAlive.decrementAndGet();
-                            condition.signal();
-                        } finally {
-                            reentrantLock.unlock();
-                        }
-                    }
-                }
-            });
-        } finally {
-            if (reentrantLock.isLocked()) {
+            } finally {
                 reentrantLock.unlock();
             }
         }
+        threadAlive.incrementAndGet();
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    runnable.run();
+                } finally {
+                    try {
+                        reentrantLock.lock();
+                        threadAlive.decrementAndGet();
+                        condition.signal();
+                    } finally {
+                        reentrantLock.unlock();
+                    }
+                }
+            }
+        });
     }
 
     public boolean isShutdown() {

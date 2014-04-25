@@ -20,6 +20,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Condition;
@@ -103,6 +104,8 @@ public class Spider implements Runnable, Task {
     private final AtomicLong pageCount = new AtomicLong(0);
 
     private Date startTime;
+
+    private int emptySleepTime = 30000;
 
     /**
      * create a spider with pageProcessor.
@@ -524,7 +527,7 @@ public class Spider implements Runnable, Task {
             if (threadPool.getThreadAlive() == 0 && exitWhenComplete) {
                 return;
             }
-            newUrlCondition.await();
+            newUrlCondition.await(emptySleepTime, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             logger.warn("waitNewUrl - interrupted, error {}", e);
         } finally {
@@ -715,5 +718,14 @@ public class Spider implements Runnable, Task {
 
     public Scheduler getScheduler() {
         return scheduler;
+    }
+
+    /**
+     * Set wait time when no url is polled.<br></br>
+     *
+     * @param emptySleepTime In MILLISECONDS.
+     */
+    public void setEmptySleepTime(int emptySleepTime) {
+        this.emptySleepTime = emptySleepTime;
     }
 }
