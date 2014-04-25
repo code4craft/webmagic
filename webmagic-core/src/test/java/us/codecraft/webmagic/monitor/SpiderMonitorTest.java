@@ -15,7 +15,7 @@ public class SpiderMonitorTest {
     public void testInherit() throws Exception {
         SpiderMonitor spiderMonitor = new SpiderMonitor(){
             @Override
-            protected SpiderStatusMBean getSpiderStatusMBean(Spider spider, MonitorSpiderListener monitorSpiderListener) {
+            protected SpiderStatusMXBean getSpiderStatusMBean(Spider spider, MonitorSpiderListener monitorSpiderListener) {
                 return new CustomSpiderStatus(spider, monitorSpiderListener);
             }
         };

@@ -6,7 +6,7 @@ import java.util.List;
  * @author code4crafer@gmail.com
  * @since 0.5.0
  */
-public interface SpiderStatusMBean {
+public interface SpiderStatusMXBean {
 
     public String getName();
 

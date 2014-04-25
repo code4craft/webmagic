@@ -40,13 +40,13 @@ public class SpiderMonitor {
 
     private Type type = Type.Local;
 
-    private List<SpiderStatusMBean> spiderStatuses = new ArrayList<SpiderStatusMBean>();
+    private List<SpiderStatusMXBean> spiderStatuses = new ArrayList<SpiderStatusMXBean>();
 
-    public List<SpiderStatusMBean> getSpiders() {
+    public List<SpiderStatusMXBean> getSpiders() {
         return spiderStatuses;
     }
 
-    public SpiderStatusMBean getSpider() {
+    public SpiderStatusMXBean getSpider() {
         return spiderStatuses.get(0);
     }
 
@@ -70,7 +70,7 @@ public class SpiderMonitor {
         return this;
     }
 
-    protected SpiderStatusMBean getSpiderStatusMBean(Spider spider, MonitorSpiderListener monitorSpiderListener) {
+    protected SpiderStatusMXBean getSpiderStatusMBean(Spider spider, MonitorSpiderListener monitorSpiderListener) {
         return new SpiderStatus(spider, monitorSpiderListener);
     }
 
@@ -182,7 +182,7 @@ public class SpiderMonitor {
             jmxConnServer.start();
         }
 
-        for (SpiderStatusMBean spiderStatus : spiderStatuses) {
+        for (SpiderStatusMXBean spiderStatus : spiderStatuses) {
             objName = new ObjectName(jmxServerName + ":name=" + spiderStatus.getName());
             localServer.registerMBean(spiderStatus, objName);
         }
@@ -199,6 +199,7 @@ public class SpiderMonitor {
 
         SpiderMonitor spiderMonitor = new SpiderMonitor();
         spiderMonitor.register(oschinaSpider, githubSpider);
+        //
         spiderMonitor.jmxStart();
         oschinaSpider.start();
         githubSpider.start();
