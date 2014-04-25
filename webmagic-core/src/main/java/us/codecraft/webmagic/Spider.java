@@ -402,6 +402,7 @@ public class Spider implements Runnable, Task {
         if (page == null) {
             sleep(site.getSleepTime());
             onError(request);
+            return;
         }
         // for cycle retry
         if (page.isNeedCycleRetry()) {
