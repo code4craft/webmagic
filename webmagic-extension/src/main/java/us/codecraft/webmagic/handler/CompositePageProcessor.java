@@ -15,14 +15,18 @@ public class CompositePageProcessor implements PageProcessor {
 
     private Site site;
 
-    private List<SubPageProcessor> subPageProcessors;
+    private List<SubPageProcessor> subPageProcessors = new ArrayList<SubPageProcessor>();
+
+    public CompositePageProcessor(Site site) {
+        this.site = site;
+    }
 
     @Override
     public void process(Page page) {
         for (SubPageProcessor subPageProcessor : subPageProcessors) {
-            if (subPageProcessor.match(page)) {
-                SubPageProcessor.MatchOtherProcessor matchOtherProcessorProcessor = subPageProcessor.process(page);
-                if (matchOtherProcessorProcessor == null || matchOtherProcessorProcessor != SubPageProcessor.MatchOtherProcessor.YES) {
+            if (subPageProcessor.match(page.getRequest())) {
+                SubPageProcessor.MatchOther matchOtherProcessorProcessor = subPageProcessor.processPage(page);
+                if (matchOtherProcessorProcessor == null || matchOtherProcessorProcessor != SubPageProcessor.MatchOther.YES) {
                     return;
                 }
             }
@@ -31,6 +35,11 @@ public class CompositePageProcessor implements PageProcessor {
 
     public CompositePageProcessor setSite(Site site) {
         this.site = site;
+        return this;
+    }
+
+    public CompositePageProcessor addSubPageProcessor(SubPageProcessor subPageProcessor) {
+        this.subPageProcessors.add(subPageProcessor);
         return this;
     }
 
