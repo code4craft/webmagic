@@ -23,6 +23,7 @@ import java.rmi.server.ExportException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -34,6 +35,10 @@ public class SpiderMonitor {
     private enum Type {
         Server, Client, Local;
     }
+
+    private static AtomicInteger serialNumber = new AtomicInteger();
+
+    private AtomicBoolean started = new AtomicBoolean(false);
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -150,6 +155,17 @@ public class SpiderMonitor {
         return server(DEFAULT_SERVER_PORT);
     }
 
+    /**
+     * Local mode: the monitor will be bound to the JVM instance.<br></br>
+     * Use jconsole to check your application.
+     *
+     * @return
+     */
+    public SpiderMonitor local() {
+        this.type = Type.Local;
+        return this;
+    }
+
 
     /**
      * Start monitor as client mode.
@@ -183,7 +199,11 @@ public class SpiderMonitor {
     }
 
     public SpiderMonitor jmxStart(String jndiServer, int rmiPort) throws IOException, JMException {
-        String jmxServerName = "WebMagic-"+ IPUtils.getFirstNoLoopbackIPAddresses();
+        if (!started.compareAndSet(false, true)) {
+            logger.error("Monitor has already started!");
+            return this;
+        }
+        String jmxServerName = "WebMagic-" + IPUtils.getFirstNoLoopbackIPAddresses() + "-" + serialNumber.incrementAndGet();
 
         // start JNDI
         MBeanServer localServer = ManagementFactory.getPlatformMBeanServer();
@@ -218,8 +238,7 @@ public class SpiderMonitor {
         //If you want to connect it from remote, use spiderMonitor.server().jmxStart();
         //ONLY ONE server can start for a machine.
         //Others will be registered
-        spiderMonitor.server().server();
-        spiderMonitor.jmxStart();
+        spiderMonitor.server().jmxStart();
         oschinaSpider.start();
         githubSpider.start();
 

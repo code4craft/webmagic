@@ -7,6 +7,7 @@ import us.codecraft.webmagic.processor.example.OschinaBlogPageProcessor;
 
 /**
  * @author code4crafer@gmail.com
+ * @since 0.5.0
  */
 public class MonitorExample {
 
@@ -21,8 +22,8 @@ public class MonitorExample {
         spiderMonitor.register(oschinaSpider, githubSpider);
         //If you want to connect it from remote, use spiderMonitor.server().jmxStart();
         //ONLY ONE server can start for a machine.
-        //Others will be registered
-        spiderMonitor.server().server();
+        //Others will be registered without start a server.
+        //You can also register a server by spiderMonitor.client(host,port).jmxStart().
         spiderMonitor.jmxStart();
         oschinaSpider.start();
         githubSpider.start();
