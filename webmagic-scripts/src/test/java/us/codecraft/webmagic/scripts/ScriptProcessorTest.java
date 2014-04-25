@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.scripts;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import us.codecraft.webmagic.Spider;
 
@@ -7,6 +8,7 @@ import us.codecraft.webmagic.Spider;
  * @author code4crafter@gmail.com
  * @since 0.4.1
  */
+@Ignore
 public class ScriptProcessorTest {
 
     @Test
