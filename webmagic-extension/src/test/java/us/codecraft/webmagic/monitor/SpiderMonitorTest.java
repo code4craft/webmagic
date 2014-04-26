@@ -26,7 +26,6 @@ public class SpiderMonitorTest {
                 .addUrl("https://github.com/code4craft");
 
         spiderMonitor.register(oschinaSpider, githubSpider);
-        spiderMonitor.jmxStart();
 
     }
 }

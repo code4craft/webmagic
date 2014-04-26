@@ -6,17 +6,9 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.SpiderListener;
 import us.codecraft.webmagic.utils.Experimental;
-import us.codecraft.webmagic.utils.IPUtils;
 
 import javax.management.*;
-import javax.management.remote.JMXConnectorServer;
-import javax.management.remote.JMXConnectorServerFactory;
-import javax.management.remote.JMXServiceURL;
-import java.io.IOException;
 import java.lang.management.ManagementFactory;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.ExportException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,41 +22,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Experimental
 public class SpiderMonitor {
 
-    private enum Type {
-        Server, Client, Local;
-    }
-
     private static SpiderMonitor INSTANCE = new SpiderMonitor();
 
     private AtomicBoolean started = new AtomicBoolean(false);
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private static final int DEFAULT_SERVER_PORT = 14721;
-
-    private static final String DEFAULT_SERVER_HOST = "localhost";
-
-    private int serverPort;
-
     private MBeanServer mbeanServer;
 
     private String jmxServerName;
 
-    private String serverHost;
-
-    private Type type = Type.Local;
-
     private List<SpiderStatusMXBean> spiderStatuses = new ArrayList<SpiderStatusMXBean>();
 
-    public List<SpiderStatusMXBean> getSpiders() {
-        return spiderStatuses;
-    }
-
-    public SpiderStatusMXBean getSpider() {
-        return spiderStatuses.get(0);
-    }
-
-    private SpiderMonitor() {
+    protected SpiderMonitor() {
+        jmxServerName = "WebMagic";
+        mbeanServer = ManagementFactory.getPlatformMBeanServer();
     }
 
     /**
@@ -84,9 +56,7 @@ public class SpiderMonitor {
                 spider.getSpiderListeners().add(monitorSpiderListener);
             }
             SpiderStatusMXBean spiderStatusMBean = getSpiderStatusMBean(spider, monitorSpiderListener);
-            if (started.get()) {
-                registerMBean(spiderStatusMBean);
-            }
+            registerMBean(spiderStatusMBean);
             spiderStatuses.add(spiderStatusMBean);
         }
         return this;
@@ -132,109 +102,8 @@ public class SpiderMonitor {
         }
     }
 
-
-    /**
-     * Start monitor as server mode.
-     *
-     * @param port
-     * @return
-     * @throws IOException
-     * @throws JMException
-     */
-    public synchronized SpiderMonitor server(int port) throws IOException, JMException {
-        try {
-            Registry registry = LocateRegistry.createRegistry(port);
-        } catch (ExportException e) {
-            logger.warn("Start server fail, maybe the address is in using.", e);
-        }
-        serverPort = port;
-        serverHost = "localhost";
-        type = Type.Server;
-        return this;
-    }
-
-    /**
-     * Start monitor as server mode.
-     *
-     * @return
-     * @throws IOException
-     * @throws JMException
-     */
-    public SpiderMonitor server() throws IOException, JMException {
-        return server(DEFAULT_SERVER_PORT);
-    }
-
-    /**
-     * Local mode: the monitor will be bound to the JVM instance.<br></br>
-     * Use jconsole to check your application.
-     *
-     * @return
-     */
-    public synchronized SpiderMonitor local() {
-        this.type = Type.Local;
-        return this;
-    }
-
-
-    /**
-     * Start monitor as client mode.
-     *
-     * @param serverHost
-     * @param serverPort
-     * @return
-     * @throws IOException
-     * @throws JMException
-     */
-    public synchronized SpiderMonitor client(String serverHost, int serverPort) throws IOException, JMException {
-        type = Type.Client;
-        this.serverHost = serverHost;
-        this.serverPort = serverPort;
-        return this;
-    }
-
-    /**
-     * Start monitor as client mode.
-     *
-     * @return
-     * @throws IOException
-     * @throws JMException
-     */
-    public SpiderMonitor client() throws IOException, JMException {
-        return client(DEFAULT_SERVER_HOST, DEFAULT_SERVER_PORT);
-    }
-
-    public synchronized SpiderMonitor jmxStart() throws IOException, JMException {
-        if (!started.compareAndSet(false, true)) {
-            logger.error("Monitor has already started!");
-            return this;
-        }
-        jmxServerName = "WebMagic-" + IPUtils.getFirstNoLoopbackIPAddresses();
-
-        // start JNDI
-        mbeanServer = ManagementFactory.getPlatformMBeanServer();
-
-        ObjectName objName;
-
-        if (type != Type.Local) {
-            JMXServiceURL url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + serverHost + ":" + serverPort + "/" + jmxServerName);
-            System.out.println("JMXServiceURL: " + url.toString());
-            System.out.println("Please replace localhost of your ip if you want to connect it in remote server.");
-            JMXConnectorServer jmxConnServer = JMXConnectorServerFactory.newJMXConnectorServer(url, null, mbeanServer);
-            jmxConnServer.start();
-            objName = new ObjectName(jmxServerName + ":name=WebMagicMonitor");
-            mbeanServer.registerMBean(jmxConnServer, objName);
-        }
-
-        for (SpiderStatusMXBean spiderStatus : spiderStatuses) {
-            registerMBean(spiderStatus);
-        }
-
-        return this;
-    }
-
     protected void registerMBean(SpiderStatusMXBean spiderStatus) throws MalformedObjectNameException, InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException {
-        ObjectName objName;
-        objName = new ObjectName(jmxServerName + ":name=" + spiderStatus.getName());
+        ObjectName objName = new ObjectName(jmxServerName + ":name=" + spiderStatus.getName());
         mbeanServer.registerMBean(spiderStatus, objName);
     }
 
