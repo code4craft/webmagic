@@ -39,7 +39,7 @@ public class Kr36NewsModel {
             }
         }, Kr36NewsModel.class).thread(20);
         thread.start();
-        SpiderMonitor spiderMonitor = SpiderMonitor.create();
+        SpiderMonitor spiderMonitor = SpiderMonitor.instance();
         spiderMonitor.server().register(thread).jmxStart();
     }
 

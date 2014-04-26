@@ -8,9 +8,7 @@ import us.codecraft.webmagic.SpiderListener;
 import us.codecraft.webmagic.utils.Experimental;
 import us.codecraft.webmagic.utils.IPUtils;
 
-import javax.management.JMException;
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
+import javax.management.*;
 import javax.management.remote.JMXConnectorServer;
 import javax.management.remote.JMXConnectorServerFactory;
 import javax.management.remote.JMXServiceURL;
@@ -36,7 +34,7 @@ public class SpiderMonitor {
         Server, Client, Local;
     }
 
-    private static AtomicInteger serialNumber = new AtomicInteger();
+    private static SpiderMonitor INSTANCE = new SpiderMonitor();
 
     private AtomicBoolean started = new AtomicBoolean(false);
 
@@ -47,6 +45,10 @@ public class SpiderMonitor {
     private static final String DEFAULT_SERVER_HOST = "localhost";
 
     private int serverPort;
+
+    private MBeanServer mbeanServer;
+
+    private String jmxServerName;
 
     private String serverHost;
 
@@ -62,13 +64,16 @@ public class SpiderMonitor {
         return spiderStatuses.get(0);
     }
 
+    private SpiderMonitor() {
+    }
+
     /**
      * Register spider for monitor.
      *
      * @param spiders
      * @return
      */
-    public SpiderMonitor register(Spider... spiders) {
+    public synchronized SpiderMonitor register(Spider... spiders) throws JMException {
         for (Spider spider : spiders) {
             MonitorSpiderListener monitorSpiderListener = new MonitorSpiderListener();
             if (spider.getSpiderListeners() == null) {
@@ -78,7 +83,11 @@ public class SpiderMonitor {
             } else {
                 spider.getSpiderListeners().add(monitorSpiderListener);
             }
-            spiderStatuses.add(getSpiderStatusMBean(spider, monitorSpiderListener));
+            SpiderStatusMXBean spiderStatusMBean = getSpiderStatusMBean(spider, monitorSpiderListener);
+            if (started.get()) {
+                registerMBean(spiderStatusMBean);
+            }
+            spiderStatuses.add(spiderStatusMBean);
         }
         return this;
     }
@@ -87,8 +96,8 @@ public class SpiderMonitor {
         return new SpiderStatus(spider, monitorSpiderListener);
     }
 
-    public static SpiderMonitor create() {
-        return new SpiderMonitor();
+    public static SpiderMonitor instance() {
+        return INSTANCE;
     }
 
     public class MonitorSpiderListener implements SpiderListener {
@@ -132,7 +141,7 @@ public class SpiderMonitor {
      * @throws IOException
      * @throws JMException
      */
-    public SpiderMonitor server(int port) throws IOException, JMException {
+    public synchronized SpiderMonitor server(int port) throws IOException, JMException {
         try {
             Registry registry = LocateRegistry.createRegistry(port);
         } catch (ExportException e) {
@@ -161,7 +170,7 @@ public class SpiderMonitor {
      *
      * @return
      */
-    public SpiderMonitor local() {
+    public synchronized SpiderMonitor local() {
         this.type = Type.Local;
         return this;
     }
@@ -176,7 +185,7 @@ public class SpiderMonitor {
      * @throws IOException
      * @throws JMException
      */
-    public SpiderMonitor client(String serverHost, int serverPort) throws IOException, JMException {
+    public synchronized SpiderMonitor client(String serverHost, int serverPort) throws IOException, JMException {
         type = Type.Client;
         this.serverHost = serverHost;
         this.serverPort = serverPort;
@@ -194,38 +203,39 @@ public class SpiderMonitor {
         return client(DEFAULT_SERVER_HOST, DEFAULT_SERVER_PORT);
     }
 
-    public SpiderMonitor jmxStart() throws IOException, JMException {
-        return jmxStart("localhost", DEFAULT_SERVER_PORT);
-    }
-
-    public SpiderMonitor jmxStart(String jndiServer, int rmiPort) throws IOException, JMException {
+    public synchronized SpiderMonitor jmxStart() throws IOException, JMException {
         if (!started.compareAndSet(false, true)) {
             logger.error("Monitor has already started!");
             return this;
         }
-        String jmxServerName = "WebMagic-" + IPUtils.getFirstNoLoopbackIPAddresses() + "-" + serialNumber.incrementAndGet();
+        jmxServerName = "WebMagic-" + IPUtils.getFirstNoLoopbackIPAddresses();
 
         // start JNDI
-        MBeanServer localServer = ManagementFactory.getPlatformMBeanServer();
+        mbeanServer = ManagementFactory.getPlatformMBeanServer();
 
         ObjectName objName;
 
         if (type != Type.Local) {
-            JMXServiceURL url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + jndiServer + ":" + rmiPort + "/" + jmxServerName);
+            JMXServiceURL url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + serverHost + ":" + serverPort + "/" + jmxServerName);
             System.out.println("JMXServiceURL: " + url.toString());
             System.out.println("Please replace localhost of your ip if you want to connect it in remote server.");
-            JMXConnectorServer jmxConnServer = JMXConnectorServerFactory.newJMXConnectorServer(url, null, localServer);
+            JMXConnectorServer jmxConnServer = JMXConnectorServerFactory.newJMXConnectorServer(url, null, mbeanServer);
             jmxConnServer.start();
             objName = new ObjectName(jmxServerName + ":name=WebMagicMonitor");
-            localServer.registerMBean(jmxConnServer, objName);
+            mbeanServer.registerMBean(jmxConnServer, objName);
         }
 
         for (SpiderStatusMXBean spiderStatus : spiderStatuses) {
-            objName = new ObjectName(jmxServerName + ":name=" + spiderStatus.getName());
-            localServer.registerMBean(spiderStatus, objName);
+            registerMBean(spiderStatus);
         }
 
         return this;
+    }
+
+    protected void registerMBean(SpiderStatusMXBean spiderStatus) throws MalformedObjectNameException, InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException {
+        ObjectName objName;
+        objName = new ObjectName(jmxServerName + ":name=" + spiderStatus.getName());
+        mbeanServer.registerMBean(spiderStatus, objName);
     }
 
 }

@@ -18,7 +18,7 @@ public class MonitorExample {
         Spider githubSpider = Spider.create(new GithubRepoPageProcessor())
                 .addUrl("https://github.com/code4craft");
 
-        SpiderMonitor spiderMonitor = new SpiderMonitor();
+        SpiderMonitor spiderMonitor = SpiderMonitor.instance();
         spiderMonitor.register(oschinaSpider);
         spiderMonitor.register(githubSpider);
         //If you want to connect it from remote, use spiderMonitor.server().jmxStart();
