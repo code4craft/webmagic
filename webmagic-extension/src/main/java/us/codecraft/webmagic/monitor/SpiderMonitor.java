@@ -52,6 +52,8 @@ public class SpiderMonitor {
 
     private Type type = Type.Local;
 
+    private JMXConnectorServer jmxConnServer;
+
     private List<SpiderStatusMXBean> spiderStatuses = new ArrayList<SpiderStatusMXBean>();
 
     public List<SpiderStatusMXBean> getSpiders() {
@@ -214,7 +216,7 @@ public class SpiderMonitor {
             JMXServiceURL url = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" + jndiServer + ":" + rmiPort + "/" + jmxServerName);
             System.out.println("JMXServiceURL: " + url.toString());
             System.out.println("Please replace localhost of your ip if you want to connect it in remote server.");
-            JMXConnectorServer jmxConnServer = JMXConnectorServerFactory.newJMXConnectorServer(url, null, localServer);
+            jmxConnServer = JMXConnectorServerFactory.newJMXConnectorServer(url, null, localServer);
             jmxConnServer.start();
         }
 
@@ -222,6 +224,8 @@ public class SpiderMonitor {
             objName = new ObjectName(jmxServerName + ":name=" + spiderStatus.getName());
             localServer.registerMBean(spiderStatus, objName);
         }
+        objName = new ObjectName(jmxServerName + ":name=WebMagicMonitor");
+        localServer.registerMBean(jmxConnServer, objName);
 
         return this;
     }
