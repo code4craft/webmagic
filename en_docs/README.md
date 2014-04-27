@@ -1,4 +1,4 @@
-![logo](https://raw.github.com/code4craft/webmagic/master/asserts/logo.jpg)
+![logo](https://raw.github.com/code4craft/webmagic/master/assets/logo.jpg)
 
 [Readme in Chinese](https://github.com/code4craft/webmagic/tree/master/zh_docs)
 
@@ -21,48 +21,63 @@
   
 Add dependencies to your pom.xml:
 
-		<dependency>
-            <groupId>us.codecraft</groupId>
-            <artifactId>webmagic-core</artifactId>
-            <version>0.4.3</version>
-        </dependency>
-		<dependency>
-            <groupId>us.codecraft</groupId>
-            <artifactId>webmagic-extension</artifactId>
-            <version>0.4.3</version>
-        </dependency>
+```xml
+<dependency>
+    <groupId>us.codecraft</groupId>
+    <artifactId>webmagic-core</artifactId>
+    <version>0.5.0</version>
+</dependency>
+<dependency>
+    <groupId>us.codecraft</groupId>
+    <artifactId>webmagic-extension</artifactId>
+    <version>0.5.0</version>
+</dependency>
+```
+        
+WebMagic use slf4j with slf4j-log4j12 implementation. If you customized your slf4j implementation, please exclude slf4j-log4j12.
+
+```xml
+<exclusions>
+    <exclusion>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+    </exclusion>
+</exclusions>
+```
+
 
 ## Get Started:
 
 ### First crawler:
 
-Write a class implements PageProcessor：
+Write a class implements PageProcessor. For example, I wrote a crawler of github repository infomation.
 
 ```java
-    public class OschinaBlogPageProcesser implements PageProcessor {
+public class GithubRepoPageProcessor implements PageProcessor {
 
-        private Site site = Site.me().setDomain("my.oschina.net");
+    private Site site = Site.me().setRetryTimes(3).setSleepTime(1000);
 
-        @Override
-        public void process(Page page) {
-            List<String> links = page.getHtml().links().regex("http://my\\.oschina\\.net/flashsword/blog/\\d+").all();
-            page.addTargetRequests(links);
-            page.putField("title", page.getHtml().xpath("//div[@class='BlogEntity']/div[@class='BlogTitle']/h1").toString());
-            page.putField("content", page.getHtml().$("div.content").toString());
-            page.putField("tags",page.getHtml().xpath("//div[@class='BlogTags']/a/text()").all());
+    @Override
+    public void process(Page page) {
+        page.addTargetRequests(page.getHtml().links().regex("(https://github\\.com/\\w+/\\w+)").all());
+        page.putField("author", page.getUrl().regex("https://github\\.com/(\\w+)/.*").toString());
+        page.putField("name", page.getHtml().xpath("//h1[@class='entry-title public']/strong/a/text()").toString());
+        if (page.getResultItems().get("name")==null){
+            //skip this page
+            page.setSkip(true);
         }
-
-        @Override
-        public Site getSite() {
-            return site;
-
-        }
-
-        public static void main(String[] args) {
-            Spider.create(new OschinaBlogPageProcesser()).addUrl("http://my.oschina.net/flashsword/blog")
-                 .addPipeline(new ConsolePipeline()).run();
-        }
+        page.putField("readme", page.getHtml().xpath("//div[@id='readme']/tidyText()"));
     }
+
+    @Override
+    public Site getSite() {
+        return site;
+    }
+
+    public static void main(String[] args) {
+        Spider.create(new GithubRepoPageProcessor()).addUrl("https://github.com/code4craft").thread(5).run();
+    }
+}
 ```
 
 * `page.addTargetRequests(links)`
@@ -72,27 +87,30 @@ Write a class implements PageProcessor：
 You can also use annotation way:
 
 ```java
-	@TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
-	public class OschinaBlog {
+@TargetUrl("https://github.com/\\w+/\\w+")
+@HelpUrl("https://github.com/\\w+")
+public class GithubRepo {
 
-	    @ExtractBy("//title")
-	    private String title;
+    @ExtractBy(value = "//h1[@class='entry-title public']/strong/a/text()", notNull = true)
+    private String name;
 
-	    @ExtractBy(value = "div.BlogContent",type = ExtractBy.Type.Css)
-	    private String content;
+    @ExtractByUrl("https://github\\.com/(\\w+)/.*")
+    private String author;
 
-	    @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
-	    private List<String> tags;
+    @ExtractBy("//div[@id='readme']/tidyText()")
+    private String readme;
 
-	    public static void main(String[] args) {
-	        OOSpider.create(
-	        	Site.me(),
-				new ConsolePageModelPipeline(), OschinaBlog.class).addUrl("http://my.oschina.net/flashsword/blog").run();
-	    }
-	}
+    public static void main(String[] args) {
+        OOSpider.create(Site.me().setSleepTime(1000)
+                , new ConsolePageModelPipeline(), GithubRepo.class)
+                .addUrl("https://github.com/code4craft").thread(5).run();
+    }
+}
 ```
 		
 ### Docs and samples:
+
+Documents: [http://webmagic.io/docs/](http://webmagic.io/docs/)
 
 The architecture of webmagic (refered to [Scrapy](http://scrapy.org/))
 
@@ -110,6 +128,7 @@ Lisenced under [Apache 2.0 lisence](http://opensource.org/licenses/Apache-2.0)
 
 Thanks these people for commiting source code, reporting bugs or suggesting for new feature:
 
+* [ccliangbo](https://github.com/ccliangbo)
 * [yuany](https://github.com/yuany)
 * [yxssfxwzy](https://github.com/yxssfxwzy)
 * [linkerlin](https://github.com/linkerlin)
@@ -124,6 +143,8 @@ Thanks these people for commiting source code, reporting bugs or suggesting for 
 * [yyw258520](https://github.com/yyw258520)
 * [perfecking](https://github.com/perfecking)
 * [lidongyang](http://my.oschina.net/lidongyang)
+* [seveniu](https://github.com/seveniu)
+* [sebastian1118](https://github.com/sebastian1118)
 
 
 ### Thanks:
@@ -145,6 +166,10 @@ To write webmagic, I refered to the projects below :
 ### Mail-list:
 
 [https://groups.google.com/forum/#!forum/webmagic-java](https://groups.google.com/forum/#!forum/webmagic-java)
+
+[http://list.qq.com/cgi-bin/qf_invite?id=023a01f505246785f77c5a5a9aff4e57ab20fcdde871e988](http://list.qq.com/cgi-bin/qf_invite?id=023a01f505246785f77c5a5a9aff4e57ab20fcdde871e988)
+
+QQ Group: 373225642
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/code4craft/webmagic/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
