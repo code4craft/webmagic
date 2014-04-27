@@ -128,6 +128,7 @@ Lisenced under [Apache 2.0 lisence](http://opensource.org/licenses/Apache-2.0)
 
 Thanks these people for commiting source code, reporting bugs or suggesting for new feature:
 
+* [ccliangbo](https://github.com/ccliangbo)
 * [yuany](https://github.com/yuany)
 * [yxssfxwzy](https://github.com/yxssfxwzy)
 * [linkerlin](https://github.com/linkerlin)
@@ -141,8 +142,9 @@ Thanks these people for commiting source code, reporting bugs or suggesting for 
 * [ywooer](https://github.com/ywooer)
 * [yyw258520](https://github.com/yyw258520)
 * [perfecking](https://github.com/perfecking)
-* [ccliangbo](https://github.com/ccliangbo)
 * [lidongyang](http://my.oschina.net/lidongyang)
+* [seveniu](https://github.com/seveniu)
+* [sebastian1118](https://github.com/sebastian1118)
 
 
 ### Thanks:
