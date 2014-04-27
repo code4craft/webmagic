@@ -110,6 +110,8 @@ public class GithubRepo {
 		
 ### Docs and samples:
 
+Documents: [http://webmagic.io/docs/](http://webmagic.io/docs/)
+
 The architecture of webmagic (refered to [Scrapy](http://scrapy.org/))
 
 ![image](http://code4craft.github.io/images/posts/webmagic.png)
