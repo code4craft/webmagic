@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-public class FileCacheQueueScheduler extends LocalDuplicatedRemovedScheduler {
+public class FileCacheQueueScheduler extends LocalDuplicatedRemoveScheduler {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 

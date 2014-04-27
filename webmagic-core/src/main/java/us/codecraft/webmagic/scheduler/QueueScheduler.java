@@ -16,7 +16,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @since 0.1.0
  */
 @ThreadSafe
-public class QueueScheduler extends LocalDuplicatedRemovedScheduler {
+public class QueueScheduler extends LocalDuplicatedRemoveScheduler {
 
     private BlockingQueue<Request> queue = new LinkedBlockingQueue<Request>();
 

@@ -17,7 +17,7 @@ import java.util.concurrent.PriorityBlockingQueue;
  * @since 0.2.1
  */
 @ThreadSafe
-public class PriorityScheduler extends LocalDuplicatedRemovedScheduler {
+public class PriorityScheduler extends LocalDuplicatedRemoveScheduler {
 
     public static final int INITIAL_CAPACITY = 5;
 
