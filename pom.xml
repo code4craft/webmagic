@@ -6,7 +6,7 @@
         <version>7</version>
     </parent>
     <groupId>us.codecraft</groupId>
-    <version>0.5.0</version>
+    <version>0.5.1-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <properties>
@@ -38,7 +38,7 @@
         <connection>scm:git:git@github.com:code4craft/webmagic.git</connection>
         <developerConnection>scm:git:git@github.com:code4craft/webmagic.git</developerConnection>
         <url>git@github.com:code4craft/webmagic.git</url>
-      <tag>WebMagic-0.5.0</tag>
+      <tag>HEAD</tag>
   </scm>
     <licenses>
         <license>
