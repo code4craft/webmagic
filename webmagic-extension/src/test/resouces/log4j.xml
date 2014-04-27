@@ -8,23 +8,13 @@
         </layout>
     </appender>
 
-    <logger name="org.springframework" additivity="false">
-        <level value="warn" />
-        <appender-ref ref="stdout" />
-    </logger>
-
     <logger name="org.apache" additivity="false">
         <level value="warn" />
         <appender-ref ref="stdout" />
     </logger>
 
-    <logger name="net.sf.ehcache" additivity="false">
-        <level value="warn" />
-        <appender-ref ref="stdout" />
-    </logger>
-
     <root>
-        <level value="debug" />
+        <level value="info" />
         <appender-ref ref="stdout" />
     </root>
 

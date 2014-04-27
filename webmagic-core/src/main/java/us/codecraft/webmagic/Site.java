@@ -1,5 +1,7 @@
 package us.codecraft.webmagic;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import org.apache.http.HttpHost;
 import us.codecraft.webmagic.utils.UrlUtils;
 
@@ -18,7 +20,9 @@ public class Site {
 
     private String userAgent;
 
-    private Map<String, String> cookies = new LinkedHashMap<String, String>();
+    private Map<String, String> defaultCookies = new LinkedHashMap<String, String>();
+
+    private Table<String, String, String> cookies = HashBasedTable.create();
 
     private String charset;
 
@@ -45,6 +49,10 @@ public class Site {
 
     private boolean useGzip = true;
 
+    /**
+     * @see us.codecraft.webmagic.utils.HttpConstant.Header
+     * @deprecated
+     */
     public static interface HeaderConst {
 
         public static final String REFERER = "Referer";
@@ -72,7 +80,20 @@ public class Site {
      * @return this
      */
     public Site addCookie(String name, String value) {
-        cookies.put(name, value);
+        defaultCookies.put(name, value);
+        return this;
+    }
+
+    /**
+     * Add a cookie with specific domain.
+     *
+     * @param domain
+     * @param name
+     * @param value
+     * @return
+     */
+    public Site addCookie(String domain, String name, String value) {
+        cookies.put(domain, name, value);
         return this;
     }
 
@@ -93,7 +114,16 @@ public class Site {
      * @return get cookies
      */
     public Map<String, String> getCookies() {
-        return cookies;
+        return defaultCookies;
+    }
+
+    /**
+     * get cookies of all domains
+     *
+     * @return get cookies
+     */
+    public Map<String,Map<String, String>> getAllCookies() {
+        return cookies.rowMap();
     }
 
     /**
@@ -203,10 +233,10 @@ public class Site {
      * Add a url to start url.<br>
      * Because urls are more a Spider's property than Site, move it to {@link Spider#addUrl(String...)}}
      *
-     * @deprecated
-     * @see Spider#addUrl(String...)
      * @param startUrl
      * @return this
+     * @see Spider#addUrl(String...)
+     * @deprecated
      */
     public Site addStartUrl(String startUrl) {
         return addStartRequest(new Request(startUrl));
@@ -216,10 +246,10 @@ public class Site {
      * Add a url to start url.<br>
      * Because urls are more a Spider's property than Site, move it to {@link Spider#addRequest(Request...)}}
      *
-     * @deprecated
-     * @see Spider#addRequest(Request...)
-     * @param startUrl
+     * @param startRequest
      * @return this
+     * @see Spider#addRequest(Request...)
+     * @deprecated
      */
     public Site addStartRequest(Request startRequest) {
         this.startRequests.add(startRequest);
@@ -312,6 +342,7 @@ public class Site {
 
     /**
      * set up httpProxy for this site
+     *
      * @param httpProxy
      * @return
      */
@@ -364,7 +395,8 @@ public class Site {
         if (acceptStatCode != null ? !acceptStatCode.equals(site.acceptStatCode) : site.acceptStatCode != null)
             return false;
         if (charset != null ? !charset.equals(site.charset) : site.charset != null) return false;
-        if (cookies != null ? !cookies.equals(site.cookies) : site.cookies != null) return false;
+        if (defaultCookies != null ? !defaultCookies.equals(site.defaultCookies) : site.defaultCookies != null)
+            return false;
         if (domain != null ? !domain.equals(site.domain) : site.domain != null) return false;
         if (headers != null ? !headers.equals(site.headers) : site.headers != null) return false;
         if (startRequests != null ? !startRequests.equals(site.startRequests) : site.startRequests != null)
@@ -378,7 +410,7 @@ public class Site {
     public int hashCode() {
         int result = domain != null ? domain.hashCode() : 0;
         result = 31 * result + (userAgent != null ? userAgent.hashCode() : 0);
-        result = 31 * result + (cookies != null ? cookies.hashCode() : 0);
+        result = 31 * result + (defaultCookies != null ? defaultCookies.hashCode() : 0);
         result = 31 * result + (charset != null ? charset.hashCode() : 0);
         result = 31 * result + (startRequests != null ? startRequests.hashCode() : 0);
         result = 31 * result + sleepTime;
@@ -395,7 +427,7 @@ public class Site {
         return "Site{" +
                 "domain='" + domain + '\'' +
                 ", userAgent='" + userAgent + '\'' +
-                ", cookies=" + cookies +
+                ", cookies=" + defaultCookies +
                 ", charset='" + charset + '\'' +
                 ", startRequests=" + startRequests +
                 ", sleepTime=" + sleepTime +

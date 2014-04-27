@@ -14,7 +14,7 @@ import us.codecraft.webmagic.Task;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-public class RedisScheduler implements Scheduler {
+public class RedisScheduler extends DuplicatedRemoveScheduler implements MonitorableScheduler {
 
     private JedisPool pool;
 
@@ -33,21 +33,39 @@ public class RedisScheduler implements Scheduler {
     }
 
     @Override
-    public synchronized void push(Request request, Task task) {
+    public void resetDuplicateCheck(Task task) {
         Jedis jedis = pool.getResource();
         try {
-            // if cycleRetriedTimes is set, allow duplicated.
-            Object cycleRetriedTimes = request.getExtra(Request.CYCLE_TRIED_TIMES);
-            // use set to remove duplicate url
-            if (cycleRetriedTimes != null || !jedis.sismember(SET_PREFIX + task.getUUID(), request.getUrl())) {
-                // use list to store queue
-                jedis.rpush(QUEUE_PREFIX + task.getUUID(), request.getUrl());
-                jedis.sadd(SET_PREFIX + task.getUUID(), request.getUrl());
-                if (request.getExtras() != null) {
-                    String field = DigestUtils.shaHex(request.getUrl());
-                    String value = JSON.toJSONString(request);
-                    jedis.hset((ITEM_PREFIX + task.getUUID()), field, value);
-                }
+            jedis.del(getSetKey(task));
+        } finally {
+            pool.returnResource(jedis);
+        }
+    }
+
+    @Override
+    protected boolean isDuplicate(Request request, Task task) {
+        Jedis jedis = pool.getResource();
+        try {
+            boolean isDuplicate = !jedis.sismember(getSetKey(task), request.getUrl());
+            if (!isDuplicate) {
+                jedis.sadd(getSetKey(task), request.getUrl());
+            }
+            return isDuplicate;
+        } finally {
+            pool.returnResource(jedis);
+        }
+
+    }
+
+    @Override
+    protected void pushWhenNoDuplicate(Request request, Task task) {
+        Jedis jedis = pool.getResource();
+        try {
+            jedis.rpush(getQueueKey(task), request.getUrl());
+            if (request.getExtras() != null) {
+                String field = DigestUtils.shaHex(request.getUrl());
+                String value = JSON.toJSONString(request);
+                jedis.hset((ITEM_PREFIX + task.getUUID()), field, value);
             }
         } finally {
             pool.returnResource(jedis);
@@ -58,7 +76,7 @@ public class RedisScheduler implements Scheduler {
     public synchronized Request poll(Task task) {
         Jedis jedis = pool.getResource();
         try {
-            String url = jedis.lpop(QUEUE_PREFIX + task.getUUID());
+            String url = jedis.lpop(getQueueKey(task));
             if (url == null) {
                 return null;
             }
@@ -71,6 +89,36 @@ public class RedisScheduler implements Scheduler {
             }
             Request request = new Request(url);
             return request;
+        } finally {
+            pool.returnResource(jedis);
+        }
+    }
+
+    protected String getSetKey(Task task) {
+        return SET_PREFIX + task.getUUID();
+    }
+
+    protected String getQueueKey(Task task) {
+        return QUEUE_PREFIX + task.getUUID();
+    }
+
+    @Override
+    public int getLeftRequestsCount(Task task) {
+        Jedis jedis = pool.getResource();
+        try {
+            Long size = jedis.llen(getQueueKey(task));
+            return size.intValue();
+        } finally {
+            pool.returnResource(jedis);
+        }
+    }
+
+    @Override
+    public int getTotalRequestsCount(Task task) {
+        Jedis jedis = pool.getResource();
+        try {
+            Long size = jedis.scard(getQueueKey(task));
+            return size.intValue();
         } finally {
             pool.returnResource(jedis);
         }

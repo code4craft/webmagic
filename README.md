@@ -1,4 +1,4 @@
-![logo](https://raw.github.com/code4craft/webmagic/master/assets/logo.jpg)
+![logo](https://raw.github.com/code4craft/webmagic/master/asserts/logo.jpg)
 
 
 [![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
@@ -175,6 +175,7 @@ webmagic遵循[Apache 2.0协议](http://opensource.org/licenses/Apache-2.0)
 
 以下是为WebMagic提交过代码或者issue的朋友:
 
+* [ccliangbo](https://github.com/ccliangbo)
 * [yuany](https://github.com/yuany)
 * [yxssfxwzy](https://github.com/yxssfxwzy)
 * [linkerlin](https://github.com/linkerlin)
@@ -188,8 +189,9 @@ webmagic遵循[Apache 2.0协议](http://opensource.org/licenses/Apache-2.0)
 * [ywooer](https://github.com/ywooer)
 * [yyw258520](https://github.com/yyw258520)
 * [perfecking](https://github.com/perfecking)
-* [ccliangbo](https://github.com/ccliangbo)
 * [lidongyang](http://my.oschina.net/lidongyang)
+* [seveniu](https://github.com/seveniu)
+* [sebastian1118](https://github.com/sebastian1118)
 
 ### 邮件组:
 
@@ -201,4 +203,4 @@ QQ:
 
 ### QQ群：
 
-330192938
+373225642

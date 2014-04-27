@@ -3,7 +3,7 @@
     <parent>
         <artifactId>webmagic-parent</artifactId>
         <groupId>us.codecraft</groupId>
-        <version>0.4.3</version>
+        <version>0.5.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-public class FileCacheQueueScheduler implements Scheduler {
+public class FileCacheQueueScheduler extends LocalDuplicatedRemoveScheduler {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -145,18 +145,12 @@ public class FileCacheQueueScheduler implements Scheduler {
     }
 
     @Override
-    public synchronized void push(Request request, Task task) {
+    protected void pushWhenNoDuplicate(Request request, Task task) {
         if (!inited.get()) {
             init(task);
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("push to queue " + request.getUrl());
-        }
-        if (urls.add(request.getUrl())) {
-            queue.add(request);
-            fileUrlWriter.println(request.getUrl());
-        }
-
+        queue.add(request);
+        fileUrlWriter.println(request.getUrl());
     }
 
     @Override
@@ -166,5 +160,10 @@ public class FileCacheQueueScheduler implements Scheduler {
         }
         fileCursorWriter.println(cursor.incrementAndGet());
         return queue.poll();
+    }
+
+    @Override
+    public int getLeftRequestsCount(Task task) {
+        return queue.size();
     }
 }

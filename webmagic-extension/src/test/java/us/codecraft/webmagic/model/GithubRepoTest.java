@@ -5,7 +5,6 @@ import org.junit.Test;
 import us.codecraft.webmagic.downloader.MockGithubDownloader;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.example.GithubRepo;
 import us.codecraft.webmagic.pipeline.PageModelPipeline;
 
 /**

@@ -3,7 +3,7 @@
     <parent>
         <artifactId>webmagic-parent</artifactId>
         <groupId>us.codecraft</groupId>
-        <version>0.4.3</version>
+        <version>0.5.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,6 +15,10 @@
             <groupId>org.jruby</groupId>
             <artifactId>jruby</artifactId>
             <version>1.7.6</version>
+        </dependency>
+        <dependency><groupId>org.python</groupId>
+            <artifactId>jython</artifactId>
+            <version>2.5.3</version>
         </dependency>
         <dependency>
             <groupId>commons-cli</groupId>
@@ -40,25 +44,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>

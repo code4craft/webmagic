@@ -21,7 +21,7 @@ public @interface Formatter {
      *
      * @return formatter params
      */
-    String[] value();
+    String[] value() default "";
 
     /**
      * Specific the class of field of class of elements in collection for field. <br/>

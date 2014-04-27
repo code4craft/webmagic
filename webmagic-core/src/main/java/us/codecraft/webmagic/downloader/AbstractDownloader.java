@@ -34,6 +34,12 @@ public abstract class AbstractDownloader implements Downloader {
         return (Html) page.getHtml();
     }
 
+    protected void onSuccess(Request request) {
+    }
+
+    protected void onError(Request request) {
+    }
+
     protected Page addToCycleRetry(Request request, Site site) {
         Page page = new Page();
         Object cycleTriedTimesObject = request.getExtra(Request.CYCLE_TRIED_TIMES);

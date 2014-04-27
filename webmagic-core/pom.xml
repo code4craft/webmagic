@@ -3,7 +3,7 @@
     <parent>
         <groupId>us.codecraft</groupId>
         <artifactId>webmagic-parent</artifactId>
-        <version>0.4.3</version>
+        <version>0.5.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -51,11 +51,6 @@
         </dependency>
 
         <dependency>
-            <groupId>net.sourceforge.htmlcleaner</groupId>
-            <artifactId>htmlcleaner</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
         </dependency>
@@ -68,6 +63,17 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-io</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>0.8.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
         </dependency>
 
     </dependencies>

@@ -1350,7 +1350,7 @@ public class XpathSelectorTest {
                 + "</script>\n" + "\n" + "    \n" + "    \n" + "  </body>\n" + "</html>\n";
         String text2 = "<div>aaa</div>";
         XpathSelector xpathSelector = new XpathSelector(
-                "//div[@id='main']/div[@class='blog_main']/div[1][@class='blog_title']/h3/a");
+                "//div[@id='main']/div[@class='blog_main']/div[@class='blog_title']/h3/a/text()");
         String select = xpathSelector.select(text);
         Assert.assertEquals("jsoup 解析页面商品信息", select);
     }

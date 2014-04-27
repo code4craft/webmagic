@@ -4,7 +4,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.codecraft.webmagic.utils.EnvironmentUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ public class Html extends PlainText {
      */
     private Document document;
 
-    private boolean init = false;
+    private boolean needInitCache = true;
 
     public Html(List<String> strings) {
         super(strings);
@@ -34,12 +33,22 @@ public class Html extends PlainText {
         super(text);
     }
 
+    public Html(List<String> strings, boolean needInitCache) {
+        super(strings);
+        this.needInitCache = needInitCache;
+    }
+
+    public Html(String text, boolean needInitCache) {
+        super(text);
+        this.needInitCache = needInitCache;
+    }
+
     /**
      * lazy init
      */
     private void initDocument() {
-        if (this.document == null && !init) {
-            init = true;
+        if (this.document == null && needInitCache) {
+            needInitCache = false;
             //just init once whether the parsing succeeds or not
             try {
                 this.document = Jsoup.parse(getText());
@@ -68,7 +77,7 @@ public class Html extends PlainText {
                 results.add(result);
             }
         }
-        return new Html(results);
+        return new Html(results, false);
     }
 
     @Override
@@ -79,7 +88,7 @@ public class Html extends PlainText {
             List<String> result = selector.selectList(string);
             results.addAll(result);
         }
-        return new Html(results);
+        return new Html(results, false);
     }
 
     @Override
@@ -96,23 +105,18 @@ public class Html extends PlainText {
 
     @Override
     public Selectable xpath(String xpath) {
-        if (EnvironmentUtil.useXsoup()) {
-            XsoupSelector xsoupSelector = new XsoupSelector(xpath);
-            if (document != null) {
-                return new Html(xsoupSelector.selectList(document));
-            }
-            return selectList(xsoupSelector, strings);
-        } else {
-            XpathSelector xpathSelector = new XpathSelector(xpath);
-            return selectList(xpathSelector, strings);
+        XpathSelector xpathSelector = Selectors.xpath(xpath);
+        if (document != null) {
+            return new Html(xpathSelector.selectList(document), false);
         }
+        return selectList(xpathSelector, strings);
     }
 
     @Override
     public Selectable $(String selector) {
         CssSelector cssSelector = Selectors.$(selector);
         if (document != null) {
-            return new Html(cssSelector.selectList(document));
+            return new Html(cssSelector.selectList(document), false);
         }
         return selectList(cssSelector, strings);
     }
@@ -121,12 +125,13 @@ public class Html extends PlainText {
     public Selectable $(String selector, String attrName) {
         CssSelector cssSelector = Selectors.$(selector, attrName);
         if (document != null) {
-            return new Html(cssSelector.selectList(document));
+            return new Html(cssSelector.selectList(document), false);
         }
         return selectList(cssSelector, strings);
     }
 
     public Document getDocument() {
+        initDocument();
         return document;
     }
 

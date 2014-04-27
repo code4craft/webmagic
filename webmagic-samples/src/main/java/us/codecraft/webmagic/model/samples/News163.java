@@ -3,7 +3,6 @@ package us.codecraft.webmagic.model.samples;
 import us.codecraft.webmagic.MultiPageModel;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.OOSpider;
-import us.codecraft.webmagic.model.annotation.ComboExtract;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
@@ -26,9 +25,8 @@ public class News163 implements MultiPageModel {
     @ExtractByUrl(value = "http://news\\.163\\.com/\\d+/\\d+/\\d+/\\w+_(\\d+)\\.html", notNull = false)
     private String page;
 
-    @ComboExtract(value = {@ExtractBy("//div[@class=\"ep-pages\"]//a/@href"),
-            @ExtractBy(value = "http://news\\.163\\.com/\\d+/\\d+/\\d+/\\w+_(\\d+)\\.html", type = ExtractBy.Type.Regex)},
-            multi = true, notNull = false)
+    @ExtractBy(value = "//div[@class=\"ep-pages\"]//a/regex('http://news\\.163\\.com/\\d+/\\d+/\\d+/\\w+_(\\d+)\\.html',1)"
+            , multi = true, notNull = false)
     private List<String> otherPage;
 
     @ExtractBy("//h1[@id=\"h1title\"]/text()")
@@ -74,8 +72,8 @@ public class News163 implements MultiPageModel {
     }
 
     public static void main(String[] args) {
-        OOSpider.create(Site.me().addStartUrl("http://news.163.com/13/0802/05/958I1E330001124J_2.html"), News163.class)
-                .scheduler(new RedisScheduler("localhost")).clearPipeline().pipeline(new MultiPagePipeline()).pipeline(new ConsolePipeline()).run();
+        OOSpider.create(Site.me(), News163.class).addUrl("http://news.163.com/13/0802/05/958I1E330001124J_2.html")
+                .scheduler(new RedisScheduler("localhost")).addPipeline(new MultiPagePipeline()).addPipeline(new ConsolePipeline()).run();
     }
 
 }
