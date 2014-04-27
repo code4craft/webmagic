@@ -40,12 +40,6 @@
             </dependency>
 
             <dependency>
-                <groupId>us.codecraft</groupId>
-                <artifactId>forger</artifactId>
-                <version>0.1.1-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
                 <groupId>org.freemarker</groupId>
                 <artifactId>freemarker</artifactId>
                 <version>2.3.19</version>
