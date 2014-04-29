@@ -24,7 +24,7 @@ public abstract class LocalDuplicatedRemoveScheduler extends DuplicatedRemoveSch
 
     @Override
     protected boolean isDuplicate(Request request, Task task) {
-        return urls.add(request.getUrl());
+        return !urls.add(request.getUrl());
     }
 
     @Override

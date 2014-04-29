@@ -4,6 +4,7 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
+import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 import java.util.List;
 
@@ -30,6 +31,6 @@ public class OschinaBlogPageProcesser implements PageProcessor {
     }
 
     public static void main(String[] args) {
-        Spider.create(new OschinaBlogPageProcesser()).run();
+        Spider.create(new OschinaBlogPageProcesser()).setScheduler(new RedisScheduler("localhost")).run();
     }
 }
