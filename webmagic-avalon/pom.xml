@@ -3,7 +3,7 @@
     <parent>
         <artifactId>webmagic-parent</artifactId>
         <groupId>us.codecraft</groupId>
-        <version>0.5.0</version>
+        <version>0.5.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -37,12 +37,6 @@
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis-spring</artifactId>
                 <version>1.1.1</version>
-            </dependency>
-
-            <dependency>
-                <groupId>us.codecraft</groupId>
-                <artifactId>forger</artifactId>
-                <version>0.1.1-SNAPSHOT</version>
             </dependency>
 
             <dependency>

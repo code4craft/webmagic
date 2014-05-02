@@ -41,12 +41,12 @@ webmagic使用maven管理依赖，在项目中添加对应的依赖即可使用w
 <dependency>
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-core</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
 </dependency>
 <dependency>
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-extension</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
 </dependency>
 ```
         
@@ -192,6 +192,7 @@ webmagic遵循[Apache 2.0协议](http://opensource.org/licenses/Apache-2.0)
 * [lidongyang](http://my.oschina.net/lidongyang)
 * [seveniu](https://github.com/seveniu)
 * [sebastian1118](https://github.com/sebastian1118)
+* [codev777](https://github.com/codev777)
 
 ### 邮件组:
 
