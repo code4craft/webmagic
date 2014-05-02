@@ -17,11 +17,11 @@ public class BloomFilterDuplicateRemoverTest {
         boolean isDuplicate = bloomFilterDuplicateRemover.isDuplicate(new Request("a"), null);
         assertThat(isDuplicate).isFalse();
         isDuplicate = bloomFilterDuplicateRemover.isDuplicate(new Request("a"), null);
-        assertThat(isDuplicate);
+        assertThat(isDuplicate).isTrue();
         isDuplicate = bloomFilterDuplicateRemover.isDuplicate(new Request("b"), null);
         assertThat(isDuplicate).isFalse();
         isDuplicate = bloomFilterDuplicateRemover.isDuplicate(new Request("b"), null);
-        assertThat(isDuplicate);
+        assertThat(isDuplicate).isTrue();
 
     }
 }

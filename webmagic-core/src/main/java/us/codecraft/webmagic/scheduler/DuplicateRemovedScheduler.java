@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
+import us.codecraft.webmagic.scheduler.component.HashSetDuplicateRemover;
 
 /**
  * Remove duplicate urls and only push urls which are not duplicate.<br></br>
@@ -16,7 +17,7 @@ public abstract class DuplicateRemovedScheduler implements Scheduler {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    private DuplicateRemover duplicatedRemover;
+    private DuplicateRemover duplicatedRemover = new HashSetDuplicateRemover();
 
     public DuplicateRemover getDuplicateRemover() {
         return duplicatedRemover;
