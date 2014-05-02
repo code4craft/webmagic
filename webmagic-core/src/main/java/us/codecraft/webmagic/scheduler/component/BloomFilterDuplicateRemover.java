@@ -23,9 +23,14 @@ public class BloomFilterDuplicateRemover implements DuplicateRemover {
     private AtomicInteger counter;
 
     public BloomFilterDuplicateRemover(int expectedInsertions) {
-        this(expectedInsertions, 0.03);
+        this(expectedInsertions, 0.01);
     }
 
+    /**
+     *
+     * @param expectedInsertions the number of expected insertions to the constructed
+     * @param fpp the desired false positive probability (must be positive and less than 1.0)
+     */
     public BloomFilterDuplicateRemover(int expectedInsertions, double fpp) {
         this.expectedInsertions = expectedInsertions;
         this.fpp = fpp;
