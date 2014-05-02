@@ -1,18 +1,6 @@
 webmagic使用手册
 ========
->webmagic是一个开源的Java垂直爬虫框架，目标是简化爬虫的开发流程，让开发者专注于逻辑功能的开发。webmagic的核心非常简单，但是覆盖爬虫的整个流程，也是很好的学习爬虫开发的材料。
-
->web爬虫是一种技术，webmagic致力于将这种技术的实现成本降低，但是出于对资源提供者的尊重，webmagic不会做反封锁的事情，包括：验证码破解、代理切换、自动登录等。
-
->作者黄亿华([code4crafter@gmail.com](code4crafter@gmail.com))曾经在前公司进行过一年的垂直爬虫的开发，webmagic就是为了解决爬虫开发的一些重复劳动而产生的框架。
-
->webmagic的架构和设计参考了以下两个项目，感谢以下两个项目的作者：
-
->python爬虫 **scrapy** [https://github.com/scrapy/scrapy](https://github.com/scrapy/scrapy)
-
->Java爬虫 **Spiderman** [https://gitcafe.com/laiweiwei/Spiderman](https://gitcafe.com/laiweiwei/Spiderman)
-
->webmagic遵循[Apache 2.0协议](http://www.apache.org/licenses/LICENSE-2.0.html)，你可以自由进行使用和修改。有使用不便或者问题，欢迎在github[提交issue](https://github.com/code4craft/webmagic/issues)，或者在[oschina讨论模块](http://www.oschina.net/question)提问。
+>新版文档地址[http://webmagic.io/docs/](http://webmagic.io/docs/)，此手册已不再更新。
 
 <div style="page-break-after:always"></div>
 
