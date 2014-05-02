@@ -46,12 +46,16 @@ public class BloomFilterDuplicateRemover implements DuplicateRemover {
 
     @Override
     public boolean isDuplicate(Request request, Task task) {
-        boolean isDuplicate = bloomFilter.mightContain(request.getUrl());
+        boolean isDuplicate = bloomFilter.mightContain(getUrl(request));
         if (!isDuplicate) {
-            bloomFilter.put(request.getUrl());
+            bloomFilter.put(getUrl(request));
             counter.incrementAndGet();
         }
         return isDuplicate;
+    }
+
+    protected String getUrl(Request request) {
+        return request.getUrl();
     }
 
     @Override
