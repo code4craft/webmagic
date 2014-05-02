@@ -25,12 +25,12 @@ Add dependencies to your pom.xml:
 <dependency>
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-core</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
 </dependency>
 <dependency>
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-extension</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
 </dependency>
 ```
         
@@ -145,6 +145,7 @@ Thanks these people for commiting source code, reporting bugs or suggesting for 
 * [lidongyang](http://my.oschina.net/lidongyang)
 * [seveniu](https://github.com/seveniu)
 * [sebastian1118](https://github.com/sebastian1118)
+* [codev777](https://github.com/codev777)
 
 
 ### Thanks:
