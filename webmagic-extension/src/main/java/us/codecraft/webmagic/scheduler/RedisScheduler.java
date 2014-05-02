@@ -7,6 +7,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
 /**
  * Use Redis as url scheduler for distributed crawlers.<br>
@@ -14,7 +15,7 @@ import us.codecraft.webmagic.Task;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-public class RedisScheduler extends DuplicatedRemoveScheduler implements MonitorableScheduler {
+public class RedisScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler, DuplicateRemover {
 
     private JedisPool pool;
 
@@ -43,7 +44,7 @@ public class RedisScheduler extends DuplicatedRemoveScheduler implements Monitor
     }
 
     @Override
-    protected boolean isDuplicate(Request request, Task task) {
+    public boolean isDuplicate(Request request, Task task) {
         Jedis jedis = pool.getResource();
         try {
             boolean isDuplicate = jedis.sismember(getSetKey(task), request.getUrl());

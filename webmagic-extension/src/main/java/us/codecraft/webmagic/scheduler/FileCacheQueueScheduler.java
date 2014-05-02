@@ -2,8 +2,6 @@ package us.codecraft.webmagic.scheduler;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 
@@ -23,9 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-public class FileCacheQueueScheduler extends LocalDuplicatedRemoveScheduler {
-
-    private Logger logger = LoggerFactory.getLogger(getClass());
+public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler {
 
     private String filePath = System.getProperty("java.io.tmpdir");
 
@@ -165,5 +161,10 @@ public class FileCacheQueueScheduler extends LocalDuplicatedRemoveScheduler {
     @Override
     public int getLeftRequestsCount(Task task) {
         return queue.size();
+    }
+
+    @Override
+    public int getTotalRequestsCount(Task task) {
+        return getDuplicateRemover().getTotalRequestsCount(task);
     }
 }
