@@ -26,11 +26,12 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     private static final String ITEM_PREFIX = "item_";
 
     public RedisScheduler(String host) {
-        pool = new JedisPool(new JedisPoolConfig(), host);
+        this(new JedisPool(new JedisPoolConfig(), host));
     }
 
     public RedisScheduler(JedisPool pool) {
         this.pool = pool;
+        setDuplicateRemover(this);
     }
 
     @Override
