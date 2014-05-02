@@ -7,7 +7,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
  * @author code4crafter@gmail.com <br>
- * @since 0.3.2
+ * @since 0.5.1
  */
 public class GithubRepoPageProcessor implements PageProcessor {
 
@@ -17,13 +17,16 @@ public class GithubRepoPageProcessor implements PageProcessor {
     public void process(Page page) {
         page.addTargetRequests(page.getHtml().links().regex("(https://github\\.com/\\w+/\\w+)").all());
         page.addTargetRequests(page.getHtml().links().regex("(https://github\\.com/\\w+)").all());
-        page.putField("author", page.getUrl().regex("https://github\\.com/(\\w+)/.*").toString());
-        page.putField("name", page.getHtml().xpath("//h1[@class='entry-title public']/strong/a/text()").toString());
-        if (page.getResultItems().get("name")==null){
+        GithubRepo githubRepo = new GithubRepo();
+        githubRepo.setAuthor(page.getUrl().regex("https://github\\.com/(\\w+)/.*").toString());
+        githubRepo.setName(page.getHtml().xpath("//h1[@class='entry-title public']/strong/a/text()").toString());
+        githubRepo.setReadme(page.getHtml().xpath("//div[@id='readme']/tidyText()").toString());
+        if (githubRepo.getName() == null) {
             //skip this page
             page.setSkip(true);
+        } else {
+            page.putField("repo", githubRepo);
         }
-        page.putField("readme", page.getHtml().xpath("//div[@id='readme']/tidyText()"));
     }
 
     @Override
