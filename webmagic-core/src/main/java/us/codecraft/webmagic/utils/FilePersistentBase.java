@@ -22,10 +22,10 @@ public class FilePersistentBase {
     }
 
     public void setPath(String path) {
-        this.path = path;
         if (!path.endsWith(PATH_SEPERATOR)) {
             path += PATH_SEPERATOR;
         }
+        this.path = path;
     }
 
     public File getFile(String fullName) {
