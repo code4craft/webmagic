@@ -22,8 +22,9 @@ public abstract class DuplicateRemovedScheduler implements Scheduler {
         return duplicatedRemover;
     }
 
-    public void setDuplicateRemover(DuplicateRemover duplicatedRemover) {
+    public DuplicateRemovedScheduler setDuplicateRemover(DuplicateRemover duplicatedRemover) {
         this.duplicatedRemover = duplicatedRemover;
+        return this;
     }
 
     @Override
