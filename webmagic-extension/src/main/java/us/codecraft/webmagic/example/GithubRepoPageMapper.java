@@ -10,9 +10,9 @@ import us.codecraft.webmagic.processor.PageProcessor;
  * @author code4crafter@gmail.com <br>
  * @since 0.3.2
  */
-public class GithubRepoPageProcessor implements PageProcessor {
+public class GithubRepoPageMapper implements PageProcessor {
 
-    private Site site = Site.me().setRetryTimes(3);
+    private Site site = Site.me().setRetryTimes(3).setSleepTime(0);
 
     private PageMapper<GithubRepo> githubRepoPageMapper = new PageMapper<GithubRepo>(GithubRepo.class);
 
@@ -21,7 +21,12 @@ public class GithubRepoPageProcessor implements PageProcessor {
         page.addTargetRequests(page.getHtml().links().regex("(https://github\\.com/\\w+/\\w+)").all());
         page.addTargetRequests(page.getHtml().links().regex("(https://github\\.com/\\w+)").all());
         GithubRepo githubRepo = githubRepoPageMapper.get(page);
-        page.putField("repo",githubRepo);
+        if (githubRepo == null) {
+            page.setSkip(true);
+        } else {
+            page.putField("repo", githubRepo);
+        }
+
     }
 
     @Override
@@ -30,6 +35,6 @@ public class GithubRepoPageProcessor implements PageProcessor {
     }
 
     public static void main(String[] args) {
-        Spider.create(new GithubRepoPageProcessor()).addUrl("https://github.com/code4craft").thread(5).run();
+        Spider.create(new GithubRepoPageMapper()).addUrl("https://github.com/code4craft").thread(5).run();
     }
 }
