@@ -1,7 +1,7 @@
 package us.codecraft.webmagic.selector;
 
 import com.alibaba.fastjson.JSON;
-import org.jsoup.parser.TokenQueue;
+import us.codecraft.xsoup.XTokenQueue;
 
 import java.util.List;
 
@@ -27,11 +27,11 @@ public class Json extends PlainText {
      */
     public Json removePadding(String padding) {
         String text = getText();
-        TokenQueue tokenQueue = new TokenQueue(text);
+        XTokenQueue tokenQueue = new XTokenQueue(text);
         tokenQueue.consumeWhitespace();
         tokenQueue.consume(padding);
         tokenQueue.consumeWhitespace();
-        String chompBalanced = tokenQueue.chompBalanced('(', ')');
+        String chompBalanced = tokenQueue.chompBalancedNotInQuotes('(', ')');
         return new Json(chompBalanced);
     }
 
