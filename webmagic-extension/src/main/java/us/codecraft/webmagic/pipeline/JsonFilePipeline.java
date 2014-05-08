@@ -38,7 +38,7 @@ public class JsonFilePipeline extends FilePersistentBase implements Pipeline {
     public void process(ResultItems resultItems, Task task) {
         String path = this.path + "/" + task.getUUID() + "/";
         try {
-            PrintWriter printWriter = new PrintWriter(new FileWriter(new File(path + DigestUtils.md5Hex(resultItems.getRequest().getUrl()) + ".json")));
+            PrintWriter printWriter = new PrintWriter(new FileWriter(getFile(path + DigestUtils.md5Hex(resultItems.getRequest().getUrl()) + ".json")));
             printWriter.write(JSON.toJSONString(resultItems.getAll()));
             printWriter.close();
         } catch (IOException e) {
