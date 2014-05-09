@@ -1,8 +1,12 @@
-webmagic
----------
+![logo](https://raw.github.com/code4craft/webmagic/master/assets/logo.jpg)
+
+
 [![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
 
+
 [Readme in English](https://github.com/code4craft/webmagic/tree/master/en_docs)
+
+官方网站[http://webmagic.io/](http://webmagic.io/)
 
 >webmagic是一个开源的Java垂直爬虫框架，目标是简化爬虫的开发流程，让开发者专注于逻辑功能的开发。webmagic的核心非常简单，但是覆盖爬虫的整个流程，也是很好的学习爬虫开发的材料。作者曾经在前公司进行过一年的垂直爬虫的开发，webmagic就是为了解决爬虫开发的一些重复劳动而产生的框架。
 
@@ -25,22 +29,37 @@ python爬虫 **scrapy** [https://github.com/scrapy/scrapy](https://github.com/sc
 
 Java爬虫 **Spiderman** [https://gitcafe.com/laiweiwei/Spiderman](https://gitcafe.com/laiweiwei/Spiderman)
 
+webmagic的github地址：[https://github.com/code4craft/webmagic](https://github.com/code4craft/webmagic)。
+
 ## 快速开始
 
 ### 使用maven
 
 webmagic使用maven管理依赖，在项目中添加对应的依赖即可使用webmagic：
 
-		<dependency>
-            <groupId>us.codecraft</groupId>
-            <artifactId>webmagic-core</artifactId>
-            <version>0.4.2</version>
-        </dependency>
-		<dependency>
-            <groupId>us.codecraft</groupId>
-            <artifactId>webmagic-extension</artifactId>
-            <version>0.4.2</version>
-        </dependency>
+```xml
+<dependency>
+    <groupId>us.codecraft</groupId>
+    <artifactId>webmagic-core</artifactId>
+    <version>0.5.1</version>
+</dependency>
+<dependency>
+    <groupId>us.codecraft</groupId>
+    <artifactId>webmagic-extension</artifactId>
+    <version>0.5.1</version>
+</dependency>
+```
+        
+WebMagic 使用slf4j-log4j12作为slf4j的实现.如果你自己定制了slf4j的实现，请在项目中去掉此依赖。
+
+```xml
+<exclusions>
+    <exclusion>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+    </exclusion>
+</exclusions>
+```
 
 #### 项目结构
 	
@@ -68,11 +87,7 @@ webmagic还包含两个可用的扩展包，因为这两个包都依赖了比较
 
 ### 不使用maven
 
-不使用maven的用户，可以下载这个二进制打包版本(感谢[oschina](http://www.oschina.net/))：
-
-	git clone http://git.oschina.net/flashsword20/webmagic-bin.git
-
-在**bin/lib**目录下，有项目依赖的所有jar包，直接在IDE里import即可。
+在项目的**lib**目录下，有依赖的所有jar包，直接在IDE里import即可。
 
 ### 第一个爬虫
 
@@ -80,31 +95,33 @@ webmagic还包含两个可用的扩展包，因为这两个包都依赖了比较
 
 PageProcessor是webmagic-core的一部分，定制一个PageProcessor即可实现自己的爬虫逻辑。以下是抓取osc博客的一段代码：
 
-    public class OschinaBlogPageProcesser implements PageProcessor {
+```java
+public class OschinaBlogPageProcesser implements PageProcessor {
 
-        private Site site = Site.me().setDomain("my.oschina.net")
-           .addStartUrl("http://my.oschina.net/flashsword/blog");
+    private Site site = Site.me().setDomain("my.oschina.net");
 
-        @Override
-        public void process(Page page) {
-            List<String> links = page.getHtml().links().regex("http://my\\.oschina\\.net/flashsword/blog/\\d+").all();
-            page.addTargetRequests(links);
-            page.putField("title", page.getHtml().xpath("//div[@class='BlogEntity']/div[@class='BlogTitle']/h1").toString());
-            page.putField("content", page.getHtml().$("div.content").toString());
-            page.putField("tags",page.getHtml().xpath("//div[@class='BlogTags']/a/text()").all());
-        }
-
-        @Override
-        public Site getSite() {
-            return site;
-
-        }
-
-        public static void main(String[] args) {
-            Spider.create(new OschinaBlogPageProcesser())
-                 .pipeline(new ConsolePipeline()).run();
-        }
+    @Override
+    public void process(Page page) {
+        List<String> links = page.getHtml().links().regex("http://my\\.oschina\\.net/flashsword/blog/\\d+").all();
+        page.addTargetRequests(links);
+        page.putField("title", page.getHtml().xpath("//div[@class='BlogEntity']/div[@class='BlogTitle']/h1").toString());
+        page.putField("content", page.getHtml().$("div.content").toString());
+        page.putField("tags",page.getHtml().xpath("//div[@class='BlogTags']/a/text()").all());
     }
+
+    @Override
+    public Site getSite() {
+        return site;
+
+    }
+
+    public static void main(String[] args) {
+        Spider.create(new OschinaBlogPageProcesser()).addUrl("http://my.oschina.net/flashsword/blog")
+             .addPipeline(new ConsolePipeline()).run();
+    }
+}
+```
+
 
 这里通过page.addTargetRequests()方法来增加要抓取的URL，并通过page.putField()来保存抽取结果。page.getHtml().xpath()则是按照某个规则对结果进行抽取，这里抽取支持链式调用。调用结束后，toString()表示转化为单个String，all()则转化为一个String列表。
 
@@ -116,39 +133,75 @@ Spider是爬虫的入口类。Pipeline是结果输出和持久化的接口，这
 
 webmagic-extension包括了注解方式编写爬虫的方法，只需基于一个POJO增加注解即可完成一个爬虫。以下仍然是抓取oschina博客的一段代码，功能与OschinaBlogPageProcesser完全相同：
 
-	@TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
-	public class OschinaBlog {
+```java
+@TargetUrl("http://my.oschina.net/flashsword/blog/\\d+")
+public class OschinaBlog {
 
-	    @ExtractBy("//title")
-	    private String title;
+    @ExtractBy("//title")
+    private String title;
 
-	    @ExtractBy(value = "div.BlogContent",type = ExtractBy.Type.Css)
-	    private String content;
+    @ExtractBy(value = "div.BlogContent",type = ExtractBy.Type.Css)
+    private String content;
 
-	    @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
-	    private List<String> tags;
+    @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
+    private List<String> tags;
 
-	    public static void main(String[] args) {
-	        OOSpider.create(
-	        	Site.me().addStartUrl("http://my.oschina.net/flashsword/blog"),
-				new ConsolePageModelPipeline(), OschinaBlog.class).run();
-	    }
-	}
+    public static void main(String[] args) {
+        OOSpider.create(
+        	Site.me(),
+			new ConsolePageModelPipeline(), OschinaBlog.class).addUrl("http://my.oschina.net/flashsword/blog").run();
+    }
+}
+```
 
 这个例子定义了一个Model类，Model类的字段'title'、'content'、'tags'均为要抽取的属性。这个类在Pipeline里是可以复用的。
 
 ### 详细文档
 
-见[webmagic manual.md](https://github.com/code4craft/webmagic/blob/master/user-manual.md)。
+见[http://webmagic.io/docs/](http://webmagic.io/docs/)。
 
 ### 示例
 
 webmagic-samples目录里有一些定制PageProcessor以抽取不同站点的例子。
 
-作者还有一个使用webmagic进行抽取并持久化到数据库的项目[JobHunter](http://git.oschina.net/flashsword20/jobhunter)。这个项目整合了Spring，自定义了Pipeline，使用mybatis进行数据持久化。
+webmagic的使用可以参考：[oschina openapi 应用：博客搬家](http://my.oschina.net/oscfox/blog/194507)
+
 
 ### 协议
 
 webmagic遵循[Apache 2.0协议](http://opensource.org/licenses/Apache-2.0)
 
+### 贡献者:
 
+以下是为WebMagic提交过代码或者issue的朋友:
+
+* [ccliangbo](https://github.com/ccliangbo)
+* [yuany](https://github.com/yuany)
+* [yxssfxwzy](https://github.com/yxssfxwzy)
+* [linkerlin](https://github.com/linkerlin)
+* [d0ngw](https://github.com/d0ngw)
+* [xuchaoo](https://github.com/xuchaoo)
+* [supermicah](https://github.com/supermicah)
+* [SimpleExpress](https://github.com/SimpleExpress)
+* [aruanruan](https://github.com/aruanruan)
+* [l1z2g9](https://github.com/l1z2g9)
+* [zhegexiaohuozi](https://github.com/zhegexiaohuozi)
+* [ywooer](https://github.com/ywooer)
+* [yyw258520](https://github.com/yyw258520)
+* [perfecking](https://github.com/perfecking)
+* [lidongyang](http://my.oschina.net/lidongyang)
+* [seveniu](https://github.com/seveniu)
+* [sebastian1118](https://github.com/sebastian1118)
+* [codev777](https://github.com/codev777)
+
+### 邮件组:
+
+Gmail：
+[https://groups.google.com/forum/#!forum/webmagic-java](https://groups.google.com/forum/#!forum/webmagic-java)
+
+QQ:
+[http://list.qq.com/cgi-bin/qf_invite?id=023a01f505246785f77c5a5a9aff4e57ab20fcdde871e988](http://list.qq.com/cgi-bin/qf_invite?id=023a01f505246785f77c5a5a9aff4e57ab20fcdde871e988)
+
+### QQ群：
+
+373225642

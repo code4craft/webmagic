@@ -37,7 +37,7 @@ public class SpiderTest {
     @Test
     public void testWaitAndNotify() throws InterruptedException {
         for (int i = 0; i < 10000; i++) {
-            System.out.println("round" + i);
+            System.out.println("round " + i);
             testRound();
         }
     }

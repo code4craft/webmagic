@@ -9,3 +9,4 @@ var config = {
 title = $("div.BlogTitle h1"),
 content = $("div.BlogContent")
 urls("http://my\\.oschina\\.net/flashsword/blog/\\d+")
+config;

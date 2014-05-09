@@ -21,6 +21,8 @@ public class Request implements Serializable {
 
     private String url;
 
+    private String method;
+
     /**
      * Store additional information in extras.
      */
@@ -106,10 +108,25 @@ public class Request implements Serializable {
         this.url = url;
     }
 
+    /**
+     * The http method of the request. Get for default.
+     * @return httpMethod
+     * @see us.codecraft.webmagic.utils.HttpConstant.Method
+     * @since 0.5.0
+     */
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
     @Override
     public String toString() {
         return "Request{" +
                 "url='" + url + '\'' +
+                ", method='" + method + '\'' +
                 ", extras=" + extras +
                 ", priority=" + priority +
                 '}';

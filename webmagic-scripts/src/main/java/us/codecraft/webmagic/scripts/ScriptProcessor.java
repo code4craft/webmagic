@@ -1,6 +1,8 @@
 package us.codecraft.webmagic.scripts;
 
 import org.apache.commons.io.IOUtils;
+import org.jruby.RubyHash;
+import org.python.core.PyDictionary;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
@@ -10,6 +12,8 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author code4crafter@gmail.com
@@ -50,20 +54,35 @@ public class ScriptProcessor implements PageProcessor {
             context.setAttribute("page", page, ScriptContext.ENGINE_SCOPE);
             context.setAttribute("config", site, ScriptContext.ENGINE_SCOPE);
             try {
-                engine.eval(defines + "\n" + script, context);
-//            switch (language) {
-//                case JavaScript:
-//                    NativeObject o = (NativeObject) engine.get("result");
-//                    if (o != null) {
-//                        for (Map.Entry<Object, Object> objectObjectEntry : o.entrySet()) {
-//                            page.getResultItems().put(objectObjectEntry.getKey().toString(), objectObjectEntry.getValue());
+                switch (language) {
+                    case JavaScript:
+                        engine.eval(defines + "\n" + script, context);
+//                        NativeObject o = (NativeObject) engine.get("result");
+//                        if (o != null) {
+//                            for (Object o1 : o.getIds()) {
+//                                String key = String.valueOf(o1);
+//                                page.getResultItems().put(key, NativeObject.getProperty(o, key));
+//                            }
 //                        }
-//                    }
-//                    break;
-//                case JRuby:
-//                    Object o1 = engine.get("result");
-//                    break;
-//            }
+                        break;
+                    case JRuby:
+                        RubyHash oRuby = (RubyHash) engine.eval(defines + "\n" + script, context);
+                        Iterator itruby = oRuby.entrySet().iterator();
+                        while (itruby.hasNext()) {
+                            Map.Entry pairs = (Map.Entry) itruby.next();
+                            page.getResultItems().put(pairs.getKey().toString(), pairs.getValue());
+                        }
+                        break;
+                    case Jython:
+                        engine.eval(defines + "\n" + script, context);
+                        PyDictionary oJython = (PyDictionary) engine.get("result");
+                        Iterator it = oJython.entrySet().iterator();
+                        while (it.hasNext()) {
+                            Map.Entry pairs = (Map.Entry) it.next();
+                            page.getResultItems().put(pairs.getKey().toString(), pairs.getValue());
+                        }
+                        break;
+                }
             } catch (ScriptException e) {
                 e.printStackTrace();
             }
@@ -71,6 +90,7 @@ public class ScriptProcessor implements PageProcessor {
             enginePool.release(engine);
         }
     }
+
 
     @Override
     public Site getSite() {

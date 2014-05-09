@@ -769,7 +769,7 @@ public class MockGithubDownloader implements Downloader{
             "\n" +
             "<p>Write a class implements PageProcessor：</p>\n" +
             "\n" +
-            "<div class=\"highlight highlight-java\"><pre>    <span class=\"kd\">public</span> <span class=\"kd\">class</span> <span class=\"nc\">OschinaBlogPageProcesser</span> <span class=\"kd\">implements</span> <span class=\"n\">PageProcessor</span> <span class=\"o\">{</span>\n" +
+            "<div class=\"highlight highlight-java\"><pre>    <span class=\"kd\">public</span> <span class=\"kd\">class</span> <span class=\"nc\">OschinaBlogPageProcessor</span> <span class=\"kd\">implements</span> <span class=\"n\">PageProcessor</span> <span class=\"o\">{</span>\n" +
             "\n" +
             "        <span class=\"kd\">private</span> <span class=\"n\">Site</span> <span class=\"n\">site</span> <span class=\"o\">=</span> <span class=\"n\">Site</span><span class=\"o\">.</span><span class=\"na\">me</span><span class=\"o\">().</span><span class=\"na\">setDomain</span><span class=\"o\">(</span><span class=\"s\">\"my.oschina.net\"</span><span class=\"o\">)</span>\n" +
             "           <span class=\"o\">.</span><span class=\"na\">addStartUrl</span><span class=\"o\">(</span><span class=\"s\">\"http://my.oschina.net/flashsword/blog\"</span><span class=\"o\">);</span>\n" +
@@ -790,7 +790,7 @@ public class MockGithubDownloader implements Downloader{
             "        <span class=\"o\">}</span>\n" +
             "\n" +
             "        <span class=\"kd\">public</span> <span class=\"kd\">static</span> <span class=\"kt\">void</span> <span class=\"nf\">main</span><span class=\"o\">(</span><span class=\"n\">String</span><span class=\"o\">[]</span> <span class=\"n\">args</span><span class=\"o\">)</span> <span class=\"o\">{</span>\n" +
-            "            <span class=\"n\">Spider</span><span class=\"o\">.</span><span class=\"na\">create</span><span class=\"o\">(</span><span class=\"k\">new</span> <span class=\"n\">OschinaBlogPageProcesser</span><span class=\"o\">())</span>\n" +
+            "            <span class=\"n\">Spider</span><span class=\"o\">.</span><span class=\"na\">create</span><span class=\"o\">(</span><span class=\"k\">new</span> <span class=\"n\">OschinaBlogPageProcessor</span><span class=\"o\">())</span>\n" +
             "                 <span class=\"o\">.</span><span class=\"na\">pipeline</span><span class=\"o\">(</span><span class=\"k\">new</span> <span class=\"n\">ConsolePipeline</span><span class=\"o\">()).</span><span class=\"na\">run</span><span class=\"o\">();</span>\n" +
             "        <span class=\"o\">}</span>\n" +
             "    <span class=\"o\">}</span>\n" +

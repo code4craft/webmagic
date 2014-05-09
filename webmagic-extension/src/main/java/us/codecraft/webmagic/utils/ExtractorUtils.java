@@ -37,12 +37,7 @@ public class ExtractorUtils {
     }
 
     private static Selector getXpathSelector(String value) {
-        Selector selector;
-        if (EnvironmentUtil.useXsoup()) {
-            selector = new XsoupSelector(value);
-        } else {
-            selector = new XpathSelector(value);
-        }
+        Selector selector = new XpathSelector(value);
         return selector;
     }
 

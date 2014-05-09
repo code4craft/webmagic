@@ -78,4 +78,17 @@ public class GithubRepo implements HasKey {
     public int getFork() {
         return fork;
     }
+
+    @Override
+    public String toString() {
+        return "GithubRepo{" +
+                "name='" + name + '\'' +
+                ", author='" + author + '\'' +
+                ", readme='" + readme + '\'' +
+                ", language=" + language +
+                ", star=" + star +
+                ", fork=" + fork +
+                ", url='" + url + '\'' +
+                '}';
+    }
 }

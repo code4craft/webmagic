@@ -2,7 +2,8 @@ package us.codecraft.webmagic.downloader;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.*;
 import us.codecraft.webmagic.utils.Experimental;
 import us.codecraft.webmagic.pipeline.Pipeline;
@@ -28,7 +29,7 @@ public class FileCache extends FilePersistentBase implements Downloader, Pipelin
 
     private final PageProcessor pageProcessor;
 
-    private Logger logger = Logger.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     public FileCache(String startUrl, String urlPattern) {
         this(startUrl, urlPattern, "/data/webmagic/temp/");

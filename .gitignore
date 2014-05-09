@@ -1,4 +1,6 @@
-target/*
+target
 *.iml
 out/
 .idea
+.classpath
+.project
