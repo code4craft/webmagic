@@ -1,7 +1,6 @@
 package us.codecraft.webmagic.downloader;
 
 import com.google.common.collect.Sets;
-import info.monitorenter.cpdetector.io.CodepageDetectorProxy;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
@@ -24,12 +23,11 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.utils.HttpConstant;
 import us.codecraft.webmagic.selector.PlainText;
+import us.codecraft.webmagic.utils.HttpConstant;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -122,44 +120,33 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
     }
 
-    private static CodepageDetectorProxy detector = CodepageDetectorProxy.getInstance();
     protected String getHtmlCharset(CloseableHttpResponse httpResponse) throws IOException {
-        // 1、head头部包含编码集
+        // 1、encoding in http header Content-Type
         String value = httpResponse.getEntity().getContentType().getValue();
         String charset = UrlUtils.getCharset(value);
 
-        if(StringUtils.isEmpty(charset)) {
-            // 2、meta元素中包含编码集
+        if (StringUtils.isEmpty(charset)) {
+            // 2、charset in meta
             String content = IOUtils.toString(httpResponse.getEntity().getContent());
-            if(StringUtils.isNotEmpty(content)) {
+            if (StringUtils.isNotEmpty(content)) {
                 Document document = Jsoup.parse(content);
                 Elements links = document.select("meta");
-                for(Element link : links) {
-                    // 2.1、处理场景: <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                for (Element link : links) {
+                    // 2.1、 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
                     String metaContent = link.attr("content");
                     String metaCharset = link.attr("charset");
-                    if(metaContent.indexOf("charset") != -1) {
+                    if (metaContent.indexOf("charset") != -1) {
                         metaContent = metaContent.substring(metaContent.indexOf("charset"), metaContent.length());
                         charset = metaContent.split("=")[1];
                         break;
                     }
-                    // 2.2、处理场景: <meta charset="UTF-8" />
-                    else if(StringUtils.isNotEmpty(metaCharset)) {
+                    // 2.2、 <meta charset="UTF-8" />
+                    else if (StringUtils.isNotEmpty(metaCharset)) {
                         charset = metaCharset;
                         break;
                     }
                 }
-
-                // 3、以上两种都不包含的场景
-                if(StringUtils.isEmpty(charset)) {
-                    java.nio.charset.Charset nioCharset = null;
-                    try {
-                        nioCharset = detector.detectCodepage(httpResponse.getEntity().getContent(), content.length());
-                        charset = nioCharset.name();
-                    } catch (IOException e) {
-                        // ignore
-                    }
-                }
+                // 3、todo use tools as cpdetector for content decode
             }
         }
         return charset;

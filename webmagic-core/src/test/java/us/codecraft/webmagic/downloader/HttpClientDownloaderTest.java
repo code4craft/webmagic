@@ -1,7 +1,6 @@
 package us.codecraft.webmagic.downloader;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -11,6 +10,7 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.selector.Html;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,29 +57,20 @@ public class HttpClientDownloaderTest {
     }
 
     @Test
-    public void testGetHtmlCharset() {
+    public void testGetHtmlCharset() throws IOException {
         HttpClientDownloader downloader = new HttpClientDownloader();
         Site site = Site.me();
         CloseableHttpClient httpClient = new HttpClientGenerator().getClient(site);
-        try {
-            // 头部包含编码
-            Request requestGBK = new Request("http://sports.163.com/14/0514/13/9S7986F300051CA1.html#p=9RGQDGGH0AI90005");
-            CloseableHttpResponse httpResponse = httpClient.execute(downloader.getHttpUriRequest(requestGBK, site, null));
-            String charset = downloader.getHtmlCharset(httpResponse);
-            assertEquals(charset, "GBK");
+        // encoding in http header Content-Type
+        Request requestGBK = new Request("http://sports.163.com/14/0514/13/9S7986F300051CA1.html#p=9RGQDGGH0AI90005");
+        CloseableHttpResponse httpResponse = httpClient.execute(downloader.getHttpUriRequest(requestGBK, site, null));
+        String charset = downloader.getHtmlCharset(httpResponse);
+        assertEquals(charset, "GBK");
 
-            // meta包含编码
-            Request requestUTF_8 = new Request("http://preshing.com/");
-            httpResponse = httpClient.execute(downloader.getHttpUriRequest(requestUTF_8, site, null));
-            charset = downloader.getHtmlCharset(httpResponse);
-            assertEquals(charset, "utf-8");
-
-//            Request request = new Request("http://sports.163.com/14/0514/13/9S7986F300051CA1.html#p=9RGQDGGH0AI90005");
-//            httpResponse = httpClient.execute(downloader.getHttpUriRequest(request, site, null));
-//            charset = downloader.getHtmlCharset(httpResponse);
-//            assertEquals(charset, "GBK");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // encoding in meta
+        Request requestUTF_8 = new Request("http://preshing.com/");
+        httpResponse = httpClient.execute(downloader.getHttpUriRequest(requestUTF_8, site, null));
+        charset = downloader.getHtmlCharset(httpResponse);
+        assertEquals(charset, "utf-8");
     }
 }
