@@ -1,5 +1,8 @@
 package us.codecraft.webmagic.downloader;
 
+import com.github.dreamhead.moco.*;
+import com.github.dreamhead.moco.Runnable;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.junit.Ignore;
@@ -13,6 +16,7 @@ import us.codecraft.webmagic.selector.Html;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import static com.github.dreamhead.moco.Moco.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -57,20 +61,53 @@ public class HttpClientDownloaderTest {
     }
 
     @Test
-    public void testGetHtmlCharset() throws IOException {
-        HttpClientDownloader downloader = new HttpClientDownloader();
-        Site site = Site.me();
-        CloseableHttpClient httpClient = new HttpClientGenerator().getClient(site);
-        // encoding in http header Content-Type
-        Request requestGBK = new Request("http://sports.163.com/14/0514/13/9S7986F300051CA1.html#p=9RGQDGGH0AI90005");
-        CloseableHttpResponse httpResponse = httpClient.execute(downloader.getHttpUriRequest(requestGBK, site, null));
-        String charset = downloader.getHtmlCharset(httpResponse);
-        assertEquals(charset, "GBK");
+    public void testGetHtmlCharset() throws Exception {
+        HttpServer server = httpserver(12306);
+        server.get(by(uri("/header"))).response(header("Content-Type", "text/html; charset=gbk"));
+        server.get(by(uri("/meta4"))).response(with(text("<html>\n" +
+                "  <head>\n" +
+                "    <meta charset='gbk'/>\n" +
+                "  </head>\n" +
+                "  <body></body>\n" +
+                "</html>")),header("Content-Type",""));
+        server.get(by(uri("/meta5"))).response(with(text("<html>\n" +
+                "  <head>\n" +
+                "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=gbk\" />\n" +
+                "  </head>\n" +
+                "  <body></body>\n" +
+                "</html>")),header("Content-Type",""));
+        Runner.running(server, new Runnable() {
+            @Override
+            public void run() {
+                String charset = getCharsetByUrl("http://127.0.0.1:12306/header");
+                assertEquals(charset, "gbk");
+                charset = getCharsetByUrl("http://127.0.0.1:12306/meta4");
+                assertEquals(charset, "gbk");
+                charset = getCharsetByUrl("http://127.0.0.1:12306/meta5");
+                assertEquals(charset, "gbk");
+            }
 
-        // encoding in meta
-        Request requestUTF_8 = new Request("http://preshing.com/");
-        httpResponse = httpClient.execute(downloader.getHttpUriRequest(requestUTF_8, site, null));
-        charset = downloader.getHtmlCharset(httpResponse);
-        assertEquals(charset, "utf-8");
+            private String getCharsetByUrl(String url) {
+                HttpClientDownloader downloader = new HttpClientDownloader();
+                Site site = Site.me();
+                CloseableHttpClient httpClient = new HttpClientGenerator().getClient(site);
+                // encoding in http header Content-Type
+                Request requestGBK = new Request(url);
+                CloseableHttpResponse httpResponse = null;
+                try {
+                    httpResponse = httpClient.execute(downloader.getHttpUriRequest(requestGBK, site, null));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String charset = null;
+                try {
+                    byte[] contentBytes = IOUtils.toByteArray(httpResponse.getEntity().getContent());
+                    charset = downloader.getHtmlCharset(httpResponse,contentBytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return charset;
+            }
+        });
     }
 }

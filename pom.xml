@@ -96,6 +96,18 @@
                 <version>1.1.37</version>
             </dependency>
             <dependency>
+                <groupId>com.github.dreamhead</groupId>
+                <artifactId>moco-core</artifactId>
+                <version>0.9.1</version>
+                <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-simple</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
                 <version>1.2.17</version>
