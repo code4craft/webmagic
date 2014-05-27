@@ -143,4 +143,10 @@ public interface Selectable {
      * @return
      */
     public Selectable selectList(Selector selector);
+
+    /**
+     * get all nodes
+     * @return
+     */
+    public List<Selectable> nodes();
 }

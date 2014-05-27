@@ -142,6 +142,13 @@ public class Html extends PlainText {
         return document.html();
     }
 
+    @Override
+    public List<Selectable> nodes() {
+        ArrayList<Selectable> selectables = new ArrayList<Selectable>();
+        selectables.add(this);
+        return selectables;
+    }
+
     /**
      * @param selector
      * @return
