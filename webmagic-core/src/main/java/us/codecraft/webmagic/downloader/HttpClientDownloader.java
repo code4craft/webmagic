@@ -117,6 +117,10 @@ public class HttpClientDownloader extends AbstractDownloader {
             } catch (IOException e) {
                 logger.warn("close response fail", e);
             }
+            if (site.getHttpProxyPool().isEnable()) {
+                site.returnHttpProxyToPool((HttpHost) request.getExtra(Request.PROXY), (Integer) request
+                        .getExtra(Request.STATUS_CODE));
+            }
         }
     }
 
