@@ -2,7 +2,6 @@ package us.codecraft.webmagic.selector;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import us.codecraft.xsoup.XPathEvaluator;
 import us.codecraft.xsoup.Xsoup;
 
@@ -34,7 +33,7 @@ public class XpathSelector extends BaseElementSelector {
 
     @Override
     public Element selectElement(Element element) {
-        Elements elements = selectElements(element);
+        List<Element> elements = selectElements(element);
         if (CollectionUtils.isNotEmpty(elements)){
             return elements.get(0);
         }
@@ -42,7 +41,12 @@ public class XpathSelector extends BaseElementSelector {
     }
 
     @Override
-    public Elements selectElements(Element element) {
+    public List<Element> selectElements(Element element) {
         return xPathEvaluator.evaluate(element).getElements();
+    }
+
+    @Override
+    public boolean hasAttribute() {
+        return xPathEvaluator.hasAttribute();
     }
 }

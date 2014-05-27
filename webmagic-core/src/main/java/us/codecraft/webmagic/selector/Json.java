@@ -26,7 +26,7 @@ public class Json extends PlainText {
      * @return
      */
     public Json removePadding(String padding) {
-        String text = getText();
+        String text = getFirstSourceText();
         XTokenQueue tokenQueue = new XTokenQueue(text);
         tokenQueue.consumeWhitespace();
         tokenQueue.consume(padding);
@@ -36,29 +36,22 @@ public class Json extends PlainText {
     }
 
     public <T> T toObject(Class<T> clazz) {
-        if (getText() == null) {
+        if (getFirstSourceText() == null) {
             return null;
         }
-        return JSON.parseObject(getText(), clazz);
+        return JSON.parseObject(getFirstSourceText(), clazz);
     }
 
     public <T> List<T> toList(Class<T> clazz) {
-        if (getText() == null) {
+        if (getFirstSourceText() == null) {
             return null;
         }
-        return JSON.parseArray(getText(), clazz);
-    }
-
-    public String getText() {
-        if (strings != null && strings.size() > 0) {
-            return strings.get(0);
-        }
-        return null;
+        return JSON.parseArray(getFirstSourceText(), clazz);
     }
 
     @Override
     public Selectable jsonPath(String jsonPath) {
         JsonPathSelector jsonPathSelector = new JsonPathSelector(jsonPath);
-        return selectList(jsonPathSelector,strings);
+        return selectList(jsonPathSelector,getSourceTexts());
     }
 }

@@ -12,12 +12,15 @@ import java.util.List;
  */
 public class PlainText extends AbstractSelectable {
 
-    public PlainText(List<String> strings) {
-        super(strings);
+    protected List<String> sourceTexts;
+
+    public PlainText(List<String> sourceTexts) {
+        this.sourceTexts = sourceTexts;
     }
 
     public PlainText(String text) {
-       super(text);
+        this.sourceTexts = new ArrayList<String>();
+        sourceTexts.add(text);
     }
 
     public static PlainText create(String text) {
@@ -51,11 +54,15 @@ public class PlainText extends AbstractSelectable {
 
     @Override
     public List<Selectable> nodes() {
-        List<Selectable> nodes = new ArrayList<Selectable>(strings.size());
-        for (String string : strings) {
+        List<Selectable> nodes = new ArrayList<Selectable>(getSourceTexts().size());
+        for (String string : getSourceTexts()) {
             nodes.add(PlainText.create(string));
         }
         return nodes;
     }
 
+    @Override
+    protected List<String> getSourceTexts() {
+        return sourceTexts;
+    }
 }

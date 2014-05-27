@@ -2,7 +2,6 @@ package us.codecraft.webmagic.selector;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,16 +36,18 @@ public abstract class BaseElementSelector implements Selector, ElementSelector {
         return null;
     }
 
-    public Elements selectElements(String text) {
+    public List<Element> selectElements(String text) {
         if (text != null) {
             return selectElements(Jsoup.parse(text));
         } else {
-            return new Elements();
+            return new ArrayList<Element>();
         }
     }
 
     public abstract Element selectElement(Element element);
 
-    public abstract Elements selectElements(Element element);
+    public abstract List<Element> selectElements(Element element);
+
+    public abstract boolean hasAttribute();
 
 }

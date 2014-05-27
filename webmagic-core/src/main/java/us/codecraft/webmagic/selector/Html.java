@@ -2,10 +2,11 @@ package us.codecraft.webmagic.selector;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  * @author code4crafter@gmail.com <br>
  * @since 0.1.0
  */
-public class Html extends PlainText {
+public class Html extends HtmlNode {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -23,130 +24,26 @@ public class Html extends PlainText {
      */
     private Document document;
 
-    private boolean needInitCache = true;
-
-    public Html(List<String> strings) {
-        super(strings);
-    }
-
     public Html(String text) {
-        super(text);
-    }
-
-    public Html(List<String> strings, boolean needInitCache) {
-        super(strings);
-        this.needInitCache = needInitCache;
-    }
-
-    public Html(String text, boolean needInitCache) {
-        super(text);
-        this.needInitCache = needInitCache;
-    }
-
-    /**
-     * lazy init
-     */
-    private void initDocument() {
-        if (this.document == null && needInitCache) {
-            needInitCache = false;
-            //just init once whether the parsing succeeds or not
-            try {
-                this.document = Jsoup.parse(getText());
-            } catch (Exception e) {
-                logger.warn("parse document error ", e);
-            }
+        try {
+            this.document = Jsoup.parse(text);
+        } catch (Exception e) {
+            this.document = null;
+            logger.warn("parse document error ", e);
         }
     }
 
     public Html(Document document) {
-        super(document.html());
         this.document = document;
     }
 
-    public static Html create(String text) {
-        return new Html(text);
-    }
-
-    @Override
-    protected Selectable select(Selector selector, List<String> strings) {
-        initDocument();
-        List<String> results = new ArrayList<String>();
-        for (String string : strings) {
-            String result = selector.select(string);
-            if (result != null) {
-                results.add(result);
-            }
-        }
-        return new Html(results, false);
-    }
-
-    @Override
-    protected Selectable selectList(Selector selector, List<String> strings) {
-        initDocument();
-        List<String> results = new ArrayList<String>();
-        for (String string : strings) {
-            List<String> result = selector.selectList(string);
-            results.addAll(result);
-        }
-        return new Html(results, false);
-    }
-
-    @Override
-    public Selectable smartContent() {
-        initDocument();
-        SmartContentSelector smartContentSelector = Selectors.smartContent();
-        return select(smartContentSelector, strings);
-    }
-
-    @Override
-    public Selectable links() {
-        return xpath("//a/@href");
-    }
-
-    @Override
-    public Selectable xpath(String xpath) {
-        XpathSelector xpathSelector = Selectors.xpath(xpath);
-        if (document != null) {
-            return new Html(xpathSelector.selectList(document), false);
-        }
-        return selectList(xpathSelector, strings);
-    }
-
-    @Override
-    public Selectable $(String selector) {
-        CssSelector cssSelector = Selectors.$(selector);
-        if (document != null) {
-            return new Html(cssSelector.selectList(document), false);
-        }
-        return selectList(cssSelector, strings);
-    }
-
-    @Override
-    public Selectable $(String selector, String attrName) {
-        CssSelector cssSelector = Selectors.$(selector, attrName);
-        if (document != null) {
-            return new Html(cssSelector.selectList(document), false);
-        }
-        return selectList(cssSelector, strings);
-    }
-
     public Document getDocument() {
-        initDocument();
         return document;
     }
 
-    public String getText() {
-        if (strings != null && strings.size() > 0) {
-            return strings.get(0);
-        }
-        return document.html();
-    }
-
     @Override
-    public List<Selectable> nodes() {
-        ArrayList<Selectable> selectables = new ArrayList<Selectable>();
-        selectables.add(this);
-        return selectables;
+    protected List<Element> getElements() {
+        return Collections.<Element>singletonList(getDocument());
     }
 
     /**
@@ -158,7 +55,7 @@ public class Html extends PlainText {
             ElementSelector elementSelector = (ElementSelector) selector;
             return elementSelector.select(getDocument());
         } else {
-            return selector.select(getText());
+            return selector.select(getFirstSourceText());
         }
     }
 
@@ -167,7 +64,12 @@ public class Html extends PlainText {
             ElementSelector elementSelector = (ElementSelector) selector;
             return elementSelector.selectList(getDocument());
         } else {
-            return selector.selectList(getText());
+            return selector.selectList(getFirstSourceText());
         }
     }
+
+    public static Html create(String text) {
+        return new Html(text);
+    }
+
 }

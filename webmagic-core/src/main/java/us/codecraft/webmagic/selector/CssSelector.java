@@ -57,7 +57,7 @@ public class CssSelector extends BaseElementSelector {
 
     @Override
     public String select(Element element) {
-        Elements elements = selectElements(element);
+        List<Element> elements = selectElements(element);
         if (CollectionUtils.isEmpty(elements)) {
             return null;
         }
@@ -67,7 +67,7 @@ public class CssSelector extends BaseElementSelector {
     @Override
     public List<String> selectList(Element doc) {
         List<String> strings = new ArrayList<String>();
-        Elements elements = selectElements(doc);
+        List<Element> elements = selectElements(doc);
         if (CollectionUtils.isNotEmpty(elements)) {
             for (Element element : elements) {
                 String value = getValue(element);
@@ -89,7 +89,12 @@ public class CssSelector extends BaseElementSelector {
     }
 
     @Override
-    public Elements selectElements(Element element) {
+    public List<Element> selectElements(Element element) {
         return element.select(selectorText);
+    }
+
+    @Override
+    public boolean hasAttribute() {
+        return attrName != null;
     }
 }

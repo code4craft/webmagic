@@ -11,17 +11,7 @@ import java.util.List;
  */
 public abstract class AbstractSelectable implements Selectable {
 
-    protected List<String> strings;
-
-    public AbstractSelectable(String text) {
-        List<String> results = new ArrayList<String>();
-        results.add(text);
-        this.strings = results;
-    }
-
-    public AbstractSelectable(List<String> strings) {
-        this.strings = strings;
-    }
+    protected abstract List<String> getSourceTexts();
 
     @Override
     public Selectable css(String selector) {
@@ -55,7 +45,7 @@ public abstract class AbstractSelectable implements Selectable {
 
     @Override
     public List<String> all() {
-        return strings;
+        return getSourceTexts();
     }
 
     @Override
@@ -74,30 +64,37 @@ public abstract class AbstractSelectable implements Selectable {
 
     @Override
     public Selectable select(Selector selector) {
-        return select(selector, strings);
+        return select(selector, getSourceTexts());
     }
 
     @Override
     public Selectable selectList(Selector selector) {
-        return selectList(selector, strings);
+        return selectList(selector, getSourceTexts());
     }
 
     @Override
     public Selectable regex(String regex) {
         RegexSelector regexSelector = Selectors.regex(regex);
-        return selectList(regexSelector, strings);
+        return selectList(regexSelector, getSourceTexts());
     }
 
     @Override
     public Selectable regex(String regex, int group) {
         RegexSelector regexSelector = Selectors.regex(regex, group);
-        return selectList(regexSelector, strings);
+        return selectList(regexSelector, getSourceTexts());
     }
 
     @Override
     public Selectable replace(String regex, String replacement) {
         ReplaceSelector replaceSelector = new ReplaceSelector(regex,replacement);
-        return select(replaceSelector, strings);
+        return select(replaceSelector, getSourceTexts());
+    }
+
+    public String getFirstSourceText() {
+        if (getSourceTexts() != null && getSourceTexts().size() > 0) {
+            return getSourceTexts().get(0);
+        }
+        return null;
     }
 
     @Override
@@ -107,6 +104,6 @@ public abstract class AbstractSelectable implements Selectable {
 
     @Override
     public boolean match() {
-        return strings != null && strings.size() > 0;
+        return getSourceTexts() != null && getSourceTexts().size() > 0;
     }
 }

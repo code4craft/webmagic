@@ -39,7 +39,7 @@ public class HttpClientDownloaderTest {
     public void testDownloader() {
         HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
         Html html = httpClientDownloader.download("https://github.com");
-        assertTrue(!html.getText().isEmpty());
+        assertTrue(!html.getFirstSourceText().isEmpty());
     }
 
     @Test(expected = IllegalArgumentException.class)
