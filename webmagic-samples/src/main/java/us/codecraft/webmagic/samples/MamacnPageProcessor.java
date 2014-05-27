@@ -10,6 +10,7 @@ import us.codecraft.webmagic.selector.Selectable;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 /**
  * @author code4crafer@gmail.com
@@ -20,11 +21,14 @@ public class MamacnPageProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        Selectable images = page.getHtml().xpath("//ul[@id=ma-thumb-list]/li");
-        page.putField("img", images.xpath("//div[@class=picList]/div[@class=pre]/div[@class=npic]//img/@src").get());
-        page.putField("title", page.getHtml().xpath("//div[@class=picList]/div[@class=pre]/div[@class=npic]//img/@alt").get());
-        page.putField("url", page.getUrl().toString());
-        if (page.getResultItems().get("title") == null) {
+        List<Selectable> nodes = page.getHtml().xpath("//ul[@id=ma-thumb-list]/li").nodes();
+        StringBuilder accum = new StringBuilder();
+        for (Selectable node : nodes) {
+            accum.append("img:").append(node.xpath("//a/@href").get()).append("\n");
+            accum.append("title:").append(node.xpath("//img/@alt").get()).append("\n");
+        }
+        page.putField("",accum.toString());
+        if (accum.length() == 0) {
             page.setSkip(true);
         }
         page.addTargetRequests(page.getHtml().links().regex("http://www\\.mama\\.cn/photo/.*\\.html").all());
