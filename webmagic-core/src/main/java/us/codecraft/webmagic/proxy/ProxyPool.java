@@ -1,34 +1,17 @@
 package us.codecraft.webmagic.proxy;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import org.apache.http.HttpHost;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.DelayQueue;
-import java.util.concurrent.Delayed;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.http.HttpHost;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * ClassName:ProxyPool
@@ -59,7 +42,7 @@ public class ProxyPool {
 		@Override
 		public void run() {
 			saveProxyList();
-			logger.info(allProxyStutus());
+			logger.info(allProxyStatus());
 		}
 	};
 
@@ -230,7 +213,7 @@ public class ProxyPool {
 		}
 	}
 
-	public String allProxyStutus() {
+	public String allProxyStatus() {
 		String re = "all proxy info >>>> \n";
 		for (Entry<String, Proxy> entry : allProxy.entrySet()) {
 			re += entry.getValue().toString() + "\n";
@@ -285,13 +268,13 @@ public class ProxyPool {
 				proxyPool.logger.info("borrow object>>>>" + i + ">>>>" + httphostList.get(i).toString());
 				i++;
 			}
-			System.out.println(proxyPool.allProxyStutus());
+			System.out.println(proxyPool.allProxyStatus());
 			System.in.read();
 			for (i = 0; i < httphostList.size(); i++) {
 				proxyPool.returnProxy(httphostList.get(i), 200);
 				proxyPool.logger.info("return object>>>>" + i + ">>>>" + httphostList.get(i).toString());
 			}
-			System.out.println(proxyPool.allProxyStutus());
+			System.out.println(proxyPool.allProxyStatus());
 			System.in.read();
 		}
 
