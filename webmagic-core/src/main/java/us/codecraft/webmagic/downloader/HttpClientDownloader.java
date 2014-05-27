@@ -3,6 +3,7 @@ package us.codecraft.webmagic.downloader;
 import com.google.common.collect.Sets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.annotation.ThreadSafe;
@@ -85,10 +86,12 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
         logger.info("downloading page {}", request.getUrl());
         CloseableHttpResponse httpResponse = null;
+        int statusCode=0;
         try {
             HttpUriRequest httpUriRequest = getHttpUriRequest(request, site, headers);
             httpResponse = getHttpClient(site).execute(httpUriRequest);
-            int statusCode = httpResponse.getStatusLine().getStatusCode();
+            statusCode = httpResponse.getStatusLine().getStatusCode();
+            request.putExtra(Request.STATUS_CODE, statusCode);
             if (statusAccept(acceptStatCode, statusCode)) {
                 Page page = handleResponse(request, charset, httpResponse, task);
                 onSuccess(request);
@@ -105,6 +108,7 @@ public class HttpClientDownloader extends AbstractDownloader {
             onError(request);
             return null;
         } finally {
+        	request.putExtra(Request.STATUS_CODE, statusCode);
             try {
                 if (httpResponse != null) {
                     //ensure the connection is released back to pool
@@ -137,9 +141,11 @@ public class HttpClientDownloader extends AbstractDownloader {
                 .setSocketTimeout(site.getTimeOut())
                 .setConnectTimeout(site.getTimeOut())
                 .setCookieSpec(CookieSpecs.BEST_MATCH);
-        if (site != null && site.getHttpProxy() != null) {
-            requestConfigBuilder.setProxy(site.getHttpProxy());
-        }
+		if (site.getHttpProxyPool().isEnable()) {
+			HttpHost host = site.getHttpProxyFromPool();
+			requestConfigBuilder.setProxy(host);
+			request.putExtra(Request.PROXY, host);
+		}
         requestBuilder.setConfig(requestConfigBuilder.build());
         return requestBuilder.build();
     }
