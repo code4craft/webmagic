@@ -46,9 +46,12 @@ public class JsonPathSelector implements Selector {
             return list;
         }
         if (object instanceof List) {
-            return (List<String>) object;
+            List<Object> items = (List<Object>) object;
+            for (Object item : items) {
+                list.add(String.valueOf(item));
+            }
         } else {
-            list.add(object.toString());
+            list.add(String.valueOf(object));
         }
         return list;
     }

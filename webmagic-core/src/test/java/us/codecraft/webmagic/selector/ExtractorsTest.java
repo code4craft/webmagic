@@ -1,8 +1,8 @@
 package us.codecraft.webmagic.selector;
 
-import junit.framework.Assert;
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static us.codecraft.webmagic.selector.Selectors.*;
 
 /**
@@ -16,19 +16,19 @@ public class ExtractorsTest {
 
     @Test
     public void testEach() {
-        Assert.assertEquals("<a href=\"xxx\">aabbcc</a>", $("div h1 a").select(html));
-        Assert.assertEquals("xxx", $("div h1 a", "href").select(html));
-        Assert.assertEquals("aabbcc", $("div h1 a", "innerHtml").select(html));
-        Assert.assertEquals("xxx", xpath("//a/@href").select(html));
-        Assert.assertEquals("xxx", regex("a href=\"(.*)\"").select(html));
-        Assert.assertEquals("xxx", regex("(a href)=\"(.*)\"", 2).select(html));
+        assertThat($("div h1 a").select(html)).isEqualTo("<a href=\"xxx\">aabbcc</a>");
+        assertThat($("div h1 a", "href").select(html)).isEqualTo("xxx");
+        assertThat($("div h1 a", "innerHtml").select(html)).isEqualTo("aabbcc");
+        assertThat(xpath("//a/@href").select(html)).isEqualTo("xxx");
+        assertThat(regex("a href=\"(.*)\"").select(html)).isEqualTo("xxx");
+        assertThat(regex("(a href)=\"(.*)\"", 2).select(html)).isEqualTo("xxx");
     }
 
     @Test
     public void testCombo() {
-        Assert.assertEquals("bb", and($("title"), regex("aa(bb)cc")).select(html2));
+        assertThat(and($("title"), regex("aa(bb)cc")).select(html2)).isEqualTo("bb");
         OrSelector or = or($("div h1 a", "innerHtml"), xpath("//title"));
-        Assert.assertEquals("aabbcc", or.select(html));
-        Assert.assertEquals("<title>aabbcc</title>", or.select(html2));
+        assertThat(or.select(html)).isEqualTo("aabbcc");
+        assertThat(or.select(html2)).isEqualTo("<title>aabbcc</title>");
     }
 }

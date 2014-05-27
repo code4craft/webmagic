@@ -50,11 +50,6 @@ public class UrlUtilsTest {
     }
 
     @Test
-    public void test(){
-        UrlUtils.canonicalizeUrl("start tag", "http://www.dianping.com/");
-    }
-
-    @Test
     public void testGetDomain(){
         String url = "http://www.dianping.com/aa/";
         Assert.assertEquals("www.dianping.com",UrlUtils.getDomain(url));
