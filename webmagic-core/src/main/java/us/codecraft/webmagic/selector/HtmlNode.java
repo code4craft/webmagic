@@ -1,9 +1,11 @@
 package us.codecraft.webmagic.selector;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * @author code4crafer@gmail.com
@@ -48,9 +50,11 @@ public class HtmlNode extends AbstractSelectable {
      * @return
      */
     protected Selectable selectElements(BaseElementSelector elementSelector) {
+        ListIterator<Element> elementIterator = getElements().listIterator();
         if (!elementSelector.hasAttribute()) {
             List<Element> resultElements = new ArrayList<Element>();
-            for (Element element : getElements()) {
+            while (elementIterator.hasNext()) {
+                Element element = checkElementAndConvert(elementIterator);
                 List<Element> selectElements = elementSelector.selectElements(element);
                 resultElements.addAll(selectElements);
             }
@@ -58,13 +62,33 @@ public class HtmlNode extends AbstractSelectable {
         } else {
             // has attribute, consider as plaintext
             List<String> resultStrings = new ArrayList<String>();
-            for (Element element : getElements()) {
+            while (elementIterator.hasNext()) {
+                Element element = checkElementAndConvert(elementIterator);
                 List<String> selectList = elementSelector.selectList(element);
                 resultStrings.addAll(selectList);
             }
             return new PlainText(resultStrings);
 
         }
+    }
+
+    /**
+     * Only document can be select
+     * See: https://github.com/code4craft/webmagic/issues/113
+     *
+     * @param elementIterator
+     * @param element
+     */
+    private Element checkElementAndConvert(ListIterator<Element> elementIterator) {
+        Element element = elementIterator.next();
+        if (!(element instanceof Document)) {
+            Document root = new Document(element.ownerDocument().baseUri());
+            Element clone = element.clone();
+            root.appendChild(clone);
+            elementIterator.set(root);
+            return root;
+        }
+        return element;
     }
 
     @Override
