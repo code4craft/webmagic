@@ -146,6 +146,7 @@ Thanks these people for commiting source code, reporting bugs or suggesting for 
 * [seveniu](https://github.com/seveniu)
 * [sebastian1118](https://github.com/sebastian1118)
 * [codev777](https://github.com/codev777)
+* [fengwuze](https://github.com/fengwuze)
 
 
 ### Thanks:
