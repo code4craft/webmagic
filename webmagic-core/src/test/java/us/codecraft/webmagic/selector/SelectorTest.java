@@ -23,4 +23,11 @@ public class SelectorTest {
         assertThat(linksWithoutChain).hasSameSizeAs(linksWithChainFirstCall);
         assertThat(linksWithChainFirstCall).hasSameSizeAs(linksWithChainSecondCall);
     }
+
+    @Test
+    public void testNodes() throws Exception {
+        Html selectable = new Html(html);
+        List<Selectable> links = selectable.xpath("//a").nodes();
+        assertThat(links.get(0).links().get()).isEqualTo("http://whatever.com/aaa");
+    }
 }

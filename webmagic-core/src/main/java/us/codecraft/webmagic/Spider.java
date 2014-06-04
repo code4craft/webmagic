@@ -2,6 +2,7 @@ package us.codecraft.webmagic;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.http.HttpHost;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.downloader.Downloader;
@@ -324,6 +325,10 @@ public class Spider implements Runnable, Task {
                             onError(requestFinal);
                             logger.error("process request " + requestFinal + " error", e);
                         } finally {
+                            if (site.getHttpProxyPool().isEnable()) {
+                                site.returnHttpProxyToPool((HttpHost) requestFinal.getExtra(Request.PROXY), (Integer) requestFinal
+                                        .getExtra(Request.STATUS_CODE));
+                            }
                             pageCount.incrementAndGet();
                             signalNewUrl();
                         }

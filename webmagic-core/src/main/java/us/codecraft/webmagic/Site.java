@@ -3,6 +3,8 @@ package us.codecraft.webmagic;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.apache.http.HttpHost;
+
+import us.codecraft.webmagic.proxy.ProxyPool;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.util.*;
@@ -47,6 +49,8 @@ public class Site {
 
     private HttpHost httpProxy;
 
+	private ProxyPool httpProxyPool=new ProxyPool();
+	
     private boolean useGzip = true;
 
     /**
@@ -438,4 +442,32 @@ public class Site {
                 ", headers=" + headers +
                 '}';
     }
+
+    /**
+     * Set httpProxyPool, String[0]:ip, String[1]:port <br>
+     *
+     * @return this
+     */
+	public Site setHttpProxyPool(List<String[]> httpProxyList) {
+		this.httpProxyPool=new ProxyPool(httpProxyList);
+		return this;
+	}
+
+	public ProxyPool getHttpProxyPool() {
+		return httpProxyPool;
+	}
+
+	public HttpHost getHttpProxyFromPool() {
+		return httpProxyPool.getProxy();
+	}
+
+	public void returnHttpProxyToPool(HttpHost proxy,int statusCode) {
+		httpProxyPool.returnProxy(proxy,statusCode);
+	}
+	
+	public Site setProxyReuseInterval(int reuseInterval) {
+		this.httpProxyPool.setReuseInterval(reuseInterval);
+		return this;
+	}
+
 }
