@@ -193,6 +193,7 @@ webmagic遵循[Apache 2.0协议](http://opensource.org/licenses/Apache-2.0)
 * [seveniu](https://github.com/seveniu)
 * [sebastian1118](https://github.com/sebastian1118)
 * [codev777](https://github.com/codev777)
+* [fengwuze](https://github.com/fengwuze)
 
 ### 邮件组:
 
