@@ -27,11 +27,7 @@ public class SelectorTest {
     @Test
     public void testNodes() throws Exception {
         Html selectable = new Html(html);
-List<Selectable> divs = html.xpath("//div").nodes();
-for (Selectable div : divs) {
-    System.out.println(div.xpath("//h2").get());
-}
-
+        List<Selectable> links = selectable.xpath("//a").nodes();
         assertThat(links.get(0).links().get()).isEqualTo("http://whatever.com/aaa");
     }
 }
