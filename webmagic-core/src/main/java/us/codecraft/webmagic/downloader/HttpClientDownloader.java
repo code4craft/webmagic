@@ -141,8 +141,8 @@ public class HttpClientDownloader extends AbstractDownloader {
                 .setSocketTimeout(site.getTimeOut())
                 .setConnectTimeout(site.getTimeOut())
                 .setCookieSpec(CookieSpecs.BEST_MATCH);
-		if (site.getHttpProxyPool().isEnable()) {
-			HttpHost host = site.getHttpProxyFromPool();
+        if (site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
+            HttpHost host = site.getHttpProxyFromPool();
 			requestConfigBuilder.setProxy(host);
 			request.putExtra(Request.PROXY, host);
 		}

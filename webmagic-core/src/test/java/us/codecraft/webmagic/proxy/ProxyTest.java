@@ -1,16 +1,14 @@
 package us.codecraft.webmagic.proxy;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.apache.http.HttpHost;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.HttpHost;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import us.codecraft.webmagic.Request;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author yxssfxwzy@sina.com May 30, 2014
@@ -28,11 +26,6 @@ public class ProxyTest {
 		for (String line : source) {
 			httpProxyList.add(new String[] { line.split(":")[0], line.split(":")[1] });
 		}
-	}
-
-	@Test
-	public void testAddProxy() {
-
 	}
 
 	@Test

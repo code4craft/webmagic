@@ -49,7 +49,7 @@ public class Site {
 
     private HttpHost httpProxy;
 
-	private ProxyPool httpProxyPool=new ProxyPool();
+	private ProxyPool httpProxyPool;
 	
     private boolean useGzip = true;
 
@@ -452,6 +452,11 @@ public class Site {
 		this.httpProxyPool=new ProxyPool(httpProxyList);
 		return this;
 	}
+
+    public Site enableHttpProxyPool() {
+        this.httpProxyPool=new ProxyPool();
+        return this;
+    }
 
 	public ProxyPool getHttpProxyPool() {
 		return httpProxyPool;
