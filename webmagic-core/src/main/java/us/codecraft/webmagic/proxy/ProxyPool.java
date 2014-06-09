@@ -1,26 +1,39 @@
 package us.codecraft.webmagic.proxy;
 
-import org.apache.http.HttpHost;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Map.Entry;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.DelayQueue;
 
+import org.apache.http.HttpHost;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import us.codecraft.webmagic.utils.FilePersistentBase;
+import us.codecraft.webmagic.utils.ProxyUtils;
+
 /**
- * ClassName:ProxyPool
+ * Pooled Proxy Object
  * 
- * @see
- * @Function: TODO ADD FUNCTION
- * @author ch
- * @version Ver 1.0
- * @Date 2014-2-14 下午01:10:04
+ * @author yxssfxwzy@sina.com <br>
+ * @since 0.5.1
+ * @see Proxy
  */
 public class ProxyPool {
 
@@ -31,10 +44,14 @@ public class ProxyPool {
 
 	private int reuseInterval = 1500;// ms
 	private int reviveTime = 2 * 60 * 60 * 1000;// ms
+	private int saveProxyInterval = 10 * 60 * 1000;// ms
 
 	private boolean isEnable = false;
 	private boolean validateWhenInit = false;
-	private String proxyFile = "data/lastUse.proxy";
+	// private boolean isUseLastProxy = true;
+	private String proxyFilePath = "/data/webmagic/lastUse.proxy";
+
+	private FilePersistentBase fBase = new FilePersistentBase();
 
 	private Timer timer = new Timer(true);
 	private TimerTask saveProxyTask = new TimerTask() {
@@ -47,13 +64,46 @@ public class ProxyPool {
 	};
 
 	public ProxyPool() {
-
+		this(null, true);
 	}
 
 	public ProxyPool(List<String[]> httpProxyList) {
-		readProxyList();
-		addProxy(httpProxyList.toArray(new String[httpProxyList.size()][]));
-		timer.schedule(saveProxyTask, 10 * 60 * 1000L, 10 * 60 * 1000);
+		this(httpProxyList, true);
+	}
+
+	public ProxyPool(List<String[]> httpProxyList, boolean isUseLastProxy) {
+		if (httpProxyList != null) {
+			addProxy(httpProxyList.toArray(new String[httpProxyList.size()][]));
+		}
+		if (isUseLastProxy) {
+			if (!new File(proxyFilePath).exists()) {
+				setFilePath();
+			}
+			setFilePath();
+			readProxyList();
+			timer.schedule(saveProxyTask, 0, saveProxyInterval);
+		}
+	}
+
+	private void setFilePath() {
+		String tmpDir = System.getProperty("java.io.tmpdir");
+		String path = tmpDir + "webmagic\\lastUse.proxy";
+		if (tmpDir != null && new File(tmpDir).isDirectory()) {
+			fBase.setPath(tmpDir + "webmagic");
+			File f = fBase.getFile(path);
+			if (!f.exists()) {
+				try {
+					f.createNewFile();
+
+				} catch (IOException e) {
+					logger.error("proxy file create error", e);
+				}
+			}
+
+		} else {
+			logger.error("java tmp dir not exists");
+		}
+		this.proxyFilePath = path;
 	}
 
 	private void saveProxyList() {
@@ -61,7 +111,7 @@ public class ProxyPool {
 			return;
 		}
 		try {
-			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(proxyFile));
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(fBase.getFile(proxyFilePath)));
 			os.writeObject(prepareForSaving());
 			os.close();
 			logger.info("save proxy");
@@ -84,15 +134,15 @@ public class ProxyPool {
 
 	private void readProxyList() {
 		try {
-			ObjectInputStream is = new ObjectInputStream(new FileInputStream(proxyFile));
+			ObjectInputStream is = new ObjectInputStream(new FileInputStream(fBase.getFile(proxyFilePath)));
 			addProxy((Map<String, Proxy>) is.readObject());
 			is.close();
 		} catch (FileNotFoundException e) {
-			logger.error("proxy file not found", e);
+			logger.info("last use proxy file not found", e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
@@ -103,7 +153,7 @@ public class ProxyPool {
 				if (allProxy.containsKey(entry.getKey())) {
 					continue;
 				}
-				if (!validateWhenInit || ProxyUtil.validateProxy(entry.getValue().getHttpHost())) {
+				if (!validateWhenInit || ProxyUtils.validateProxy(entry.getValue().getHttpHost())) {
 					entry.getValue().setFailedNum(0);
 					entry.getValue().setReuseTimeInterval(reuseInterval);
 					proxyQueue.add(entry.getValue());
@@ -124,7 +174,7 @@ public class ProxyPool {
 					continue;
 				}
 				HttpHost item = new HttpHost(InetAddress.getByName(s[0]), Integer.valueOf(s[1]));
-				if (!validateWhenInit || ProxyUtil.validateProxy(item)) {
+				if (!validateWhenInit || ProxyUtils.validateProxy(item)) {
 					Proxy p = new Proxy(item, reuseInterval);
 					proxyQueue.add(p);
 					allProxy.put(s[0], p);
@@ -173,7 +223,7 @@ public class ProxyPool {
 			p.successNumIncrement(1);
 			break;
 		case Proxy.ERROR_403:
-			// banned,try larger interval
+			// banned,try longer interval
 			p.fail(Proxy.ERROR_403);
 			p.setReuseTimeInterval(reuseInterval * p.getFailedNum());
 			logger.info(host + " >>>> reuseTimeInterval is >>>> " + p.getReuseTimeInterval() / 1000.0);
@@ -185,7 +235,7 @@ public class ProxyPool {
 			logger.info(host + " >>>> reuseTimeInterval is >>>> " + p.getReuseTimeInterval() / 1000.0);
 			break;
 		case Proxy.ERROR_404:
-			//p.fail(Proxy.ERROR_404);
+			// p.fail(Proxy.ERROR_404);
 			// p.setReuseTimeInterval(reuseInterval * p.getFailedNum());
 			break;
 		default:
@@ -193,14 +243,12 @@ public class ProxyPool {
 			break;
 		}
 		if (p.getFailedNum() > 20) {
-			// allProxy.remove(host.getAddress().getHostAddress());
 			p.setReuseTimeInterval(reviveTime);
 			logger.error("remove proxy >>>> " + host + ">>>>" + p.getFailedType() + " >>>> remain proxy >>>> " + proxyQueue.size());
 			return;
 		}
-		if (p.getFailedNum()%5==0) {
-			if (!ProxyUtil.validateProxy(host)) {
-				// allProxy.remove(host.getAddress().getHostAddress());
+		if (p.getFailedNum() > 0 && p.getFailedNum() % 5 == 0) {
+			if (!ProxyUtils.validateProxy(host)) {
 				p.setReuseTimeInterval(reviveTime);
 				logger.error("remove proxy >>>> " + host + ">>>>" + p.getFailedType() + " >>>> remain proxy >>>> " + proxyQueue.size());
 				return;
@@ -219,7 +267,6 @@ public class ProxyPool {
 			re += entry.getValue().toString() + "\n";
 		}
 		return re;
-
 	}
 
 	public int getIdleNum() {
@@ -234,52 +281,6 @@ public class ProxyPool {
 		this.reuseInterval = reuseInterval;
 	}
 
-	public static List<String[]> getProxyList() {
-		List<String[]> proxyList = new ArrayList<String[]>();
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(new File("proxy.txt")));
-
-			String line = "";
-			while ((line = br.readLine()) != null) {
-				proxyList.add(new String[] { line.split(":")[0], line.split(":")[1] });
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return proxyList;
-	}
-
-	public static void main(String[] args) throws IOException {
-		ProxyPool proxyPool = new ProxyPool(getProxyList());
-		proxyPool.setReuseInterval(10000);
-		// proxyPool.saveProxyList();
-
-		while (true) {
-			List<HttpHost> httphostList = new ArrayList<HttpHost>();
-			System.in.read();
-			int i = 0;
-			while (proxyPool.getIdleNum() > 2) {
-				HttpHost httphost = proxyPool.getProxy();
-				httphostList.add(httphost);
-				// proxyPool.proxyPool.use(httphost);
-				proxyPool.logger.info("borrow object>>>>" + i + ">>>>" + httphostList.get(i).toString());
-				i++;
-			}
-			System.out.println(proxyPool.allProxyStatus());
-			System.in.read();
-			for (i = 0; i < httphostList.size(); i++) {
-				proxyPool.returnProxy(httphostList.get(i), 200);
-				proxyPool.logger.info("return object>>>>" + i + ">>>>" + httphostList.get(i).toString());
-			}
-			System.out.println(proxyPool.allProxyStatus());
-			System.in.read();
-		}
-
-	}
-
 	public void enable(boolean isEnable) {
 		this.isEnable = isEnable;
 	}
@@ -287,4 +288,37 @@ public class ProxyPool {
 	public boolean isEnable() {
 		return isEnable;
 	}
+
+	public int getReviveTime() {
+		return reviveTime;
+	}
+
+	public void setReviveTime(int reviveTime) {
+		this.reviveTime = reviveTime;
+	}
+
+	public boolean isValidateWhenInit() {
+		return validateWhenInit;
+	}
+
+	public void validateWhenInit(boolean validateWhenInit) {
+		this.validateWhenInit = validateWhenInit;
+	}
+
+	public int getSaveProxyInterval() {
+		return saveProxyInterval;
+	}
+
+	public void setSaveProxyInterval(int saveProxyInterval) {
+		this.saveProxyInterval = saveProxyInterval;
+	}
+
+	public String getProxyFilePath() {
+		return proxyFilePath;
+	}
+
+	public void setProxyFilePath(String proxyFilePath) {
+		this.proxyFilePath = proxyFilePath;
+	}
+
 }
