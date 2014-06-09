@@ -9,7 +9,8 @@ import java.util.concurrent.TimeUnit;
 import org.apache.http.HttpHost;
 
 /**    
- * >>>>Proxy Status
+ * >>>> Proxy lifecycle 
+ 
         +----------+     +-----+
         | last use |     | new |
         +-----+----+     +---+-+
@@ -44,13 +45,22 @@ import org.apache.http.HttpHost;
            |        |+-------------------+
            +--------+
  */
+
+/**
+ * Object has these status of lifecycle above.<br>
+ * 
+ * @author yxssfxwzy@sina.com <br>
+ * @since 0.5.1
+ * @see ProxyPool
+ */
+
 public class Proxy implements Delayed, Serializable {
 
 	private static final long serialVersionUID = 228939737383625551L;
 	public static final int ERROR_403 = 403;
 	public static final int ERROR_404 = 404;
-	public static final int ERROR_BANNED = 10000;
-	public static final int ERROR_Proxy = 10001;
+	public static final int ERROR_BANNED = 10000;// banned by website
+	public static final int ERROR_Proxy = 10001;// the proxy itself failed
 	public static final int SUCCESS = 200;
 
 	private final HttpHost httpHost;
@@ -59,7 +69,6 @@ public class Proxy implements Delayed, Serializable {
 	private Long canReuseTime = 0L;
 	private Long lastBorrowTime = System.currentTimeMillis();
 	private Long responseTime = 0L;
-	private Long idleTime = 0L;
 
 	private int failedNum = 0;
 	private int successNum = 0;
@@ -143,7 +152,7 @@ public class Proxy implements Delayed, Serializable {
 
 	@Override
 	public long getDelay(TimeUnit unit) {
-		return unit.convert(canReuseTime - System.nanoTime(), unit.NANOSECONDS);
+		return unit.convert(canReuseTime - System.nanoTime(), TimeUnit.NANOSECONDS);
 	}
 
 	@Override
