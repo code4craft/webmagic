@@ -29,27 +29,27 @@ public class PlainText extends AbstractSelectable {
 
     @Override
     public Selectable xpath(String xpath) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("XPath can not apply to plain text. Please check whether you use a previous xpath with attribute select (/@href etc).");
     }
 
     @Override
     public Selectable $(String selector) {
-        throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException("$ can not apply to plain text. Please check whether you use a previous xpath with attribute select (/@href etc).");
     }
 
     @Override
     public Selectable $(String selector, String attrName) {
-        throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException("$ can not apply to plain text. Please check whether you use a previous xpath with attribute select (/@href etc).");
     }
 
     @Override
     public Selectable smartContent() {
-        throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException("Smart content can not apply to plain text. Please check whether you use a previous xpath with attribute select (/@href etc).");
     }
 
     @Override
     public Selectable links() {
-        throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException("Links can not apply to plain text. Please check whether you use a previous xpath with attribute select (/@href etc).");
     }
 
     @Override
