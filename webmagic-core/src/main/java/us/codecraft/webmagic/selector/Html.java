@@ -3,6 +3,7 @@ package us.codecraft.webmagic.selector;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Entities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +20,24 @@ public class Html extends HtmlNode {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
+	private static volatile boolean INITED = false;
+
+	/**
+	 * Disable jsoup html entity escape. It can be set just before any Html instance is created.
+	 */
+	public static boolean DISABLE_HTML_ENTITY_ESCAPE = true;
+
+	/**
+	 * Disable jsoup html entity escape. It is a hack way only for jsoup 1.7.2.
+	 */
+	private void disableJsoupHtmlEntityEscape() {
+		if (DISABLE_HTML_ENTITY_ESCAPE && !INITED) {
+			Entities.EscapeMode.base.getMap().clear();
+			Entities.EscapeMode.extended.getMap().clear();
+			INITED = true;
+		}
+	}
+
     /**
      * Store parsed document for better performance when only one text exist.
      */
@@ -26,6 +45,7 @@ public class Html extends HtmlNode {
 
     public Html(String text) {
         try {
+			disableJsoupHtmlEntityEscape();
             this.document = Jsoup.parse(text);
         } catch (Exception e) {
             this.document = null;
