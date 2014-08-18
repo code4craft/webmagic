@@ -20,6 +20,7 @@ public class HtmlTest {
 
 	@Test
 	public void testDisableJsoupHtmlEntityEscape() throws Exception {
+		Html.DISABLE_HTML_ENTITY_ESCAPE = true;
 		Html html = new Html("aaaaaaa&b");
 		assertThat(html.regex("(aaaaaaa&b)").toString()).isEqualTo("aaaaaaa&b");
 	}
