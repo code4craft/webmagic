@@ -43,6 +43,19 @@ public class HtmlNode extends AbstractSelectable {
         return selectElements(xpathSelector);
     }
 
+    @Override
+    public Selectable selectList(Selector selector) {
+        if (selector instanceof BaseElementSelector) {
+           return selectElements((BaseElementSelector) selector);
+        }
+        return selectList(selector, getSourceTexts());
+    }
+
+    @Override
+    public Selectable select(Selector selector) {
+        return selectList(selector);
+    }
+
     /**
      * select elements
      *

@@ -1,11 +1,14 @@
 package us.codecraft.webmagic.model;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
 import us.codecraft.webmagic.selector.PlainText;
+
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,6 +43,22 @@ public class ModelPageProcessorTest {
         ModelPageProcessor modelPageProcessor = ModelPageProcessor.create(null, ModelFoo.class, ModelBar.class);
         modelPageProcessor.process(page);
         assertThat(page.getResultItems().isSkip()).isFalse();
+    }
 
+    @Test
+    public void testExtractLinks() throws Exception {
+        ModelPageProcessor modelPageProcessor = ModelPageProcessor.create(null, MockModel.class);
+        Page page = getMockPage();
+        modelPageProcessor.process(page);
+        assertThat(page.getTargetRequests()).containsExactly(new Request("http://webmagic.io/list/1"), new Request("http://webmagic.io/list/2"), new Request("http://webmagic.io/post/1"), new Request("http://webmagic.io/post/2"));
+
+    }
+
+    private Page getMockPage() throws IOException {
+        Page page = new Page();
+        page.setRawText(IOUtils.toString(getClass().getClassLoader().getResourceAsStream("html/mock-webmagic.html")));
+        page.setRequest(new Request("http://webmagic.io/list/0"));
+        page.setUrl(new PlainText("http://webmagic.io/list/0"));
+        return page;
     }
 }
