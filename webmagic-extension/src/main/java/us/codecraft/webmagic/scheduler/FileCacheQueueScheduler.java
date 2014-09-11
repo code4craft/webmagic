@@ -145,6 +145,8 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
         if (!inited.get()) {
             init(task);
         }
+        if(urls.contains(request.getUrl())) //已存在此URL 表示已抓取过 跳过
+            return;
         queue.add(request);
         fileUrlWriter.println(request.getUrl());
     }
