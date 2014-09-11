@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
 import java.io.*;
 import java.util.LinkedHashSet;
@@ -68,6 +69,26 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
         logger.info("init cache scheduler success");
     }
 
+    private void initDuplicateRemover() {
+        setDuplicateRemover(
+                new DuplicateRemover() {
+                    @Override
+                    public boolean isDuplicate(Request request, Task task) {
+                        return !urls.add(request.getUrl());
+                    }
+
+                    @Override
+                    public void resetDuplicateCheck(Task task) {
+                        urls.clear();
+                    }
+
+                    @Override
+                    public int getTotalRequestsCount(Task task) {
+                        return urls.size();
+                    }
+                });
+    }
+
     private void initFlushThread() {
         Executors.newScheduledThreadPool(1).scheduleAtFixedRate(new Runnable() {
             @Override
@@ -92,6 +113,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
             urls = new LinkedHashSet<String>();
             readCursorFile();
             readUrlFile();
+            initDuplicateRemover();
         } catch (FileNotFoundException e) {
             //init
             logger.info("init cache file " + getFileName(fileUrlAllName));
@@ -145,8 +167,6 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
         if (!inited.get()) {
             init(task);
         }
-        if(urls.contains(request.getUrl())) //已存在此URL 表示已抓取过 跳过
-            return;
         queue.add(request);
         fileUrlWriter.println(request.getUrl());
     }
