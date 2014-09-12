@@ -331,7 +331,7 @@ public class Site {
     }
 
     /**
-     * Set cycleRetryTimes times when download fail, 0 by default. Only work in RedisScheduler. <br>
+     * Set cycleRetryTimes times when download fail, 0 by default. <br>
      *
      * @return this
      */
