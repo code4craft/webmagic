@@ -49,6 +49,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
             filePath += "/";
         }
         this.filePath = filePath;
+        initDuplicateRemover();
     }
 
     private void flush() {
@@ -74,6 +75,9 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
                 new DuplicateRemover() {
                     @Override
                     public boolean isDuplicate(Request request, Task task) {
+                        if (!inited.get()) {
+                            init(task);
+                        }
                         return !urls.add(request.getUrl());
                     }
 
@@ -113,7 +117,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
             urls = new LinkedHashSet<String>();
             readCursorFile();
             readUrlFile();
-            initDuplicateRemover();
+            // initDuplicateRemover();
         } catch (FileNotFoundException e) {
             //init
             logger.info("init cache file " + getFileName(fileUrlAllName));
@@ -164,9 +168,9 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
 
     @Override
     protected void pushWhenNoDuplicate(Request request, Task task) {
-        if (!inited.get()) {
+      /*  if (!inited.get()) {
             init(task);
-        }
+        }*/
         queue.add(request);
         fileUrlWriter.println(request.getUrl());
     }
