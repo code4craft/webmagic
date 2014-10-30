@@ -66,7 +66,6 @@ public class ProxyPool {
             if (!new File(proxyFilePath).exists()) {
                 setFilePath();
             }
-            setFilePath();
             readProxyList();
             timer.schedule(saveProxyTask, 0, saveProxyInterval);
         }

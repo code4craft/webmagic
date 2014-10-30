@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
 import java.io.*;
 import java.util.LinkedHashSet;
@@ -48,6 +49,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
             filePath += "/";
         }
         this.filePath = filePath;
+        initDuplicateRemover();
     }
 
     private void flush() {
@@ -66,6 +68,29 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
         initFlushThread();
         inited.set(true);
         logger.info("init cache scheduler success");
+    }
+
+    private void initDuplicateRemover() {
+        setDuplicateRemover(
+                new DuplicateRemover() {
+                    @Override
+                    public boolean isDuplicate(Request request, Task task) {
+                        if (!inited.get()) {
+                            init(task);
+                        }
+                        return !urls.add(request.getUrl());
+                    }
+
+                    @Override
+                    public void resetDuplicateCheck(Task task) {
+                        urls.clear();
+                    }
+
+                    @Override
+                    public int getTotalRequestsCount(Task task) {
+                        return urls.size();
+                    }
+                });
     }
 
     private void initFlushThread() {
@@ -92,6 +117,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
             urls = new LinkedHashSet<String>();
             readCursorFile();
             readUrlFile();
+            // initDuplicateRemover();
         } catch (FileNotFoundException e) {
             //init
             logger.info("init cache file " + getFileName(fileUrlAllName));
@@ -142,9 +168,6 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
 
     @Override
     protected void pushWhenNoDuplicate(Request request, Task task) {
-        if (!inited.get()) {
-            init(task);
-        }
         queue.add(request);
         fileUrlWriter.println(request.getUrl());
     }
