@@ -25,7 +25,7 @@ public abstract class DuplicateRemovedScheduler implements Scheduler {
 
     private DuplicateRemover duplicatedRemover = new HashSetDuplicateRemover();
     /**
-     * 抓取新增内容时 用它来避免重复添加旧HelpUrl到队列中
+     * 抓取新增内容时 用它来避免重复添加旧HelpUrl到队列中 适合增量内容不多的情景
      */
     private Set<String> oldHelpUrlRemover = Sets.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
 
@@ -43,8 +43,9 @@ public abstract class DuplicateRemovedScheduler implements Scheduler {
         logger.trace("get a candidate url {}", request.getUrl());
         if (!duplicatedRemover.isDuplicate(request, task) || shouldReserved(request)) {
             logger.debug("push to queue {}", request.getUrl());
-            if(request.getExtra(Request.CRAWL_NEW_ADDED)!=null)
+            if(request.getExtra(Request.CRAWL_NEW_ADDED)!=null){
             	logger.info("New added url: {}",request);
+            }
             pushWhenNoDuplicate(request, task);
         }else{
         	// 已抓取过此Url
