@@ -113,16 +113,11 @@ public class Spider implements Runnable, Task {
     private Date startTime;
 
     private int emptySleepTime = 30000;
-    /**
-     * 是否首次爬取
-     */
-//    private boolean firstCrawl = true;
-    /**
-     * 是否跳过对旧URL的抽取结果的处理 即不会被pipeline处理
-     */
-//    private boolean skipProcessResultOfOldUrl;
     
-    private boolean crawlNewAdded; //是否抓取新增
+    /**
+     * 是否抓取新增
+     */
+    private boolean crawlNewAdded; 
     
     /**
      * create a spider with pageProcessor.

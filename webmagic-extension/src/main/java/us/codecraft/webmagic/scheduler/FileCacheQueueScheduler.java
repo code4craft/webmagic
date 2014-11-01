@@ -75,10 +75,6 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler
 		logger.info("init cache scheduler success");
 	}
 
-	/*
-	 * private void initDuplicateRemover() { setDuplicateRemover(new
-	 * HashSetDuplicateRemover()); }
-	 */
 
 	private void initFlushThread() {
 		Executors.newScheduledThreadPool(1).scheduleAtFixedRate(new Runnable() {
@@ -171,7 +167,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler
 
 	@Override
 	public synchronized Request poll(Task task) {
-		if (!inited.get()) { // 什么情况下会出现poll时还没初始化
+		if (!inited.get()) { 
 			init(task);
 		}
 		Request result = queue.poll();
@@ -192,7 +188,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler
 	}
 
 	/**
-	 * 重置cursor文件避免无限增长
+	 *   如定时抓取 重置cursor文件避免无限增长
 	 */
 	public void resetCursorFile() {
 		fileCursorWriter.flush(); // 先将缓冲区中的内容刷新到文件
@@ -211,39 +207,6 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler
 		}
 	}
 
-	/**
-	 * <pre>
-	 * for crawl new added url 
-	 * filter target url 
-	 * put helper url in queue
-	 * 
-	 * @throws IOException
-	 */
-	/*public void loadUrlsToQueue(String[] needExcludeUrlRegexs) {
-		resetCursorFile();
-		
-		 * for (String url : urls) { Request request = new Request(url);
-		 * if(isExclude(needExcludeUrlRegexs, url)) continue;
-		 * queue.add(request); }
-		 
-	}
-*/
-	/*private boolean isExclude(String[] needExcludeUrlRegexs, String url) {
-		if (needExcludeUrlRegexs == null)
-			return false;
-		for (String regex : needExcludeUrlRegexs) {
-			if (url.matches(regex)) {
-				return true;
-			}
-		}
-		return false;
-	}*/
-
-	/**
-	 * 释放资源 如 writer 定时flush任务
-	 */
-	public void close() {
-
-	}
+	
 
 }
