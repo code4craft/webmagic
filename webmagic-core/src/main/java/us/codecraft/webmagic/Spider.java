@@ -570,14 +570,7 @@ public class Spider implements Runnable, Task {
     public void start() {
         runAsync();
     }
-/**
- * 优雅停止抓取进程
- */
-    public void shutdownGracefully(){
-    	stop();
-    	//若使用的是FileCacheQueueScheduler 执行其close方法释放资源
-    	
-    }
+
     public void stop() {
         if (stat.compareAndSet(STAT_RUNNING, STAT_STOPPED)) {
             logger.info("Spider " + getUUID() + " stop success!");
