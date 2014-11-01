@@ -134,6 +134,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
             int lineReaded = 0;
             while ((line = fileUrlReader.readLine()) != null) {
                 //urls.add(line.trim());
+                getDuplicateRemover().isDuplicate(new Request(line), null);
                 lineReaded++;
                 if (lineReaded > cursor.get()) {
                     queue.add(new Request(line));
