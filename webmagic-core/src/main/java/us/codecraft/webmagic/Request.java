@@ -31,11 +31,7 @@ public class Request implements Serializable {
      * 仅添加到队列 而不持久化到文件
      */
     public static final String ONLY_ADD_TO_QUEUE = "onlyAndToQueue"; 
-    /**
-     * 新url 即不在已有的urls.txt文件中(若使用的是FileCacheQueueScheduler)
-     */
-//    public static final String NEW_URL = "newUrl";
-
+    
     private String url;
 
     private String method;

@@ -433,11 +433,6 @@ public class Spider implements Runnable, Task {
         pageProcessor.process(page);
         extractAndAddRequests(page, spawnUrl);
         
-        //若不是首次爬取 且不是新url 且忽略对旧url的抽取结果进行pipeline处理 也会跳过pipeline处理这一步
-        /*Boolean newUrl =request.getExtra(Request.NEW_URL)==null?false:true;
-        if(!firstCrawl && !newUrl && skipProcessResultOfOldUrl)
-        	page.setSkip(true);*/
-        
         if (!page.getResultItems().isSkip()) {
             for (Pipeline pipeline : pipelines) {
                 pipeline.process(page.getResultItems(), this);
