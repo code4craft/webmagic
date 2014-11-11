@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.scheduler;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -10,6 +11,7 @@ import java.io.PrintWriter;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -19,6 +21,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
 /**
  * Store urls and cursor in files so that a Spider can resume the status when
@@ -28,7 +31,7 @@ import us.codecraft.webmagic.Task;
  * @since 0.2.0
  */
 public class FileCacheQueueScheduler extends DuplicateRemovedScheduler
-		implements MonitorableScheduler {
+		implements MonitorableScheduler,Closeable {
 
 	private String filePath = System.getProperty("java.io.tmpdir");
 
@@ -47,6 +50,8 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler
 	private AtomicBoolean inited = new AtomicBoolean(false);
 
 	private BlockingQueue<Request> queue;
+	
+	private ScheduledExecutorService scheduledFlushService ;
 
 	// private Set<String> urls;
 
@@ -55,6 +60,15 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler
 			filePath += "/";
 		}
 		this.filePath = filePath;
+	}
+	/**
+	 * 可以动态设置queue 如PriorityBlockingQueue
+	 * @param filePath
+	 * @param queue
+	 */
+	public FileCacheQueueScheduler(String filePath, BlockingQueue<Request> queue) {
+		this(filePath);
+		this.queue = queue;
 	}
 
 	private void flush() {
@@ -75,13 +89,12 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler
 		logger.info("init cache scheduler success");
 	}
 
-	/*
-	 * private void initDuplicateRemover() { setDuplicateRemover(new
-	 * HashSetDuplicateRemover()); }
-	 */
 
 	private void initFlushThread() {
-		Executors.newScheduledThreadPool(1).scheduleAtFixedRate(new Runnable() {
+		if(scheduledFlushService==null)
+			scheduledFlushService = Executors.newScheduledThreadPool(1);
+		
+		scheduledFlushService.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
 				flush();
@@ -104,7 +117,8 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler
 
 	private void readFile() {
 		try {
-			queue = new LinkedBlockingQueue<Request>();
+			if(queue==null) //若为空 默认为LinkedBlockingQueue
+				queue = new LinkedBlockingQueue<Request>();
 			// urls = new LinkedHashSet<String>();
 			readCursorFile();
 			readUrlFile();
@@ -205,45 +219,23 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler
 
 		} catch (IOException e) {
 			throw new RuntimeException(e);
-		}finally{
-			if(tempCursorWriter!=null)
+		} finally{
+			if(tempCursorWriter != null)
 				tempCursorWriter.close();
 		}
 	}
 
-	/**
-	 * <pre>
-	 * for crawl new added url 
-	 * filter target url 
-	 * put helper url in queue
-	 * 
-	 * @throws IOException
-	 */
-	/*public void loadUrlsToQueue(String[] needExcludeUrlRegexs) {
-		resetCursorFile();
-		
-		 * for (String url : urls) { Request request = new Request(url);
-		 * if(isExclude(needExcludeUrlRegexs, url)) continue;
-		 * queue.add(request); }
-		 
-	}
-*/
-	/*private boolean isExclude(String[] needExcludeUrlRegexs, String url) {
-		if (needExcludeUrlRegexs == null)
-			return false;
-		for (String regex : needExcludeUrlRegexs) {
-			if (url.matches(regex)) {
-				return true;
-			}
-		}
-		return false;
-	}*/
 
 	/**
 	 * 释放资源 如 writer 定时flush任务
 	 */
+	@Override
 	public void close() {
-
+		logger.info("close()");
+		flush();
+		fileUrlWriter.close();
+		fileCursorWriter.close();
+		scheduledFlushService.shutdown();
 	}
 
 }
