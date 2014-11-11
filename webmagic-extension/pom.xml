@@ -10,6 +10,7 @@
 
 	<groupId>tcl.us.codecraft</groupId>
 	<artifactId>tcl-webmagic-extension</artifactId>
+	<version>0.5.2-SNAPSHOT</version>
 
 	<dependencies>
 		<dependency>
