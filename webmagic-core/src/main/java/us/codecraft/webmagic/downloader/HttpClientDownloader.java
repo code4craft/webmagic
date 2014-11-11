@@ -143,6 +143,7 @@ public class HttpClientDownloader extends AbstractDownloader {
                 .setCookieSpec(CookieSpecs.BEST_MATCH);
         if (site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
             HttpHost host = site.getHttpProxyFromPool();
+            logger.info("Using proxy {}", host);
 			requestConfigBuilder.setProxy(host);
 			request.putExtra(Request.PROXY, host);
 		}
@@ -176,14 +177,22 @@ public class HttpClientDownloader extends AbstractDownloader {
 
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
         String content = getContent(charset, httpResponse);
-        Page page = new Page();
+//        logger.info(task.getSite().toString());
+//        logger.info(content);
+        Page page = getReturnPage(request, httpResponse);
         page.setRawText(content);
-        page.setUrl(new PlainText(request.getUrl()));
-        page.setRequest(request);
-        page.setStatusCode(httpResponse.getStatusLine().getStatusCode());
         return page;
     }
 
+	protected Page getReturnPage(Request request, HttpResponse httpResponse) {
+		Page page = new Page();
+       
+        page.setUrl(new PlainText(request.getUrl()));
+        page.setRequest(request);
+        page.setStatusCode(httpResponse==null?200:httpResponse.getStatusLine().getStatusCode());
+		return page;
+	}
+   
     protected String getContent(String charset, HttpResponse httpResponse) throws IOException {
         if (charset == null) {
             byte[] contentBytes = IOUtils.toByteArray(httpResponse.getEntity().getContent());
