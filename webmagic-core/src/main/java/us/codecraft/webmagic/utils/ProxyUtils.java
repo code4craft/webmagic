@@ -35,7 +35,10 @@ public class ProxyUtils {
 		// first way to get local IP
 		try {
 			localAddr = InetAddress.getLocalHost();
-			logger.info("local IP:" + localAddr.getHostAddress());
+			if(localAddr.getHostAddress().startsWith("127.0")){
+				localAddr = null;
+			}else
+				logger.info("local IP:" + localAddr.getHostAddress());
 		} catch (UnknownHostException e) {
 			logger.info("try again\n");
 		}
@@ -70,21 +73,24 @@ public class ProxyUtils {
 	}
 
 	public static boolean validateProxy(HttpHost p) {
-		if (localAddr == null) {
+		/*if (localAddr == null) {
 			logger.error("cannot get local IP");
 			return false;
-		}
+		}*/
 		boolean isReachable = false;
 		Socket socket = null;
 		try {
 			socket = new Socket();
-			socket.bind(new InetSocketAddress(localAddr, 0));
+//			socket.bind(new InetSocketAddress(localAddr, 0));
+			socket.bind(null);
 			InetSocketAddress endpointSocketAddr = new InetSocketAddress(p.getAddress().getHostAddress(), p.getPort());
 			socket.connect(endpointSocketAddr, 3000);
-			logger.debug("SUCCESS - connection established! Local: " + localAddr.getHostAddress() + " remote: " + p);
+//			logger.debug("SUCCESS - connection established! Local: " + localAddr.getHostAddress() + " remote: " + p);
+			logger.debug("SUCCESS - connection established! Local: " + socket.getLocalAddress() + " remote: " + p);
 			isReachable = true;
 		} catch (IOException e) {
-			logger.warn("FAILRE - CAN not connect! Local: " + localAddr.getHostAddress() + " remote: " + p);
+//			logger.warn("FAILRE - CAN not connect! Local: " + localAddr.getHostAddress() + " remote: " + p);
+			logger.warn("FAILRE - CAN not connect! Local: " + socket.getLocalAddress() + " remote: " + p);
 		} finally {
 			if (socket != null) {
 				try {
