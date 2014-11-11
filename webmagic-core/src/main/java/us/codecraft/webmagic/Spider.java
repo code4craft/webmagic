@@ -392,6 +392,7 @@ public class Spider implements Runnable, Task {
     public void close() {
         destroyEach(downloader);
         destroyEach(pageProcessor);
+        destroyEach(scheduler);
         for (Pipeline pipeline : pipelines) {
             destroyEach(pipeline);
         }
@@ -437,11 +438,6 @@ public class Spider implements Runnable, Task {
         }
         pageProcessor.process(page);
         extractAndAddRequests(page, spawnUrl);
-        
-        //若不是首次爬取 且不是新url 且忽略对旧url的抽取结果进行pipeline处理 也会跳过pipeline处理这一步
-        /*Boolean newUrl =request.getExtra(Request.NEW_URL)==null?false:true;
-        if(!firstCrawl && !newUrl && skipProcessResultOfOldUrl)
-        	page.setSkip(true);*/
         
         if (!page.getResultItems().isSkip()) {
             for (Pipeline pipeline : pipelines) {
@@ -772,6 +768,10 @@ public class Spider implements Runnable, Task {
 	public void setCrawlNewAdded(boolean crawlNewAdded) {
 		this.crawlNewAdded = crawlNewAdded;
 	}
-    
+	@Override
+	protected void finalize() throws Throwable {
+		logger.info("finalize()");
+		super.finalize();
+	}
     
 }
