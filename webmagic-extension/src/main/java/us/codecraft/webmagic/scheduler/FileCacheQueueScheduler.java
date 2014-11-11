@@ -21,7 +21,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
 /**
  * Store urls and cursor in files so that a Spider can resume the status when
@@ -185,7 +184,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler
 
 	@Override
 	public synchronized Request poll(Task task) {
-		if (!inited.get()) { // 什么情况下会出现poll时还没初始化
+		if (!inited.get()) { 
 			init(task);
 		}
 		Request result = queue.poll();
@@ -206,7 +205,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler
 	}
 
 	/**
-	 * 重置cursor文件避免无限增长
+	 *   如定时抓取 重置cursor文件避免无限增长
 	 */
 	public void resetCursorFile() {
 		fileCursorWriter.flush(); // 先将缓冲区中的内容刷新到文件
@@ -225,7 +224,6 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler
 		}
 	}
 
-
 	/**
 	 * 释放资源 如 writer 定时flush任务
 	 */
@@ -237,5 +235,4 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler
 		fileCursorWriter.close();
 		scheduledFlushService.shutdown();
 	}
-
 }

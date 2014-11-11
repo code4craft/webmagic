@@ -113,16 +113,11 @@ public class Spider implements Runnable, Task {
     private Date startTime;
 
     private int emptySleepTime = 30000;
-    /**
-     * 是否首次爬取
-     */
-//    private boolean firstCrawl = true;
-    /**
-     * 是否跳过对旧URL的抽取结果的处理 即不会被pipeline处理
-     */
-//    private boolean skipProcessResultOfOldUrl;
     
-    private boolean crawlNewAdded; //是否抓取新增
+    /**
+     * 是否抓取新增
+     */
+    private boolean crawlNewAdded; 
     
     /**
      * create a spider with pageProcessor.
@@ -576,14 +571,7 @@ public class Spider implements Runnable, Task {
     public void start() {
         runAsync();
     }
-/**
- * 优雅停止抓取进程
- */
-    public void shutdownGracefully(){
-    	stop();
-    	//若使用的是FileCacheQueueScheduler 执行其close方法释放资源
-    	
-    }
+
     public void stop() {
         if (stat.compareAndSet(STAT_RUNNING, STAT_STOPPED)) {
             logger.info("Spider " + getUUID() + " stop success!");

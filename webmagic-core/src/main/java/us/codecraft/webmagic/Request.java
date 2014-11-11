@@ -20,6 +20,9 @@ public class Request implements Serializable {
     public static final String CYCLE_TRIED_TIMES = "_cycle_tried_times";
     public static final String STATUS_CODE = "statusCode";
     public static final String PROXY = "proxy";
+    /**
+     * url种类 target or help
+     */
     public static final String KIND_OF_URL = "kindOfUrl";
     public static final String TARGET_URL = "targetUrl";
     public static final String HELP_URL = "helpUrl";
@@ -28,11 +31,7 @@ public class Request implements Serializable {
      * 仅添加到队列 而不持久化到文件
      */
     public static final String ONLY_ADD_TO_QUEUE = "onlyAndToQueue"; 
-    /**
-     * 新url 即不在已有的urls.txt文件中(若使用的是FileCacheQueueScheduler)
-     */
-//    public static final String NEW_URL = "newUrl";
-
+    
     private String url;
 
     private String method;
