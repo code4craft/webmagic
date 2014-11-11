@@ -2,12 +2,14 @@ package us.codecraft.webmagic.monitor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.SpiderListener;
 import us.codecraft.webmagic.utils.Experimental;
 
 import javax.management.*;
+
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -105,6 +107,11 @@ public class SpiderMonitor {
     protected void registerMBean(SpiderStatusMXBean spiderStatus) throws MalformedObjectNameException, InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException {
         ObjectName objName = new ObjectName(jmxServerName + ":name=" + spiderStatus.getName());
         mbeanServer.registerMBean(spiderStatus, objName);
+    }
+    
+    public void unregisterMBean(Spider spider) throws MBeanRegistrationException, InstanceNotFoundException, MalformedObjectNameException{
+    	ObjectName objName = new ObjectName(jmxServerName + ":name=" + spider.getUUID());
+    	mbeanServer.unregisterMBean(objName);
     }
 
 }
