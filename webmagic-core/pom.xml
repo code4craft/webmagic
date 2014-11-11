@@ -10,7 +10,7 @@
 
 	<groupId>tcl.us.codecraft</groupId>
 	<artifactId>tcl-webmagic-core</artifactId>
-
+	<version>0.5.2-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
