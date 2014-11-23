@@ -1,6 +1,6 @@
 package us.codecraft.webmagic.downloader;
 
-import org.apache.http.HttpStatus;
+import org.apache.http.annotation.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
@@ -8,17 +8,15 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.selector.PlainText;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 /**
- * Created by baizz on 2014-10-31.
+ * this downloader is used to download pages which need to render the javascript
  *
- * @author baizz
- * @version 0.5.0
+ * @author dolphineor
+ * @version 0.5.3
  */
+@ThreadSafe
 public class PhantomJSDownloader extends AbstractDownloader {
 
     private static Logger logger = LoggerFactory.getLogger(PhantomJSDownloader.class);
@@ -28,13 +26,13 @@ public class PhantomJSDownloader extends AbstractDownloader {
     private int threadNum;
 
     public PhantomJSDownloader() {
-        PhantomJSDownloader.phantomJSPath = PhantomJSDownloader.class.getClassLoader().getResource("").getPath() + "crawl.js ";
+        PhantomJSDownloader.phantomJSPath = new File(this.getClass().getResource("/").getPath()).getPath() + System.getProperty("file.separator") + "crawl.js ";
     }
 
     @Override
     public Page download(Request request, Task task) {
         if (logger.isInfoEnabled()) {
-            logger.info("download: " + request.getUrl());
+            logger.info("downloading page: " + request.getUrl());
         }
         String content = getPage(request);
         if (content.contains("HTTP request failed")) {
@@ -45,7 +43,7 @@ public class PhantomJSDownloader extends AbstractDownloader {
                 }
             }
             if (content.contains("HTTP request failed")) {
-                //下载页面失败后的处理
+                //when failed
                 Page page = new Page();
                 page.setRequest(request);
                 return page;
@@ -56,7 +54,7 @@ public class PhantomJSDownloader extends AbstractDownloader {
         page.setRawText(content);
         page.setUrl(new PlainText(request.getUrl()));
         page.setRequest(request);
-        page.setStatusCode(HttpStatus.SC_OK);
+        page.setStatusCode(200);
         return page;
     }
 

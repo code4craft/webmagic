@@ -13,6 +13,8 @@ import java.util.List;
 
 /**
  * Created by dolphineor on 2014-11-21.
+ * <p/>
+ * 以淘宝为例, 搜索冬装的相关结果
  */
 public class PhantomjsPageProcessor implements PageProcessor {
 
