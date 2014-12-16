@@ -11,12 +11,19 @@
 	<groupId>tcl.us.codecraft</groupId>
 	<artifactId>tcl-webmagic-extension</artifactId>
 	<version>0.5.2-SNAPSHOT</version>
+	
+	<properties>
+	<jedis.version>2.5.1</jedis.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
+			<!-- 
 			<version>2.0.0</version>
+			 -->
+			<version>${jedis.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>tcl.us.codecraft</groupId>
