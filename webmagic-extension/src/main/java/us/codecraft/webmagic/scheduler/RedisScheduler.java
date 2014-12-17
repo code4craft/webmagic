@@ -1,13 +1,18 @@
 package us.codecraft.webmagic.scheduler;
 
-import com.alibaba.fastjson.JSON;
 import org.apache.commons.codec.digest.DigestUtils;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.JedisSentinelPool;
+import redis.clients.jedis.exceptions.JedisConnectionException;
+import redis.clients.util.Pool;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
+
+import com.alibaba.fastjson.JSON;
 
 /**
  * Use Redis as url scheduler for distributed crawlers.<br>
@@ -17,7 +22,7 @@ import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
  */
 public class RedisScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler, DuplicateRemover {
 
-    private JedisPool pool;
+    private Pool<Jedis> pool;
 
     private static final String QUEUE_PREFIX = "queue_";
 
@@ -29,7 +34,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         this(new JedisPool(new JedisPoolConfig(), host));
     }
 
-    public RedisScheduler(JedisPool pool) {
+    public RedisScheduler(Pool<Jedis> pool) {
         this.pool = pool;
         setDuplicateRemover(this);
     }
@@ -91,7 +96,8 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
             }
             Request request = new Request(url);
             return request;
-        } finally {
+        }
+        finally {
             pool.returnResource(jedis);
         }
     }
