@@ -16,6 +16,11 @@
             <artifactId>jruby</artifactId>
             <version>1.7.6</version>
         </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>2.1.6</version>
+        </dependency>
         <dependency><groupId>org.python</groupId>
             <artifactId>jython</artifactId>
             <version>2.5.3</version>
