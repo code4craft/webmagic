@@ -39,6 +39,8 @@ public class Site {
 
     private int cycleRetryTimes = 0;
 
+    private int retrySleepTime = 1000;
+
     private int timeOut = 5000;
 
     private static final Set<Integer> DEFAULT_STATUS_CODE_SET = new HashSet<Integer>();
@@ -49,8 +51,8 @@ public class Site {
 
     private HttpHost httpProxy;
 
-	private ProxyPool httpProxyPool;
-	
+    private ProxyPool httpProxyPool;
+
     private boolean useGzip = true;
 
     /**
@@ -359,6 +361,20 @@ public class Site {
         return useGzip;
     }
 
+    public int getRetrySleepTime() {
+        return retrySleepTime;
+    }
+
+    /**
+     * Set retry sleep times when download fail, 1000 by default. <br>
+     *
+     * @param retrySleepTime
+     */
+    public Site setRetrySleepTime(int retrySleepTime) {
+        this.retrySleepTime = retrySleepTime;
+        return this;
+    }
+
     /**
      * Whether use gzip. <br>
      * Default is true, you can set it to false to disable gzip.
@@ -448,31 +464,31 @@ public class Site {
      *
      * @return this
      */
-	public Site setHttpProxyPool(List<String[]> httpProxyList) {
-		this.httpProxyPool=new ProxyPool(httpProxyList);
-		return this;
-	}
+    public Site setHttpProxyPool(List<String[]> httpProxyList) {
+        this.httpProxyPool=new ProxyPool(httpProxyList);
+        return this;
+    }
 
     public Site enableHttpProxyPool() {
         this.httpProxyPool=new ProxyPool();
         return this;
     }
 
-	public ProxyPool getHttpProxyPool() {
-		return httpProxyPool;
-	}
+    public ProxyPool getHttpProxyPool() {
+        return httpProxyPool;
+    }
 
-	public HttpHost getHttpProxyFromPool() {
-		return httpProxyPool.getProxy();
-	}
+    public HttpHost getHttpProxyFromPool() {
+        return httpProxyPool.getProxy();
+    }
 
-	public void returnHttpProxyToPool(HttpHost proxy,int statusCode) {
-		httpProxyPool.returnProxy(proxy,statusCode);
-	}
-	
-	public Site setProxyReuseInterval(int reuseInterval) {
-		this.httpProxyPool.setReuseInterval(reuseInterval);
-		return this;
-	}
+    public void returnHttpProxyToPool(HttpHost proxy,int statusCode) {
+        httpProxyPool.returnProxy(proxy,statusCode);
+    }
+
+    public Site setProxyReuseInterval(int reuseInterval) {
+        this.httpProxyPool.setReuseInterval(reuseInterval);
+        return this;
+    }
 
 }

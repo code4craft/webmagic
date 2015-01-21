@@ -407,14 +407,14 @@ public class Spider implements Runnable, Task {
     protected void processRequest(Request request) {
         Page page = downloader.download(request, this);
         if (page == null) {
-            sleep(site.getSleepTime());
+            sleep(site.getRetrySleepTime());
             onError(request);
             return;
         }
         // for cycle retry
         if (page.isNeedCycleRetry()) {
             extractAndAddRequests(page, true);
-            sleep(site.getSleepTime());
+            sleep(site.getRetrySleepTime());
             return;
         }
         pageProcessor.process(page);
