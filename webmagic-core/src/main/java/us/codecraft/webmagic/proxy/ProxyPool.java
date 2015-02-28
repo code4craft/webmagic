@@ -22,7 +22,7 @@ import java.util.concurrent.DelayQueue;
  * @see Proxy
  * @since 0.5.1
  */
-public class ProxyPool {
+public class ProxyPool implements IProxyPool{
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 

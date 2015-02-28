@@ -4,7 +4,8 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.apache.http.HttpHost;
 
-import us.codecraft.webmagic.proxy.ProxyPool;
+import us.codecraft.webmagic.proxy.IProxyPool;
+import us.codecraft.webmagic.proxy.SimpleProxyPool;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.util.*;
@@ -51,7 +52,7 @@ public class Site {
 
     private HttpHost httpProxy;
 
-    private ProxyPool httpProxyPool;
+    private IProxyPool httpProxyPool;
 
     private boolean useGzip = true;
 
@@ -464,17 +465,17 @@ public class Site {
      *
      * @return this
      */
-    public Site setHttpProxyPool(List<String[]> httpProxyList) {
-        this.httpProxyPool=new ProxyPool(httpProxyList);
+    public Site setHttpProxyPool(IProxyPool proxyPool) {
+        this.httpProxyPool = proxyPool;
         return this;
     }
 
     public Site enableHttpProxyPool() {
-        this.httpProxyPool=new ProxyPool();
+        this.httpProxyPool=new SimpleProxyPool();
         return this;
     }
 
-    public ProxyPool getHttpProxyPool() {
+    public IProxyPool getHttpProxyPool() {
         return httpProxyPool;
     }
 
@@ -484,11 +485,6 @@ public class Site {
 
     public void returnHttpProxyToPool(HttpHost proxy,int statusCode) {
         httpProxyPool.returnProxy(proxy,statusCode);
-    }
-
-    public Site setProxyReuseInterval(int reuseInterval) {
-        this.httpProxyPool.setReuseInterval(reuseInterval);
-        return this;
     }
 
 }
