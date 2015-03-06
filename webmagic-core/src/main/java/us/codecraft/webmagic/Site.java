@@ -4,6 +4,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.apache.http.HttpHost;
 
+import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.proxy.ProxyPool;
 import us.codecraft.webmagic.utils.UrlUtils;
 
@@ -469,6 +470,11 @@ public class Site {
         return this;
     }
 
+    public Site setHttpProxyPool(List<String[]> httpProxyList, boolean isUseLastProxy) {
+        this.httpProxyPool=new ProxyPool(httpProxyList, isUseLastProxy);
+        return this;
+    }
+
     public Site enableHttpProxyPool() {
         this.httpProxyPool=new ProxyPool();
         return this;
@@ -478,7 +484,7 @@ public class Site {
         return httpProxyPool;
     }
 
-    public HttpHost getHttpProxyFromPool() {
+    public Proxy getHttpProxyFromPool() {
         return httpProxyPool.getProxy();
     }
 
