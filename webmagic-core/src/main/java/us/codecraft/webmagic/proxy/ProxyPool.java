@@ -156,14 +156,14 @@ public class ProxyPool {
         isEnable = true;
         for (String[] s : httpProxyList) {
             try {
-                if (allProxy.containsKey(s[0])) {
+                if (allProxy.containsKey(s[2])) {
                     continue;
                 }
-                HttpHost item = new HttpHost(InetAddress.getByName(s[0]), Integer.valueOf(s[1]));
+                HttpHost item = new HttpHost(InetAddress.getByName(s[2]), Integer.valueOf(s[3]));
                 if (!validateWhenInit || ProxyUtils.validateProxy(item)) {
-                    Proxy p = new Proxy(item, reuseInterval);
+                    Proxy p = new Proxy(item, reuseInterval, s[0], s[1]);
                     proxyQueue.add(p);
-                    allProxy.put(s[0], p);
+                    allProxy.put(s[2], p);
                 }
             } catch (NumberFormatException e) {
                 logger.error("HttpHost init error:", e);
@@ -174,7 +174,7 @@ public class ProxyPool {
         logger.info("proxy pool size>>>>" + allProxy.size());
     }
 
-    public HttpHost getProxy() {
+    public Proxy getProxy() {
         Proxy proxy = null;
         try {
             Long time = System.currentTimeMillis();
@@ -192,7 +192,7 @@ public class ProxyPool {
         if (proxy == null) {
             throw new NoSuchElementException();
         }
-        return proxy.getHttpHost();
+        return proxy;
     }
 
     public void returnProxy(HttpHost host, int statusCode) {

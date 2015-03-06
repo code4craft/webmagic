@@ -24,6 +24,7 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.HttpConstant;
 import us.codecraft.webmagic.utils.UrlUtils;
@@ -50,9 +51,9 @@ public class HttpClientDownloader extends AbstractDownloader {
 
     private HttpClientGenerator httpClientGenerator = new HttpClientGenerator();
 
-    private CloseableHttpClient getHttpClient(Site site) {
+    private CloseableHttpClient getHttpClient(Site site, Proxy proxy) {
         if (site == null) {
-            return httpClientGenerator.getClient(null);
+            return httpClientGenerator.getClient(null, proxy);
         }
         String domain = site.getDomain();
         CloseableHttpClient httpClient = httpClients.get(domain);
@@ -60,7 +61,7 @@ public class HttpClientDownloader extends AbstractDownloader {
             synchronized (this) {
                 httpClient = httpClients.get(domain);
                 if (httpClient == null) {
-                    httpClient = httpClientGenerator.getClient(site);
+                    httpClient = httpClientGenerator.getClient(site, proxy);
                     httpClients.put(domain, httpClient);
                 }
             }
@@ -88,8 +89,17 @@ public class HttpClientDownloader extends AbstractDownloader {
         CloseableHttpResponse httpResponse = null;
         int statusCode=0;
         try {
-            HttpUriRequest httpUriRequest = getHttpUriRequest(request, site, headers);
-            httpResponse = getHttpClient(site).execute(httpUriRequest);
+            HttpHost proxyHost = null;
+            Proxy proxy = null; //TODO
+            if (site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
+                proxy = site.getHttpProxyFromPool();
+                proxyHost = proxy.getHttpHost();
+            } else if(site.getHttpProxy()!= null){
+                proxyHost = site.getHttpProxy();
+            }
+            
+            HttpUriRequest httpUriRequest = getHttpUriRequest(request, site, headers, proxyHost);//���������˴���
+            httpResponse = getHttpClient(site, proxy).execute(httpUriRequest);//getHttpClient�������˴�����֤
             statusCode = httpResponse.getStatusLine().getStatusCode();
             request.putExtra(Request.STATUS_CODE, statusCode);
             if (statusAccept(acceptStatCode, statusCode)) {
@@ -129,7 +139,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         return acceptStatCode.contains(statusCode);
     }
 
-    protected HttpUriRequest getHttpUriRequest(Request request, Site site, Map<String, String> headers) {
+    protected HttpUriRequest getHttpUriRequest(Request request, Site site, Map<String, String> headers,HttpHost proxy) {
         RequestBuilder requestBuilder = selectRequestMethod(request).setUri(request.getUrl());
         if (headers != null) {
             for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
@@ -141,14 +151,9 @@ public class HttpClientDownloader extends AbstractDownloader {
                 .setSocketTimeout(site.getTimeOut())
                 .setConnectTimeout(site.getTimeOut())
                 .setCookieSpec(CookieSpecs.BEST_MATCH);
-        if (site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
-            HttpHost host = site.getHttpProxyFromPool();
-			requestConfigBuilder.setProxy(host);
-			request.putExtra(Request.PROXY, host);
-		}else if(site.getHttpProxy()!= null){
-            HttpHost host = site.getHttpProxy();
-			requestConfigBuilder.setProxy(host);
-			request.putExtra(Request.PROXY, host);	
+        if (proxy !=null) {
+			requestConfigBuilder.setProxy(proxy);
+			request.putExtra(Request.PROXY, proxy);
 		}
         requestBuilder.setConfig(requestConfigBuilder.build());
         return requestBuilder.build();
