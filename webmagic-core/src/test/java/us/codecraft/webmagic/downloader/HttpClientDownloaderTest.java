@@ -90,12 +90,12 @@ public class HttpClientDownloaderTest {
             private String getCharsetByUrl(String url) {
                 HttpClientDownloader downloader = new HttpClientDownloader();
                 Site site = Site.me();
-                CloseableHttpClient httpClient = new HttpClientGenerator().getClient(site);
+                CloseableHttpClient httpClient = new HttpClientGenerator().getClient(site, null);
                 // encoding in http header Content-Type
                 Request requestGBK = new Request(url);
                 CloseableHttpResponse httpResponse = null;
                 try {
-                    httpResponse = httpClient.execute(downloader.getHttpUriRequest(requestGBK, site, null));
+                    httpResponse = httpClient.execute(downloader.getHttpUriRequest(requestGBK, site, null,null));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
