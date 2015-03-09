@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.downloader;
 
 import com.google.common.collect.Sets;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpHost;
@@ -9,10 +10,12 @@ import org.apache.http.NameValuePair;
 import org.apache.http.annotation.ThreadSafe;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,6 +23,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
@@ -29,7 +33,9 @@ import us.codecraft.webmagic.utils.HttpConstant;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -129,8 +135,8 @@ public class HttpClientDownloader extends AbstractDownloader {
         return acceptStatCode.contains(statusCode);
     }
 
-    protected HttpUriRequest getHttpUriRequest(Request request, Site site, Map<String, String> headers) {
-        RequestBuilder requestBuilder = selectRequestMethod(request).setUri(request.getUrl());
+    protected HttpUriRequest getHttpUriRequest(Request request, Site site, Map<String, String> headers) throws UnsupportedEncodingException {
+        RequestBuilder requestBuilder = selectRequestMethod(request,site).setUri(request.getUrl());
         if (headers != null) {
             for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
                 requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
@@ -154,7 +160,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         return requestBuilder.build();
     }
 
-    protected RequestBuilder selectRequestMethod(Request request) {
+    protected RequestBuilder selectRequestMethod(Request request,Site site) throws UnsupportedEncodingException {
         String method = request.getMethod();
         if (method == null || method.equalsIgnoreCase(HttpConstant.Method.GET)) {
             //default get
@@ -163,7 +169,9 @@ public class HttpClientDownloader extends AbstractDownloader {
             RequestBuilder requestBuilder = RequestBuilder.post();
             NameValuePair[] nameValuePair = (NameValuePair[]) request.getExtra("nameValuePair");
             if (nameValuePair != null && nameValuePair.length > 0) {
-                requestBuilder.addParameters(nameValuePair);
+
+                //由于RequestBuilder在对post参数编码时默认使用ISO-8859-1，会导致中文乱码，所以在此修正
+                requestBuilder.setEntity(new UrlEncodedFormEntity(Arrays.asList(nameValuePair),site.getCharset()));
             }
             return requestBuilder;
         } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
