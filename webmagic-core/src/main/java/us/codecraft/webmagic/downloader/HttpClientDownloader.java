@@ -145,6 +145,10 @@ public class HttpClientDownloader extends AbstractDownloader {
             HttpHost host = site.getHttpProxyFromPool();
 			requestConfigBuilder.setProxy(host);
 			request.putExtra(Request.PROXY, host);
+		}else if(site.getHttpProxy()!= null){
+            HttpHost host = site.getHttpProxy();
+			requestConfigBuilder.setProxy(host);
+			request.putExtra(Request.PROXY, host);	
 		}
         requestBuilder.setConfig(requestConfigBuilder.build());
         return requestBuilder.build();
