@@ -107,6 +107,9 @@ public class Spider implements Runnable, Task {
     private Date startTime;
 
     private int emptySleepTime = 30000;
+    
+    //如果本次执行无任何错误，则值为true，否则为false
+    private boolean sucessFlag = true;
 
     /**
      * create a spider with pageProcessor.
@@ -344,6 +347,7 @@ public class Spider implements Runnable, Task {
     }
 
     protected void onError(Request request) {
+    	sucessFlag = false;
         if (CollectionUtils.isNotEmpty(spiderListeners)) {
             for (SpiderListener spiderListener : spiderListeners) {
                 spiderListener.onError(request);
@@ -735,4 +739,31 @@ public class Spider implements Runnable, Task {
     public void setEmptySleepTime(int emptySleepTime) {
         this.emptySleepTime = emptySleepTime;
     }
+
+	public boolean isSucessFlag() {
+		return sucessFlag;
+	}
+
+	public void setSucessFlag(boolean sucessFlag) {
+		this.sucessFlag = sucessFlag;
+	}
+
+	/**  
+	 * 返回 pageProcessor 的值   
+	 * @return pageProcessor  
+	 */
+	public PageProcessor getPageProcessor() {
+		return pageProcessor;
+	}
+
+	/**  
+	 * 设置 pageProcessor 的值  
+	 * @param pageProcessor
+	 */
+	public void setPageProcessor(PageProcessor pageProcessor) {
+		this.pageProcessor = pageProcessor;
+	}
+    
+    
+    
 }
