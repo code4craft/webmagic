@@ -108,8 +108,8 @@ public class Spider implements Runnable, Task {
 
     private int emptySleepTime = 30000;
     
-    //如果本次执行无任何错误，则值为true，否则为false
-    private boolean sucessFlag = true;
+    //如果本次执行无任何错误，则值为0，未知型错误为：1，代理搜索次数当天超过100次被封，值为2
+    private int sucessFlag = 0;
 
     /**
      * create a spider with pageProcessor.
@@ -347,7 +347,7 @@ public class Spider implements Runnable, Task {
     }
 
     protected void onError(Request request) {
-    	sucessFlag = false;
+    	sucessFlag = 1;
         if (CollectionUtils.isNotEmpty(spiderListeners)) {
             for (SpiderListener spiderListener : spiderListeners) {
                 spiderListener.onError(request);
@@ -431,6 +431,11 @@ public class Spider implements Runnable, Task {
         //for proxy status management
         request.putExtra(Request.STATUS_CODE, page.getStatusCode());
         sleep(site.getSleepTime());
+        
+        //看本次查询的IP是否已经由于超过100次而被封：
+        if(null!=page.getRawText()&&page.getRawText().indexOf("同一IP每天最多可搜索100次")!=-1){
+        	sucessFlag = 2;
+        }
     }
 
     protected void sleep(int time) {
@@ -740,11 +745,11 @@ public class Spider implements Runnable, Task {
         this.emptySleepTime = emptySleepTime;
     }
 
-	public boolean isSucessFlag() {
+	public int isSucessFlag() {
 		return sucessFlag;
 	}
 
-	public void setSucessFlag(boolean sucessFlag) {
+	public void setSucessFlag(int sucessFlag) {
 		this.sucessFlag = sucessFlag;
 	}
 
