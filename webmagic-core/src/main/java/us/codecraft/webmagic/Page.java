@@ -41,6 +41,8 @@ public class Page {
     private int statusCode;
 
     private boolean needCycleRetry;
+    
+    private String error;
 
     private List<Request> targetRequests = new ArrayList<Request>();
 
@@ -228,4 +230,22 @@ public class Page {
                 ", targetRequests=" + targetRequests +
                 '}';
     }
+
+	/**  
+	 * 返回 error 的值   
+	 * @return error  
+	 */
+	public String getError() {
+		return error;
+	}
+
+	/**  
+	 * 设置 error 的值  
+	 * @param error
+	 */
+	public void setError(String error) {
+		this.error = error;
+	}
+    
+    
 }

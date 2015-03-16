@@ -104,7 +104,9 @@ public class HttpClientDownloader extends AbstractDownloader {
                 return page;
             } else {
                 logger.warn("code error " + statusCode + "\t" + request.getUrl());
-                return null;
+                Page page = new Page();
+                page.setError("code error " + statusCode + "\t" + request.getUrl());
+                return page;
             }
         } catch (IOException e) {
             logger.warn("download page " + request.getUrl() + " error", e);
@@ -112,7 +114,9 @@ public class HttpClientDownloader extends AbstractDownloader {
                 return addToCycleRetry(request, site);
             }
             onError(request);
-            return null;
+            Page page = new Page();
+            page.setError(e.toString());
+            return page;
         } finally {
         	request.putExtra(Request.STATUS_CODE, statusCode);
             try {

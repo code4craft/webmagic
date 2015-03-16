@@ -25,6 +25,12 @@
             <artifactId>guava</artifactId>
         </dependency>
 
+	 <dependency>
+  		<groupId>com.heetian.spider</groupId>
+  		<artifactId>spider-mysql</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
