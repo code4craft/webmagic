@@ -161,9 +161,21 @@ public class HttpClientDownloader extends AbstractDownloader {
             return RequestBuilder.get();
         } else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
             RequestBuilder requestBuilder = RequestBuilder.post();
-            NameValuePair[] nameValuePair = (NameValuePair[]) request.getExtra("nameValuePair");
-            if (nameValuePair != null && nameValuePair.length > 0) {
-                requestBuilder.addParameters(nameValuePair);
+            Object extraNameValuePair=request.getExtra("nameValuePair");
+			NameValuePair[] nameValuePair=null;
+			if (extraNameValuePair instanceof NameValuePair[]) 
+				nameValuePair = (NameValuePair[]) extraNameValuePair;
+			else{
+				JSONArray arr = JSON.parseArray(String.valueOf(extraNameValuePair));
+				nameValuePair = new NameValuePair[arr.size()];
+				for (int i = 0; i < nameValuePair.length; i++) {
+					JSONObject obj = (JSONObject) arr.get(i);
+					nameValuePair[i] = new BasicNameValuePair(obj.getString("name"),
+							obj.getString("value"));
+				}
+			}
+	    if (nameValuePair != null && nameValuePair.length > 0) {
+                	requestBuilder.addParameters(nameValuePair);
             }
             return requestBuilder;
         } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
