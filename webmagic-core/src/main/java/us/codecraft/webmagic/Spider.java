@@ -1,10 +1,24 @@
 package us.codecraft.webmagic;
 
-import com.google.common.collect.Lists;
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.http.HttpHost;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.CollectorPipeline;
@@ -17,15 +31,7 @@ import us.codecraft.webmagic.scheduler.Scheduler;
 import us.codecraft.webmagic.thread.CountableThreadPool;
 import us.codecraft.webmagic.utils.UrlUtils;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
+import com.google.common.collect.Lists;
 
 /**
  * Entrance of a crawler.<br>
@@ -107,7 +113,12 @@ public class Spider implements Runnable, Task {
     private Date startTime;
 
     private int emptySleepTime = 30000;
-
+    
+    /**
+     * 是否抓取新增
+     */
+    private boolean crawlNewAdded; 
+    
     /**
      * create a spider with pageProcessor.
      *
@@ -370,10 +381,13 @@ public class Spider implements Runnable, Task {
             }
         }
     }
-
+/**
+ * scheduler中的资源是否也要释放 如FileCacheQueueScheduler中的Writer
+ */
     public void close() {
         destroyEach(downloader);
         destroyEach(pageProcessor);
+        destroyEach(scheduler);
         for (Pipeline pipeline : pipelines) {
             destroyEach(pipeline);
         }
@@ -419,6 +433,7 @@ public class Spider implements Runnable, Task {
         }
         pageProcessor.process(page);
         extractAndAddRequests(page, spawnUrl);
+        
         if (!page.getResultItems().isSkip()) {
             for (Pipeline pipeline : pipelines) {
                 pipeline.process(page.getResultItems(), this);
@@ -449,6 +464,8 @@ public class Spider implements Runnable, Task {
         if (site.getDomain() == null && request != null && request.getUrl() != null) {
             site.setDomain(UrlUtils.getDomain(request.getUrl()));
         }
+        if(crawlNewAdded)
+        	request.putExtra(Request.CRAWL_NEW_ADDED, true);
         scheduler.push(request, this);
     }
 
@@ -735,4 +752,14 @@ public class Spider implements Runnable, Task {
     public void setEmptySleepTime(int emptySleepTime) {
         this.emptySleepTime = emptySleepTime;
     }
+
+	public void setCrawlNewAdded(boolean crawlNewAdded) {
+		this.crawlNewAdded = crawlNewAdded;
+	}
+	@Override
+	protected void finalize() throws Throwable {
+		logger.info("finalize()");
+		super.finalize();
+	}
+    
 }

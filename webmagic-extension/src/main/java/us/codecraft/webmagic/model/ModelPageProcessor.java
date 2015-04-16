@@ -45,8 +45,8 @@ class ModelPageProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         for (PageModelExtractor pageModelExtractor : pageModelExtractorList) {
-            extractLinks(page, pageModelExtractor.getHelpUrlRegionSelector(), pageModelExtractor.getHelpUrlPatterns());
-            extractLinks(page, pageModelExtractor.getTargetUrlRegionSelector(), pageModelExtractor.getTargetUrlPatterns());
+            extractLinks(page, pageModelExtractor.getHelpUrlRegionSelector(), pageModelExtractor.getHelpUrlPatterns(),Request.HELP_URL);
+            extractLinks(page, pageModelExtractor.getTargetUrlRegionSelector(), pageModelExtractor.getTargetUrlPatterns(),Request.TARGET_URL);
             Object process = pageModelExtractor.process(page);
             if (process == null || (process instanceof List && ((List) process).size() == 0)) {
                 continue;
@@ -59,7 +59,7 @@ class ModelPageProcessor implements PageProcessor {
         }
     }
 
-    private void extractLinks(Page page, Selector urlRegionSelector, List<Pattern> urlPatterns) {
+    private void extractLinks(Page page, Selector urlRegionSelector, List<Pattern> urlPatterns, String kindOfUrl) {
         List<String> links;
         if (urlRegionSelector == null) {
             links = page.getHtml().links().all();
@@ -70,7 +70,9 @@ class ModelPageProcessor implements PageProcessor {
             for (Pattern targetUrlPattern : urlPatterns) {
                 Matcher matcher = targetUrlPattern.matcher(link);
                 if (matcher.find()) {
-                    page.addTargetRequest(new Request(matcher.group(1)));
+                	Request request = new Request(matcher.group(1));
+                	request.putExtra(Request.KIND_OF_URL, kindOfUrl);
+                    page.addTargetRequest(request);
                 }
             }
         }

@@ -20,7 +20,18 @@ public class Request implements Serializable {
     public static final String CYCLE_TRIED_TIMES = "_cycle_tried_times";
     public static final String STATUS_CODE = "statusCode";
     public static final String PROXY = "proxy";
-
+    /**
+     * url种类 target or help
+     */
+    public static final String KIND_OF_URL = "kindOfUrl";
+    public static final String TARGET_URL = "targetUrl";
+    public static final String HELP_URL = "helpUrl";
+    public static final String CRAWL_NEW_ADDED = "crawlNewAdded";
+    /**
+     * 仅添加到队列 而不持久化到文件
+     */
+    public static final String ONLY_ADD_TO_QUEUE = "onlyAndToQueue"; 
+    
     private String url;
 
     private String method;

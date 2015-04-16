@@ -35,6 +35,11 @@ public class Page {
     private Json json;
 
     private String rawText;
+    
+    /**
+     * 原生二进制内容
+     */
+    private byte[] contentBytes;
 
     private Selectable url;
 
@@ -216,7 +221,12 @@ public class Page {
         this.rawText = rawText;
         return this;
     }
-
+    public void setContentBytes(byte[] contentBytes) {
+		this.contentBytes = contentBytes;
+	}
+    public byte[] getContentBytes() {
+		return contentBytes;
+	}
     @Override
     public String toString() {
         return "Page{" +
