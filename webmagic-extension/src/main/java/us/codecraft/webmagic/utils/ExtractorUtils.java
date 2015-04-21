@@ -35,28 +35,6 @@ public class ExtractorUtils {
         }
         return selector;
     }
-    
-    public static Selector getSelector(String type, String value) {
-        Selector selector;
-        String t = type.toLowerCase();
-        switch (t) {
-            case "css":
-                selector = new CssSelector(value);
-                break;
-            case "regex":
-                selector = new RegexSelector(value);
-                break;
-            case "xpath":
-                selector = getXpathSelector(value);
-                break;
-            case "jsonpath":
-                selector = new JsonPathSelector(value);
-                break;
-            default:
-                selector = getXpathSelector(value);
-        }
-        return selector;
-    }
 
     private static Selector getXpathSelector(String value) {
         Selector selector = new XpathSelector(value);
