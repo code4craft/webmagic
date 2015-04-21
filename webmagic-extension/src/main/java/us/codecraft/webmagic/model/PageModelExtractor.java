@@ -1,30 +1,21 @@
 package us.codecraft.webmagic.model;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-import net.minidev.json.parser.JSONParser;
-import net.minidev.json.parser.ParseException;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.alibaba.fastjson.JSONObject;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.model.annotation.ComboExtract;
@@ -164,7 +155,12 @@ class PageModelExtractor {
     }
 
     private FieldExtractor getAnnotationExtractByUrl(Class clazz, Field field) {
-        FieldExtractor fieldExtractor = null;
+    	FieldExtractor fieldExtractor = null;
+    	fieldExtractor = confAnnotationExtractByUrl(clazz, field);
+    	if(fieldExtractor != null){
+    		return fieldExtractor;
+    	}
+        
         ExtractByUrl extractByUrl = field.getAnnotation(ExtractByUrl.class);
         if (extractByUrl != null) {
             String regexPattern = extractByUrl.value();
@@ -181,18 +177,46 @@ class PageModelExtractor {
         }
         return fieldExtractor;
     }
+    
+    
+    private FieldExtractor confAnnotationExtractByUrl(Class clazz, Field field) {
+        FieldExtractor fieldExtractor = null;
+        Properties p = properties.get(clazz.getName());
+        String conf = null;
+        
+        if(p == null){
+        	return null;
+        }
+        
+        conf = p.getProperty(clazz.getName()+".field."+field.getName()+".ExtractByUrl.value");
+        if(conf == null){
+        	return null;
+        }
+        
+        String regexPattern = conf.trim();
+        if (StringUtils.isEmpty(regexPattern)) {
+            regexPattern = ".*";
+        }
+        
+		boolean notNull = Boolean.valueOf(p.getProperty(clazz.getName() + ".ExtractByUrl.notNull", "false"));
+		boolean multi = Boolean.valueOf(p.getProperty(clazz.getName() + ".ExtractByUrl.multi", "false"));
+        fieldExtractor = new FieldExtractor(field, new RegexSelector(regexPattern), FieldExtractor.Source.Url, notNull,multi || List.class.isAssignableFrom(field.getType()));
+        Method setterMethod = getSetterMethod(clazz, field);
+        if (setterMethod != null) {
+            fieldExtractor.setSetterMethod(setterMethod);
+        }
+        
+        return fieldExtractor;
+    }
 
     private FieldExtractor getAnnotationExtractCombo(Class clazz, Field field) {
         FieldExtractor fieldExtractor = null;
-        ComboExtract comboExtract = field.getAnnotation(ComboExtract.class);
-        
-        //TODO
         fieldExtractor = confFieldExtractCombo(clazz, field);
-        
         if(fieldExtractor != null){
         	return fieldExtractor;
         }
         
+        ComboExtract comboExtract = field.getAnnotation(ComboExtract.class);
         if (comboExtract != null) {
             ExtractBy[] extractBies = comboExtract.value();
             Selector selector;
@@ -217,28 +241,68 @@ class PageModelExtractor {
     }
 
     private FieldExtractor confFieldExtractCombo(Class clazz, Field field) {
-    	//TODO
+    	
         Properties p = properties.get(clazz.getName());
         String conf = null;
         
-        if(p != null){
-        	conf = p.getProperty(clazz.getName()+".field."+field.getName()+".ExtractCombo");
+        if(p == null){
+        	return null;
         }
         
-        if(conf != null){
+        conf = p.getProperty(clazz.getName()+".field."+field.getName()+".ExtractCombo.value.1.ExtractBy.value");
+        
+        if(conf == null){
+        	return null;
         }
-		return null;
+        
+        String value = conf.trim();
+        String type = null;
+        List<Selector> selectors = new LinkedList<Selector>();
+        int count = 1;
+        
+        while(value != null){
+        	
+        	type = p.getProperty(clazz.getName()+".field."+field.getName()+".ExtractCombo.value."+count+".ExtractBy.type");
+        	Selector selector = ExtractorUtils.getSelector(type, value);
+        	selectors.add(selector);
+        	count++;
+        	value = p.getProperty(clazz.getName()+".field."+field.getName()+".ExtractCombo.value."+count+".ExtractBy.value").trim();
+        }
+        
+        String op = p.getProperty(clazz.getName()+".field."+field.getName()+".ExtractCombo.op");
+        if(StringUtils.isEmpty(op)){
+        	op = "and";
+        }
+        
+        Selector selector = null;
+        if("or".equalsIgnoreCase(op)){
+        	selector = new OrSelector(selectors);
+        }else{
+        	selector = new AndSelector(selectors);
+        }
+        
+		boolean notNull = Boolean.valueOf(p.getProperty(clazz.getName() + ".ExtractCombo.notNull", "false"));
+		boolean multi = Boolean.valueOf(p.getProperty(clazz.getName() + ".ExtractCombo.multi", "false"));
+		FieldExtractor.Source source = p.getProperty(clazz.getName() + ".ExtractCombo.source", "SelectedHtml").equalsIgnoreCase("RawHtml") ? FieldExtractor.Source.RawHtml:FieldExtractor.Source.Html;
+        FieldExtractor fieldExtractor = new FieldExtractor(field, selector, source, notNull, multi || List.class.isAssignableFrom(field.getType()));
+        Method setterMethod = getSetterMethod(clazz, field);
+        if (setterMethod != null) {
+            fieldExtractor.setSetterMethod(setterMethod);
+        }
+        
+		return fieldExtractor;
 	}
 
 	private FieldExtractor getAnnotationExtractBy(Class clazz, Field field) {
         FieldExtractor fieldExtractor = null;
-        ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
-        
-        fieldExtractor = confFieldExtractBy(clazz, field);
+        fieldExtractor = confAnnotationExtractBy(clazz, field);
         
         if(fieldExtractor != null){
         	return fieldExtractor;
-        }else if (extractBy != null) {
+        }
+        
+        ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
+        if (extractBy != null) {
             Selector selector = ExtractorUtils.getSelector(extractBy);
             fieldExtractor = new FieldExtractor(field, selector, extractBy.source() == ExtractBy.Source.RawHtml ? FieldExtractor.Source.RawHtml : FieldExtractor.Source.Html,
                     extractBy.notNull(), extractBy.multi() || List.class.isAssignableFrom(field.getType()));
@@ -250,19 +314,31 @@ class PageModelExtractor {
         return fieldExtractor;
     }
 
-    private FieldExtractor confFieldExtractBy(Class clazz, Field field) {
+    private FieldExtractor confAnnotationExtractBy(Class clazz, Field field) {
     	
     	Properties p = properties.get(clazz.getName());
-        String conf = null;
-        
-        if(p != null){
-        	conf = p.getProperty(clazz.getName()+".field."+field.getName()+".ExtractBy");
+    	if(p == null){
+    		return null;
+    	}
+    	
+        String conf = p.getProperty(clazz.getName()+".field."+field.getName()+".ExtractBy.value");
+        if(conf == null){
+        	return null;
         }
         
-        if(conf != null){
-        	
+        String value = conf.replaceAll("[\"]", "");
+		boolean notNull = Boolean.valueOf(p.getProperty(clazz.getName() + ".ExtractBy.notNull", "false"));
+		boolean multi = Boolean.valueOf(p.getProperty(clazz.getName() + ".ExtractBy.multi", "false"));
+		String type = p.getProperty(clazz.getName() + ".ExtractBy.type", "xpath");
+		Selector selector = ExtractorUtils.getSelector(type, value);
+		FieldExtractor.Source source = p.getProperty(clazz.getName() + ".ExtractBy.source", "RawHtml").equalsIgnoreCase("RawHtml") ? FieldExtractor.Source.RawHtml:FieldExtractor.Source.Html;
+		FieldExtractor fieldExtractor = new FieldExtractor(field, selector, source, notNull, multi || List.class.isAssignableFrom(field.getType()));
+        Method setterMethod = getSetterMethod(clazz, field);
+        if (setterMethod != null) {
+            fieldExtractor.setSetterMethod(setterMethod);
         }
-		return null;
+        
+		return fieldExtractor;
 	}
 
 	public static Method getSetterMethod(Class clazz, Field field) {
@@ -382,7 +458,7 @@ class PageModelExtractor {
         }
         
         String sourceRegion = p.getProperty(clazz.getName()+".TargetUrl.sourceRegion");
-        if (!sourceRegion.equals("")) {
+        if (!StringUtils.isEmpty(sourceRegion)) {
             helpUrlRegionSelector = new XpathSelector(sourceRegion);
         }
         
@@ -657,4 +733,19 @@ class PageModelExtractor {
     Selector getHelpUrlRegionSelector() {
         return helpUrlRegionSelector;
     }
+    
+    public static void main(String[] args) {
+    	String extractBys = "@ExtractBy(value = \"div.PubDate\", type = Type.Css), @ExtractBy(value = \"(\\d+)评\", type = Type.Regex) ".trim();
+        int index = extractBys.indexOf("@ExtractBy");
+        while(index >= 0){
+        	int lb = extractBys.indexOf("(", index);
+        	int rb = extractBys.indexOf(")", lb);
+        	String extractBy = extractBys.substring(lb+1, rb);
+        	System.out.println("Extract By:"+ extractBy);
+        	extractBys = extractBys.substring(rb+1).trim();
+        	System.out.println("Rest:"+ extractBys);
+        	index = extractBys.indexOf("@ExtractBy");
+        }
+	}
+    
 }
