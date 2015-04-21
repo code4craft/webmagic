@@ -1,23 +1,18 @@
-package io.batcloud.downloader;
+package us.codecraft.webmagic.downloader;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
+import com.google.common.collect.Sets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.annotation.ThreadSafe;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,21 +20,19 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.downloader.AbstractDownloader;
-import us.codecraft.webmagic.downloader.HttpClientGenerator;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.HttpConstant;
 import us.codecraft.webmagic.utils.UrlUtils;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Sets;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -168,21 +161,9 @@ public class HttpClientDownloader extends AbstractDownloader {
             return RequestBuilder.get();
         } else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
             RequestBuilder requestBuilder = RequestBuilder.post();
-            Object extraNameValuePair=request.getExtra("nameValuePair");
-			NameValuePair[] nameValuePair=null;
-			if (extraNameValuePair instanceof NameValuePair[]) 
-				nameValuePair = (NameValuePair[]) extraNameValuePair;
-			else{
-				JSONArray arr = JSON.parseArray(String.valueOf(extraNameValuePair));
-				nameValuePair = new NameValuePair[arr.size()];
-				for (int i = 0; i < nameValuePair.length; i++) {
-					JSONObject obj = (JSONObject) arr.get(i);
-					nameValuePair[i] = new BasicNameValuePair(obj.getString("name"),
-							obj.getString("value"));
-				}
-			}
-	    if (nameValuePair != null && nameValuePair.length > 0) {
-                	requestBuilder.addParameters(nameValuePair);
+            NameValuePair[] nameValuePair = (NameValuePair[]) request.getExtra("nameValuePair");
+            if (nameValuePair != null && nameValuePair.length > 0) {
+                requestBuilder.addParameters(nameValuePair);
             }
             return requestBuilder;
         } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
