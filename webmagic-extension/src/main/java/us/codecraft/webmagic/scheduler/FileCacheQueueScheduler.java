@@ -42,14 +42,14 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
 
     private BlockingQueue<Request> queue;
 
-    private Set<String> urls;
+   // private Set<String> urls;
 
     public FileCacheQueueScheduler(String filePath) {
         if (!filePath.endsWith("/") && !filePath.endsWith("\\")) {
             filePath += "/";
         }
         this.filePath = filePath;
-        initDuplicateRemover();
+        //initDuplicateRemover();
     }
 
     private void flush() {
@@ -114,7 +114,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
     private void readFile() {
         try {
             queue = new LinkedBlockingQueue<Request>();
-            urls = new LinkedHashSet<String>();
+            //urls = new LinkedHashSet<String>();
             readCursorFile();
             readUrlFile();
             // initDuplicateRemover();
@@ -133,7 +133,8 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
             fileUrlReader = new BufferedReader(new FileReader(getFileName(fileUrlAllName)));
             int lineReaded = 0;
             while ((line = fileUrlReader.readLine()) != null) {
-                urls.add(line.trim());
+                //urls.add(line.trim());
+                getDuplicateRemover().isDuplicate(new Request(line), null);
                 lineReaded++;
                 if (lineReaded > cursor.get()) {
                     queue.add(new Request(line));
