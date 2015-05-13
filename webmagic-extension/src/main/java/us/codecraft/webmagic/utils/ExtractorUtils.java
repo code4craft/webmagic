@@ -39,22 +39,18 @@ public class ExtractorUtils {
     public static Selector getSelector(String type, String value) {
         Selector selector;
         String t = type.toLowerCase();
-        switch (t) {
-            case "css":
-                selector = new CssSelector(value);
-                break;
-            case "regex":
-                selector = new RegexSelector(value);
-                break;
-            case "xpath":
-                selector = getXpathSelector(value);
-                break;
-            case "jsonpath":
-                selector = new JsonPathSelector(value);
-                break;
-            default:
-                selector = getXpathSelector(value);
+        if("css".equals(t)){
+        	selector = new CssSelector(value);
+        }else if ("regex".equals(t)){
+        	selector = new RegexSelector(value);
+        }else if ("xpath".equals(t)){
+        	selector = getXpathSelector(value);
+        }else if ("jsonpath".equals(t)){
+        	selector = new JsonPathSelector(value);
+        }else {
+        	selector = getXpathSelector(value);
         }
+        
         return selector;
     }
 
