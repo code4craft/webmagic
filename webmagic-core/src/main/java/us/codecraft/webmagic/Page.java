@@ -32,6 +32,8 @@ public class Page {
 
     private Html html;
 
+    private Html rawHtml;
+
     private Json json;
 
     private String rawText;
@@ -73,6 +75,18 @@ public class Page {
             html = new Html(UrlUtils.fixAllRelativeHrefs(rawText, request.getUrl()));
         }
         return html;
+    }
+
+    /**
+     * get html content of page
+     * @author wangnima
+     * @return html
+     */
+    public Html getRawHtml() {
+        if (rawHtml == null) {
+            rawHtml = new Html(UrlUtils.fixAllRelativeHrefsSimple(rawText, request.getUrl()));
+        }
+        return rawHtml;
     }
 
     /**
