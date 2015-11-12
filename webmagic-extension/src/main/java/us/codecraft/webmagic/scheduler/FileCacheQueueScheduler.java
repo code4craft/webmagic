@@ -12,9 +12,11 @@ import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+
 
 /**
  * Store urls and cursor in files so that a Spider can resume the status when shutdown.<br>
@@ -22,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler {
+public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler,Closeable {
 
     private String filePath = System.getProperty("java.io.tmpdir");
 
@@ -43,6 +45,8 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
     private BlockingQueue<Request> queue;
 
     private Set<String> urls;
+    
+    private ScheduledExecutorService flushThreadPool;
 
     public FileCacheQueueScheduler(String filePath) {
         if (!filePath.endsWith("/") && !filePath.endsWith("\\")) {
@@ -94,7 +98,8 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
     }
 
     private void initFlushThread() {
-        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(new Runnable() {
+    	flushThreadPool = Executors.newScheduledThreadPool(1);
+    	flushThreadPool.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 flush();
@@ -161,6 +166,12 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
             }
         }
     }
+    
+    public void close() throws IOException {
+		flushThreadPool.shutdown();	
+		fileUrlWriter.close();
+		fileCursorWriter.close();
+	}
 
     private String getFileName(String filename) {
         return filePath + task.getUUID() + filename;
