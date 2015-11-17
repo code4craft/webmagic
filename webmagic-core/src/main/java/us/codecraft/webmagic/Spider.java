@@ -374,6 +374,7 @@ public class Spider implements Runnable, Task {
     public void close() {
         destroyEach(downloader);
         destroyEach(pageProcessor);
+        destroyEach(scheduler);
         for (Pipeline pipeline : pipelines) {
             destroyEach(pipeline);
         }
