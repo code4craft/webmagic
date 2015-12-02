@@ -119,7 +119,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     public int getTotalRequestsCount(Task task) {
         Jedis jedis = pool.getResource();
         try {
-            Long size = jedis.scard(getQueueKey(task));
+            Long size = jedis.scard(getSetKey(task));
             return size.intValue();
         } finally {
             pool.returnResource(jedis);
