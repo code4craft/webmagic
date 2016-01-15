@@ -6,8 +6,7 @@ import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.scheduler.PriorityScheduler;
-import us.codecraft.webmagic.selector.Selectable;
-import us.codecraft.webmagic.selector.XpathSelector;
+import us.codecraft.webmagic.scheduler.FileCacheQueueScheduler;
 
 import java.util.Arrays;
 import java.util.List;
@@ -85,9 +84,9 @@ public class MafengwoPageProcessor implements PageProcessor {
 
     public static void main(String[] args) {
         Spider.create(new MafengwoPageProcessor()).
-                setScheduler(new PriorityScheduler()).
                 addUrl("http://www.mafengwo.cn/yj/10099/2-0-1.html").
                 addPipeline(new FilePipeline("D:\\webmagic\\")).
+                setScheduler(new FileCacheQueueScheduler("D:\\webmagic\\cache\\")).
                 thread(5).
                 run();
     }
