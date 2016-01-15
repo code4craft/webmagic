@@ -7,6 +7,7 @@ import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.scheduler.PriorityScheduler;
 import us.codecraft.webmagic.selector.Selectable;
+import us.codecraft.webmagic.selector.XpathSelector;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,11 +24,15 @@ public class MafengwoPageProcessor implements PageProcessor {
 
     static private String pTitle = "//h1[@class='headtext']/text()";
     static private String pTitle2 = "//h1/text()";
-    static private String pContent = "//div[@class='va_con']";
-    static private String pSubtitle = "//div[@class='article_title _j_anchorcnt']//h2//span[@class='_j_anchor']/text()";
-    static private String pParagraph = "//p[@class='_j_note_content']/text()";
-    static private String pParagraph2 = "//p/text()";
-
+    static private String pBody = "//div[@class='va_con']/tidyText()";
+    static private String pBody2 = "//div[@class='a_con_text']/tidyText()";
+    static private String pUsername = "//div[@class='person']/strong/a[@class='per_name']/text()";
+    static private String pUsername2 = "//a[@class='name']/text()";
+    static private String pUserid = "//div[@class='person']/strong/a";
+    static private String pUserid2 = "//div[@class='author_info']/div[@class='avatar_box']/div[@class='out_pic']/a";
+    static private String pDatetime = "//div[@class='vc_time']/span[@class='time']/text()";
+    static private String pDatetime2 = "//span[@class='date']/text()";
+    static private String regUserid = "<a[^<>]*href=[\"'][http://www\\.mafengwo\\.cn]+/u/(\\d+)\\.html[\"']";
     static private List<String> userAgentList= Arrays.asList(
             "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0",
             "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0) Gecko/16.0 Firefox/16.0",
@@ -41,21 +46,31 @@ public class MafengwoPageProcessor implements PageProcessor {
         page.addTargetRequests(page.getHtml().links().regex("(http://www\\.mafengwo\\.cn/yj/.*\\.html)").all(),srcUrl);
         boolean parseFlag = page.getUrl().regex("http://www\\.mafengwo\\.cn/i/\\d+\\.html").match();
         if (parseFlag) {
-            Selectable titleObj = page.getHtml().xpath(pTitle);
-            if (titleObj == null) {
-                titleObj = page.getHtml().xpath(pTitle2);
+            String username = page.getHtml().xpath(pUsername).get();
+            if (username == null && page.getHtml().xpath(pUsername2).all().size()>0) {
+                username = page.getHtml().xpath(pUsername2).all().get(0);
             }
-            //List<String> subTitles = page.getHtml().xpath(pSubtitle).all();
-            List<String> paragraphs = page.getHtml().xpath(pParagraph).all();
-            if (paragraphs == null || paragraphs.size() == 0) {
-                paragraphs = page.getHtml().xpath(pParagraph2).all();
+            String userid = page.getHtml().xpath(pUserid).regex(regUserid).get();
+            if (userid == null) {
+                userid = page.getHtml().xpath(pUserid2).regex(regUserid).get();
             }
-            String content = "";
-            for (String paragraph : paragraphs) {
-                content += paragraph;
+            String datetime = page.getHtml().xpath(pDatetime).get();
+            if (datetime == null && page.getHtml().xpath(pDatetime2).all().size()>0) {
+                datetime = page.getHtml().xpath(pDatetime2).all().get(0);
             }
-            page.putField("title", titleObj.toString());
-            page.putField("content", content);
+            String title = page.getHtml().xpath(pTitle).get();
+            if (title == null) {
+                title = page.getHtml().xpath(pTitle2).get();
+            }
+            String body = page.getHtml().xpath(pBody).get();
+            if (body == null) {
+                body = page.getHtml().xpath(pBody2).get();
+            }
+            page.putField("username", username);
+            page.putField("userid", userid);
+            page.putField("datetime", datetime);
+            page.putField("title", title);
+            page.putField("body", body);
         } else {
             page.setSkip(true);
         }
@@ -72,7 +87,7 @@ public class MafengwoPageProcessor implements PageProcessor {
         Spider.create(new MafengwoPageProcessor()).
                 setScheduler(new PriorityScheduler()).
                 addUrl("http://www.mafengwo.cn/yj/10099/2-0-1.html").
-                addPipeline(new FilePipeline("/tmp/webmagic")).
+                addPipeline(new FilePipeline("D:\\webmagic\\")).
                 thread(5).
                 run();
     }
