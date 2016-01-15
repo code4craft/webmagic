@@ -22,7 +22,7 @@ public class Request implements Serializable {
     public static final String PROXY = "proxy";
 
     private String url;
-
+    private String srcUrl;
     private String method;
 
     /**
@@ -42,6 +42,11 @@ public class Request implements Serializable {
 
     public Request(String url) {
         this.url = url;
+    }
+
+    public Request(String url, String srcUrl) {
+        this.url = url;
+        this.srcUrl = srcUrl;
     }
 
     public long getPriority() {
@@ -81,6 +86,8 @@ public class Request implements Serializable {
         return url;
     }
 
+    public String getSrcUrl() { return srcUrl; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -110,6 +117,7 @@ public class Request implements Serializable {
         this.url = url;
     }
 
+    public void setSrcUrl(String url) { this.srcUrl = url; }
     /**
      * The http method of the request. Get for default.
      * @return httpMethod
@@ -127,6 +135,7 @@ public class Request implements Serializable {
     @Override
     public String toString() {
         return "Request{" +
+                "srcUrl='" + srcUrl +'\'' +
                 "url='" + url + '\'' +
                 ", method='" + method + '\'' +
                 ", extras=" + extras +
