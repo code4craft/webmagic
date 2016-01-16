@@ -83,11 +83,11 @@ public class MafengwoPageProcessor implements PageProcessor {
     }
 
     public static void main(String[] args) {
-        Spider.create(new MafengwoPageProcessor()).
-                addUrl("http://www.mafengwo.cn/yj/10099/2-0-1.html").
-                addPipeline(new FilePipeline("D:\\webmagic\\")).
-                setScheduler(new FileCacheQueueScheduler("D:\\webmagic\\cache\\")).
-                thread(5).
-                run();
+        Spider.create(new MafengwoPageProcessor())
+                .addUrl("http://www.mafengwo.cn/yj/10099/2-0-1.html")
+                .addPipeline(new FilePipeline("D:\\webmagic\\"))
+                .setScheduler(new FileCacheQueueScheduler("D:\\webmagic\\cache\\"))
+                .thread(5)
+                .run();
     }
 }
