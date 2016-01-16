@@ -19,7 +19,7 @@ public class GithubRepoPageProcessor implements PageProcessor {
         page.addTargetRequests(page.getHtml().links().regex("(https://github\\.com/\\w+)").all());
         GithubRepo githubRepo = new GithubRepo();
         githubRepo.setAuthor(page.getUrl().regex("https://github\\.com/(\\w+)/.*").toString());
-        githubRepo.setName(page.getHtml().xpath("//h1[@class='entry-title public']/strong/a/text()").toString());
+        githubRepo.setName(page.getHtml().xpath("//h1[contains(@class, 'entry-title') and contains(@class, 'public')]/strong/a/text()").toString());
         githubRepo.setReadme(page.getHtml().xpath("//div[@id='readme']/tidyText()").toString());
         if (githubRepo.getName() == null) {
             //skip this page

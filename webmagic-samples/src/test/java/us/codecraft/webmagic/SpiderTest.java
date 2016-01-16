@@ -18,7 +18,7 @@ public class SpiderTest {
     @Ignore
     @Test
     public void testSpider() throws InterruptedException {
-        Spider me = Spider.create(new HuxiuProcessor()).pipeline(new FilePipeline());
+        Spider me = Spider.create(new HuxiuProcessor()).addPipeline(new FilePipeline());
         me.run();
     }
 
@@ -31,7 +31,7 @@ public class SpiderTest {
         SimplePageProcessor pageProcessor2 = new SimplePageProcessor("http://www.diaoyuweng.com/home.php?mod=space&uid=88304&do=thread&view=me&type=thread&from=space", "http://www.diaoyuweng.com/thread-*-1-1.html");
         System.out.println(pageProcessor2.getSite().getCharset());
         pageProcessor2.getSite().setSleepTime(500);
-        Spider.create(pageProcessor2).pipeline(new FilePipeline()).scheduler(new FileCacheQueueScheduler("/data/temp/webmagic/cache/")).
+        Spider.create(pageProcessor2).addPipeline(new FilePipeline()).scheduler(new FileCacheQueueScheduler("/data/temp/webmagic/cache/")).
                 run();
 
 
