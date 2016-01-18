@@ -152,6 +152,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18</version>
                 <configuration>
                     <forkMode>pertest</forkMode>
                     <argLine>-Xms1024m -Xmx1024m -Xss1m </argLine>
