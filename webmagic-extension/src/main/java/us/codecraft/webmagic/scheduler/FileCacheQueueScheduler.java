@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.scheduler;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
@@ -141,7 +142,11 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
                 urls.add(line.trim());
                 lineReaded++;
                 if (lineReaded > cursor.get()) {
-                    queue.add(new Request(line));
+                    if (StringUtils.contains(line, "\t")) {
+                        queue.add(new Request(StringUtils.substringBefore(line, "\t"), StringUtils.substringAfter(line, "\t")));
+                    } else {
+                        queue.add(new Request(line));
+                    }
                 }
             }
         } finally {
@@ -180,7 +185,11 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
     @Override
     protected void pushWhenNoDuplicate(Request request, Task task) {
         queue.add(request);
-        fileUrlWriter.println(request.getUrl());
+        if (request.getSrcUrl() == null) {
+            fileUrlWriter.println(request.getUrl());
+        } else {
+            fileUrlWriter.println(request.getUrl() + "\t" + request.getSrcUrl());
+        }
     }
 
     @Override

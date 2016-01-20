@@ -94,6 +94,9 @@ public class HttpClientDownloader extends AbstractDownloader {
             request.putExtra(Request.STATUS_CODE, statusCode);
             if (statusAccept(acceptStatCode, statusCode)) {
                 Page page = handleResponse(request, charset, httpResponse, task);
+                if (request.getSrcUrl()!=null) {
+                    page.putField("srcUrl", request.getSrcUrl());
+                }
                 onSuccess(request);
                 return page;
             } else {

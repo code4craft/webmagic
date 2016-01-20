@@ -6,6 +6,7 @@ import us.codecraft.webmagic.selector.Json;
 import us.codecraft.webmagic.selector.Selectable;
 import us.codecraft.webmagic.utils.UrlUtils;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,9 +120,31 @@ public class Page {
     }
 
     /**
+     * add urls to fetch with source url
+     *
+     * @param requests
+     * @param srcUrl
+     */
+    public void addTargetRequests(List<String> requests, String srcUrl) {
+        synchronized (targetRequests) {
+            if (StringUtils.isNotBlank(srcUrl) && !srcUrl.equals("#") && !srcUrl.startsWith("javascript")) {
+                srcUrl = UrlUtils.canonicalizeUrl(srcUrl, url.toString());
+                for (String s : requests) {
+                    if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
+                        continue;
+                    }
+                    s = UrlUtils.canonicalizeUrl(s, url.toString());
+                    targetRequests.add(new Request(s, srcUrl));
+                }
+            }
+        }
+    }
+
+    /**
      * add urls to fetch
      *
      * @param requests
+     * @param priority
      */
     public void addTargetRequests(List<String> requests, long priority) {
         synchronized (targetRequests) {
@@ -131,6 +154,28 @@ public class Page {
                 }
                 s = UrlUtils.canonicalizeUrl(s, url.toString());
                 targetRequests.add(new Request(s).setPriority(priority));
+            }
+        }
+    }
+
+    /**
+     * add urls to fetch with source url
+     *
+     * @param requests
+     * @param priority
+     * @param srcUrl
+     */
+    public void addTargetRequests(List<String> requests, long priority, String srcUrl) {
+        synchronized (targetRequests) {
+            if (StringUtils.isNotBlank(srcUrl) && !srcUrl.equals("#") && !srcUrl.startsWith("javascript")) {
+                srcUrl = UrlUtils.canonicalizeUrl(srcUrl, url.toString());
+                for (String s : requests) {
+                    if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
+                        continue;
+                    }
+                    s = UrlUtils.canonicalizeUrl(s, url.toString());
+                    targetRequests.add(new Request(s, srcUrl).setPriority(priority));
+                }
             }
         }
     }
@@ -147,6 +192,24 @@ public class Page {
         synchronized (targetRequests) {
             requestString = UrlUtils.canonicalizeUrl(requestString, url.toString());
             targetRequests.add(new Request(requestString));
+        }
+    }
+
+    /**
+     * add url to fetch with source url
+     *
+     * @param requestString
+     * @param srcUrl
+     */
+    public void addTargetRequest(String requestString, String srcUrl) {
+        if (StringUtils.isBlank(requestString) || requestString.equals("#") ||
+                StringUtils.isBlank(srcUrl) || srcUrl.equals("#")) {
+            return;
+        }
+        synchronized (targetRequests) {
+            requestString = UrlUtils.canonicalizeUrl(requestString, url.toString());
+            srcUrl = UrlUtils.canonicalizeUrl(srcUrl, url.toString());
+            targetRequests.add(new Request(requestString, srcUrl));
         }
     }
 
