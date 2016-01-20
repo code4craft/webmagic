@@ -88,7 +88,7 @@
             <dependency>
                 <groupId>us.codecraft</groupId>
                 <artifactId>xsoup</artifactId>
-                <version>0.2.4</version>
+                <version>0.3.1</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>

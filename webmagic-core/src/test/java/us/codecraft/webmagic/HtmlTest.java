@@ -39,11 +39,11 @@ public class HtmlTest {
 		assertThat(html.links().all()).contains("/xx/xx");
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test
 	public void testNthNodesGet(){
 		Html html = new Html("<a data-tip=\"p$t$xxx\" href=\"/xx/xx\">xx</a>");
 		assertThat(html.xpath("//a[1]/@href").get()).isEqualTo("/xx/xx");
 		Selectable selectable = html.xpath("//a[1]").nodes().get(0);
-		assertThat(selectable.xpath("@href").get()).isEqualTo("/xx/xx");
+		assertThat(selectable.xpath("/a/@href").get()).isEqualTo("/xx/xx");
 	}
 }
