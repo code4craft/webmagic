@@ -518,7 +518,7 @@ public class Spider implements Runnable, Task {
      * Add urls with information to crawl.<br>
      *
      * @param requests requests
-     * @return
+     * @return this
      */
     public Spider addRequest(Request... requests) {
         for (Request request : requests) {
@@ -730,7 +730,7 @@ public class Spider implements Runnable, Task {
     }
 
     /**
-     * Set wait time when no url is polled.<br></br>
+     * Set wait time when no url is polled.<br><br>
      *
      * @param emptySleepTime In MILLISECONDS.
      */

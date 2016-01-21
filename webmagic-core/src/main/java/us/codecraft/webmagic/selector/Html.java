@@ -69,7 +69,7 @@ public class Html extends HtmlNode {
 
     /**
      * @param selector selector
-     * @return
+     * @return result
      */
     public String selectDocument(Selector selector) {
         if (selector instanceof ElementSelector) {

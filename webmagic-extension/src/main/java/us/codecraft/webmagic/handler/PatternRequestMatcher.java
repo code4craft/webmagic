@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * User: Sebastian MA
  * Date: April 03, 2014
  * Time: 10:00
- * <p></p>
+ * <p>
  * A PatternHandler is in charge of both page extraction and data processing by implementing
  * its two abstract methods.
  */

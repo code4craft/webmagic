@@ -9,12 +9,12 @@ import us.codecraft.webmagic.Request;
 public interface RequestMatcher {
 
     /**
-     * Check whether to process the page.<br></br>
+     * Check whether to process the page.<br><br>
      * Please DO NOT change page status in this method.
      *
      * @param page page
      *
-     * @return
+     * @return whether matches
      */
     public boolean match(Request page);
 

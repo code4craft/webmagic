@@ -8,7 +8,7 @@ import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 import us.codecraft.webmagic.scheduler.component.HashSetDuplicateRemover;
 
 /**
- * Remove duplicate urls and only push urls which are not duplicate.<br></br>
+ * Remove duplicate urls and only push urls which are not duplicate.<br><br>
  *
  * @author code4crafer@gmail.com
  * @since 0.5.0

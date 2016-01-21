@@ -52,7 +52,7 @@ public class UrlUtils {
     /**
      *
      * @param url url
-     * @return
+     * @return new url
      */
     public static String encodeIllegalCharacterInUrl(String url) {
         //TODO more charator support

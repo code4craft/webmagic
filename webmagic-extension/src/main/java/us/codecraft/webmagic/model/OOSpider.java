@@ -25,7 +25,7 @@ import java.util.List;
  *      private String content;
  *
  *      {@literal @}ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
- *      private List<String> tags;
+ *      private List&lt;String&gt; tags;
  * }
  * </pre>
  * And start the spider by:

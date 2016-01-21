@@ -30,6 +30,7 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
     /**
      * init map with protoMapClass
      *
+     * @param map the origin map to contains the DoubleKeyMap
      * @param protoMapClass protoMapClass
      */
     @SuppressWarnings("rawtypes")

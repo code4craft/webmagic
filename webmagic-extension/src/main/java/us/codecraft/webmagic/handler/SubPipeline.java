@@ -12,7 +12,7 @@ public interface SubPipeline extends RequestMatcher {
     /**
      * process the page, extract urls to fetch, extract the data and store
      *
-     * @param page page
+     * @param resultItems resultItems
      * @param task task
      * @return whether continue to match
      */
