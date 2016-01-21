@@ -20,6 +20,7 @@ public class HtmlTest {
 		assertThat(selectable.regex("(a+b)").replace("aa(a)", "$1bb").toString()).isEqualTo("abbabbab");
     }
 
+	@Ignore("not work in jsoup 1.8.x")
 	@Test
 	public void testDisableJsoupHtmlEntityEscape() throws Exception {
 		Html.DISABLE_HTML_ENTITY_ESCAPE = true;
@@ -27,7 +28,6 @@ public class HtmlTest {
 		assertThat(html.regex("(aaaaaaa&b)").toString()).isEqualTo("aaaaaaa&b");
 	}
 
-	@Ignore("not work in jsoup 1.8.x")
 	@Test
 	public void testEnableJsoupHtmlEntityEscape() throws Exception {
 		Html.DISABLE_HTML_ENTITY_ESCAPE = false;
