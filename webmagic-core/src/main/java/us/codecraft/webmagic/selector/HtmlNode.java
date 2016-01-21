@@ -59,7 +59,7 @@ public class HtmlNode extends AbstractSelectable {
     /**
      * select elements
      *
-     * @param elementSelector
+     * @param elementSelector elementSelector
      * @return
      */
     protected Selectable selectElements(BaseElementSelector elementSelector) {
@@ -89,8 +89,8 @@ public class HtmlNode extends AbstractSelectable {
      * Only document can be select
      * See: https://github.com/code4craft/webmagic/issues/113
      *
-     * @param elementIterator
-     * @param element
+     * @param elementIterator elementIterator
+     * @param element element
      */
     private Element checkElementAndConvert(ListIterator<Element> elementIterator) {
         Element element = elementIterator.next();

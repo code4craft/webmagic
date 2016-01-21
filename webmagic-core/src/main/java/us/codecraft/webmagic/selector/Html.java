@@ -68,7 +68,7 @@ public class Html extends HtmlNode {
     }
 
     /**
-     * @param selector
+     * @param selector selector
      * @return
      */
     public String selectDocument(Selector selector) {

@@ -17,8 +17,8 @@ public interface Downloader {
     /**
      * Downloads web pages and store in Page object.
      *
-     * @param request
-     * @param task
+     * @param request request
+     * @param task task
      * @return page
      */
     public Page download(Request request, Task task);

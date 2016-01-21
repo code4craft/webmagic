@@ -30,7 +30,7 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
     /**
      * init map with protoMapClass
      *
-     * @param protoMapClass
+     * @param protoMapClass protoMapClass
      */
     @SuppressWarnings("rawtypes")
     public DoubleKeyMap(Map<K1, Map<K2, V>> map, Class<? extends Map> protoMapClass) {
@@ -40,7 +40,7 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
     }
 
     /**
-     * @param key
+     * @param key key
      * @return map
      */
     public Map<K2, V> get(K1 key) {
@@ -48,8 +48,8 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
     }
 
     /**
-     * @param key1
-     * @param key2
+     * @param key1 key1
+     * @param key2 key2
      * @return value
      */
     public V get(K1 key1, K2 key2) {
@@ -61,8 +61,8 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
 
 
     /**
-     * @param key1
-     * @param submap
+     * @param key1 key1
+     * @param submap submap
      * @return value
      */
     public V put(K1 key1, Map<K2, V> submap) {
@@ -70,9 +70,9 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
     }
 
     /**
-     * @param key1
-     * @param key2
-     * @param value
+     * @param key1 key1
+     * @param key2 key2
+     * @param value value
      * @return value
      */
     public synchronized V put(K1 key1, K2 key2, V value) {
@@ -84,8 +84,8 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
     }
 
     /**
-     * @param key1
-     * @param key2
+     * @param key1 key1
+     * @param key2 key2
      * @return value
      */
     public synchronized V remove(K1 key1, K2 key2) {
@@ -100,7 +100,7 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
     }
 
     /**
-     * @param key1
+     * @param key1 key1
      * @return
      */
     public Map<K2, V> remove(K1 key1) {

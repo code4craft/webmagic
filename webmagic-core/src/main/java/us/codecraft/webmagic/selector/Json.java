@@ -22,7 +22,7 @@ public class Json extends PlainText {
 
     /**
      * remove padding for JSONP
-     * @param padding
+     * @param padding padding
      * @return
      */
     public Json removePadding(String padding) {

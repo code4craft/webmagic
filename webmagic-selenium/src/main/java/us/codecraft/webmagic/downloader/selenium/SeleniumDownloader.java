@@ -42,7 +42,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 	/**
 	 * 新建
 	 *
-	 * @param chromeDriverPath
+	 * @param chromeDriverPath chromeDriverPath
 	 */
 	public SeleniumDownloader(String chromeDriverPath) {
 		System.getProperties().setProperty("webdriver.chrome.driver",
@@ -62,7 +62,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 	/**
 	 * set sleep time to wait until load success
 	 *
-	 * @param sleepTime
+	 * @param sleepTime sleepTime
 	 * @return this
 	 */
 	public SeleniumDownloader setSleepTime(int sleepTime) {

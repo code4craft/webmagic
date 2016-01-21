@@ -25,8 +25,8 @@ public class UrlUtils {
      * <p/>
      * Borrowed from Jsoup.
      *
-     * @param url
-     * @param refer
+     * @param url url
+     * @param refer refer
      * @return canonicalizeUrl
      */
     public static String canonicalizeUrl(String url, String refer) {
@@ -51,7 +51,7 @@ public class UrlUtils {
 
     /**
      *
-     * @param url
+     * @param url url
      * @return
      */
     public static String encodeIllegalCharacterInUrl(String url) {

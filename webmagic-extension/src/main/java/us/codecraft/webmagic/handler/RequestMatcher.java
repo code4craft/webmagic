@@ -12,7 +12,7 @@ public interface RequestMatcher {
      * Check whether to process the page.<br></br>
      * Please DO NOT change page status in this method.
      *
-     * @param page
+     * @param page page
      *
      * @return
      */

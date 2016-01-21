@@ -141,7 +141,7 @@ class WebDriverPool {
 	 * check whether input is a valid URL
 	 * 
 	 * @author bob.li.0718@gmail.com
-	 * @param urlString
+	 * @param urlString urlString
 	 * @return true means yes, otherwise no.
 	 */
 	private boolean isUrl(String urlString) {

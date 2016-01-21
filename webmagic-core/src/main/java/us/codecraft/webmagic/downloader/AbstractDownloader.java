@@ -16,7 +16,7 @@ public abstract class AbstractDownloader implements Downloader {
     /**
      * A simple method to download a url.
      *
-     * @param url
+     * @param url url
      * @return html
      */
     public Html download(String url) {
@@ -26,7 +26,8 @@ public abstract class AbstractDownloader implements Downloader {
     /**
      * A simple method to download a url.
      *
-     * @param url
+     * @param url url
+     * @param charset charset
      * @return html
      */
     public Html download(String url, String charset) {

@@ -42,7 +42,7 @@ public class SpiderMonitor {
     /**
      * Register spider for monitor.
      *
-     * @param spiders
+     * @param spiders spiders
      * @return
      */
     public synchronized SpiderMonitor register(Spider... spiders) throws JMException {

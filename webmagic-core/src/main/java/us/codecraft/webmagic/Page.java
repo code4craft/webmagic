@@ -56,8 +56,8 @@ public class Page {
     /**
      * store extract results
      *
-     * @param key
-     * @param field
+     * @param key key
+     * @param field field
      */
     public void putField(String key, Object field) {
         resultItems.put(key, field);
@@ -89,7 +89,7 @@ public class Page {
     }
 
     /**
-     * @param html
+     * @param html html
      * @deprecated since 0.4.0
      * The html is parse just when first time of calling {@link #getHtml()}, so use {@link #setRawText(String)} instead.
      */
@@ -104,7 +104,7 @@ public class Page {
     /**
      * add urls to fetch
      *
-     * @param requests
+     * @param requests requests
      */
     public void addTargetRequests(List<String> requests) {
         synchronized (targetRequests) {
@@ -121,7 +121,8 @@ public class Page {
     /**
      * add urls to fetch
      *
-     * @param requests
+     * @param requests requests
+     * @param priority priority
      */
     public void addTargetRequests(List<String> requests, long priority) {
         synchronized (targetRequests) {
@@ -138,7 +139,7 @@ public class Page {
     /**
      * add url to fetch
      *
-     * @param requestString
+     * @param requestString requestString
      */
     public void addTargetRequest(String requestString) {
         if (StringUtils.isBlank(requestString) || requestString.equals("#")) {
@@ -153,7 +154,7 @@ public class Page {
     /**
      * add requests to fetch
      *
-     * @param request
+     * @param request request
      */
     public void addTargetRequest(Request request) {
         synchronized (targetRequests) {

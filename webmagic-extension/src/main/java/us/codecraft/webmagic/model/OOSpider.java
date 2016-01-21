@@ -60,9 +60,9 @@ public class OOSpider<T> extends Spider {
     /**
      * create a spider
      *
-     * @param site
-     * @param pageModelPipeline
-     * @param pageModels
+     * @param site site
+     * @param pageModelPipeline pageModelPipeline
+     * @param pageModels pageModels
      */
     public OOSpider(Site site, PageModelPipeline pageModelPipeline, Class... pageModels) {
         this(ModelPageProcessor.create(site, pageModels));

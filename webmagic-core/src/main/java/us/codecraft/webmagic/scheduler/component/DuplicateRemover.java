@@ -13,21 +13,21 @@ public interface DuplicateRemover {
      *
      * Check whether the request is duplicate.
      *
-     * @param request
-     * @param task
+     * @param request request
+     * @param task task
      * @return
      */
     public boolean isDuplicate(Request request, Task task);
 
     /**
      * Reset duplicate check.
-     * @param task
+     * @param task task
      */
     public void resetDuplicateCheck(Task task);
 
     /**
      * Get TotalRequestsCount for monitor.
-     * @param task
+     * @param task task
      * @return
      */
     public int getTotalRequestsCount(Task task);

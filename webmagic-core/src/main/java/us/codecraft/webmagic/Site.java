@@ -81,8 +81,8 @@ public class Site {
     /**
      * Add a cookie with domain {@link #getDomain()}
      *
-     * @param name
-     * @param value
+     * @param name name
+     * @param value value
      * @return this
      */
     public Site addCookie(String name, String value) {
@@ -93,9 +93,9 @@ public class Site {
     /**
      * Add a cookie with specific domain.
      *
-     * @param domain
-     * @param name
-     * @param value
+     * @param domain domain
+     * @param name name
+     * @param value value
      * @return
      */
     public Site addCookie(String domain, String name, String value) {
@@ -153,7 +153,7 @@ public class Site {
     /**
      * set the domain of site.
      *
-     * @param domain
+     * @param domain domain
      * @return this
      */
     public Site setDomain(String domain) {
@@ -165,7 +165,7 @@ public class Site {
      * Set charset of page manually.<br>
      * When charset is not set or set to null, it can be auto detected by Http header.
      *
-     * @param charset
+     * @param charset charset
      * @return this
      */
     public Site setCharset(String charset) {
@@ -189,7 +189,7 @@ public class Site {
     /**
      * set timeout for downloader in ms
      *
-     * @param timeOut
+     * @param timeOut timeOut
      */
     public Site setTimeOut(int timeOut) {
         this.timeOut = timeOut;
@@ -202,7 +202,7 @@ public class Site {
      * {200} by default.<br>
      * It is not necessarily to be set.<br>
      *
-     * @param acceptStatCode
+     * @param acceptStatCode acceptStatCode
      * @return this
      */
     public Site setAcceptStatCode(Set<Integer> acceptStatCode) {
@@ -239,7 +239,7 @@ public class Site {
      * Add a url to start url.<br>
      * Because urls are more a Spider's property than Site, move it to {@link Spider#addUrl(String...)}}
      *
-     * @param startUrl
+     * @param startUrl startUrl
      * @return this
      * @see Spider#addUrl(String...)
      * @deprecated
@@ -252,7 +252,7 @@ public class Site {
      * Add a url to start url.<br>
      * Because urls are more a Spider's property than Site, move it to {@link Spider#addRequest(Request...)}}
      *
-     * @param startRequest
+     * @param startRequest startRequest
      * @return this
      * @see Spider#addRequest(Request...)
      * @deprecated
@@ -269,7 +269,7 @@ public class Site {
      * Set the interval between the processing of two pages.<br>
      * Time unit is micro seconds.<br>
      *
-     * @param sleepTime
+     * @param sleepTime sleepTime
      * @return this
      */
     public Site setSleepTime(int sleepTime) {
@@ -349,7 +349,7 @@ public class Site {
     /**
      * set up httpProxy for this site
      *
-     * @param httpProxy
+     * @param httpProxy httpProxy
      * @return
      */
     public Site setHttpProxy(HttpHost httpProxy) {
@@ -368,7 +368,7 @@ public class Site {
     /**
      * Set retry sleep times when download fail, 1000 by default. <br>
      *
-     * @param retrySleepTime
+     * @param retrySleepTime retrySleepTime
      */
     public Site setRetrySleepTime(int retrySleepTime) {
         this.retrySleepTime = retrySleepTime;
@@ -379,7 +379,7 @@ public class Site {
      * Whether use gzip. <br>
      * Default is true, you can set it to false to disable gzip.
      *
-     * @param useGzip
+     * @param useGzip useGzip
      * @return
      */
     public Site setUseGzip(boolean useGzip) {

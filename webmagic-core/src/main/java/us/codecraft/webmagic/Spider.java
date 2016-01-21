@@ -111,7 +111,7 @@ public class Spider implements Runnable, Task {
     /**
      * create a spider with pageProcessor.
      *
-     * @param pageProcessor
+     * @param pageProcessor pageProcessor
      * @return new spider
      * @see PageProcessor
      */
@@ -122,7 +122,7 @@ public class Spider implements Runnable, Task {
     /**
      * create a spider with pageProcessor.
      *
-     * @param pageProcessor
+     * @param pageProcessor pageProcessor
      */
     public Spider(PageProcessor pageProcessor) {
         this.pageProcessor = pageProcessor;
@@ -134,7 +134,7 @@ public class Spider implements Runnable, Task {
      * Set startUrls of Spider.<br>
      * Prior to startUrls of Site.
      *
-     * @param startUrls
+     * @param startUrls startUrls
      * @return this
      */
     public Spider startUrls(List<String> startUrls) {
@@ -147,7 +147,7 @@ public class Spider implements Runnable, Task {
      * Set startUrls of Spider.<br>
      * Prior to startUrls of Site.
      *
-     * @param startRequests
+     * @param startRequests startRequests
      * @return this
      */
     public Spider startRequest(List<Request> startRequests) {
@@ -160,7 +160,7 @@ public class Spider implements Runnable, Task {
      * Set an uuid for spider.<br>
      * Default uuid is domain of site.<br>
      *
-     * @param uuid
+     * @param uuid uuid
      * @return this
      */
     public Spider setUUID(String uuid) {
@@ -171,7 +171,7 @@ public class Spider implements Runnable, Task {
     /**
      * set scheduler for Spider
      *
-     * @param scheduler
+     * @param scheduler scheduler
      * @return this
      * @Deprecated
      * @see #setScheduler(us.codecraft.webmagic.scheduler.Scheduler)
@@ -183,7 +183,7 @@ public class Spider implements Runnable, Task {
     /**
      * set scheduler for Spider
      *
-     * @param scheduler
+     * @param scheduler scheduler
      * @return this
      * @see Scheduler
      * @since 0.2.1
@@ -204,7 +204,7 @@ public class Spider implements Runnable, Task {
     /**
      * add a pipeline for Spider
      *
-     * @param pipeline
+     * @param pipeline pipeline
      * @return this
      * @see #addPipeline(us.codecraft.webmagic.pipeline.Pipeline)
      * @deprecated
@@ -216,7 +216,7 @@ public class Spider implements Runnable, Task {
     /**
      * add a pipeline for Spider
      *
-     * @param pipeline
+     * @param pipeline pipeline
      * @return this
      * @see Pipeline
      * @since 0.2.1
@@ -230,7 +230,7 @@ public class Spider implements Runnable, Task {
     /**
      * set pipelines for Spider
      *
-     * @param pipelines
+     * @param pipelines pipelines
      * @return this
      * @see Pipeline
      * @since 0.4.1
@@ -254,7 +254,7 @@ public class Spider implements Runnable, Task {
     /**
      * set the downloader of spider
      *
-     * @param downloader
+     * @param downloader downloader
      * @return this
      * @see #setDownloader(us.codecraft.webmagic.downloader.Downloader)
      * @deprecated
@@ -266,7 +266,7 @@ public class Spider implements Runnable, Task {
     /**
      * set the downloader of spider
      *
-     * @param downloader
+     * @param downloader downloader
      * @return this
      * @see Downloader
      */
@@ -468,7 +468,7 @@ public class Spider implements Runnable, Task {
     /**
      * Add urls to crawl. <br/>
      *
-     * @param urls
+     * @param urls urls
      * @return
      */
     public Spider addUrl(String... urls) {
@@ -482,7 +482,7 @@ public class Spider implements Runnable, Task {
     /**
      * Download urls synchronizing.
      *
-     * @param urls
+     * @param urls urls
      * @return
      */
     public <T> List<T> getAll(Collection<String> urls) {
@@ -517,7 +517,7 @@ public class Spider implements Runnable, Task {
     /**
      * Add urls with information to crawl.<br/>
      *
-     * @param requests
+     * @param requests requests
      * @return
      */
     public Spider addRequest(Request... requests) {
@@ -567,7 +567,7 @@ public class Spider implements Runnable, Task {
     /**
      * start with more than one threads
      *
-     * @param threadNum
+     * @param threadNum threadNum
      * @return this
      */
     public Spider thread(int threadNum) {
@@ -582,7 +582,7 @@ public class Spider implements Runnable, Task {
     /**
      * start with more than one threads
      *
-     * @param threadNum
+     * @param threadNum threadNum
      * @return this
      */
     public Spider thread(ExecutorService executorService, int threadNum) {
@@ -603,7 +603,7 @@ public class Spider implements Runnable, Task {
      * True: exit when all url of the site is downloaded. <br/>
      * False: not exit until call stop() manually.<br/>
      *
-     * @param exitWhenComplete
+     * @param exitWhenComplete exitWhenComplete
      * @return
      */
     public Spider setExitWhenComplete(boolean exitWhenComplete) {
@@ -679,7 +679,7 @@ public class Spider implements Runnable, Task {
      * Add urls to download when it is true, and just download seed urls when it is false. <br>
      * DO NOT set it unless you know what it means!
      *
-     * @param spawnUrl
+     * @param spawnUrl spawnUrl
      * @return
      * @since 0.4.0
      */
