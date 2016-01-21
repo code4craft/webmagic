@@ -124,7 +124,7 @@ public interface Selectable {
      * extract by JSON Path expression
      *
      * @param jsonPath jsonPath
-     * @return
+     * @return result
      */
     public Selectable jsonPath(String jsonPath);
 
@@ -132,7 +132,7 @@ public interface Selectable {
      * extract by custom selector
      *
      * @param selector selector
-     * @return
+     * @return result
      */
     public Selectable select(Selector selector);
 
@@ -140,13 +140,13 @@ public interface Selectable {
      * extract by custom selector
      *
      * @param selector selector
-     * @return
+     * @return result
      */
     public Selectable selectList(Selector selector);
 
     /**
      * get all nodes
-     * @return
+     * @return result
      */
     public List<Selectable> nodes();
 }

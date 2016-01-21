@@ -15,7 +15,7 @@ public interface DuplicateRemover {
      *
      * @param request request
      * @param task task
-     * @return
+     * @return true if is duplicate
      */
     public boolean isDuplicate(Request request, Task task);
 
@@ -28,7 +28,7 @@ public interface DuplicateRemover {
     /**
      * Get TotalRequestsCount for monitor.
      * @param task task
-     * @return
+     * @return number of total request
      */
     public int getTotalRequestsCount(Task task);
 

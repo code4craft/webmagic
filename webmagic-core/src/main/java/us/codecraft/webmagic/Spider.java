@@ -466,10 +466,10 @@ public class Spider implements Runnable, Task {
     }
 
     /**
-     * Add urls to crawl. <br/>
+     * Add urls to crawl. <br>
      *
      * @param urls urls
-     * @return
+     * @return this
      */
     public Spider addUrl(String... urls) {
         for (String url : urls) {
@@ -483,7 +483,7 @@ public class Spider implements Runnable, Task {
      * Download urls synchronizing.
      *
      * @param urls urls
-     * @return
+     * @return list downloaded
      */
     public <T> List<T> getAll(Collection<String> urls) {
         destroyWhenExit = false;
@@ -515,7 +515,7 @@ public class Spider implements Runnable, Task {
     }
 
     /**
-     * Add urls with information to crawl.<br/>
+     * Add urls with information to crawl.<br>
      *
      * @param requests requests
      * @return
@@ -582,6 +582,7 @@ public class Spider implements Runnable, Task {
     /**
      * start with more than one threads
      *
+     * @param executorService executorService to run the spider
      * @param threadNum threadNum
      * @return this
      */
@@ -599,12 +600,12 @@ public class Spider implements Runnable, Task {
     }
 
     /**
-     * Exit when complete. <br/>
-     * True: exit when all url of the site is downloaded. <br/>
-     * False: not exit until call stop() manually.<br/>
+     * Exit when complete. <br>
+     * True: exit when all url of the site is downloaded. <br>
+     * False: not exit until call stop() manually.<br>
      *
      * @param exitWhenComplete exitWhenComplete
-     * @return
+     * @return this
      */
     public Spider setExitWhenComplete(boolean exitWhenComplete) {
         this.exitWhenComplete = exitWhenComplete;
@@ -680,7 +681,7 @@ public class Spider implements Runnable, Task {
      * DO NOT set it unless you know what it means!
      *
      * @param spawnUrl spawnUrl
-     * @return
+     * @return this
      * @since 0.4.0
      */
     public Spider setSpawnUrl(boolean spawnUrl) {

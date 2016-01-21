@@ -96,7 +96,7 @@ public class Site {
      * @param domain domain
      * @param name name
      * @param value value
-     * @return
+     * @return this
      */
     public Site addCookie(String domain, String name, String value) {
         cookies.put(domain, name, value);
@@ -190,6 +190,7 @@ public class Site {
      * set timeout for downloader in ms
      *
      * @param timeOut timeOut
+     * @return this
      */
     public Site setTimeOut(int timeOut) {
         this.timeOut = timeOut;
@@ -301,12 +302,12 @@ public class Site {
     }
 
     /**
-     * Put an Http header for downloader. <br/>
-     * Use {@link #addCookie(String, String)} for cookie and {@link #setUserAgent(String)} for user-agent. <br/>
+     * Put an Http header for downloader. <br>
+     * Use {@link #addCookie(String, String)} for cookie and {@link #setUserAgent(String)} for user-agent. <br>
      *
      * @param key   key of http header, there are some keys constant in {@link HeaderConst}
      * @param value value of header
-     * @return
+     * @return this
      */
     public Site addHeader(String key, String value) {
         headers.put(key, value);
@@ -316,6 +317,7 @@ public class Site {
     /**
      * Set retry times when download fail, 0 by default.<br>
      *
+     * @param retryTimes retryTimes
      * @return this
      */
     public Site setRetryTimes(int retryTimes) {
@@ -335,6 +337,7 @@ public class Site {
     /**
      * Set cycleRetryTimes times when download fail, 0 by default. <br>
      *
+     * @param cycleRetryTimes cycleRetryTimes
      * @return this
      */
     public Site setCycleRetryTimes(int cycleRetryTimes) {
@@ -350,7 +353,7 @@ public class Site {
      * set up httpProxy for this site
      *
      * @param httpProxy httpProxy
-     * @return
+     * @return this
      */
     public Site setHttpProxy(HttpHost httpProxy) {
         this.httpProxy = httpProxy;
@@ -369,6 +372,7 @@ public class Site {
      * Set retry sleep times when download fail, 1000 by default. <br>
      *
      * @param retrySleepTime retrySleepTime
+     * @return this
      */
     public Site setRetrySleepTime(int retrySleepTime) {
         this.retrySleepTime = retrySleepTime;
@@ -380,7 +384,7 @@ public class Site {
      * Default is true, you can set it to false to disable gzip.
      *
      * @param useGzip useGzip
-     * @return
+     * @return this
      */
     public Site setUseGzip(boolean useGzip) {
         this.useGzip = useGzip;
@@ -462,6 +466,7 @@ public class Site {
     /**
      * Set httpProxyPool, String[0]:ip, String[1]:port <br>
      *
+     * @param httpProxyList httpProxyList
      * @return this
      */
     public Site setHttpProxyPool(List<String[]> httpProxyList) {

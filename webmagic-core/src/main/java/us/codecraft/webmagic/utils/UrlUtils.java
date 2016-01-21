@@ -22,7 +22,7 @@ public class UrlUtils {
 
     /**
      * canonicalizeUrl
-     * <p/>
+     * <br>
      * Borrowed from Jsoup.
      *
      * @param url url
