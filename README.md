@@ -163,7 +163,7 @@ To write webmagic, I refered to the projects below :
 
 	Another crawler framework in Java.
 	
-	[https://gitcafe.com/laiweiwei/Spiderman](https://gitcafe.com/laiweiwei/Spiderman)
+	[http://git.oschina.net/l-weiwei/spiderman](http://git.oschina.net/l-weiwei/spiderman)
 
 ### Mail-list:
 
