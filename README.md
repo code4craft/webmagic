@@ -1,6 +1,6 @@
 ![logo](https://raw.github.com/code4craft/webmagic/master/assets/logo.jpg)
 
-[Readme in Chinese](https://github.com/code4craft/webmagic/tree/master/zh_docs)
+[Readme in Chinese](https://github.com/code4craft/webmagic/tree/master/README-zh.md)
 
 [User Manual (Chinese)](https://github.com/code4craft/webmagic/blob/master/user-manual.md)
 
