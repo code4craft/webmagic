@@ -4,6 +4,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.apache.http.HttpHost;
 
+import org.apache.http.impl.entity.StrictContentLengthStrategy;
 import us.codecraft.webmagic.proxy.ProxyPool;
 import us.codecraft.webmagic.utils.UrlUtils;
 
@@ -18,11 +19,14 @@ import java.util.*;
  */
 public class Site {
 
+    private  boolean enableSSL=false;
     private String domain;
 
     private String userAgent;
 
     private Map<String, String> defaultCookies = new LinkedHashMap<String, String>();
+
+    private String onlyVauleCookies;
 
     private Table<String, String, String> cookies = HashBasedTable.create();
 
@@ -78,6 +82,10 @@ public class Site {
         return new Site();
     }
 
+    public Site addCookie(String value){
+        onlyVauleCookies=value;
+        return  this;
+    }
     /**
      * Add a cookie with domain {@link #getDomain()}
      *
@@ -114,6 +122,10 @@ public class Site {
         return this;
     }
 
+    public  String getValueCookies()
+    {
+        return  onlyVauleCookies;
+    }
     /**
      * get cookies
      *
@@ -363,6 +375,9 @@ public class Site {
     public boolean isUseGzip() {
         return useGzip;
     }
+    public boolean isEnableSSL() {
+        return enableSSL;
+    }
 
     public int getRetrySleepTime() {
         return retrySleepTime;
@@ -379,6 +394,14 @@ public class Site {
         return this;
     }
 
+    /**
+     * @param enableSSL
+     * @return
+     */
+    public Site setEnableSSL(boolean enableSSL) {
+        this.enableSSL = enableSSL;
+        return this;
+    }
     /**
      * Whether use gzip. <br>
      * Default is true, you can set it to false to disable gzip.
