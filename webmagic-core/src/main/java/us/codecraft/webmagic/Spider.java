@@ -325,10 +325,6 @@ public class Spider implements Runnable, Task {
                             onError(requestFinal);
                             logger.error("process request " + requestFinal + " error", e);
                         } finally {
-                            if (site.getHttpProxyPool()!=null && site.getHttpProxyPool().isEnable()) {
-                                site.returnHttpProxyToPool((HttpHost) requestFinal.getExtra(Request.PROXY), (Integer) requestFinal
-                                        .getExtra(Request.STATUS_CODE));
-                            }
                             pageCount.incrementAndGet();
                             signalNewUrl();
                         }
