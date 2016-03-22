@@ -5,7 +5,6 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.scheduler.PriorityScheduler;
 import us.codecraft.webmagic.scheduler.FileCacheQueueScheduler;
 
 import java.util.Arrays;
@@ -83,10 +82,13 @@ public class MafengwoPageProcessor implements PageProcessor {
     }
 
     public static void main(String[] args) {
+        String startUrl = "http://www.mafengwo.cn/yj/10099/2-0-1.html";
+        String localPath = "/tmp/webmagic";
+        String cachePath = localPath + "/cache";
         Spider.create(new MafengwoPageProcessor())
-                .addUrl("http://www.mafengwo.cn/yj/10099/2-0-1.html")
-                .addPipeline(new FilePipeline("D:\\webmagic\\"))
-                .setScheduler(new FileCacheQueueScheduler("D:\\webmagic\\cache\\"))
+                .addUrl(startUrl)
+                .addPipeline(new FilePipeline(localPath))
+                .setScheduler(new FileCacheQueueScheduler(cachePath))
                 .thread(5)
                 .run();
     }
