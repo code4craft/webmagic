@@ -4,6 +4,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.apache.http.HttpHost;
 
+import org.apache.http.auth.UsernamePasswordCredentials;
 import us.codecraft.webmagic.proxy.ProxyPool;
 import us.codecraft.webmagic.utils.UrlUtils;
 
@@ -50,6 +51,8 @@ public class Site {
     private Map<String, String> headers = new HashMap<String, String>();
 
     private HttpHost httpProxy;
+
+    private UsernamePasswordCredentials usernamePasswordCredentials; //代理用户名密码设置
 
     private ProxyPool httpProxyPool;
 
@@ -476,6 +479,15 @@ public class Site {
 
     public Site enableHttpProxyPool() {
         this.httpProxyPool=new ProxyPool();
+        return this;
+    }
+
+    public UsernamePasswordCredentials getUsernamePasswordCredentials() {
+        return usernamePasswordCredentials;
+    }
+
+    public Site setUsernamePasswordCredentials(UsernamePasswordCredentials usernamePasswordCredentials) {
+        this.usernamePasswordCredentials = usernamePasswordCredentials;
         return this;
     }
 

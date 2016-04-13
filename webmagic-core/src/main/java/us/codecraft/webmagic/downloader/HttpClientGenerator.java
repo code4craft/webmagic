@@ -3,7 +3,10 @@ package us.codecraft.webmagic.downloader;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CookieStore;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.config.SocketConfig;
@@ -65,6 +68,15 @@ public class HttpClientGenerator {
                 }
             });
         }
+
+        if(site!=null&&site.getHttpProxy()!=null&&site.getUsernamePasswordCredentials()!=null){
+            CredentialsProvider credsProvider = new BasicCredentialsProvider();
+            credsProvider.setCredentials(
+                    new AuthScope(site.getHttpProxy()),//可以访问的范围
+                    site.getUsernamePasswordCredentials());//用户名和密码
+            httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
+        }
+
         SocketConfig socketConfig = SocketConfig.custom().setSoKeepAlive(true).setTcpNoDelay(true).build();
         httpClientBuilder.setDefaultSocketConfig(socketConfig);
         if (site != null) {
