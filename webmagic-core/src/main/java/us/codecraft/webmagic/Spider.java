@@ -325,10 +325,6 @@ public class Spider implements Runnable, Task {
                             onError(requestFinal);
                             logger.error("process request " + requestFinal + " error", e);
                         } finally {
-                            if (site.getHttpProxyPool()!=null && site.getHttpProxyPool().isEnable()) {
-                                site.returnHttpProxyToPool((HttpHost) requestFinal.getExtra(Request.PROXY), (Integer) requestFinal
-                                        .getExtra(Request.STATUS_CODE));
-                            }
                             pageCount.incrementAndGet();
                             signalNewUrl();
                         }
@@ -408,9 +404,7 @@ public class Spider implements Runnable, Task {
     protected void processRequest(Request request) {
         Page page = downloader.download(request, this);
         if (page == null) {
-            sleep(site.getRetrySleepTime());
-            onError(request);
-            return;
+            throw new RuntimeException("unaccpetable response status");
         }
         // for cycle retry
         if (page.isNeedCycleRetry()) {
