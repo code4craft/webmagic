@@ -119,6 +119,10 @@ public class HttpClientDownloader extends AbstractDownloader {
             return null;
         } finally {
         	request.putExtra(Request.STATUS_CODE, statusCode);
+            if (site.getHttpProxyPool()!=null && site.getHttpProxyPool().isEnable()) {
+                site.returnHttpProxyToPool((HttpHost) request.getExtra(Request.PROXY), (Integer) request
+                        .getExtra(Request.STATUS_CODE));
+            }
             try {
                 if (httpResponse != null) {
                     //ensure the connection is released back to pool
