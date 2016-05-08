@@ -1,12 +1,12 @@
 package us.codecraft.webmagic.proxy;
 
+import org.apache.http.HttpHost;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.http.HttpHost;
 
 /**    
  * >>>> Proxy lifecycle 
@@ -64,6 +64,9 @@ public class Proxy implements Delayed, Serializable {
 	public static final int SUCCESS = 200;
 
 	private final HttpHost httpHost;
+	private String user;
+	private String password;
+	
 
 	private int reuseTimeInterval = 1500;// ms
 	private Long canReuseTime = 0L;
@@ -76,13 +79,17 @@ public class Proxy implements Delayed, Serializable {
 
 	private List<Integer> failedErrorType = new ArrayList<Integer>();
 
-	Proxy(HttpHost httpHost) {
+	Proxy(HttpHost httpHost, String user, String password) {
 		this.httpHost = httpHost;
+		this.user = user;
+		this.password = password;
 		this.canReuseTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(reuseTimeInterval, TimeUnit.MILLISECONDS);
 	}
 
-	Proxy(HttpHost httpHost, int reuseInterval) {
+	Proxy(HttpHost httpHost,  int reuseInterval, String user, String password) {
 		this.httpHost = httpHost;
+		this.user = user;
+		this.password = password;
 		this.canReuseTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert(reuseInterval, TimeUnit.MILLISECONDS);
 	}
 
@@ -169,6 +176,17 @@ public class Proxy implements Delayed, Serializable {
 				successNum * 100.0 / borrowNum, borrowNum);
 		return re;
 
+	}
+	
+	public String getUser()
+	{
+		return user;
+		
+	}
+	public String getPassword()
+	{
+		return password;
+		
 	}
 
 	public void borrowNumIncrement(int increment) {
