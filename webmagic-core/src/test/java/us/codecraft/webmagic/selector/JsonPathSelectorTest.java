@@ -39,10 +39,10 @@ public class JsonPathSelectorTest {
         List<String> list = jsonPathSelector.selectList(text);
         assertThat(select).isEqualTo("Nigel Rees");
         assertThat(list).contains("Nigel Rees","Evelyn Waugh");
-        jsonPathSelector = new JsonPathSelector("$.store.book[?(@.category == 'reference')]");
+        jsonPathSelector = new JsonPathSelector("$.store.book[?(@.category == 'reference')].title");
         list = jsonPathSelector.selectList(text);
         select = jsonPathSelector.select(text);
-        assertThat(select).isEqualTo("{\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"category\":\"reference\",\"price\":8.95}");
-        assertThat(list).contains("{\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"category\":\"reference\",\"price\":8.95}");
+        assertThat(select).isEqualTo("Sayings of the Century");
+        assertThat(list).contains("Sayings of the Century");
     }
 }
