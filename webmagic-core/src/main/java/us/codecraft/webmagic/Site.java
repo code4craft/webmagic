@@ -5,6 +5,7 @@ import com.google.common.collect.Table;
 import org.apache.http.HttpHost;
 
 import us.codecraft.webmagic.proxy.Proxy;
+import us.codecraft.webmagic.proxy.SimpleProxyPool;
 import us.codecraft.webmagic.proxy.ProxyPool;
 import us.codecraft.webmagic.utils.UrlUtils;
 
@@ -470,18 +471,18 @@ public class Site {
      * @param httpProxyList httpProxyList
      * @return this
      */
-    public Site setHttpProxyPool(List<String[]> httpProxyList) {
-        this.httpProxyPool=new ProxyPool(httpProxyList);
+    public Site setHttpProxyPool(ProxyPool proxyPool) {
+        this.httpProxyPool = proxyPool;
         return this;
     }
 
     public Site setHttpProxyPool(List<String[]> httpProxyList, boolean isUseLastProxy) {
-        this.httpProxyPool=new ProxyPool(httpProxyList, isUseLastProxy);
+        this.httpProxyPool=new SimpleProxyPool(httpProxyList, isUseLastProxy);
         return this;
     }
 
     public Site enableHttpProxyPool() {
-        this.httpProxyPool=new ProxyPool();
+        this.httpProxyPool=new SimpleProxyPool();
         return this;
     }
 
@@ -495,11 +496,6 @@ public class Site {
 
     public void returnHttpProxyToPool(HttpHost proxy,int statusCode) {
         httpProxyPool.returnProxy(proxy,statusCode);
-    }
-
-    public Site setProxyReuseInterval(int reuseInterval) {
-        this.httpProxyPool.setReuseInterval(reuseInterval);
-        return this;
     }
 
 }
