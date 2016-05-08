@@ -51,7 +51,7 @@ import java.util.concurrent.TimeUnit;
  * 
  * @author yxssfxwzy@sina.com <br>
  * @since 0.5.1
- * @see ProxyPool
+ * @see SimpleProxyPool
  */
 
 public class Proxy implements Delayed, Serializable {
