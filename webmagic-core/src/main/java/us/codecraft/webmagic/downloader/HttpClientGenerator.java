@@ -81,6 +81,15 @@ public class HttpClientGenerator {
                 }
             });
         }
+
+        if(site!=null&&site.getHttpProxy()!=null&&site.getUsernamePasswordCredentials()!=null){
+            CredentialsProvider credsProvider = new BasicCredentialsProvider();
+            credsProvider.setCredentials(
+                    new AuthScope(site.getHttpProxy()),//可以访问的范围
+                    site.getUsernamePasswordCredentials());//用户名和密码
+            httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
+        }
+
         SocketConfig socketConfig = SocketConfig.custom().setSoKeepAlive(true).setTcpNoDelay(true).build();
         httpClientBuilder.setDefaultSocketConfig(socketConfig);
         if (site != null) {
