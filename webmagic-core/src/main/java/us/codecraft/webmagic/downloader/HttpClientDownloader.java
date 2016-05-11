@@ -3,6 +3,7 @@ package us.codecraft.webmagic.downloader;
 import com.google.common.collect.Sets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -173,6 +174,10 @@ public class HttpClientDownloader extends AbstractDownloader {
             NameValuePair[] nameValuePair = (NameValuePair[]) request.getExtra("nameValuePair");
             if (nameValuePair != null && nameValuePair.length > 0) {
                 requestBuilder.addParameters(nameValuePair);
+            }
+            HttpEntity httpEntity = (HttpEntity)request.getExtra("httpEntity");
+            if(httpEntity!=null){
+                requestBuilder.setEntity(httpEntity);
             }
             return requestBuilder;
         } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
