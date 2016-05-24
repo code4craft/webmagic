@@ -471,7 +471,7 @@ public class Site {
     /**
      * Set httpProxyPool, String[0]:ip, String[1]:port <br>
      *
-     * @param httpProxyList httpProxyList
+     * @param proxyPool proxyPool
      * @return this
      */
     public Site setHttpProxyPool(ProxyPool proxyPool) {
@@ -479,6 +479,12 @@ public class Site {
         return this;
     }
 
+    /**
+     * Set httpProxyPool, String[0]:ip, String[1]:port <br>
+     *
+     * @param httpProxyList httpProxyList
+     * @return this
+     */
     public Site setHttpProxyPool(List<String[]> httpProxyList, boolean isUseLastProxy) {
         this.httpProxyPool=new SimpleProxyPool(httpProxyList, isUseLastProxy);
         return this;
