@@ -36,6 +36,11 @@ public class Request implements Serializable {
      * @see us.codecraft.webmagic.scheduler.PriorityScheduler
      */
     private long priority;
+    
+    /**
+     * @see  us.codecraft.webmagic.scheduler.DuplicateRemovedScheduler
+     */
+    private boolean checkDuplicateFlag = true;
 
     public Request() {
     }
@@ -123,8 +128,17 @@ public class Request implements Serializable {
     public void setMethod(String method) {
         this.method = method;
     }
+    
+    
+    public boolean isCheckDuplicateFlag() {
+		return checkDuplicateFlag;
+	}
 
-    @Override
+	public void setCheckDuplicateFlag(boolean checkDuplicateFlag) {
+		this.checkDuplicateFlag = checkDuplicateFlag;
+	}
+
+	@Override
     public String toString() {
         return "Request{" +
                 "url='" + url + '\'' +
