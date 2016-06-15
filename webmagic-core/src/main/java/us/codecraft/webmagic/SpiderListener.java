@@ -11,4 +11,6 @@ public interface SpiderListener {
     public void onSuccess(Request request);
 
     public void onError(Request request);
+
+    public void onError(Request request, Exception e);
 }
