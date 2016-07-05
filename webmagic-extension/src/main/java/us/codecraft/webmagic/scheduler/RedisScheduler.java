@@ -17,7 +17,7 @@ import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
  */
 public class RedisScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler, DuplicateRemover {
 
-    private JedisPool pool;
+    protected JedisPool pool;
 
     private static final String QUEUE_PREFIX = "queue_";
 
@@ -89,7 +89,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
                 Request o = JSON.parseObject(new String(bytes), Request.class);
                 return o;
             }
-            Request request = new Request(url);
+                Request request = new Request(url);
             return request;
         } finally {
             pool.returnResource(jedis);
@@ -102,6 +102,11 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
 
     protected String getQueueKey(Task task) {
         return QUEUE_PREFIX + task.getUUID();
+    }
+
+    protected String getItemKey(Task task)
+    {
+        return ITEM_PREFIX + task.getUUID();
     }
 
     @Override
