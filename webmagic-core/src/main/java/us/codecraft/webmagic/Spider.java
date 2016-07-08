@@ -474,6 +474,20 @@ public class Spider implements Runnable, Task {
     }
 
     /**
+     * Add urls to crawl by list parameter. <br>
+     *
+     * @param urls
+     * @return this
+     */
+    public Spider addUrl(List<String> urls) {
+        for (String url : urls) {
+            addRequest(new Request(url));
+        }
+        signalNewUrl();
+        return this;
+    }
+
+    /**
      * Download urls synchronizing.
      *
      * @param urls urls
