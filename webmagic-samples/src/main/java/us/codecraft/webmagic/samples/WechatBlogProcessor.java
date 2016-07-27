@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.samples;
 
+import com.google.common.base.Joiner;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
@@ -29,9 +30,13 @@ public class WechatBlogProcessor implements PageProcessor {
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.55.3 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10",
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
 
-    private static String pTitle = "//*[@id='activity-name']";
-    private static String pAuthor = "//a[@id='post-user']";
-    private static String pContent = "//*[@id='js_content']/text()";
+    private static String pTitle = "//*[@id='activity-name']/text()";
+    private static String pAuthor = "//a[@id='post-user']/text()";
+    private static String pContent = "//*[@id='js_content']//p/text() | " +
+            "//*[@id='js_content']//span/text() | " +
+            "//*[@id='js_content']//strong/text() | " +
+            "//*[@id='js_content']//a/text()";
+    private static String pPostDate = "//*[@id='post-date']/text()";
     private String currentUrl;
     @Override
     public void process(Page page) {
@@ -41,22 +46,25 @@ public class WechatBlogProcessor implements PageProcessor {
         page.addTargetRequests(page.getHtml().links().regex("http://mp\\.weixin\\.qq\\.com/s\\?timestamp=\\d+&src=\\d+&ver=\\d+&signature=.+").all());
         page.addTargetRequests(page.getHtml().links().regex("http://mp\\.weixin\\.qq\\.com/s\\?src=\\d+&timestamp=\\d+&ver=\\d+&signature=.+").all());
         page.addTargetRequests(page.getHtml().links().regex("http://mp\\.weixin\\.qq\\.com/s\\?__biz=\\S+&mid=\\S+&idx=\\S+&sn=\\S*").all());
-        boolean parseFlag = page.getUrl().regex("http://mp\\.weixin\\.qq\\.com/s\\?timestamp=\\d+&src=\\d+&ver=\\d+&signature=.+").match();
-//        if (parseFlag) {
-//            String title = page.getHtml().xpath(pTitle).get();
-//            String author = page.getHtml().xpath(pAuthor).get();
-//            String content = page.getHtml().xpath(pContent).get();
-//
-//            page.putField("title", title);
-//            page.putField("author", author);
-//            page.putField("content", content);
-//        } else {
-//            page.setSkip(true);
-//        }
-        page.putField("raw", page.getRawText());
-
+        page.addTargetRequests(page.getHtml().links().regex("http://weixin\\.sogou\\.com/weixin\\?").all());
+        boolean parseFlag =
+                page.getUrl().regex("http://mp\\.weixin\\.qq\\.com/s\\?timestamp=\\d+&src=\\d+&ver=\\d+&signature=.+").match() ||
+                page.getUrl().regex("http://mp\\.weixin\\.qq\\.com/s\\?src=\\d+&timestamp=\\d+&ver=\\d+&signature=.+").match();
+        if (parseFlag) {
+            String title = page.getHtml().xpath(pTitle).get();
+            String author = page.getHtml().xpath(pAuthor).get();
+            String content = Joiner.on("").skipNulls().join(page.getHtml().xpath(pContent).all());
+            String postDate = page.getHtml().xpath(pPostDate).get();
+            page.putField("title", title);
+            page.putField("author", author);
+            page.putField("content", content);
+            page.putField("post_date", postDate);
+            page.putField("download_time", System.currentTimeMillis());
+            page.putField("raw", page.getRawText());
+        } else {
+            page.setSkip(true);
+        }
     }
-
     @Override
     public Site getSite() {
         site.addHeader("Referer", currentUrl);
@@ -64,15 +72,15 @@ public class WechatBlogProcessor implements PageProcessor {
     }
 
     public static void main(String[] args) {
-        String query = "股票";
+        String query = "美妆";
         if (args.length>0) {
             query = args[0];
         }
-        String startUrl = "http://weixin.sogou.com/weixin?type=1&query="+query;
-        String localPath = "/tmp/wechat";
+        String localPath = "/data/wechat";
         String cachePath = localPath + "/cache";
         Spider.create(new WechatBlogProcessor())
-                .addUrl(startUrl)
+                .addUrl("http://weixin.sogou.com/weixin?type=1&query="+query)
+                .addUrl("http://weixin.sogou.com/weixin?type=2&query="+query)
                 .addPipeline(new FilePipeline(localPath))
                 .setScheduler(new FileCacheQueueScheduler(cachePath))
                 .thread(1)
