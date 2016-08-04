@@ -1,6 +1,14 @@
 package us.codecraft.webmagic.downloader;
 
-import com.google.common.collect.Sets;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
@@ -18,8 +26,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.mozilla.intl.chardet.nsDetector;
+import org.mozilla.intl.chardet.nsICharsetDetectionObserver;
+import org.mozilla.intl.chardet.nsPSMDetector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Sets;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
@@ -28,12 +42,6 @@ import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.HttpConstant;
 import us.codecraft.webmagic.utils.UrlUtils;
-
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -212,6 +220,19 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
     }
 
+    public String getCharset(InputStream in) {
+		String charset = null;
+		try {
+			String cs[] = CharsetDetectorInner.getInstance().detectAllCharset(in);
+			if (cs != null && cs.length > 0) {
+				charset = cs[0];
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return charset;
+	}
+    
     protected String getHtmlCharset(HttpResponse httpResponse, byte[] contentBytes) throws IOException {
         String charset;
         // charset
@@ -222,6 +243,17 @@ public class HttpClientDownloader extends AbstractDownloader {
             logger.debug("Auto get charset: {}", charset);
             return charset;
         }
+        
+    	InputStream is1 = null;
+        //此处添加检测逻辑
+        is1 = new ByteArrayInputStream(contentBytes);
+        charset = getCharset(is1);
+        if (charset != null) {
+        	return charset;
+        }
+        is1.close();
+        
+        
         // use default charset to decode first time
         Charset defaultCharset = Charset.defaultCharset();
         String content = new String(contentBytes, defaultCharset.name());
@@ -249,4 +281,75 @@ public class HttpClientDownloader extends AbstractDownloader {
         // 3、todo use tools as cpdetector for content decode
         return charset;
     }
+}
+
+class CharsetDetectorInner {
+
+	private boolean found = false;
+	private String result;
+	private int lang;
+
+	private static CharsetDetectorInner c = new CharsetDetectorInner();
+
+	private CharsetDetectorInner() {
+	}
+
+	public static CharsetDetectorInner getInstance() {
+
+		return c;
+	}
+
+	public String[] detectChineseCharset(InputStream in) throws IOException {
+//		lang = nsPSMDetector.CHINESE;
+		lang = nsPSMDetector.ALL;
+		String[] prob;
+		// Initalize the nsDetector() ;
+		nsDetector det = new nsDetector(lang);
+		// Set an observer...
+		// The Notify() will be called when a matching charset is found.
+
+		det.Init(new nsICharsetDetectionObserver() {
+
+			public void Notify(String charset) {
+				found = true;
+				result = charset;
+			}
+		});
+		BufferedInputStream imp = new BufferedInputStream(in);
+		byte[] buf = new byte[1024];
+		int len;
+		boolean isAscii = true;
+		while ((len = imp.read(buf, 0, buf.length)) != -1) {
+			// Check if the stream is only ascii.
+			if (isAscii)
+				isAscii = det.isAscii(buf, len);
+			// DoIt if non-ascii and not done yet.
+			if (!isAscii) {
+				if (det.DoIt(buf, len, false))
+					break;
+			}
+		}
+		imp.close();
+		in.close();
+		det.DataEnd();
+		if (isAscii) {
+			found = true;
+			prob = new String[] { "ASCII" };
+		} else if (found) {
+			prob = new String[] { result };
+		} else {
+			prob = det.getProbableCharsets();
+		}
+		return prob;
+	}
+
+	public String[] detectAllCharset(InputStream in) throws IOException {
+		try {
+			lang = nsPSMDetector.ALL;
+			return detectChineseCharset(in);
+		} catch (IOException e) {
+			throw e;
+		}
+	}
+
 }
