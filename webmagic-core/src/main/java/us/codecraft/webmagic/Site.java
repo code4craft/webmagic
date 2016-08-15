@@ -4,6 +4,9 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.apache.http.HttpHost;
 
+import us.codecraft.webmagic.proxy.Proxy;
+import us.codecraft.webmagic.proxy.SimpleProxyPool;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import us.codecraft.webmagic.proxy.ProxyPool;
 import us.codecraft.webmagic.utils.UrlUtils;
 
@@ -50,6 +53,8 @@ public class Site {
     private Map<String, String> headers = new HashMap<String, String>();
 
     private HttpHost httpProxy;
+
+    private UsernamePasswordCredentials usernamePasswordCredentials; //代理用户名密码设置
 
     private ProxyPool httpProxyPool;
 
@@ -466,16 +471,36 @@ public class Site {
     /**
      * Set httpProxyPool, String[0]:ip, String[1]:port <br>
      *
+     * @param proxyPool proxyPool
+     * @return this
+     */
+    public Site setHttpProxyPool(ProxyPool proxyPool) {
+        this.httpProxyPool = proxyPool;
+        return this;
+    }
+
+    /**
+     * Set httpProxyPool, String[0]:ip, String[1]:port <br>
+     *
      * @param httpProxyList httpProxyList
      * @return this
      */
-    public Site setHttpProxyPool(List<String[]> httpProxyList) {
-        this.httpProxyPool=new ProxyPool(httpProxyList);
+    public Site setHttpProxyPool(List<String[]> httpProxyList, boolean isUseLastProxy) {
+        this.httpProxyPool=new SimpleProxyPool(httpProxyList, isUseLastProxy);
         return this;
     }
 
     public Site enableHttpProxyPool() {
-        this.httpProxyPool=new ProxyPool();
+        this.httpProxyPool=new SimpleProxyPool();
+        return this;
+    }
+
+    public UsernamePasswordCredentials getUsernamePasswordCredentials() {
+        return usernamePasswordCredentials;
+    }
+
+    public Site setUsernamePasswordCredentials(UsernamePasswordCredentials usernamePasswordCredentials) {
+        this.usernamePasswordCredentials = usernamePasswordCredentials;
         return this;
     }
 
@@ -483,17 +508,12 @@ public class Site {
         return httpProxyPool;
     }
 
-    public HttpHost getHttpProxyFromPool() {
+    public Proxy getHttpProxyFromPool() {
         return httpProxyPool.getProxy();
     }
 
     public void returnHttpProxyToPool(HttpHost proxy,int statusCode) {
         httpProxyPool.returnProxy(proxy,statusCode);
-    }
-
-    public Site setProxyReuseInterval(int reuseInterval) {
-        this.httpProxyPool.setReuseInterval(reuseInterval);
-        return this;
     }
 
 }
