@@ -1,6 +1,6 @@
 package us.codecraft.webmagic.selector;
 
-import org.junit.Assert;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 /**
@@ -20,6 +20,6 @@ public class RegexSelectorTest {
         String source = "(hello world";
         RegexSelector regexSelector = new RegexSelector(regex);
         String select = regexSelector.select(source);
-        Assert.assertEquals(source,select);
+        Assertions.assertThat(select).isEqualTo(source);
     }
 }

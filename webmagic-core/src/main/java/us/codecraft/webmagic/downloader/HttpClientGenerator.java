@@ -1,9 +1,13 @@
 package us.codecraft.webmagic.downloader;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CookieStore;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.config.SocketConfig;
@@ -15,6 +19,7 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.protocol.HttpContext;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.proxy.Proxy;
 
 import java.io.IOException;
 import java.util.Map;
@@ -36,17 +41,37 @@ public class HttpClientGenerator {
         connectionManager.setDefaultMaxPerRoute(100);
     }
 
-    public HttpClientGenerator setPoolSize(int poolSize){
+    public HttpClientGenerator setPoolSize(int poolSize) {
         connectionManager.setMaxTotal(poolSize);
         return this;
     }
 
-    public CloseableHttpClient getClient(Site site) {
-        return generateClient(site);
+    public CloseableHttpClient getClient(Site site, Proxy proxy) {
+        return generateClient(site, proxy);
     }
 
-    private CloseableHttpClient generateClient(Site site) {
-        HttpClientBuilder httpClientBuilder = HttpClients.custom().setConnectionManager(connectionManager);
+    private CloseableHttpClient generateClient(Site site, Proxy proxy) {
+        CredentialsProvider credsProvider = null;
+        HttpClientBuilder httpClientBuilder = HttpClients.custom();
+        
+        if(proxy!=null && StringUtils.isNotBlank(proxy.getUser()) && StringUtils.isNotBlank(proxy.getPassword()))
+        {
+            credsProvider= new BasicCredentialsProvider();
+            credsProvider.setCredentials(
+                    new AuthScope(proxy.getHttpHost().getAddress().getHostAddress(), proxy.getHttpHost().getPort()),
+                    new UsernamePasswordCredentials(proxy.getUser(), proxy.getPassword()));
+            httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
+        }
+
+        if(site!=null&&site.getHttpProxy()!=null&&site.getUsernamePasswordCredentials()!=null){
+            credsProvider = new BasicCredentialsProvider();
+            credsProvider.setCredentials(
+                    new AuthScope(site.getHttpProxy()),//可以访问的范围
+                    site.getUsernamePasswordCredentials());//用户名和密码
+            httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
+        }
+        
+        httpClientBuilder.setConnectionManager(connectionManager);
         if (site != null && site.getUserAgent() != null) {
             httpClientBuilder.setUserAgent(site.getUserAgent());
         } else {
@@ -61,10 +86,11 @@ public class HttpClientGenerator {
                     if (!request.containsHeader("Accept-Encoding")) {
                         request.addHeader("Accept-Encoding", "gzip");
                     }
-
                 }
             });
         }
+
+
         SocketConfig socketConfig = SocketConfig.custom().setSoKeepAlive(true).setTcpNoDelay(true).build();
         httpClientBuilder.setDefaultSocketConfig(socketConfig);
         if (site != null) {
@@ -76,10 +102,15 @@ public class HttpClientGenerator {
 
     private void generateCookie(HttpClientBuilder httpClientBuilder, Site site) {
         CookieStore cookieStore = new BasicCookieStore();
-        if (site.getCookies() != null) {
-            for (Map.Entry<String, String> cookieEntry : site.getCookies().entrySet()) {
+        for (Map.Entry<String, String> cookieEntry : site.getCookies().entrySet()) {
+            BasicClientCookie cookie = new BasicClientCookie(cookieEntry.getKey(), cookieEntry.getValue());
+            cookie.setDomain(site.getDomain());
+            cookieStore.addCookie(cookie);
+        }
+        for (Map.Entry<String, Map<String, String>> domainEntry : site.getAllCookies().entrySet()) {
+            for (Map.Entry<String, String> cookieEntry : domainEntry.getValue().entrySet()) {
                 BasicClientCookie cookie = new BasicClientCookie(cookieEntry.getKey(), cookieEntry.getValue());
-                cookie.setDomain(site.getDomain());
+                cookie.setDomain(domainEntry.getKey());
                 cookieStore.addCookie(cookie);
             }
         }

@@ -1,0 +1,1580 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class=" is-u2f-enabled">
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# object: http://ogp.me/ns/object# article: http://ogp.me/ns/article# profile: http://ogp.me/ns/profile#">
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+    <meta name="viewport" content="width=1020">
+
+
+    <title>code4craft/webmagic</title>
+    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="GitHub">
+    <link rel="fluid-icon" href="https://github.com/fluidicon.png" title="GitHub">
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-144.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144.png">
+    <meta property="fb:app_id" content="1401488693436528">
+
+    <meta content="@github" name="twitter:site" /><meta content="summary" name="twitter:card" /><meta content="code4craft/webmagic" name="twitter:title" /><meta content="webmagic - A scalable web crawler framework." name="twitter:description" /><meta content="https://avatars2.githubusercontent.com/u/1351884?v=3&amp;s=400" name="twitter:image:src" />
+    <meta content="GitHub" property="og:site_name" /><meta content="object" property="og:type" /><meta content="https://avatars2.githubusercontent.com/u/1351884?v=3&amp;s=400" property="og:image" /><meta content="code4craft/webmagic" property="og:title" /><meta content="https://github.com/code4craft/webmagic" property="og:url" /><meta content="webmagic - A scalable web crawler framework." property="og:description" />
+    <meta name="browser-stats-url" content="https://api.github.com/_private/browser/stats">
+    <meta name="browser-errors-url" content="https://api.github.com/_private/browser/errors">
+    <link rel="assets" href="https://assets-cdn.github.com/">
+    <link rel="web-socket" href="wss://live.github.com/_sockets/MTM1MTg4NDo3YWI4NmUwOGM3MzhlMjU5MzVhZGNiNmFmOWUxNjExNTpjNWZlMzRmNzk5NjE4NGMxNDQwZDMzY2Q5ZWE3NGRmMmZkZWMwYTg2NTRkOTA2YTU2Mjk5NDYxYTk1ZjljNDJj--22ca52337ffde7621f032b082bfd863eeade6f9c">
+    <meta name="pjax-timeout" content="1000">
+    <link rel="sudo-modal" href="/sessions/sudo_modal">
+
+    <meta name="msapplication-TileImage" content="/windows-tile.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="selected-link" value="repo_source" data-pjax-transient>
+
+    <meta name="google-site-verification" content="KT5gs8h0wvaagLKAVWq8bbeNwnZZK1r1XQysX3xurLU">
+    <meta name="google-analytics" content="UA-3769691-2">
+
+    <meta content="collector.githubapp.com" name="octolytics-host" /><meta content="github" name="octolytics-app-id" /><meta content="6AB91C29:10EF:6D4972F:569D042D" name="octolytics-dimension-request_id" /><meta content="1351884" name="octolytics-actor-id" /><meta content="code4craft" name="octolytics-actor-login" /><meta content="b87866a7952857ad32eeb0a33a8d3f9743660184e01113bc601ed02f292f8597" name="octolytics-actor-hash" />
+    <meta content="/&lt;user-name&gt;/&lt;repo-name&gt;" data-pjax-transient="true" name="analytics-location" />
+    <meta content="Rails, view, files#disambiguate" data-pjax-transient="true" name="analytics-event" />
+
+
+    <meta class="js-ga-set" name="dimension1" content="Logged In">
+
+
+
+    <meta name="hostname" content="github.com">
+    <meta name="user-login" content="code4craft">
+
+    <meta name="expected-hostname" content="github.com">
+
+    <link rel="mask-icon" href="https://assets-cdn.github.com/pinned-octocat.svg" color="#4078c0">
+    <link rel="icon" type="image/x-icon" href="https://assets-cdn.github.com/favicon.ico">
+
+    <meta content="3b3b1453e901b97918f8e2a9efa6ed4efb295cf6" name="form-nonce" />
+
+    <link crossorigin="anonymous" href="https://assets-cdn.github.com/assets/github-1b53a0bcb9add868a6c5ae469ecabb8b236ffa8f2b05360fde027f75eb714f1b.css" media="all" rel="stylesheet" />
+    <link crossorigin="anonymous" href="https://assets-cdn.github.com/assets/github2-70af51f1bed4904749e6ef486ad11871c8ce4361ac82bb5f96a090b7f5346580.css" media="all" rel="stylesheet" />
+
+
+
+
+    <meta http-equiv="x-pjax-version" content="4222bfcb881548243f94e18e8a3bcfd0">
+
+
+    <meta name="description" content="webmagic - A scalable web crawler framework.">
+    <meta name="go-import" content="github.com/code4craft/webmagic git https://github.com/code4craft/webmagic.git">
+
+    <meta content="1351884" name="octolytics-dimension-user_id" /><meta content="code4craft" name="octolytics-dimension-user_login" /><meta content="9623064" name="octolytics-dimension-repository_id" /><meta content="code4craft/webmagic" name="octolytics-dimension-repository_nwo" /><meta content="true" name="octolytics-dimension-repository_public" /><meta content="false" name="octolytics-dimension-repository_is_fork" /><meta content="9623064" name="octolytics-dimension-repository_network_root_id" /><meta content="code4craft/webmagic" name="octolytics-dimension-repository_network_root_nwo" />
+    <link href="https://github.com/code4craft/webmagic/commits/master.atom" rel="alternate" title="Recent Commits to webmagic:master" type="application/atom+xml">
+
+</head>
+
+
+<body class="logged_in   env-production macintosh vis-public">
+<a href="#start-of-content" tabindex="1" class="accessibility-aid js-skip-to-content">Skip to content</a>
+
+
+
+
+
+
+
+<div class="header header-logged-in true" role="banner">
+    <div class="container clearfix">
+
+        <a class="header-logo-invertocat" href="https://github.com/" data-hotkey="g d" aria-label="Homepage" data-ga-click="Header, go to dashboard, icon:logo">
+            <span aria-hidden="true" class="mega-octicon octicon-mark-github"></span>
+        </a>
+
+
+        <div class="site-search repo-scope js-site-search" role="search">
+            <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/code4craft/webmagic/search" class="js-site-search-form" data-global-search-url="/search" data-repo-search-url="/code4craft/webmagic/search" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+            <label class="js-chromeless-input-container form-control">
+                <div class="scope-badge">This repository</div>
+                <input type="text"
+                       class="js-site-search-focus js-site-search-field is-clearable chromeless-input"
+                       data-hotkey="s"
+                       name="q"
+                       placeholder="Search"
+                       aria-label="Search this repository"
+                       data-global-scope-placeholder="Search GitHub"
+                       data-repo-scope-placeholder="Search"
+                       tabindex="1"
+                       autocapitalize="off">
+            </label>
+        </form>
+        </div>
+
+        <ul class="header-nav left" role="navigation">
+            <li class="header-nav-item">
+                <a href="/pulls" class="js-selected-navigation-item header-nav-link" data-ga-click="Header, click, Nav menu - item:pulls context:user" data-hotkey="g p" data-selected-links="/pulls /pulls/assigned /pulls/mentioned /pulls">
+                    Pull requests
+                </a>        </li>
+            <li class="header-nav-item">
+                <a href="/issues" class="js-selected-navigation-item header-nav-link" data-ga-click="Header, click, Nav menu - item:issues context:user" data-hotkey="g i" data-selected-links="/issues /issues/assigned /issues/mentioned /issues">
+                    Issues
+                </a>        </li>
+            <li class="header-nav-item">
+                <a class="header-nav-link" href="https://gist.github.com/" data-ga-click="Header, go to gist, text:gist">Gist</a>
+            </li>
+        </ul>
+
+
+        <ul class="header-nav user-nav right" id="user-links">
+            <li class="header-nav-item">
+      <span class="js-socket-channel js-updatable-content"
+            data-channel="notification-changed:code4craft"
+            data-url="/notifications/header">
+      <a href="/notifications" aria-label="You have no unread notifications" class="header-nav-link notification-indicator tooltipped tooltipped-s" data-ga-click="Header, go to notifications, icon:read" data-hotkey="g n">
+          <span class="mail-status all-read"></span>
+          <span aria-hidden="true" class="octicon octicon-bell"></span>
+      </a>  </span>
+
+            </li>
+
+            <li class="header-nav-item dropdown js-menu-container">
+                <a class="header-nav-link tooltipped tooltipped-s js-menu-target" href="/new"
+                   aria-label="Create new…"
+                   data-ga-click="Header, create new, icon:add">
+                    <span aria-hidden="true" class="octicon octicon-plus left"></span>
+                    <span class="dropdown-caret"></span>
+                </a>
+
+                <div class="dropdown-menu-content js-menu-content">
+                    <ul class="dropdown-menu dropdown-menu-sw">
+
+                        <a class="dropdown-item" href="/new" data-ga-click="Header, create new repository">
+                            New repository
+                        </a>
+
+
+                        <a class="dropdown-item" href="/organizations/new" data-ga-click="Header, create new organization">
+                            New organization
+                        </a>
+
+
+
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-header">
+                            <span title="code4craft/webmagic">This repository</span>
+                        </div>
+                        <a class="dropdown-item" href="/code4craft/webmagic/issues/new" data-ga-click="Header, create new issue">
+                            New issue
+                        </a>
+                        <a class="dropdown-item" href="/code4craft/webmagic/settings/collaboration" data-ga-click="Header, create new collaborator">
+                            New collaborator
+                        </a>
+
+                    </ul>
+                </div>
+            </li>
+
+            <li class="header-nav-item dropdown js-menu-container">
+                <a class="header-nav-link name tooltipped tooltipped-sw js-menu-target" href="/code4craft"
+                   aria-label="View profile and more"
+                   data-ga-click="Header, show menu, icon:avatar">
+                    <img alt="@code4craft" class="avatar" height="20" src="https://avatars2.githubusercontent.com/u/1351884?v=3&amp;s=40" width="20" />
+                    <span class="dropdown-caret"></span>
+                </a>
+
+                <div class="dropdown-menu-content js-menu-content">
+                    <div class="dropdown-menu  dropdown-menu-sw">
+                        <div class=" dropdown-header header-nav-current-user css-truncate">
+                            Signed in as <strong class="css-truncate-target">code4craft</strong>
+
+                        </div>
+
+
+                        <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item" href="/code4craft" data-ga-click="Header, go to profile, text:your profile">
+                            Your profile
+                        </a>
+                        <a class="dropdown-item" href="/stars" data-ga-click="Header, go to starred repos, text:your stars">
+                            Your stars
+                        </a>
+                        <a class="dropdown-item" href="/explore" data-ga-click="Header, go to explore, text:explore">
+                            Explore
+                        </a>
+                        <a class="dropdown-item" href="/integrations" data-ga-click="Header, go to integrations, text:integrations">
+                            Integrations
+                        </a>
+                        <a class="dropdown-item" href="https://help.github.com" data-ga-click="Header, go to help, text:help">
+                            Help
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item" href="/settings/profile" data-ga-click="Header, go to settings, icon:settings">
+                            Settings
+                        </a>
+
+                        <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/logout" class="logout-form" data-form-nonce="3b3b1453e901b97918f8e2a9efa6ed4efb295cf6" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="ZINKeCzFexhof31oC9cCA+iEXymQ95S66nGpEO1oOhr5jI03Z1aD4k6dtjVPp11IJlwY9sSGIpgQt/SthVhr5Q==" /></div>
+                        <button class="dropdown-item dropdown-signout" data-ga-click="Header, sign out, icon:logout">
+                            Sign out
+                        </button>
+                    </form>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+<div id="start-of-content" class="accessibility-aid"></div>
+
+<div id="js-flash-container">
+</div>
+
+
+<div role="main" class="main-content">
+    <div itemscope itemtype="http://schema.org/WebPage">
+        <div id="js-repo-pjax-container" class="context-loader-container js-repo-nav-next" data-pjax-container>
+
+            <div class="pagehead repohead instapaper_ignore readability-menu experiment-repo-nav">
+                <div class="container repohead-details-container">
+
+
+
+                    <ul class="pagehead-actions">
+
+                        <li>
+                            <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/notifications/subscribe" class="js-social-container" data-autosubmit="true" data-form-nonce="3b3b1453e901b97918f8e2a9efa6ed4efb295cf6" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="A8U/nsuWmrNcDVP1LvjcaT2gKFrPqnmC5eOwH18NcsePFGlsinj0uaf9yaNxnk741gXv+8QIVEYn0veSA3qRUQ==" /></div>      <input id="repository_id" name="repository_id" type="hidden" value="9623064" />
+
+                            <div class="select-menu js-menu-container js-select-menu">
+                                <a href="/code4craft/webmagic/subscription"
+                                   class="btn btn-sm btn-with-count select-menu-button js-menu-target" role="button" tabindex="0" aria-haspopup="true"
+                                   data-ga-click="Repository, click Watch settings, action:files#disambiguate">
+            <span class="js-select-button">
+              <span aria-hidden="true" class="octicon octicon-eye"></span>
+              Unwatch
+            </span>
+                                </a>
+                                <a class="social-count js-social-count" href="/code4craft/webmagic/watchers">
+                                    367
+                                </a>
+
+                                <div class="select-menu-modal-holder">
+                                    <div class="select-menu-modal subscription-menu-modal js-menu-content" aria-hidden="true">
+                                        <div class="select-menu-header">
+                                            <span aria-label="Close" class="octicon octicon-x js-menu-close" role="button"></span>
+                                            <span class="select-menu-title">Notifications</span>
+                                        </div>
+
+                                        <div class="select-menu-list js-navigation-container" role="menu">
+
+                                            <div class="select-menu-item js-navigation-item " role="menuitem" tabindex="0">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+                                                <div class="select-menu-item-text">
+                                                    <input id="do_included" name="do" type="radio" value="included" />
+                                                    <span class="select-menu-item-heading">Not watching</span>
+                                                    <span class="description">Be notified when participating or @mentioned.</span>
+                    <span class="js-select-button-text hidden-select-button-text">
+                      <span aria-hidden="true" class="octicon octicon-eye"></span>
+                      Watch
+                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="select-menu-item js-navigation-item selected" role="menuitem" tabindex="0">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+                                                <div class="select-menu-item-text">
+                                                    <input checked="checked" id="do_subscribed" name="do" type="radio" value="subscribed" />
+                                                    <span class="select-menu-item-heading">Watching</span>
+                                                    <span class="description">Be notified of all conversations.</span>
+                    <span class="js-select-button-text hidden-select-button-text">
+                      <span aria-hidden="true" class="octicon octicon-eye"></span>
+                      Unwatch
+                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="select-menu-item js-navigation-item " role="menuitem" tabindex="0">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+                                                <div class="select-menu-item-text">
+                                                    <input id="do_ignore" name="do" type="radio" value="ignore" />
+                                                    <span class="select-menu-item-heading">Ignoring</span>
+                                                    <span class="description">Never be notified.</span>
+                    <span class="js-select-button-text hidden-select-button-text">
+                      <span aria-hidden="true" class="octicon octicon-mute"></span>
+                      Stop ignoring
+                    </span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        </li>
+
+                        <li>
+
+                            <div class="js-toggler-container js-social-container starring-container ">
+
+                                <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/code4craft/webmagic/unstar" class="js-toggler-form starred js-unstar-button" data-form-nonce="3b3b1453e901b97918f8e2a9efa6ed4efb295cf6" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="mGh0BvguuVTHUZ1Lnf51zYVJ7dGdABVF+Bavja/Jqy7OjG/oveUKfauEqgIowVAM3UFe636pTW6E8jHFtSR0Aw==" /></div>
+                                <button
+                                        class="btn btn-sm btn-with-count js-toggler-target"
+                                        aria-label="Unstar this repository" title="Unstar code4craft/webmagic"
+                                        data-ga-click="Repository, click unstar button, action:files#disambiguate; text:Unstar">
+                                    <span aria-hidden="true" class="octicon octicon-star"></span>
+                                    Unstar
+                                </button>
+                                <a class="social-count js-social-count" href="/code4craft/webmagic/stargazers">
+                                    1,743
+                                </a>
+                            </form>
+                                <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/code4craft/webmagic/star" class="js-toggler-form unstarred js-star-button" data-form-nonce="3b3b1453e901b97918f8e2a9efa6ed4efb295cf6" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="nQnqpsGUUYVDCSka1tYn2QpcwUBYoqFTCehYIBwHWhcW9+tWTg+gBXa/spd+Hhfe2xNjXBfz7iTXZpHy4+ksEg==" /></div>
+                                <button
+                                        class="btn btn-sm btn-with-count js-toggler-target"
+                                        aria-label="Star this repository" title="Star code4craft/webmagic"
+                                        data-ga-click="Repository, click star button, action:files#disambiguate; text:Star">
+                                    <span aria-hidden="true" class="octicon octicon-star"></span>
+                                    Star
+                                </button>
+                                <a class="social-count js-social-count" href="/code4craft/webmagic/stargazers">
+                                    1,743
+                                </a>
+                            </form>  </div>
+
+                        </li>
+
+                        <li>
+                            <a href="#fork-destination-box" class="btn btn-sm btn-with-count"
+                               title="Fork your own copy of code4craft/webmagic to your account"
+                               aria-label="Fork your own copy of code4craft/webmagic to your account"
+                               rel="facebox"
+                               data-ga-click="Repository, show fork modal, action:files#disambiguate; text:Fork">
+                                <span aria-hidden="true" class="octicon octicon-repo-forked"></span>
+                                Fork
+                            </a>
+
+                            <div id="fork-destination-box" style="display: none;">
+                                <h2 class="facebox-header" data-facebox-id="facebox-header">Where should we fork this repository?</h2>
+                                <include-fragment src=""
+                                                  class="js-fork-select-fragment fork-select-fragment"
+                                                  data-url="/code4craft/webmagic/fork?fragment=1">
+                                    <img alt="Loading" height="64" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-128.gif" width="64" />
+                                </include-fragment>
+                            </div>
+
+                            <a href="/code4craft/webmagic/network" class="social-count">
+                                1,128
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h1 itemscope itemtype="http://data-vocabulary.org/Breadcrumb" class="entry-title public ">
+                        <span aria-hidden="true" class="octicon octicon-repo"></span>
+                        <span class="author"><a href="/code4craft" class="url fn" itemprop="url" rel="author"><span itemprop="title">code4craft</span></a></span><!--
+--><span class="path-divider">/</span><!--
+--><strong><a href="/code4craft/webmagic" data-pjax="#js-repo-pjax-container">webmagic</a></strong>
+
+  <span class="page-context-loader">
+    <img alt="" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+  </span>
+
+                    </h1>
+
+                </div>
+                <div class="container">
+
+                    <nav class="reponav js-repo-nav js-sidenav-container-pjax js-octicon-loaders"
+                         role="navigation"
+                         data-pjax="#js-repo-pjax-container">
+
+                        <a href="/code4craft/webmagic" aria-label="Code" aria-selected="true" class="js-selected-navigation-item selected reponav-item" data-hotkey="g c" data-selected-links="repo_source repo_downloads repo_commits repo_releases repo_tags repo_branches /code4craft/webmagic">
+                            <span aria-hidden="true" class="octicon octicon-code"></span>
+                            Code
+                        </a>
+                        <a href="/code4craft/webmagic/issues" class="js-selected-navigation-item reponav-item" data-hotkey="g i" data-selected-links="repo_issues repo_labels repo_milestones /code4craft/webmagic/issues">
+                            <span aria-hidden="true" class="octicon octicon-issue-opened"></span>
+                            Issues
+                            <span class="counter">67</span>
+                        </a>
+                        <a href="/code4craft/webmagic/pulls" class="js-selected-navigation-item reponav-item" data-hotkey="g p" data-selected-links="repo_pulls /code4craft/webmagic/pulls">
+                            <span aria-hidden="true" class="octicon octicon-git-pull-request"></span>
+                            Pull requests
+                            <span class="counter">14</span>
+                        </a>
+                        <a href="/code4craft/webmagic/wiki" class="js-selected-navigation-item reponav-item" data-hotkey="g w" data-selected-links="repo_wiki /code4craft/webmagic/wiki">
+                            <span aria-hidden="true" class="octicon octicon-book"></span>
+                            Wiki
+                        </a>
+                        <a href="/code4craft/webmagic/pulse" class="js-selected-navigation-item reponav-item" data-selected-links="pulse /code4craft/webmagic/pulse">
+                            <span aria-hidden="true" class="octicon octicon-pulse"></span>
+                            Pulse
+                        </a>
+                        <a href="/code4craft/webmagic/graphs" class="js-selected-navigation-item reponav-item" data-selected-links="repo_graphs repo_contributors /code4craft/webmagic/graphs">
+                            <span aria-hidden="true" class="octicon octicon-graph"></span>
+                            Graphs
+                        </a>
+                        <a href="/code4craft/webmagic/settings" class="js-selected-navigation-item reponav-item" data-selected-links="repo_settings repo_branch_settings hooks /code4craft/webmagic/settings">
+                            <span aria-hidden="true" class="octicon octicon-gear"></span>
+                            Settings
+                        </a>
+                    </nav>
+
+                </div>
+            </div>
+
+            <div class="container new-discussion-timeline experiment-repo-nav">
+                <div class="repository-content">
+
+
+                    <div class="repository-meta js-details-container">
+  <span class="repository-meta-content">
+        A scalable web crawler framework.
+        <a href="http://webmagic.io/" rel="nofollow">http://webmagic.io/</a>
+  </span>
+
+                        <span class="edit-link js-details-target">— <a href="#" class="muted-link">Edit</a></span>
+                        <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/code4craft/webmagic/settings/update_meta" class="edit-repository-meta" data-form-nonce="3b3b1453e901b97918f8e2a9efa6ed4efb295cf6" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="_method" type="hidden" value="put" /><input name="authenticity_token" type="hidden" value="7xX6fGJkjyARqJhxbtYg5AK+hzEpZLP8qatQsSBLDA39GuvJkVwzO80SeWX37wxYpvr1bIudI8ojlj1p5I1zvw==" /></div>
+
+                        <div class="field">
+                            <label for="repo_description">Description</label>
+                            <input type="text" id="repo_description" class="input-contrast repo-description-field" name="repo_description" value="A scalable web crawler framework." placeholder="Short description of this repository">
+                        </div>
+
+                        <div class="field" >
+                            <label for="repo_homepage">Website</label>
+                            <input type="url" id="repo_homepage" class="input-contrast repo-website-field" name="repo_homepage" value="http://webmagic.io/" placeholder="Website for this repository (optional)">
+                        </div>
+
+                        <button class="btn">Save</button>
+                        or <a href="#" class="js-details-target">Cancel</a>
+                    </form></div>
+
+
+                    <div class="overall-summary overall-summary-bottomless">
+
+                        <div class="stats-switcher-viewport js-stats-switcher-viewport">
+                            <div class="stats-switcher-wrapper">
+                                <ul class="numbers-summary">
+                                    <li class="commits">
+                                        <a data-pjax href="/code4craft/webmagic/commits/master">
+                                            <span aria-hidden="true" class="octicon octicon-history"></span>
+            <span class="num text-emphasized">
+              698
+            </span>
+                                            commits
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a data-pjax href="/code4craft/webmagic/branches">
+                                            <span aria-hidden="true" class="octicon octicon-git-branch"></span>
+          <span class="num text-emphasized">
+            6
+          </span>
+                                            branches
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a data-pjax href="/code4craft/webmagic/releases">
+                                            <span aria-hidden="true" class="octicon octicon-tag"></span>
+          <span class="num text-emphasized">
+            13
+          </span>
+                                            releases
+                                        </a>
+                                    </li>
+
+                                    <li>
+
+                                        <a href="/code4craft/webmagic/graphs/contributors">
+                                            <span aria-hidden="true" class="octicon octicon-organization"></span>
+    <span class="num text-emphasized">
+      23
+    </span>
+                                            contributors
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <div class="repository-lang-stats">
+                                    <ol class="repository-lang-stats-numbers">
+                                        <li>
+                                            <a href="/code4craft/webmagic/search?l=java">
+                                                <span class="color-block language-color" style="background-color:#b07219;"></span>
+                                                <span class="lang">Java</span>
+                                                <span class="percent">72.2%</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/code4craft/webmagic/search?l=css">
+                                                <span class="color-block language-color" style="background-color:#563d7c;"></span>
+                                                <span class="lang">CSS</span>
+                                                <span class="percent">11.6%</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/code4craft/webmagic/search?l=javascript">
+                                                <span class="color-block language-color" style="background-color:#f1e05a;"></span>
+                                                <span class="lang">JavaScript</span>
+                                                <span class="percent">8.5%</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/code4craft/webmagic/search?l=freemarker">
+                                                <span class="color-block language-color" style="background-color:#0050b2;"></span>
+                                                <span class="lang">FreeMarker</span>
+                                                <span class="percent">7.4%</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/code4craft/webmagic/search?l=html">
+                                                <span class="color-block language-color" style="background-color:#e44b23;"></span>
+                                                <span class="lang">HTML</span>
+                                                <span class="percent">0.2%</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/code4craft/webmagic/search?l=ruby">
+                                                <span class="color-block language-color" style="background-color:#701516;"></span>
+                                                <span class="lang">Ruby</span>
+                                                <span class="percent">0.1%</span>
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="repository-lang-stats-graph js-toggle-lang-stats" title="Click for language details">
+                        <span class="language-color" aria-label="Java 72.2%" style="width:72.2%; background-color:#b07219;" itemprop="keywords">Java</span>
+                        <span class="language-color" aria-label="CSS 11.6%" style="width:11.6%; background-color:#563d7c;" itemprop="keywords">CSS</span>
+                        <span class="language-color" aria-label="JavaScript 8.5%" style="width:8.5%; background-color:#f1e05a;" itemprop="keywords">JavaScript</span>
+                        <span class="language-color" aria-label="FreeMarker 7.4%" style="width:7.4%; background-color:#0050b2;" itemprop="keywords">FreeMarker</span>
+                        <span class="language-color" aria-label="HTML 0.2%" style="width:0.2%; background-color:#e44b23;" itemprop="keywords">HTML</span>
+                        <span class="language-color" aria-label="Ruby 0.1%" style="width:0.1%; background-color:#701516;" itemprop="keywords">Ruby</span>
+                    </div>
+
+                    <include-fragment src="/code4craft/webmagic/show_partial?partial=tree%2Frecently_touched_branches_list"></include-fragment>
+
+                    <div class="file-navigation in-mid-page file-navigation-new">
+                        <div class="right">
+                            <div class="btn-group">
+
+                                <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/code4craft/webmagic/new/master" class="button_to js-new-blob-form" data-form-nonce="3b3b1453e901b97918f8e2a9efa6ed4efb295cf6" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="XOKyr9wZjCR+NGJTatrBJTz6EfVIx0qK42atG8cU8mGVCvihIi+04Zb0Y916iB+cmvs9fIDiC+Gg45gG6Y1inw==" /></div>
+                                <button class="btn btn-sm tooltipped tooltipped-n js-new-blob-submit" type="submit"
+                                        data-disable-with="working…" aria-label="Create a new file here">
+                                    New file
+                                </button>
+                            </form>
+
+
+                                <a href="/code4craft/webmagic/find/master"
+                                   class="btn btn-sm empty-icon right js-show-file-finder"
+                                   data-pjax
+                                   data-hotkey="t"
+                                   data-ga-click="Repository, find file, location:repo overview">
+                                    Find file
+                                </a>
+                            </div>
+                            <div class="file-navigation-options" data-multiple>
+
+                                <div class="file-navigation-option">
+                                    <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/users/set_protocol" class="js-set-user-protocol-preference" data-form-nonce="3b3b1453e901b97918f8e2a9efa6ed4efb295cf6" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="Sx794jiPAE0pdEIUNJhp4AUyhkPwdamIAAKBQQGDtNe+0e8whjFgMrGl63/fDAEmggpzui33hAJ0GQ0EEYf/Rw==" /></div>
+                                    <input type="hidden" name="protocol_type" value="push">
+
+                                    <div class="select-menu js-menu-container js-select-menu">
+                                        <div class="input-group js-select-button js-zeroclipboard-container">
+                                            <div class="input-group-button">
+                                                <button type="button" class="btn btn-sm select-menu-button js-menu-target" data-ga-click="Repository, clone SSH, location:repo overview">
+                                                    SSH
+                                                </button>
+                                            </div>
+                                            <input type="text" class="input-monospace input-mini js-zeroclipboard-target js-url-field" value="git@github.com:code4craft/webmagic.git" readonly>
+                                            <div class="input-group-button">
+                                                <button aria-label="Copy to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button"><span aria-hidden="true" class="octicon octicon-clippy"></span></button>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="select-menu-modal-holder">
+                                            <div class="select-menu-modal js-menu-content" aria-hidden="true">
+                                                <div class="select-menu-header">
+                                                    <span aria-label="Close" class="octicon octicon-x js-menu-close" role="button"></span>
+                                                    <span class="select-menu-title">Choose a clone URL</span>
+                                                </div>
+
+                                                <div class="select-menu-list js-navigation-container" role="menu">
+                                                    <div class="select-menu-item js-navigation-item " role="menuitem" tabindex="0">
+                                                        <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+                                                        <div class="select-menu-item-text">
+                                                            <input type="radio" name="protocol_selector" value="http" >
+                          <span class="select-menu-item-heading">
+                            HTTPS
+                            (recommended)
+                          </span>
+                            <span class="description">
+                              Clone with Git or checkout with SVN using the repository's web address.
+                            </span>
+                          <span class="js-select-button-text hidden-select-button-text">
+                            <div class="input-group-button">
+                                <button type="button" class="btn btn-sm select-menu-button js-menu-target" data-ga-click="Repository, clone HTTPS, location:repo overview">
+                                    HTTPS
+                                </button>
+                            </div>
+<input type="text" class="input-monospace input-mini js-zeroclipboard-target js-url-field" value="https://github.com/code4craft/webmagic.git" readonly>
+<div class="input-group-button">
+    <button aria-label="Copy to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button"><span aria-hidden="true" class="octicon octicon-clippy"></span></button>
+</div>
+
+                          </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="select-menu-item js-navigation-item selected" role="menuitem" tabindex="0">
+                                                        <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+                                                        <div class="select-menu-item-text">
+                                                            <input type="radio" name="protocol_selector" value="ssh" checked>
+                          <span class="select-menu-item-heading">
+                            SSH
+
+                          </span>
+                            <span class="description">
+                              Clone with an SSH key and passphrase from your GitHub settings.
+                            </span>
+                          <span class="js-select-button-text hidden-select-button-text">
+                            <div class="input-group-button">
+                                <button type="button" class="btn btn-sm select-menu-button js-menu-target" data-ga-click="Repository, clone SSH, location:repo overview">
+                                    SSH
+                                </button>
+                            </div>
+<input type="text" class="input-monospace input-mini js-zeroclipboard-target js-url-field" value="git@github.com:code4craft/webmagic.git" readonly>
+<div class="input-group-button">
+    <button aria-label="Copy to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button"><span aria-hidden="true" class="octicon octicon-clippy"></span></button>
+</div>
+
+                          </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="select-menu-list" role="menu">
+                                                    <a class="select-menu-item select-menu-action" href="https://help.github.com/articles/which-remote-url-should-i-use" target="_blank">
+                                                        <span aria-hidden="true" class="octicon octicon-question select-menu-item-icon"></span>
+                                                        <div class="select-menu-item-text">
+                                                            Learn more about clone URLs
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>        </div>
+
+                                <div class="file-navigation-option">
+                                    <a href="github-mac://openRepo/https://github.com/code4craft/webmagic" class="btn btn-sm tooltipped tooltipped-s tooltipped-multiline" aria-label="Save code4craft/webmagic to your computer and use it in GitHub Desktop.">
+                                        <span aria-hidden="true" class="octicon octicon-desktop-download"></span>
+                                    </a>
+                                </div>
+
+
+                                <div class="file-navigation-option">
+                                    <a href="/code4craft/webmagic/archive/master.zip"
+                                       class="btn btn-sm"
+                                       rel="nofollow"
+                                       data-ga-click="Repository, download zip, location:repo overview">
+                                        Download ZIP
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="select-menu js-menu-container js-select-menu left">
+                            <button class="btn btn-sm select-menu-button js-menu-target css-truncate" data-hotkey="w"
+                                    title="master"
+                                    type="button" aria-label="Switch branches or tags" tabindex="0" aria-haspopup="true">
+                                <i>Branch:</i>
+                                <span class="js-select-button css-truncate-target">master</span>
+                            </button>
+
+                            <div class="select-menu-modal-holder js-menu-content js-navigation-container" data-pjax aria-hidden="true">
+
+                                <div class="select-menu-modal">
+                                    <div class="select-menu-header">
+                                        <span aria-label="Close" class="octicon octicon-x js-menu-close" role="button"></span>
+                                        <span class="select-menu-title">Switch branches/tags</span>
+                                    </div>
+
+                                    <div class="select-menu-filters">
+                                        <div class="select-menu-text-filter">
+                                            <input type="text" aria-label="Find or create a branch…" id="context-commitish-filter-field" class="js-filterable-field js-navigation-enable" placeholder="Find or create a branch…">
+                                        </div>
+                                        <div class="select-menu-tabs">
+                                            <ul>
+                                                <li class="select-menu-tab">
+                                                    <a href="#" data-tab-filter="branches" data-filter-placeholder="Find or create a branch…" class="js-select-menu-tab" role="tab">Branches</a>
+                                                </li>
+                                                <li class="select-menu-tab">
+                                                    <a href="#" data-tab-filter="tags" data-filter-placeholder="Find a tag…" class="js-select-menu-tab" role="tab">Tags</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="select-menu-list select-menu-tab-bucket js-select-menu-tab-bucket" data-tab-filter="branches" role="menu">
+
+                                        <div data-filterable-for="context-commitish-filter-field" data-filterable-type="substring">
+
+
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/0.4.x"
+                                               data-name="0.4.x"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="0.4.x">
+                0.4.x
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/0.6.0"
+                                               data-name="0.6.0"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="0.6.0">
+                0.6.0
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/en-webmagic"
+                                               data-name="en-webmagic"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="en-webmagic">
+                en-webmagic
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/gh-pages"
+                                               data-name="gh-pages"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="gh-pages">
+                gh-pages
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open selected"
+                                               href="/code4craft/webmagic/tree/master"
+                                               data-name="master"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="master">
+                master
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/stable"
+                                               data-name="stable"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="stable">
+                stable
+              </span>
+                                            </a>
+                                        </div>
+
+                                        <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/code4craft/webmagic/branches" class="js-create-branch select-menu-item select-menu-new-item-form js-navigation-item js-new-item-form" data-form-nonce="3b3b1453e901b97918f8e2a9efa6ed4efb295cf6" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="TFV2kT/IcGmiqdH0NqRYxcNkepWIxxCkgnxla0/LxJMYaWluy1/I4QYo83JwZFB5WnNJPxF7S+BqjspGMqGmwA==" /></div>
+                                        <span aria-hidden="true" class="octicon octicon-git-branch select-menu-item-icon"></span>
+                                        <div class="select-menu-item-text">
+                                            <span class="select-menu-item-heading">Create branch: <span class="js-new-item-name"></span></span>
+                                            <span class="description">from ‘master’</span>
+                                        </div>
+                                        <input type="hidden" name="name" id="name" class="js-new-item-value">
+                                        <input type="hidden" name="branch" id="branch" value="master">
+                                        <input type="hidden" name="path" id="path" value="">
+                                    </form>
+                                    </div>
+
+                                    <div class="select-menu-list select-menu-tab-bucket js-select-menu-tab-bucket" data-tab-filter="tags">
+                                        <div data-filterable-for="context-commitish-filter-field" data-filterable-type="substring">
+
+
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/webmaigc-0.4.3"
+                                               data-name="webmaigc-0.4.3"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="webmaigc-0.4.3">
+                webmaigc-0.4.3
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/webmagic-parent-0.3.1"
+                                               data-name="webmagic-parent-0.3.1"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="webmagic-parent-0.3.1">
+                webmagic-parent-0.3.1
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/webmagic-parent-0.2.1"
+                                               data-name="webmagic-parent-0.2.1"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="webmagic-parent-0.2.1">
+                webmagic-parent-0.2.1
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/webmagic-0.4.2"
+                                               data-name="webmagic-0.4.2"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="webmagic-0.4.2">
+                webmagic-0.4.2
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/webmagic-0.4.1"
+                                               data-name="webmagic-0.4.1"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="webmagic-0.4.1">
+                webmagic-0.4.1
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/webmagic-0.4.0"
+                                               data-name="webmagic-0.4.0"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="webmagic-0.4.0">
+                webmagic-0.4.0
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/webmagic-0.3.2"
+                                               data-name="webmagic-0.3.2"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="webmagic-0.3.2">
+                webmagic-0.3.2
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/webmagic-0.3.0"
+                                               data-name="webmagic-0.3.0"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="webmagic-0.3.0">
+                webmagic-0.3.0
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/version-0.2.0"
+                                               data-name="version-0.2.0"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="version-0.2.0">
+                version-0.2.0
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/version-0.1.0"
+                                               data-name="version-0.1.0"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="version-0.1.0">
+                version-0.1.0
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/WebMagic-0.5.2"
+                                               data-name="WebMagic-0.5.2"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="WebMagic-0.5.2">
+                WebMagic-0.5.2
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/WebMagic-0.5.1"
+                                               data-name="WebMagic-0.5.1"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="WebMagic-0.5.1">
+                WebMagic-0.5.1
+              </span>
+                                            </a>
+                                            <a class="select-menu-item js-navigation-item js-navigation-open "
+                                               href="/code4craft/webmagic/tree/WebMagic-0.5.0"
+                                               data-name="WebMagic-0.5.0"
+                                               data-skip-pjax="true"
+                                               rel="nofollow">
+                                                <span aria-hidden="true" class="octicon octicon-check select-menu-item-icon"></span>
+              <span class="select-menu-item-text css-truncate-target" title="WebMagic-0.5.0">
+                WebMagic-0.5.0
+              </span>
+                                            </a>
+                                        </div>
+
+                                        <div class="select-menu-no-results">Nothing to show</div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <a href="/code4craft/webmagic/pull/new/master" class="btn btn-sm btn-primary" data-pjax data-ga-click="Repository, new pull request, location:repo overview">
+                            New pull request
+                        </a>
+
+                        <div class="breadcrumb">
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="commit-tease js-details-container">
+    <span class="right">
+      Latest commit
+      <a class="commit-tease-sha" href="/code4craft/webmagic/commit/800f66c4cc7e1e4b3e485af5236e3c9b8d54f028" data-pjax>
+          800f66c
+      </a>
+      <time datetime="2016-01-18T15:20:08Z" is="relative-time">Jan 18, 2016</time>
+    </span>
+
+
+    <span class="commit-author-section">
+      <img alt="@code4craft" class="avatar" height="20" src="https://avatars2.githubusercontent.com/u/1351884?v=3&amp;s=40" width="20" />
+      <a href="/code4craft" class="user-mention" rel="author">code4craft</a>
+    </span>
+
+                        <a href="/code4craft/webmagic/commit/800f66c4cc7e1e4b3e485af5236e3c9b8d54f028" class="message" data-pjax="true" title="Revert &quot;remove some unkown config&quot;
+
+This reverts commit 0e245c989605c94b8daa21be8da9ac7002c10568.">Revert "remove some unkown config"</a>
+          <span class="hidden-text-expander inline">
+            <a href="#" class="js-details-target">…</a>
+          </span>
+                        </span>
+
+                        <div class="commit-desc"><pre class="text-small">This reverts commit <a href="https://github.com/code4craft/webmagic/commit/0e245c989605c94b8daa21be8da9ac7002c10568" class="commit-link"><tt>0e245c9</tt></a>.</pre></div>
+                    </div>
+
+
+                    <div class="file-wrap ">
+
+                        <a href="/code4craft/webmagic/tree/800f66c4cc7e1e4b3e485af5236e3c9b8d54f028" class="hidden js-permalink-shortcut" data-hotkey="y">Permalink</a>
+
+                        <table class="files js-navigation-container js-active-navigation-container" data-pjax>
+
+
+                            <tbody>
+                            <tr class="warning include-fragment-error">
+                                <td class="icon"><span aria-hidden="true" class="octicon octicon-alert"></span></td>
+                                <td class="content" colspan="3">Failed to load latest commit information.</td>
+                            </tr>
+
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-directory"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/tree/master/assets" class="js-directory-link js-navigation-open" id="32bb636196f91ed59d7a49190e26b42c-3bc5c153572a8e40990cf593b34139cba724f15c" title="assets">assets</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/code4craft/webmagic/commit/644e8d1f72c08c83348e5c31a42f0f0dfa32f07d" class="message" data-pjax="true" title="同步官方源码">同步官方源码</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2014-04-12T14:32:22Z" is="time-ago">Apr 12, 2014</time></span>
+                                </td>
+                            </tr>
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-directory"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/tree/master/en_docs" class="js-directory-link js-navigation-open" id="025516923597c2d7f987828ad6657c14-d80a6b0dee9c88e6b198bc58b3cb0704b3ce07c4" title="en_docs">en_docs</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/code4craft/webmagic/commit/dbebcbe44f07acb8871a0e3f786dd3d10d938a1c" class="message" data-pjax="true" title="docs">docs</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2014-05-02T22:14:31Z" is="time-ago">May 3, 2014</time></span>
+                                </td>
+                            </tr>
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-directory"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/tree/master/webmagic-avalon" class="js-directory-link js-navigation-open" id="079d784782a58fecda2d64e6fadff4ca-c2dff4951c408dd117233ed6a57daa4b7cda0473" title="webmagic-avalon">webmagic-avalon</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/code4craft/webmagic/commit/7668731f08a3118390e7651002d56b2223d4e656" class="message" data-pjax="true" title="update version to snapshot">update version to snapshot</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2014-05-04T23:03:55Z" is="time-ago">May 5, 2014</time></span>
+                                </td>
+                            </tr>
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-directory"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/tree/master/webmagic-core" class="js-directory-link js-navigation-open" id="39809e13bc65c3873f79570b81852d62-a2cf4af3f59391cccb922597dd0c4819a3426667" title="webmagic-core">webmagic-core</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/code4craft/webmagic/commit/90e14b31b0c229d5664092ea01f739f264e419a8" class="message" data-pjax="true" title="修正FileCacheQueueScheduler导致程序不能正常结束和未关闭流
+
+FileCacheQueueScheduler中开启了一个线程周期运行来保存数据但在爬虫结束后没有关闭导致程序无法结束，以及没有关闭io流。
+
+解决方法：
+让FileCacheQueueScheduler实现Closable接口，在close方法中关闭线程以及流。
+在Spider的close方法中添加对scheduler的关闭操作。">修正FileCacheQueueScheduler导致程序不能正常结束和未关闭流</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2015-11-12T15:10:20Z" is="time-ago">Nov 12, 2015</time></span>
+                                </td>
+                            </tr>
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-directory"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/tree/master/webmagic-extension" class="js-directory-link js-navigation-open" id="dc82c79bcb262e1942088502bb426876-35467ae616c037bd947e6752a20167d5fb74d3b5" title="webmagic-extension">webmagic-extension</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/code4craft/webmagic/commit/cfde3b7657d208a80625b61b430bef11889ecc0e" class="message" data-pjax="true" title="Merge pull request #237 from SpenceZhou/master
+
+Update RedisScheduler.java">Merge pull request</a> <a href="https://github.com/code4craft/webmagic/pull/237" class="issue-link js-issue-link" data-url="https://github.com/code4craft/webmagic/issues/237" data-id="119897705" data-error-text="Failed to load issue title" data-permission-text="Issue title is private">#237</a> <a href="/code4craft/webmagic/commit/cfde3b7657d208a80625b61b430bef11889ecc0e" class="message" data-pjax="true" title="Merge pull request #237 from SpenceZhou/master
+
+Update RedisScheduler.java">from SpenceZhou/master</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2015-12-02T14:17:00Z" is="time-ago">Dec 2, 2015</time></span>
+                                </td>
+                            </tr>
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-directory"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/tree/master/webmagic-samples" class="js-directory-link js-navigation-open" id="4284b70d4c5e11003fb292b0d0f7539f-264e0e2eafe7960dcd72844100faa1460fad5cfb" title="webmagic-samples">webmagic-samples</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/code4craft/webmagic/commit/84b046e4c962841b725cb1be6165f40c549e2ef8" class="message" data-pjax="true" title="Merge pull request #227 from hsqlu/master
+
+update deprecated method">Merge pull request</a> <a href="https://github.com/code4craft/webmagic/pull/227" class="issue-link js-issue-link" data-url="https://github.com/code4craft/webmagic/issues/227" data-id="107109677" data-error-text="Failed to load issue title" data-permission-text="Issue title is private">#227</a> <a href="/code4craft/webmagic/commit/84b046e4c962841b725cb1be6165f40c549e2ef8" class="message" data-pjax="true" title="Merge pull request #227 from hsqlu/master
+
+update deprecated method">from hsqlu/master</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2016-01-16T11:36:52Z" is="time-ago">Jan 16, 2016</time></span>
+                                </td>
+                            </tr>
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-directory"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/tree/master/webmagic-saxon" class="js-directory-link js-navigation-open" id="5ee0de5b970664e15f6805d957403c63-8311a46ae76f5669f4be3da0e2a01cce327caf97" title="webmagic-saxon">webmagic-saxon</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/code4craft/webmagic/commit/5f8c3fd5c518099b7028369fc35df4c01065f42e" class="message" data-pjax="true" title="update version">update version</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2014-06-04T09:33:30Z" is="time-ago">Jun 4, 2014</time></span>
+                                </td>
+                            </tr>
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-directory"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/tree/master/webmagic-scripts" class="js-directory-link js-navigation-open" id="8ecc7fcb462c06097aa24a7048097d3d-0422570614304398e2739f4d5e13c12ee403add9" title="webmagic-scripts">webmagic-scripts</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/code4craft/webmagic/commit/5f8c3fd5c518099b7028369fc35df4c01065f42e" class="message" data-pjax="true" title="update version">update version</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2014-06-04T09:33:30Z" is="time-ago">Jun 4, 2014</time></span>
+                                </td>
+                            </tr>
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-directory"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/tree/master/webmagic-selenium" class="js-directory-link js-navigation-open" id="988c197af393f3198711cebacce7fd65-455315f3cbd4108203da09a88afd566d65d161e1" title="webmagic-selenium">webmagic-selenium</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/code4craft/webmagic/commit/5d365f7bf46f854d2e05dc31a066cd6c37994fab" class="message" data-pjax="true" title="update and validate pom.xml
+
+Update selenium and GhostDriver (PhantomJSDriver) to latest version.">update and validate pom.xml</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2015-07-11T14:43:49Z" is="time-ago">Jul 11, 2015</time></span>
+                                </td>
+                            </tr>
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-directory"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/tree/master/zh_docs" class="js-directory-link js-navigation-open" id="bec3b859688b0bbdb94899b1a5b56441-e305b1e0799520204fb6aca537fa5a922240329a" title="zh_docs">zh_docs</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/code4craft/webmagic/commit/2a15bc028962e650463db331794f2b515a77880a" class="message" data-pjax="true" title="contributor">contributor</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2014-06-04T14:27:16Z" is="time-ago">Jun 4, 2014</time></span>
+                                </td>
+                            </tr>
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-text"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/blob/master/.gitignore" class="js-directory-link js-navigation-open" id="a084b794bc0759e7a6b77810e01874f2-0175dbaadc0ab38c5b79ca4a0944fb63b4f8973c" title=".gitignore">.gitignore</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/code4craft/webmagic/commit/07ea04223f419d3eb4f3e68c2b69391c93283454" class="message" data-pjax="true" title="change_gitignore">change_gitignore</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2014-05-19T07:56:22Z" is="time-ago">May 19, 2014</time></span>
+                                </td>
+                            </tr>
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-text"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/blob/master/.travis.yml" class="js-directory-link js-navigation-open" id="354f30a63fb0907d4ad57269548329e3-a9f233f37f99ae2dcd5aa2cfefe18738158dd470" title=".travis.yml">.travis.yml</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/code4craft/webmagic/commit/73ae7a1d52253bd097283b62a7152f22ffadb60d" class="message" data-pjax="true" title="remove ci for jdk6">remove ci for jdk6</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2016-01-18T15:19:39Z" is="time-ago">Jan 18, 2016</time></span>
+                                </td>
+                            </tr>
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-text"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/blob/master/README.md" class="js-directory-link js-navigation-open" id="04c6e90faac2675aa89e2176d2eec7d8-98fea5a59788254b208d7f2752baf2d77a029dca" title="README.md">README.md</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/code4craft/webmagic/commit/5e8ca02ec670e18f52361296072929fc0a93efc3" class="message" data-pjax="true" title="contributor">contributor</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2014-06-04T14:26:56Z" is="time-ago">Jun 4, 2014</time></span>
+                                </td>
+                            </tr>
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-text"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/blob/master/pom.xml" class="js-directory-link js-navigation-open" id="600376dffeb79835ede4a0b285078036-e7290bc95daf3ae60b8ace743d5c822e99223be5" title="pom.xml">pom.xml</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/code4craft/webmagic/commit/800f66c4cc7e1e4b3e485af5236e3c9b8d54f028" class="message" data-pjax="true" title="Revert &quot;remove some unkown config&quot;
+
+This reverts commit 0e245c989605c94b8daa21be8da9ac7002c10568.">Revert "remove some unkown config"</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2016-01-18T15:20:08Z" is="time-ago">Jan 18, 2016</time></span>
+                                </td>
+                            </tr>
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-text"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/blob/master/release-note.md" class="js-directory-link js-navigation-open" id="d59c2d5d8d04d144da5f1cd251c384ad-f44704efd075006a4fc3935fb6607b158f3815b4" title="release-note.md">release-note.md</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="https://github.com/code4craft/webmagic/issues/34" class="issue-link js-issue-link" data-url="https://github.com/code4craft/webmagic/issues/34" data-id="22319882" data-error-text="Failed to load issue title" data-permission-text="Issue title is private">#34</a> <a href="/code4craft/webmagic/commit/b838c4e4331326e38e7c30c56d39be9d71fc930a" class="message" data-pjax="true" title="#34 Close reader in FileCacheQueueScheduler">Close reader in FileCacheQueueScheduler</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2013-11-08T06:59:09Z" is="time-ago">Nov 8, 2013</time></span>
+                                </td>
+                            </tr>
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-text"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/blob/master/user-manual.md" class="js-directory-link js-navigation-open" id="a5d0f6c7ea51007118aea16b56f50a6a-17f65291cbb26141ec6f27422918d8da7f6b8755" title="user-manual.md">user-manual.md</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/code4craft/webmagic/commit/5f6f48931497d80463dace8a97e66e9a7b10d79e" class="message" data-pjax="true" title="deperate in user manual">deperate in user manual</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2014-05-02T22:29:37Z" is="time-ago">May 3, 2014</time></span>
+                                </td>
+                            </tr>
+                            <tr class="js-navigation-item">
+                                <td class="icon">
+                                    <span aria-hidden="true" class="octicon octicon-file-text"></span>
+                                    <img alt="" class="spinner" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+                                </td>
+                                <td class="content">
+                                    <span class="css-truncate css-truncate-target"><a href="/code4craft/webmagic/blob/master/webmagic-avalon.md" class="js-directory-link js-navigation-open" id="5fbef994bb80a792d34444969fa7f80c-bcf39ea065c240dd3bbbbb758ada151d2f1e025c" title="webmagic-avalon.md">webmagic-avalon.md</a></span>
+                                </td>
+                                <td class="message">
+            <span class="css-truncate css-truncate-target">
+                  <a href="/code4craft/webmagic/commit/7c43b5146e6eb8c309c3a6cdfd58bda70ab932ec" class="message" data-pjax="true" title="scripts readme">scripts readme</a>
+            </span>
+                                </td>
+                                <td class="age">
+                                    <span class="css-truncate css-truncate-target"><time datetime="2013-11-28T04:04:05Z" is="time-ago">Nov 28, 2013</time></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+
+
+                    <div id="readme" class="boxed-group clearfix announce instapaper_body md">
+                        <h3>
+                            <span aria-hidden="true" class="octicon octicon-book"></span>
+                            README.md
+                        </h3>
+
+                        <article class="markdown-body entry-content" itemprop="mainContentOfPage"><p><a href="https://camo.githubusercontent.com/77fe3da40f9b2c5839df0267890a2457a64003e0/68747470733a2f2f7261772e6769746875622e636f6d2f636f64653463726166742f7765626d616769632f6d61737465722f6173736574732f6c6f676f2e6a7067" target="_blank"><img src="https://camo.githubusercontent.com/77fe3da40f9b2c5839df0267890a2457a64003e0/68747470733a2f2f7261772e6769746875622e636f6d2f636f64653463726166742f7765626d616769632f6d61737465722f6173736574732f6c6f676f2e6a7067" alt="logo" data-canonical-src="https://raw.github.com/code4craft/webmagic/master/assets/logo.jpg" style="max-width:100%;"></a></p>
+
+                            <p><a href="https://github.com/code4craft/webmagic/tree/master/zh_docs">Readme in Chinese</a></p>
+
+                            <p><a href="https://github.com/code4craft/webmagic/blob/master/user-manual.md">User Manual (Chinese)</a></p>
+
+                            <p><a href="https://travis-ci.org/code4craft/webmagic"><img src="https://camo.githubusercontent.com/28f799aaf9175c6e3b3c131896651cf1775b2bc8/68747470733a2f2f7472617669732d63692e6f72672f636f64653463726166742f7765626d616769632e706e673f6272616e63683d6d6173746572" alt="Build Status" data-canonical-src="https://travis-ci.org/code4craft/webmagic.png?branch=master" style="max-width:100%;"></a></p>
+
+                            <blockquote>
+                                <p>A scalable crawler framework. It covers the whole lifecycle of crawler: downloading, url management, content extraction and persistent. It can simplify the development of a  specific crawler.</p>
+                            </blockquote>
+
+                            <h2><a id="user-content-features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features:</h2>
+
+                            <ul>
+                                <li>Simple core with high flexibility.</li>
+                                <li>Simple API for html extracting.</li>
+                                <li>Annotation with POJO to customize a crawler, no configuration.</li>
+                                <li>Multi-thread and Distribution support.</li>
+                                <li>Easy to be integrated.</li>
+                            </ul>
+
+                            <h2><a id="user-content-install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install:</h2>
+
+                            <p>Add dependencies to your pom.xml:</p>
+
+                            <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;us.codecraft&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;webmagic-core&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;0.5.2&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;
+&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;us.codecraft&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;webmagic-extension&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;0.5.2&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+                            <p>WebMagic use slf4j with slf4j-log4j12 implementation. If you customized your slf4j implementation, please exclude slf4j-log4j12.</p>
+
+                            <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">exclusions</span>&gt;
+    &lt;<span class="pl-ent">exclusion</span>&gt;
+        &lt;<span class="pl-ent">groupId</span>&gt;org.slf4j&lt;/<span class="pl-ent">groupId</span>&gt;
+        &lt;<span class="pl-ent">artifactId</span>&gt;slf4j-log4j12&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;/<span class="pl-ent">exclusion</span>&gt;
+&lt;/<span class="pl-ent">exclusions</span>&gt;</pre></div>
+
+                            <h2><a id="user-content-get-started" class="anchor" href="#get-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Started:</h2>
+
+                            <h3><a id="user-content-first-crawler" class="anchor" href="#first-crawler" aria-hidden="true"><span class="octicon octicon-link"></span></a>First crawler:</h3>
+
+                            <p>Write a class implements PageProcessor. For example, I wrote a crawler of github repository infomation.</p>
+
+                            <div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">GithubRepoPageProcessor</span> <span class="pl-k">implements</span> <span class="pl-e">PageProcessor</span> {
+
+    <span class="pl-k">private</span> <span class="pl-smi">Site</span> site <span class="pl-k">=</span> <span class="pl-smi">Site</span><span class="pl-k">.</span>me()<span class="pl-k">.</span>setRetryTimes(<span class="pl-c1">3</span>)<span class="pl-k">.</span>setSleepTime(<span class="pl-c1">1000</span>);
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">process</span>(<span class="pl-smi">Page</span> <span class="pl-v">page</span>) {
+        page<span class="pl-k">.</span>addTargetRequests(page<span class="pl-k">.</span>getHtml()<span class="pl-k">.</span>links()<span class="pl-k">.</span>regex(<span class="pl-s"><span class="pl-pds">"</span>(https://github<span class="pl-cce">\\</span>.com/<span class="pl-cce">\\</span>w+/<span class="pl-cce">\\</span>w+)<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>all());
+        page<span class="pl-k">.</span>putField(<span class="pl-s"><span class="pl-pds">"</span>author<span class="pl-pds">"</span></span>, page<span class="pl-k">.</span>getUrl()<span class="pl-k">.</span>regex(<span class="pl-s"><span class="pl-pds">"</span>https://github<span class="pl-cce">\\</span>.com/(<span class="pl-cce">\\</span>w+)/.*<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>toString());
+        page<span class="pl-k">.</span>putField(<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>, page<span class="pl-k">.</span>getHtml()<span class="pl-k">.</span>xpath(<span class="pl-s"><span class="pl-pds">"</span>//h1[@class='entry-title public']/strong/a/text()<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>toString());
+        <span class="pl-k">if</span> (page<span class="pl-k">.</span>getResultItems()<span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>)<span class="pl-k">==</span><span class="pl-c1">null</span>){
+            <span class="pl-c">//skip this page</span>
+            page<span class="pl-k">.</span>setSkip(<span class="pl-c1">true</span>);
+        }
+        page<span class="pl-k">.</span>putField(<span class="pl-s"><span class="pl-pds">"</span>readme<span class="pl-pds">"</span></span>, page<span class="pl-k">.</span>getHtml()<span class="pl-k">.</span>xpath(<span class="pl-s"><span class="pl-pds">"</span>//div[@id='readme']/tidyText()<span class="pl-pds">"</span></span>));
+    }
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">Site</span> <span class="pl-en">getSite</span>() {
+        <span class="pl-k">return</span> site;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-k">String</span>[] <span class="pl-v">args</span>) {
+        <span class="pl-smi">Spider</span><span class="pl-k">.</span>create(<span class="pl-k">new</span> <span class="pl-smi">GithubRepoPageProcessor</span>())<span class="pl-k">.</span>addUrl(<span class="pl-s"><span class="pl-pds">"</span>https://github.com/code4craft<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>thread(<span class="pl-c1">5</span>)<span class="pl-k">.</span>run();
+    }
+}</pre></div>
+
+                            <ul>
+                                <li><p><code>page.addTargetRequests(links)</code></p>
+
+                                    <p>Add urls for crawling.</p></li>
+                            </ul>
+
+                            <p>You can also use annotation way:</p>
+
+                            <div class="highlight highlight-source-java"><pre>@TargetUrl(<span class="pl-s"><span class="pl-pds">"</span>https://github.com/<span class="pl-cce">\\</span>w+/<span class="pl-cce">\\</span>w+<span class="pl-pds">"</span></span>)
+@HelpUrl(<span class="pl-s"><span class="pl-pds">"</span>https://github.com/<span class="pl-cce">\\</span>w+<span class="pl-pds">"</span></span>)
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">GithubRepo</span> {
+
+    <span class="pl-k">@ExtractBy</span>(<span class="pl-c1">value</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>//h1[@class='entry-title public']/strong/a/text()<span class="pl-pds">"</span></span>, <span class="pl-c1">notNull</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>)
+    <span class="pl-k">private</span> <span class="pl-smi">String</span> name;
+
+    <span class="pl-k">@ExtractByUrl</span>(<span class="pl-s"><span class="pl-pds">"</span>https://github<span class="pl-cce">\\</span>.com/(<span class="pl-cce">\\</span>w+)/.*<span class="pl-pds">"</span></span>)
+    <span class="pl-k">private</span> <span class="pl-smi">String</span> author;
+
+    <span class="pl-k">@ExtractBy</span>(<span class="pl-s"><span class="pl-pds">"</span>//div[@id='readme']/tidyText()<span class="pl-pds">"</span></span>)
+    <span class="pl-k">private</span> <span class="pl-smi">String</span> readme;
+
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-k">String</span>[] <span class="pl-v">args</span>) {
+        <span class="pl-smi">OOSpider</span><span class="pl-k">.</span>create(<span class="pl-smi">Site</span><span class="pl-k">.</span>me()<span class="pl-k">.</span>setSleepTime(<span class="pl-c1">1000</span>)
+                , <span class="pl-k">new</span> <span class="pl-smi">ConsolePageModelPipeline</span>(), <span class="pl-smi">GithubRepo</span><span class="pl-k">.</span>class)
+                .addUrl(<span class="pl-s"><span class="pl-pds">"</span>https://github.com/code4craft<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>thread(<span class="pl-c1">5</span>)<span class="pl-k">.</span>run();
+    }
+}</pre></div>
+
+                            <h3><a id="user-content-docs-and-samples" class="anchor" href="#docs-and-samples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Docs and samples:</h3>
+
+                            <p>Documents: <a href="http://webmagic.io/docs/">http://webmagic.io/docs/</a></p>
+
+                            <p>The architecture of webmagic (refered to <a href="http://scrapy.org/">Scrapy</a>)</p>
+
+                            <p><a href="https://camo.githubusercontent.com/06cb8227231a6adf6d2a57b14b60a25389a25fe9/687474703a2f2f636f64653463726166742e6769746875622e696f2f696d616765732f706f7374732f7765626d616769632e706e67" target="_blank"><img src="https://camo.githubusercontent.com/06cb8227231a6adf6d2a57b14b60a25389a25fe9/687474703a2f2f636f64653463726166742e6769746875622e696f2f696d616765732f706f7374732f7765626d616769632e706e67" alt="image" data-canonical-src="http://code4craft.github.io/images/posts/webmagic.png" style="max-width:100%;"></a></p>
+
+                            <p>Javadocs: <a href="http://code4craft.github.io/webmagic/docs/en/">http://code4craft.github.io/webmagic/docs/en/</a></p>
+
+                            <p>There are some samples in <code>webmagic-samples</code> package.</p>
+
+                            <h3><a id="user-content-lisence" class="anchor" href="#lisence" aria-hidden="true"><span class="octicon octicon-link"></span></a>Lisence:</h3>
+
+                            <p>Lisenced under <a href="http://opensource.org/licenses/Apache-2.0">Apache 2.0 lisence</a></p>
+
+                            <h3><a id="user-content-contributors" class="anchor" href="#contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributors:</h3>
+
+                            <p>Thanks these people for commiting source code, reporting bugs or suggesting for new feature:</p>
+
+                            <ul>
+                                <li><a href="https://github.com/ccliangbo">ccliangbo</a></li>
+                                <li><a href="https://github.com/yuany">yuany</a></li>
+                                <li><a href="https://github.com/yxssfxwzy">yxssfxwzy</a></li>
+                                <li><a href="https://github.com/linkerlin">linkerlin</a></li>
+                                <li><a href="https://github.com/d0ngw">d0ngw</a></li>
+                                <li><a href="https://github.com/xuchaoo">xuchaoo</a></li>
+                                <li><a href="https://github.com/supermicah">supermicah</a></li>
+                                <li><a href="https://github.com/SimpleExpress">SimpleExpress</a></li>
+                                <li><a href="https://github.com/aruanruan">aruanruan</a></li>
+                                <li><a href="https://github.com/l1z2g9">l1z2g9</a></li>
+                                <li><a href="https://github.com/zhegexiaohuozi">zhegexiaohuozi</a></li>
+                                <li><a href="https://github.com/ywooer">ywooer</a></li>
+                                <li><a href="https://github.com/yyw258520">yyw258520</a></li>
+                                <li><a href="https://github.com/perfecking">perfecking</a></li>
+                                <li><a href="http://my.oschina.net/lidongyang">lidongyang</a></li>
+                                <li><a href="https://github.com/seveniu">seveniu</a></li>
+                                <li><a href="https://github.com/sebastian1118">sebastian1118</a></li>
+                                <li><a href="https://github.com/codev777">codev777</a></li>
+                                <li><a href="https://github.com/fengwuze">fengwuze</a></li>
+                            </ul>
+
+                            <h3><a id="user-content-thanks" class="anchor" href="#thanks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Thanks:</h3>
+
+                            <p>To write webmagic, I refered to the projects below :</p>
+
+                            <ul>
+                                <li><p><strong>Scrapy</strong></p>
+
+                                    <p>A crawler framework in Python.</p>
+
+                                    <p><a href="http://scrapy.org/">http://scrapy.org/</a></p></li>
+                                <li><p><strong>Spiderman</strong></p>
+
+                                    <p>Another crawler framework in Java.</p>
+
+                                    <p><a href="https://gitcafe.com/laiweiwei/Spiderman">https://gitcafe.com/laiweiwei/Spiderman</a></p></li>
+                            </ul>
+
+                            <h3><a id="user-content-mail-list" class="anchor" href="#mail-list" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mail-list:</h3>
+
+                            <p><a href="https://groups.google.com/forum/#!forum/webmagic-java">https://groups.google.com/forum/#!forum/webmagic-java</a></p>
+
+                            <p><a href="http://list.qq.com/cgi-bin/qf_invite?id=023a01f505246785f77c5a5a9aff4e57ab20fcdde871e988">http://list.qq.com/cgi-bin/qf_invite?id=023a01f505246785f77c5a5a9aff4e57ab20fcdde871e988</a></p>
+
+                            <p>QQ Group: 373225642</p>
+
+                            <p><a href="https://bitdeli.com/free" title="Bitdeli Badge"><img src="https://camo.githubusercontent.com/ac3c3cde05f612ce1a1c9a8be3bf2893ffa6d64d/68747470733a2f2f64327765637a68766c38323376302e636c6f756466726f6e742e6e65742f636f64653463726166742f7765626d616769632f7472656e642e706e67" alt="Bitdeli Badge" data-canonical-src="https://d2weczhvl823v0.cloudfront.net/code4craft/webmagic/trend.png" style="max-width:100%;"></a></p>
+                        </article>
+                    </div>
+
+
+                </div>
+                <div class="modal-backdrop"></div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="container">
+    <div class="site-footer" role="contentinfo">
+        <ul class="site-footer-links right">
+            <li><a href="https://status.github.com/" data-ga-click="Footer, go to status, text:status">Status</a></li>
+            <li><a href="https://developer.github.com" data-ga-click="Footer, go to api, text:api">API</a></li>
+            <li><a href="https://training.github.com" data-ga-click="Footer, go to training, text:training">Training</a></li>
+            <li><a href="https://shop.github.com" data-ga-click="Footer, go to shop, text:shop">Shop</a></li>
+            <li><a href="https://github.com/blog" data-ga-click="Footer, go to blog, text:blog">Blog</a></li>
+            <li><a href="https://github.com/about" data-ga-click="Footer, go to about, text:about">About</a></li>
+            <li><a href="https://github.com/pricing" data-ga-click="Footer, go to pricing, text:pricing">Pricing</a></li>
+
+        </ul>
+
+        <a href="https://github.com" aria-label="Homepage">
+            <span aria-hidden="true" class="mega-octicon octicon-mark-github" title="GitHub "></span>
+        </a>
+        <ul class="site-footer-links">
+            <li>&copy; 2016 <span title="0.16501s from github-fe119-cp1-prd.iad.github.net">GitHub</span>, Inc.</li>
+            <li><a href="https://github.com/site/terms" data-ga-click="Footer, go to terms, text:terms">Terms</a></li>
+            <li><a href="https://github.com/site/privacy" data-ga-click="Footer, go to privacy, text:privacy">Privacy</a></li>
+            <li><a href="https://github.com/security" data-ga-click="Footer, go to security, text:security">Security</a></li>
+            <li><a href="https://github.com/contact" data-ga-click="Footer, go to contact, text:contact">Contact</a></li>
+            <li><a href="https://help.github.com" data-ga-click="Footer, go to help, text:help">Help</a></li>
+        </ul>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div id="ajax-error-message" class="flash flash-error">
+    <span aria-hidden="true" class="octicon octicon-alert"></span>
+    <button type="button" class="flash-close js-flash-close js-ajax-error-dismiss" aria-label="Dismiss error">
+        <span aria-hidden="true" class="octicon octicon-x"></span>
+    </button>
+    Something went wrong with that request. Please try again.
+</div>
+
+
+<script crossorigin="anonymous" src="https://assets-cdn.github.com/assets/frameworks-2895475c714f13790b63e636b5389a6918a260259c5b22a15acf5ef26bd6ef09.js"></script>
+<script async="async" crossorigin="anonymous" src="https://assets-cdn.github.com/assets/github-c0404608a3bcd1310776df0ab26e107bfd70ff0382408f43ede1a81e730e39cd.js"></script>
+
+
+
+<div class="js-stale-session-flash stale-session-flash flash flash-warn flash-banner hidden">
+    <span aria-hidden="true" class="octicon octicon-alert"></span>
+    <span class="signed-in-tab-flash">You signed in with another tab or window. <a href="">Reload</a> to refresh your session.</span>
+    <span class="signed-out-tab-flash">You signed out in another tab or window. <a href="">Reload</a> to refresh your session.</span>
+</div>
+<div class="facebox" id="facebox" style="display:none;">
+    <div class="facebox-popup">
+        <div class="facebox-content" role="dialog" aria-labelledby="facebox-header" aria-describedby="facebox-description">
+        </div>
+        <button type="button" class="facebox-close js-facebox-close" aria-label="Close modal">
+            <span aria-hidden="true" class="octicon octicon-x"></span>
+        </button>
+    </div>
+</div>
+
+</body>
+</html>
+

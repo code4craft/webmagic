@@ -16,7 +16,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @since 0.1.0
  */
 @ThreadSafe
-public class QueueScheduler extends LocalDuplicatedRemovedScheduler {
+public class QueueScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler {
 
     private BlockingQueue<Request> queue = new LinkedBlockingQueue<Request>();
 
@@ -28,5 +28,15 @@ public class QueueScheduler extends LocalDuplicatedRemovedScheduler {
     @Override
     public synchronized Request poll(Task task) {
         return queue.poll();
+    }
+
+    @Override
+    public int getLeftRequestsCount(Task task) {
+        return queue.size();
+    }
+
+    @Override
+    public int getTotalRequestsCount(Task task) {
+        return getDuplicateRemover().getTotalRequestsCount(task);
     }
 }

@@ -2,6 +2,7 @@ package us.codecraft.webmagic;
 
 import org.apache.commons.lang3.StringUtils;
 import us.codecraft.webmagic.selector.Html;
+import us.codecraft.webmagic.selector.Json;
 import us.codecraft.webmagic.selector.Selectable;
 import us.codecraft.webmagic.utils.UrlUtils;
 
@@ -31,6 +32,8 @@ public class Page {
 
     private Html html;
 
+    private Json json;
+
     private String rawText;
 
     private Selectable url;
@@ -53,8 +56,8 @@ public class Page {
     /**
      * store extract results
      *
-     * @param key
-     * @param field
+     * @param key key
+     * @param field field
      */
     public void putField(String key, Object field) {
         resultItems.put(key, field);
@@ -73,9 +76,22 @@ public class Page {
     }
 
     /**
-     * @param html
+     * get json content of page
+     *
+     * @return json
+     * @since 0.5.0
+     */
+    public Json getJson() {
+        if (json == null) {
+            json = new Json(rawText);
+        }
+        return json;
+    }
+
+    /**
+     * @param html html
      * @deprecated since 0.4.0
-     *             The html is parse just when first time of calling {@link #getHtml()}, so use {@link #setRawText(String)} instead.
+     * The html is parse just when first time of calling {@link #getHtml()}, so use {@link #setRawText(String)} instead.
      */
     public void setHtml(Html html) {
         this.html = html;
@@ -88,13 +104,13 @@ public class Page {
     /**
      * add urls to fetch
      *
-     * @param requests
+     * @param requests requests
      */
     public void addTargetRequests(List<String> requests) {
         synchronized (targetRequests) {
             for (String s : requests) {
                 if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
-                    break;
+                    continue;
                 }
                 s = UrlUtils.canonicalizeUrl(s, url.toString());
                 targetRequests.add(new Request(s));
@@ -105,13 +121,14 @@ public class Page {
     /**
      * add urls to fetch
      *
-     * @param requests
+     * @param requests requests
+     * @param priority priority
      */
     public void addTargetRequests(List<String> requests, long priority) {
         synchronized (targetRequests) {
             for (String s : requests) {
                 if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
-                    break;
+                    continue;
                 }
                 s = UrlUtils.canonicalizeUrl(s, url.toString());
                 targetRequests.add(new Request(s).setPriority(priority));
@@ -122,7 +139,7 @@ public class Page {
     /**
      * add url to fetch
      *
-     * @param requestString
+     * @param requestString requestString
      */
     public void addTargetRequest(String requestString) {
         if (StringUtils.isBlank(requestString) || requestString.equals("#")) {
@@ -137,7 +154,7 @@ public class Page {
     /**
      * add requests to fetch
      *
-     * @param request
+     * @param request request
      */
     public void addTargetRequest(Request request) {
         synchronized (targetRequests) {

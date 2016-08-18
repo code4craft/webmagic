@@ -1,70 +1,52 @@
 package us.codecraft.webmagic.selector;
 
-import org.htmlcleaner.*;
+import org.apache.commons.collections.CollectionUtils;
+import org.jsoup.nodes.Element;
+import us.codecraft.xsoup.XPathEvaluator;
+import us.codecraft.xsoup.Xsoup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * XPath selector based on HtmlCleaner.<br>
+ * XPath selector based on Xsoup.<br>
  *
  * @author code4crafter@gmail.com <br>
- * @since 0.1.0
+ * @since 0.3.0
  */
-public class XpathSelector implements Selector {
+public class XpathSelector extends BaseElementSelector {
 
-    private String xpathStr;
+    private XPathEvaluator xPathEvaluator;
 
     public XpathSelector(String xpathStr) {
-        this.xpathStr = xpathStr;
+        this.xPathEvaluator = Xsoup.compile(xpathStr);
     }
 
     @Override
-    public String select(String text) {
-        HtmlCleaner htmlCleaner = new HtmlCleaner();
-        TagNode tagNode = htmlCleaner.clean(text);
-        if (tagNode == null) {
-            return null;
-        }
-        try {
-            Object[] objects = tagNode.evaluateXPath(xpathStr);
-            if (objects != null && objects.length >= 1) {
-                if (objects[0] instanceof TagNode) {
-                    TagNode tagNode1 = (TagNode) objects[0];
-                    return htmlCleaner.getInnerHtml(tagNode1);
-                } else {
-                    return objects[0].toString();
-                }
-            }
-        } catch (XPatherException e) {
-            e.printStackTrace();
+    public String select(Element element) {
+        return xPathEvaluator.evaluate(element).get();
+    }
+
+    @Override
+    public List<String> selectList(Element element) {
+        return xPathEvaluator.evaluate(element).list();
+    }
+
+    @Override
+    public Element selectElement(Element element) {
+        List<Element> elements = selectElements(element);
+        if (CollectionUtils.isNotEmpty(elements)){
+            return elements.get(0);
         }
         return null;
     }
 
     @Override
-    public List<String> selectList(String text) {
-        HtmlCleaner htmlCleaner = new HtmlCleaner();
-        TagNode tagNode = htmlCleaner.clean(text);
-        if (tagNode == null) {
-            return null;
-        }
-        List<String> results = new ArrayList<String>();
-        try {
-            Object[] objects = tagNode.evaluateXPath(xpathStr);
-            if (objects != null && objects.length >= 1) {
-                for (Object object : objects) {
-                    if (object instanceof TagNode) {
-                        TagNode tagNode1 = (TagNode) object;
-                        results.add(htmlCleaner.getInnerHtml(tagNode1));
-                    } else {
-                        results.add(object.toString());
-                    }
-                }
-            }
-        } catch (XPatherException e) {
-            e.printStackTrace();
-        }
-        return results;
+    public List<Element> selectElements(Element element) {
+        return xPathEvaluator.evaluate(element).getElements();
+    }
+
+    @Override
+    public boolean hasAttribute() {
+        return xPathEvaluator.hasAttribute();
     }
 }

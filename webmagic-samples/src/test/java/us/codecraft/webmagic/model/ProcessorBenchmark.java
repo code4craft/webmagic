@@ -150,7 +150,7 @@ public class ProcessorBenchmark {
             "#MyResume textarea {width:170px;height:60px;font-size:9pt;}\n" +
             "</style>\n" +
             "<div class='Resume' id='MyResume'>\n" +
-            "码农一枚<br/>实用主义者<br/>抵制重复造轮子，却造了不少轮子<br/>http://codecraft.us</div>\n" +
+            "码农一枚<br>实用主义者<br>抵制重复造轮子，却造了不少轮子<br>http://codecraft.us</div>\n" +
             "<script type=\"text/javascript\" src=\"/js/2012/jquery.editinplace.js\"></script>\n" +
             "<script type=\"text/javascript\">\n" +
             "$(\"#MyResume\").editInPlace({\n" +
@@ -453,7 +453,7 @@ public class ProcessorBenchmark {
             "<div class=\"BlogCommentForm\">\n" +
             "\t<form id=\"form_inline_comment\" action=\"/action/blog/add_comment?blog=158200\" method=\"POST\">\n" +
             "\t  <input type='hidden' id='inline_reply_id' name='reply_id' value=''/>          \n" +
-            "      <textarea name=\"content\" style=\"width:550px;height:60px;\" onkeydown=\"if((event.metaKey || event.ctrlKey)&&event.keyCode==13){$('#form_inline_comment').submit();}\"></textarea><br/>\n" +
+            "      <textarea name=\"content\" style=\"width:550px;height:60px;\" onkeydown=\"if((event.metaKey || event.ctrlKey)&&event.keyCode==13){$('#form_inline_comment').submit();}\"></textarea><br>\n" +
             "\t  <input type=\"submit\" value=\"回复\" id=\"btn_comment\" class=\"SUBMIT\"/> \n" +
             "\t  <input type=\"button\" value=\"关闭\" class=\"SUBMIT\" id='btn_close_inline_reply'/> 文明上网，理性发言\n" +
             "    </form>\n" +
@@ -463,7 +463,7 @@ public class ProcessorBenchmark {
             "  <a name=\"comments\" id=\"postform\"></a>\n" +
             "    <div class=\"BlogCommentForm\">\n" +
             "    <form id=\"form_comment\" action=\"/action/blog/add_comment?blog=158200\" method=\"POST\">          \n" +
-            "      <textarea id='ta_post_content' name=\"content\" style=\"width:550px;height:100px;\" onkeydown=\"if((event.metaKey || event.ctrlKey)&&event.keyCode==13){$('#form_comment').submit();}\"></textarea><br/>\n" +
+            "      <textarea id='ta_post_content' name=\"content\" style=\"width:550px;height:100px;\" onkeydown=\"if((event.metaKey || event.ctrlKey)&&event.keyCode==13){$('#form_comment').submit();}\"></textarea><br>\n" +
             "\t  <input type=\"submit\" value=\"发表评论\" id=\"btn_comment\" class=\"SUBMIT\" /> \n" +
             "\t  <img id=\"submiting\" style=\"display:none\" src=\"/img/loading.gif\" align=\"absmiddle\"/>\n" +
             "\t  <span id='cmt_tip'>文明上网，理性发言</span>\n" +

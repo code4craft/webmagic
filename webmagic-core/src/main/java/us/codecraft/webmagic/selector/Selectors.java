@@ -32,8 +32,14 @@ public abstract class Selectors {
         return new XpathSelector(expr);
     }
 
-    public static XsoupSelector xsoup(String expr) {
-        return new XsoupSelector(expr);
+    /**
+     * @Deprecated
+     * @see #xpath(String)
+     * @param expr expr
+     * @return new selector
+     */
+    public static XpathSelector xsoup(String expr) {
+        return new XpathSelector(expr);
     }
 
     public static AndSelector and(Selector... selectors) {

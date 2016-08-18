@@ -38,7 +38,7 @@ public interface MultiPageModel {
     /**
      * Combine multiPageModels to a whole object.
      *
-     * @param multiPageModel
+     * @param multiPageModel multiPageModel
      * @return multiPageModel combined
      */
     public MultiPageModel combine(MultiPageModel multiPageModel);

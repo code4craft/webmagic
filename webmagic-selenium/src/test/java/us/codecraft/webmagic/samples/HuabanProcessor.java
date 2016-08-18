@@ -22,7 +22,7 @@ public class HuabanProcessor implements PageProcessor {
     public void process(Page page) {
         page.addTargetRequests(page.getHtml().links().regex("http://huaban\\.com/.*").all());
         if (page.getUrl().toString().contains("pins")) {
-            page.putField("img", page.getHtml().xpath("//div[@id='pin_img']/img/@src").toString());
+            page.putField("img", page.getHtml().xpath("//div[@id='pin_img']/a/img/@src").toString());
         } else {
             page.getResultItems().setSkip(true);
         }
@@ -30,16 +30,17 @@ public class HuabanProcessor implements PageProcessor {
 
     @Override
     public Site getSite() {
-        if (site == null) {
-            site = Site.me().setDomain("huaban.com").addStartUrl("http://huaban.com/").setSleepTime(0);
+        if (null == site) {
+            site = Site.me().setDomain("huaban.com").setSleepTime(0);
         }
         return site;
     }
 
     public static void main(String[] args) {
         Spider.create(new HuabanProcessor()).thread(5)
-                .pipeline(new FilePipeline("/data/webmagic/test/"))
-                .downloader(new SeleniumDownloader("/Users/yihua/Downloads/chromedriver"))
+                .addPipeline(new FilePipeline("/data/webmagic/test/"))
+                .setDownloader(new SeleniumDownloader("/Users/yihua/Downloads/chromedriver"))
+                .addUrl("http://huaban.com/")
                 .runAsync();
     }
 }

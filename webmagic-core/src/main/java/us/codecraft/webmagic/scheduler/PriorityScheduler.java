@@ -17,7 +17,7 @@ import java.util.concurrent.PriorityBlockingQueue;
  * @since 0.2.1
  */
 @ThreadSafe
-public class PriorityScheduler extends LocalDuplicatedRemovedScheduler {
+public class PriorityScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler {
 
     public static final int INITIAL_CAPACITY = 5;
 
@@ -59,5 +59,15 @@ public class PriorityScheduler extends LocalDuplicatedRemovedScheduler {
             return poll;
         }
         return priorityQueueMinus.poll();
+    }
+
+    @Override
+    public int getLeftRequestsCount(Task task) {
+        return noPriorityQueue.size();
+    }
+
+    @Override
+    public int getTotalRequestsCount(Task task) {
+        return getDuplicateRemover().getTotalRequestsCount(task);
     }
 }

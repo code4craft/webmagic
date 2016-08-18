@@ -2,10 +2,9 @@ package us.codecraft.webmagic.scheduler;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
 import java.io.*;
 import java.util.LinkedHashSet;
@@ -13,9 +12,11 @@ import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+
 
 /**
  * Store urls and cursor in files so that a Spider can resume the status when shutdown.<br>
@@ -23,9 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-public class FileCacheQueueScheduler implements Scheduler {
-
-    private Logger logger = LoggerFactory.getLogger(getClass());
+public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler,Closeable {
 
     private String filePath = System.getProperty("java.io.tmpdir");
 
@@ -46,12 +45,15 @@ public class FileCacheQueueScheduler implements Scheduler {
     private BlockingQueue<Request> queue;
 
     private Set<String> urls;
+    
+    private ScheduledExecutorService flushThreadPool;
 
     public FileCacheQueueScheduler(String filePath) {
         if (!filePath.endsWith("/") && !filePath.endsWith("\\")) {
             filePath += "/";
         }
         this.filePath = filePath;
+        initDuplicateRemover();
     }
 
     private void flush() {
@@ -72,8 +74,32 @@ public class FileCacheQueueScheduler implements Scheduler {
         logger.info("init cache scheduler success");
     }
 
+    private void initDuplicateRemover() {
+        setDuplicateRemover(
+                new DuplicateRemover() {
+                    @Override
+                    public boolean isDuplicate(Request request, Task task) {
+                        if (!inited.get()) {
+                            init(task);
+                        }
+                        return !urls.add(request.getUrl());
+                    }
+
+                    @Override
+                    public void resetDuplicateCheck(Task task) {
+                        urls.clear();
+                    }
+
+                    @Override
+                    public int getTotalRequestsCount(Task task) {
+                        return urls.size();
+                    }
+                });
+    }
+
     private void initFlushThread() {
-        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(new Runnable() {
+    	flushThreadPool = Executors.newScheduledThreadPool(1);
+    	flushThreadPool.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 flush();
@@ -96,6 +122,7 @@ public class FileCacheQueueScheduler implements Scheduler {
             urls = new LinkedHashSet<String>();
             readCursorFile();
             readUrlFile();
+            // initDuplicateRemover();
         } catch (FileNotFoundException e) {
             //init
             logger.info("init cache file " + getFileName(fileUrlAllName));
@@ -139,24 +166,21 @@ public class FileCacheQueueScheduler implements Scheduler {
             }
         }
     }
+    
+    public void close() throws IOException {
+		flushThreadPool.shutdown();	
+		fileUrlWriter.close();
+		fileCursorWriter.close();
+	}
 
     private String getFileName(String filename) {
         return filePath + task.getUUID() + filename;
     }
 
     @Override
-    public synchronized void push(Request request, Task task) {
-        if (!inited.get()) {
-            init(task);
-        }
-        if (logger.isDebugEnabled()) {
-            logger.debug("push to queue " + request.getUrl());
-        }
-        if (urls.add(request.getUrl())) {
-            queue.add(request);
-            fileUrlWriter.println(request.getUrl());
-        }
-
+    protected void pushWhenNoDuplicate(Request request, Task task) {
+        queue.add(request);
+        fileUrlWriter.println(request.getUrl());
     }
 
     @Override
@@ -166,5 +190,15 @@ public class FileCacheQueueScheduler implements Scheduler {
         }
         fileCursorWriter.println(cursor.incrementAndGet());
         return queue.poll();
+    }
+
+    @Override
+    public int getLeftRequestsCount(Task task) {
+        return queue.size();
+    }
+
+    @Override
+    public int getTotalRequestsCount(Task task) {
+        return getDuplicateRemover().getTotalRequestsCount(task);
     }
 }

@@ -2,11 +2,12 @@ package us.codecraft.webmagic.selector;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Entities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.codecraft.webmagic.utils.EnvironmentUtil;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -15,138 +16,67 @@ import java.util.List;
  * @author code4crafter@gmail.com <br>
  * @since 0.1.0
  */
-public class Html extends PlainText {
+public class Html extends HtmlNode {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
+
+	private static volatile boolean INITED = false;
+
+	/**
+	 * Disable jsoup html entity escape. It can be set just before any Html instance is created.
+	 */
+	public static boolean DISABLE_HTML_ENTITY_ESCAPE = false;
+
+	/**
+	 * Disable jsoup html entity escape. It is a hack way only for jsoup 1.7.2.
+	 */
+	private void disableJsoupHtmlEntityEscape() {
+		if (DISABLE_HTML_ENTITY_ESCAPE && !INITED) {
+			Entities.EscapeMode.base.getMap().clear();
+			Entities.EscapeMode.extended.getMap().clear();
+			Entities.EscapeMode.xhtml.getMap().clear();
+			INITED = true;
+		}
+	}
 
     /**
      * Store parsed document for better performance when only one text exist.
      */
     private Document document;
 
-    private boolean init = false;
-
-    public Html(List<String> strings) {
-        super(strings);
-    }
-
     public Html(String text) {
-        super(text);
-    }
-
-    /**
-     * lazy init
-     */
-    private void initDocument() {
-        if (this.document == null && !init) {
-            init = true;
-            //just init once whether the parsing succeeds or not
-            try {
-                this.document = Jsoup.parse(getText());
-            } catch (Exception e) {
-                logger.warn("parse document error ", e);
-            }
+        try {
+			disableJsoupHtmlEntityEscape();
+            this.document = Jsoup.parse(text);
+        } catch (Exception e) {
+            this.document = null;
+            logger.warn("parse document error ", e);
         }
     }
 
     public Html(Document document) {
-        super(document.html());
         this.document = document;
-    }
-
-    public static Html create(String text) {
-        return new Html(text);
-    }
-
-    @Override
-    protected Selectable select(Selector selector, List<String> strings) {
-        initDocument();
-        List<String> results = new ArrayList<String>();
-        for (String string : strings) {
-            String result = selector.select(string);
-            if (result != null) {
-                results.add(result);
-            }
-        }
-        return new Html(results);
-    }
-
-    @Override
-    protected Selectable selectList(Selector selector, List<String> strings) {
-        initDocument();
-        List<String> results = new ArrayList<String>();
-        for (String string : strings) {
-            List<String> result = selector.selectList(string);
-            results.addAll(result);
-        }
-        return new Html(results);
-    }
-
-    @Override
-    public Selectable smartContent() {
-        initDocument();
-        SmartContentSelector smartContentSelector = Selectors.smartContent();
-        return select(smartContentSelector, strings);
-    }
-
-    @Override
-    public Selectable links() {
-        return xpath("//a/@href");
-    }
-
-    @Override
-    public Selectable xpath(String xpath) {
-        if (EnvironmentUtil.useXsoup()) {
-            XsoupSelector xsoupSelector = new XsoupSelector(xpath);
-            if (document != null) {
-                return new Html(xsoupSelector.selectList(document));
-            }
-            return selectList(xsoupSelector, strings);
-        } else {
-            XpathSelector xpathSelector = new XpathSelector(xpath);
-            return selectList(xpathSelector, strings);
-        }
-    }
-
-    @Override
-    public Selectable $(String selector) {
-        CssSelector cssSelector = Selectors.$(selector);
-        if (document != null) {
-            return new Html(cssSelector.selectList(document));
-        }
-        return selectList(cssSelector, strings);
-    }
-
-    @Override
-    public Selectable $(String selector, String attrName) {
-        CssSelector cssSelector = Selectors.$(selector, attrName);
-        if (document != null) {
-            return new Html(cssSelector.selectList(document));
-        }
-        return selectList(cssSelector, strings);
     }
 
     public Document getDocument() {
         return document;
     }
 
-    public String getText() {
-        if (strings != null && strings.size() > 0) {
-            return strings.get(0);
-        }
-        return document.html();
+    @Override
+    protected List<Element> getElements() {
+        return Collections.<Element>singletonList(getDocument());
     }
 
     /**
-     * @param selector
-     * @return
+     * @param selector selector
+     * @return result
      */
     public String selectDocument(Selector selector) {
         if (selector instanceof ElementSelector) {
             ElementSelector elementSelector = (ElementSelector) selector;
             return elementSelector.select(getDocument());
         } else {
-            return selector.select(getText());
+            return selector.select(getFirstSourceText());
         }
     }
 
@@ -155,7 +85,12 @@ public class Html extends PlainText {
             ElementSelector elementSelector = (ElementSelector) selector;
             return elementSelector.selectList(getDocument());
         } else {
-            return selector.selectList(getText());
+            return selector.selectList(getFirstSourceText());
         }
     }
+
+    public static Html create(String text) {
+        return new Html(text);
+    }
+
 }
