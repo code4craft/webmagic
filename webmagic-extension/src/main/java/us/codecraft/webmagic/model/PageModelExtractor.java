@@ -179,7 +179,24 @@ class PageModelExtractor {
         ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
         if (extractBy != null) {
             Selector selector = ExtractorUtils.getSelector(extractBy);
-            fieldExtractor = new FieldExtractor(field, selector, extractBy.source() == ExtractBy.Source.RawHtml ? FieldExtractor.Source.RawHtml : FieldExtractor.Source.Html,
+
+            FieldExtractor.Source source = null;
+            switch (extractBy.source()){
+                case  RawText:
+                    source = FieldExtractor.Source.RawText;
+                    break;
+                case RawHtml:
+                    source = FieldExtractor.Source.RawHtml;
+                    break;
+                case SelectedHtml:
+                    source =FieldExtractor.Source.Html;
+                    break;
+                default:
+                    source =FieldExtractor.Source.Html;
+
+            }
+
+            fieldExtractor = new FieldExtractor(field, selector, source,
                     extractBy.notNull(), extractBy.multi() || List.class.isAssignableFrom(field.getType()));
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
@@ -284,6 +301,9 @@ class PageModelExtractor {
                         case Url:
                             value = fieldExtractor.getSelector().selectList(page.getUrl().toString());
                             break;
+                        case RawText:
+                            value = fieldExtractor.getSelector().selectList(page.getRawText());
+                            break;
                         default:
                             value = fieldExtractor.getSelector().selectList(html);
                     }
@@ -311,6 +331,9 @@ class PageModelExtractor {
                             break;
                         case Url:
                             value = fieldExtractor.getSelector().select(page.getUrl().toString());
+                            break;
+                        case RawText:
+                            value = fieldExtractor.getSelector().select(page.getRawText());
                             break;
                         default:
                             value = fieldExtractor.getSelector().select(html);
