@@ -127,7 +127,9 @@ public class Spider implements Runnable, Task {
     public Spider(PageProcessor pageProcessor) {
         this.pageProcessor = pageProcessor;
         this.site = pageProcessor.getSite();
-        this.startRequests = pageProcessor.getSite().getStartRequests();
+        if (this.site!=null) {
+        	this.startRequests = pageProcessor.getSite().getStartRequests();
+        }
     }
 
     /**
@@ -402,14 +404,18 @@ public class Spider implements Runnable, Task {
     }
 
     protected void processRequest(Request request) {
-        Page page = downloader.download(request, this);
+    	processRequestTask(request, this);
+    }
+    
+    protected void processRequestTask(Request request, Task task) {
+        Page page = download(request, task);
         if (page == null) {
-            throw new RuntimeException("unaccpetable response status");
+            throw new RuntimeException("unacceptable response status");
         }
         // for cycle retry
         if (page.isNeedCycleRetry()) {
             extractAndAddRequests(page, true);
-            sleep(site.getRetrySleepTime());
+            sleep(getSite().getRetrySleepTime());
             return;
         }
         pageProcessor.process(page);
@@ -421,8 +427,17 @@ public class Spider implements Runnable, Task {
         }
         //for proxy status management
         request.putExtra(Request.STATUS_CODE, page.getStatusCode());
-        sleep(site.getSleepTime());
+        sleep(getSite().getSleepTime());
     }
+
+    /**
+     * Overridable to allow specific spiders to process the download like connecting
+     * @param request
+     * @return
+     */
+    protected Page download(Request request, Task task) {
+		return downloader.download(request, task);
+	}
 
     protected void sleep(int time) {
         try {
@@ -441,8 +456,8 @@ public class Spider implements Runnable, Task {
     }
 
     private void addRequest(Request request) {
-        if (site.getDomain() == null && request != null && request.getUrl() != null) {
-            site.setDomain(UrlUtils.getDomain(request.getUrl()));
+        if (getSite() != null && getSite().getDomain() == null && request != null && request.getUrl() != null) {
+        	getSite().setDomain(UrlUtils.getDomain(request.getUrl()));
         }
         scheduler.push(request, this);
     }
@@ -688,8 +703,8 @@ public class Spider implements Runnable, Task {
         if (uuid != null) {
             return uuid;
         }
-        if (site != null) {
-            return site.getDomain();
+        if (getSite() != null) {
+            return getSite().getDomain();
         }
         uuid = UUID.randomUUID().toString();
         return uuid;

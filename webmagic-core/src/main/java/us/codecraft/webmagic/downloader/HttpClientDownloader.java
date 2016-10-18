@@ -68,6 +68,10 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
         return httpClient;
     }
+    
+    public void restartClient(Site site) {
+    	httpClients.remove(site.getDomain());
+    }
 
     @Override
     public Page download(Request request, Task task) {
