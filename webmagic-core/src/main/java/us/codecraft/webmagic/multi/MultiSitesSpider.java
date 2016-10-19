@@ -78,7 +78,6 @@ public class MultiSitesSpider extends Spider {
 		} catch (MalformedURLException e) {
 			logger.error("Unable to parse URL =" + request.getUrl());
 		}
-		super.addRequest(request);
 	}
 
 	protected void processRequest(Request request) {
