@@ -455,7 +455,7 @@ public class Spider implements Runnable, Task {
         }
     }
 
-    private void addRequest(Request request) {
+    protected void addRequest(Request request) {
         if (getSite() != null && getSite().getDomain() == null && request != null && request.getUrl() != null) {
         	getSite().setDomain(UrlUtils.getDomain(request.getUrl()));
         }

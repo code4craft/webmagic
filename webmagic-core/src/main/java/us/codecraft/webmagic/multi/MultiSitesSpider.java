@@ -69,21 +69,16 @@ public class MultiSitesSpider extends Spider {
 	}
 
 	@Override
-	public Spider addRequest(Request... requests) {
-		List<Request> filtered = new ArrayList<Request>();
-		for (Request request : requests) {
-			try {
-				URL url = new URL(request.getUrl());
-				if (isAllowedFromRobots(url) != null) {
-					filtered.add(request);
-				}
-			} catch (MalformedURLException e) {
-				logger.error("Unable to parse URL =" + request.getUrl());
+	protected void addRequest(Request request) {
+		try {
+			URL url = new URL(request.getUrl());
+			if (isAllowedFromRobots(url) != null) {
+				super.addRequest(request);
 			}
+		} catch (MalformedURLException e) {
+			logger.error("Unable to parse URL =" + request.getUrl());
 		}
-
-		// Pass filtered request to superclass
-		return super.addRequest(filtered.toArray(new Request[filtered.size()]));
+		super.addRequest(request);
 	}
 
 	protected void processRequest(Request request) {
