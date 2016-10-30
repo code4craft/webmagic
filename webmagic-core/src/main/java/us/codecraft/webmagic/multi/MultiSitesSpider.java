@@ -39,6 +39,8 @@ import us.codecraft.webmagic.processor.PageProcessor;
  */
 public class MultiSitesSpider extends Spider {
 
+	public static final String FOLLOW_EXTRA = "follow";
+
 	private Map<String, Long> domainLastAccess = Collections.synchronizedMap(new HashMap<String, Long>());
 
 	private Map<String, BaseRobotRules> domainRobots = new HashMap<String, BaseRobotRules>();
@@ -63,7 +65,7 @@ public class MultiSitesSpider extends Spider {
 	}
 
 	public static boolean canFollow(Request request) {
-		Boolean extra = (Boolean) request.getExtra("follow");
+		Boolean extra = (Boolean) request.getExtra(FOLLOW_EXTRA);
 		return extra == null || extra;
 	}
 
@@ -141,7 +143,7 @@ public class MultiSitesSpider extends Spider {
 	 * @param url
 	 * @return the robots.txt rules if allowed or null if not allowed
 	 */
-	private BaseRobotRules isAllowedFromRobots(URL url) {
+	protected BaseRobotRules isAllowedFromRobots(URL url) {
 
 		BaseRobotRules robots;
 		robots = this.defaultDomainRobots.get(url.getHost());
@@ -149,7 +151,7 @@ public class MultiSitesSpider extends Spider {
 			System.err.println("Disabled from our own robots = " + url.toString());
 			return null;
 		}
-		robots = getRobotsTxt(url);
+		robots = getRobotsTxt(url, robots);
 		if (!robots.isAllowed(url.toString())) {
 			System.err.println("Disabled from robots = " + url.toString());
 			return null;
@@ -260,7 +262,7 @@ public class MultiSitesSpider extends Spider {
 		domainLastAccess.put(url.getHost(), System.currentTimeMillis());
 	}
 
-	private synchronized BaseRobotRules getRobotsTxt(URL url) {
+	private synchronized BaseRobotRules getRobotsTxt(URL url, BaseRobotRules baseRobots) {
 		String host = url.getHost();
 		Date now = new Date();
 		Date expiration = domainRobotsExpiration.get(host);
@@ -271,6 +273,20 @@ public class MultiSitesSpider extends Spider {
 			if (robots == null) {
 				// Just generate an empty robots txt
 				robots = new SimpleRobotRules();
+			}
+			if (baseRobots != null) {
+				// If baseRobots is not null and crawl delay is set, take the max crawldelay from both
+				if (baseRobots.getCrawlDelay() != BaseRobotRules.UNSET_CRAWL_DELAY) {
+					if (robots.getCrawlDelay() == BaseRobotRules.UNSET_CRAWL_DELAY) {
+						// baseRobots getCrawlDelay is set and robots is not set => take baseRobots one
+						robots.setCrawlDelay(baseRobots.getCrawlDelay());
+					} else {
+						// baseRobots getCrawlDelay is set and robots is set too => take max one
+						long max = Math.max(baseRobots.getCrawlDelay(), robots.getCrawlDelay());
+						robots.setCrawlDelay(max);
+					}
+				}
+
 			}
 			domainRobots.put(host, robots);
 			// And set expiration date to now+24h
