@@ -5,7 +5,7 @@
 [User Manual (Chinese)](https://github.com/code4craft/webmagic/blob/master/user-manual.md)
 
 
-[![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
+[![Build Status](https://travis-ci.org/karlind/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
 
 >A scalable crawler framework. It covers the whole lifecycle of crawler: downloading, url management, content extraction and persistent. It can simplify the development of a  specific crawler.
 
