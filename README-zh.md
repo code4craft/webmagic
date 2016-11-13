@@ -1,7 +1,7 @@
 ![logo](https://raw.github.com/code4craft/webmagic/master/assets/logo.jpg)
 
 
-[![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
+[![Build Status](https://travis-ci.org/karlind/webmagic.png?branch=master)](https://travis-ci.org/karlind/webmagic)
 
 
 官方网站[http://webmagic.io/](http://webmagic.io/)
