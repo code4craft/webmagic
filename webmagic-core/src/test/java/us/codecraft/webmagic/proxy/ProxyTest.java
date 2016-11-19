@@ -30,7 +30,7 @@ public class ProxyTest {
 
 	@Test
 	public void testProxy() {
-		SimpleProxyPool proxyPool = new SimpleProxyPool(httpProxyList);
+		SimpleProxyPool proxyPool = new SimpleProxyPool(httpProxyList,false);
 		proxyPool.setReuseInterval(500);
 		assertThat(proxyPool.getIdleNum()).isEqualTo(4);
 		assertThat(new File(proxyPool.getProxyFilePath()).exists()).isEqualTo(true);
