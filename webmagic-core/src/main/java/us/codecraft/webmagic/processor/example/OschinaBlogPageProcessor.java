@@ -16,15 +16,16 @@ public class OschinaBlogPageProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        List<String> links = page.getHtml().links().regex("http://my\\.oschina\\.net/flashsword/blog/\\d+").all();
+        // Extract all blog links
+        List<String> links = page.getHtml().links().regex("https://my\\.oschina\\.net/flashsword/blog/\\d+").all();
         page.addTargetRequests(links);
-        page.putField("title", page.getHtml().xpath("//div[@class='BlogEntity']/div[@class='BlogTitle']/h1/text()").toString());
+        page.putField("title", page.getHtml().xpath("//div[@class='blog-heading']/div[contains(@class, 'title')]/allText()").toString());
         if (page.getResultItems().get("title") == null) {
             //skip this page
             page.setSkip(true);
         }
         page.putField("content", page.getHtml().smartContent().toString());
-        page.putField("tags", page.getHtml().xpath("//div[@class='BlogTags']/a/text()").all());
+        page.putField("tags", page.getHtml().xpath("//div[@class='tags']/span/a/text()").all());
     }
 
     @Override
@@ -34,6 +35,6 @@ public class OschinaBlogPageProcessor implements PageProcessor {
     }
 
     public static void main(String[] args) {
-        Spider.create(new OschinaBlogPageProcessor()).addUrl("http://my.oschina.net/flashsword/blog").run();
+        Spider.create(new OschinaBlogPageProcessor()).addUrl("https://my.oschina.net/flashsword/blog").run();
     }
 }
