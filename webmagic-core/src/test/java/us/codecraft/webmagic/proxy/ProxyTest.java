@@ -4,7 +4,6 @@ import org.apache.http.HttpHost;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +32,6 @@ public class ProxyTest {
 		SimpleProxyPool proxyPool = new SimpleProxyPool(httpProxyList,false);
 		proxyPool.setReuseInterval(500);
 		assertThat(proxyPool.getIdleNum()).isEqualTo(4);
-		assertThat(new File(proxyPool.getProxyFilePath()).exists()).isEqualTo(true);
 		for (int i = 0; i < 2; i++) {
 			List<Fetch> fetchList = new ArrayList<Fetch>();
 			while (proxyPool.getIdleNum() != 0) {
