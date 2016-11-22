@@ -56,10 +56,12 @@ public class QuickStarter {
         for (Map.Entry<String, Class> classEntry : clazzMap.entrySet()) {
             System.out.println(classEntry.getKey()+"\t" + classEntry.getValue() + "\t" + urlMap.get(classEntry.getKey()));
         }
+        System.out.println("\nType in your choice on the following line:");
         while (key == null) {
             key = stdin.nextLine();
             if (clazzMap.get(key) == null) {
                 System.out.println("Invalid choice!");
+                System.out.println("\nType in your choice on the following line:");
                 key = null;
             }
         }
