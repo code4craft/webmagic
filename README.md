@@ -175,7 +175,7 @@ QQ Group: 373225642
 
 ### Related Project
 
-* [Gather Platform](https://github.com/gsh199449/spider)
+* <a href="https://github.com/gsh199449/spider" target="_blank">Gather Platform</a>
 	
 	A web console based on WebMagic for Spider configuration and management.
 
