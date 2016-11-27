@@ -53,7 +53,7 @@ public class Request implements Serializable {
      * Need a scheduler supporting priority.<br>
      * @see us.codecraft.webmagic.scheduler.PriorityScheduler
      *
-     * @param priority
+     * @param priority priority
      * @return this
      */
     @Experimental

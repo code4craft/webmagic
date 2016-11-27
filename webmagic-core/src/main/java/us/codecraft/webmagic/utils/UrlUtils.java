@@ -22,11 +22,11 @@ public class UrlUtils {
 
     /**
      * canonicalizeUrl
-     * <p/>
+     * <br>
      * Borrowed from Jsoup.
      *
-     * @param url
-     * @param refer
+     * @param url url
+     * @param refer refer
      * @return canonicalizeUrl
      */
     public static String canonicalizeUrl(String url, String refer) {
@@ -51,8 +51,8 @@ public class UrlUtils {
 
     /**
      *
-     * @param url
-     * @return
+     * @param url url
+     * @return new url
      */
     public static String encodeIllegalCharacterInUrl(String url) {
         //TODO more charator support
@@ -81,6 +81,15 @@ public class UrlUtils {
             domain = StringUtils.substring(domain, 0, i);
         }
         return domain;
+    }
+
+    public static String removePort(String domain) {
+        int portIndex = domain.indexOf(":");
+        if (portIndex != -1) {
+            return domain.substring(0, portIndex);
+        }else {
+            return domain;
+        }
     }
 
     /**

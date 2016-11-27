@@ -111,7 +111,7 @@ public class Spider implements Runnable, Task {
     /**
      * create a spider with pageProcessor.
      *
-     * @param pageProcessor
+     * @param pageProcessor pageProcessor
      * @return new spider
      * @see PageProcessor
      */
@@ -122,7 +122,7 @@ public class Spider implements Runnable, Task {
     /**
      * create a spider with pageProcessor.
      *
-     * @param pageProcessor
+     * @param pageProcessor pageProcessor
      */
     public Spider(PageProcessor pageProcessor) {
         this.pageProcessor = pageProcessor;
@@ -134,7 +134,7 @@ public class Spider implements Runnable, Task {
      * Set startUrls of Spider.<br>
      * Prior to startUrls of Site.
      *
-     * @param startUrls
+     * @param startUrls startUrls
      * @return this
      */
     public Spider startUrls(List<String> startUrls) {
@@ -147,7 +147,7 @@ public class Spider implements Runnable, Task {
      * Set startUrls of Spider.<br>
      * Prior to startUrls of Site.
      *
-     * @param startRequests
+     * @param startRequests startRequests
      * @return this
      */
     public Spider startRequest(List<Request> startRequests) {
@@ -160,7 +160,7 @@ public class Spider implements Runnable, Task {
      * Set an uuid for spider.<br>
      * Default uuid is domain of site.<br>
      *
-     * @param uuid
+     * @param uuid uuid
      * @return this
      */
     public Spider setUUID(String uuid) {
@@ -171,7 +171,7 @@ public class Spider implements Runnable, Task {
     /**
      * set scheduler for Spider
      *
-     * @param scheduler
+     * @param scheduler scheduler
      * @return this
      * @Deprecated
      * @see #setScheduler(us.codecraft.webmagic.scheduler.Scheduler)
@@ -183,7 +183,7 @@ public class Spider implements Runnable, Task {
     /**
      * set scheduler for Spider
      *
-     * @param scheduler
+     * @param scheduler scheduler
      * @return this
      * @see Scheduler
      * @since 0.2.1
@@ -204,7 +204,7 @@ public class Spider implements Runnable, Task {
     /**
      * add a pipeline for Spider
      *
-     * @param pipeline
+     * @param pipeline pipeline
      * @return this
      * @see #addPipeline(us.codecraft.webmagic.pipeline.Pipeline)
      * @deprecated
@@ -216,7 +216,7 @@ public class Spider implements Runnable, Task {
     /**
      * add a pipeline for Spider
      *
-     * @param pipeline
+     * @param pipeline pipeline
      * @return this
      * @see Pipeline
      * @since 0.2.1
@@ -230,7 +230,7 @@ public class Spider implements Runnable, Task {
     /**
      * set pipelines for Spider
      *
-     * @param pipelines
+     * @param pipelines pipelines
      * @return this
      * @see Pipeline
      * @since 0.4.1
@@ -254,7 +254,7 @@ public class Spider implements Runnable, Task {
     /**
      * set the downloader of spider
      *
-     * @param downloader
+     * @param downloader downloader
      * @return this
      * @see #setDownloader(us.codecraft.webmagic.downloader.Downloader)
      * @deprecated
@@ -266,7 +266,7 @@ public class Spider implements Runnable, Task {
     /**
      * set the downloader of spider
      *
-     * @param downloader
+     * @param downloader downloader
      * @return this
      * @see Downloader
      */
@@ -325,10 +325,6 @@ public class Spider implements Runnable, Task {
                             onError(requestFinal);
                             logger.error("process request " + requestFinal + " error", e);
                         } finally {
-                            if (site.getHttpProxyPool()!=null && site.getHttpProxyPool().isEnable()) {
-                                site.returnHttpProxyToPool((HttpHost) requestFinal.getExtra(Request.PROXY), (Integer) requestFinal
-                                        .getExtra(Request.STATUS_CODE));
-                            }
                             pageCount.incrementAndGet();
                             signalNewUrl();
                         }
@@ -374,6 +370,7 @@ public class Spider implements Runnable, Task {
     public void close() {
         destroyEach(downloader);
         destroyEach(pageProcessor);
+        destroyEach(scheduler);
         for (Pipeline pipeline : pipelines) {
             destroyEach(pipeline);
         }
@@ -407,14 +404,12 @@ public class Spider implements Runnable, Task {
     protected void processRequest(Request request) {
         Page page = downloader.download(request, this);
         if (page == null) {
-            sleep(site.getSleepTime());
-            onError(request);
-            return;
+            throw new RuntimeException("unaccpetable response status");
         }
         // for cycle retry
         if (page.isNeedCycleRetry()) {
             extractAndAddRequests(page, true);
-            sleep(site.getSleepTime());
+            sleep(site.getRetrySleepTime());
             return;
         }
         pageProcessor.process(page);
@@ -465,10 +460,10 @@ public class Spider implements Runnable, Task {
     }
 
     /**
-     * Add urls to crawl. <br/>
+     * Add urls to crawl. <br>
      *
-     * @param urls
-     * @return
+     * @param urls urls
+     * @return this
      */
     public Spider addUrl(String... urls) {
         for (String url : urls) {
@@ -481,8 +476,8 @@ public class Spider implements Runnable, Task {
     /**
      * Download urls synchronizing.
      *
-     * @param urls
-     * @return
+     * @param urls urls
+     * @return list downloaded
      */
     public <T> List<T> getAll(Collection<String> urls) {
         destroyWhenExit = false;
@@ -514,10 +509,10 @@ public class Spider implements Runnable, Task {
     }
 
     /**
-     * Add urls with information to crawl.<br/>
+     * Add urls with information to crawl.<br>
      *
-     * @param requests
-     * @return
+     * @param requests requests
+     * @return this
      */
     public Spider addRequest(Request... requests) {
         for (Request request : requests) {
@@ -566,7 +561,7 @@ public class Spider implements Runnable, Task {
     /**
      * start with more than one threads
      *
-     * @param threadNum
+     * @param threadNum threadNum
      * @return this
      */
     public Spider thread(int threadNum) {
@@ -581,7 +576,8 @@ public class Spider implements Runnable, Task {
     /**
      * start with more than one threads
      *
-     * @param threadNum
+     * @param executorService executorService to run the spider
+     * @param threadNum threadNum
      * @return this
      */
     public Spider thread(ExecutorService executorService, int threadNum) {
@@ -598,12 +594,12 @@ public class Spider implements Runnable, Task {
     }
 
     /**
-     * Exit when complete. <br/>
-     * True: exit when all url of the site is downloaded. <br/>
-     * False: not exit until call stop() manually.<br/>
+     * Exit when complete. <br>
+     * True: exit when all url of the site is downloaded. <br>
+     * False: not exit until call stop() manually.<br>
      *
-     * @param exitWhenComplete
-     * @return
+     * @param exitWhenComplete exitWhenComplete
+     * @return this
      */
     public Spider setExitWhenComplete(boolean exitWhenComplete) {
         this.exitWhenComplete = exitWhenComplete;
@@ -678,8 +674,8 @@ public class Spider implements Runnable, Task {
      * Add urls to download when it is true, and just download seed urls when it is false. <br>
      * DO NOT set it unless you know what it means!
      *
-     * @param spawnUrl
-     * @return
+     * @param spawnUrl spawnUrl
+     * @return this
      * @since 0.4.0
      */
     public Spider setSpawnUrl(boolean spawnUrl) {
@@ -728,7 +724,7 @@ public class Spider implements Runnable, Task {
     }
 
     /**
-     * Set wait time when no url is polled.<br></br>
+     * Set wait time when no url is polled.<br><br>
      *
      * @param emptySleepTime In MILLISECONDS.
      */
