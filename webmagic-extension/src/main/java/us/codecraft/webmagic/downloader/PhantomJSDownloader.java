@@ -20,13 +20,32 @@ import java.io.*;
 public class PhantomJSDownloader extends AbstractDownloader {
 
     private static Logger logger = LoggerFactory.getLogger(PhantomJSDownloader.class);
-    private static String phantomJSPath;
+    private static String crawlJsPath;
+    private static String phantomJsCommand = "phantomjs"; // default
 
     private int retryNum;
     private int threadNum;
 
     public PhantomJSDownloader() {
-        PhantomJSDownloader.phantomJSPath = new File(this.getClass().getResource("/").getPath()).getPath() + System.getProperty("file.separator") + "crawl.js ";
+        this.initPhantomjsCrawlPath();
+    }
+    /**
+       * 添加新的构造函数，支持phantomjs自定义命令
+       * 
+       * example: 
+       *    phantomjs.exe 支持windows环境
+       *    phantomjs --ignore-ssl-errors=yes 忽略抓取地址是https时的一些错误
+       *    /usr/local/bin/phantomjs 命令的绝对路径，避免因系统环境变量引起的IOException
+       *   
+       * @param phantomJsCommand
+       */
+    public PhantomJSDownloader(String phantomJsCommand) {
+        this.initPhantomjsCrawlPath();
+        PhantomJSDownloader.phantomJsCommand = phantomJsCommand;
+    }
+    
+    private void initPhantomjsCrawlPath() {
+        PhantomJSDownloader.crawlJsPath = new File(this.getClass().getResource("/").getPath()).getPath() + System.getProperty("file.separator") + "crawl.js ";
     }
 
     @Override
@@ -67,7 +86,7 @@ public class PhantomJSDownloader extends AbstractDownloader {
         try {
             String url = request.getUrl();
             Runtime runtime = Runtime.getRuntime();
-            Process process = runtime.exec("phantomjs " + phantomJSPath + url);
+            Process process = runtime.exec(phantomJsCommand + " " + crawlJsPath + url);
             InputStream is = process.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             StringBuffer stringBuffer = new StringBuffer();
