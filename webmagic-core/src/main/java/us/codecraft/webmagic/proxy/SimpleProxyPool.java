@@ -179,7 +179,7 @@ public class SimpleProxyPool implements ProxyPool {
         try {
             Long time = System.currentTimeMillis();
             proxy = proxyQueue.take();
-            double costTime = (System.currentTimeMillis() - time) / 1000.0;
+            double costTime = System.currentTimeMillis() - time;
             if (costTime > reuseInterval) {
                 logger.info("get proxy time >>>> " + costTime);
             }
