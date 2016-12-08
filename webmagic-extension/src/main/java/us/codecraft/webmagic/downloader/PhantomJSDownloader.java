@@ -44,6 +44,11 @@ public class PhantomJSDownloader extends AbstractDownloader {
         PhantomJSDownloader.phantomJsCommand = phantomJsCommand;
     }
     
+    public PhantomJSDownloader(String phantomJsCommand, String crawlJsPath) {
+      PhantomJSDownloader.phantomJsCommand = phantomJsCommand;
+      PhantomJSDownloader.crawlJsPath = crawlJsPath;
+    }
+    
     private void initPhantomjsCrawlPath() {
         PhantomJSDownloader.crawlJsPath = new File(this.getClass().getResource("/").getPath()).getPath() + System.getProperty("file.separator") + "crawl.js ";
     }
@@ -86,7 +91,7 @@ public class PhantomJSDownloader extends AbstractDownloader {
         try {
             String url = request.getUrl();
             Runtime runtime = Runtime.getRuntime();
-            Process process = runtime.exec(phantomJsCommand + " " + crawlJsPath + url);
+            Process process = runtime.exec(phantomJsCommand + " " + crawlJsPath + " " + url);
             InputStream is = process.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             StringBuffer stringBuffer = new StringBuffer();
