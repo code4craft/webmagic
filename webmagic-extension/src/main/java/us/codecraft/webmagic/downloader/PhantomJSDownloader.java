@@ -29,21 +29,54 @@ public class PhantomJSDownloader extends AbstractDownloader {
     public PhantomJSDownloader() {
         this.initPhantomjsCrawlPath();
     }
+    
     /**
-       * 添加新的构造函数，支持phantomjs自定义命令
-       * 
-       * example: 
-       *    phantomjs.exe 支持windows环境
-       *    phantomjs --ignore-ssl-errors=yes 忽略抓取地址是https时的一些错误
-       *    /usr/local/bin/phantomjs 命令的绝对路径，避免因系统环境变量引起的IOException
-       *   
-       * @param phantomJsCommand
-       */
+     * 添加新的构造函数，支持phantomjs自定义命令
+     * 
+     * example: 
+     *    phantomjs.exe 支持windows环境
+     *    phantomjs --ignore-ssl-errors=yes 忽略抓取地址是https时的一些错误
+     *    /usr/local/bin/phantomjs 命令的绝对路径，避免因系统环境变量引起的IOException
+     *   
+     * @param phantomJsCommand
+     */
     public PhantomJSDownloader(String phantomJsCommand) {
         this.initPhantomjsCrawlPath();
         PhantomJSDownloader.phantomJsCommand = phantomJsCommand;
     }
     
+    /**
+     * 新增构造函数，支持crawl.js路径自定义，因为当其他项目依赖此jar包时，runtime.exec()执行phantomjs命令时无使用法jar包中的crawl.js
+     * 
+     * crawl.js start -->>
+     * 
+     *   var system = require('system');
+     *   var url = system.args[1];
+     *   
+     *   var page = require('webpage').create();
+     *   page.settings.loadImages = false;
+     *   page.settings.resourceTimeout = 5000;
+     *   
+     *   page.open(url, function (status) {
+     *       if (status != 'success') {
+     *           console.log("HTTP request failed!");
+     *       } else {
+     *           console.log(page.content);
+     *       }
+     *   
+     *       page.close();
+     *       phantom.exit();
+     *   });
+     *   
+     * <<-- crawl.js end
+     * 具体项目时可以将以上js代码复制下来使用
+     *   
+     * example:
+     *    new PhantomJSDownloader("/your/path/phantomjs", "/your/path/crawl.js");
+     * 
+     * @param phantomJsCommand
+     * @param crawlJsPath
+     */
     public PhantomJSDownloader(String phantomJsCommand, String crawlJsPath) {
       PhantomJSDownloader.phantomJsCommand = phantomJsCommand;
       PhantomJSDownloader.crawlJsPath = crawlJsPath;
