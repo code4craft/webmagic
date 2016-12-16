@@ -36,6 +36,8 @@ public class Page {
 
     private String rawText;
 
+    private byte[] rawBytes;
+
     private Selectable url;
 
     private int statusCode;
@@ -69,7 +71,7 @@ public class Page {
      * @return html
      */
     public Html getHtml() {
-        if (html == null) {
+        if (html == null && rawText != null) {
             html = new Html(UrlUtils.fixAllRelativeHrefs(rawText, request.getUrl()));
         }
         return html;
@@ -82,7 +84,7 @@ public class Page {
      * @since 0.5.0
      */
     public Json getJson() {
-        if (json == null) {
+        if (json == null && rawText != null) {
             json = new Json(rawText);
         }
         return json;
@@ -107,15 +109,17 @@ public class Page {
      * @param requests requests
      */
     public void addTargetRequests(List<String> requests) {
-        synchronized (targetRequests) {
-            for (String s : requests) {
-                if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
-                    continue;
-                }
-                s = UrlUtils.canonicalizeUrl(s, url.toString());
-                targetRequests.add(new Request(s));
-            }
-        }
+        addTargetRequests(requests, true);
+    }
+
+    /**
+     * add urls to fetch
+     *
+     * @param requests requests
+     * @param requestAsText requestAsText
+     */
+    public void addTargetRequests(List<String> requests, boolean requestAsText) {
+        addTargetRequests(requests, requestAsText, 0);
     }
 
     /**
@@ -125,13 +129,24 @@ public class Page {
      * @param priority priority
      */
     public void addTargetRequests(List<String> requests, long priority) {
+        addTargetRequests(requests, true, priority);
+    }
+
+    /**
+     * add urls to fetch
+     *
+     * @param requests requests
+     * @param requestAsText requestAsText
+     * @param priority priority
+     */
+    public void addTargetRequests(List<String> requests, boolean requestAsText, long priority) {
         synchronized (targetRequests) {
             for (String s : requests) {
                 if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
                     continue;
                 }
                 s = UrlUtils.canonicalizeUrl(s, url.toString());
-                targetRequests.add(new Request(s).setPriority(priority));
+                targetRequests.add(new Request(s, null, requestAsText, priority));
             }
         }
     }
@@ -142,12 +157,22 @@ public class Page {
      * @param requestString requestString
      */
     public void addTargetRequest(String requestString) {
+        addTargetRequest(requestString, true);
+    }
+
+    /**
+     * add url to fetch
+     *
+     * @param requestString requestString
+     * @param requestAsText requestAsText
+     */
+    public void addTargetRequest(String requestString, boolean requestAsText) {
         if (StringUtils.isBlank(requestString) || requestString.equals("#")) {
             return;
         }
         synchronized (targetRequests) {
             requestString = UrlUtils.canonicalizeUrl(requestString, url.toString());
-            targetRequests.add(new Request(requestString));
+            targetRequests.add(new Request(requestString, requestAsText));
         }
     }
 
@@ -213,8 +238,17 @@ public class Page {
         return rawText;
     }
 
+    public byte[] getRawBytes() {
+        return rawBytes;
+    }
+
     public Page setRawText(String rawText) {
         this.rawText = rawText;
+        return this;
+    }
+
+    public Page setRawBytes(byte[] rawBytes) {
+        this.rawBytes = rawBytes;
         return this;
     }
 
@@ -224,6 +258,7 @@ public class Page {
                 "request=" + request +
                 ", resultItems=" + resultItems +
                 ", rawText='" + rawText + '\'' +
+                ", rawBytes='" + rawBytes + '\'' +
                 ", url=" + url +
                 ", statusCode=" + statusCode +
                 ", targetRequests=" + targetRequests +

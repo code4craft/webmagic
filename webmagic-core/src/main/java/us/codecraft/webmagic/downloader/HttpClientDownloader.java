@@ -188,13 +188,23 @@ public class HttpClientDownloader extends AbstractDownloader {
     }
 
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
-        String content = getContent(charset, httpResponse);
         Page page = new Page();
-        page.setRawText(content);
+        if (request.isRequestAsText()) {
+            String content = getContent(charset, httpResponse);
+            page.setRawText(content);
+        }
+        else {
+            byte[] bytes = getContent(httpResponse);
+            page.setRawBytes(bytes);
+        }
         page.setUrl(new PlainText(request.getUrl()));
         page.setRequest(request);
         page.setStatusCode(httpResponse.getStatusLine().getStatusCode());
         return page;
+    }
+
+    protected byte[] getContent(HttpResponse httpResponse) throws IOException {
+        return IOUtils.toByteArray(httpResponse.getEntity().getContent());
     }
 
     protected String getContent(String charset, HttpResponse httpResponse) throws IOException {

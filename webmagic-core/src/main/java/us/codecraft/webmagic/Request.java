@@ -26,6 +26,11 @@ public class Request implements Serializable {
     private String method;
 
     /**
+     * process response as text after request
+     */
+    private boolean requestAsText = true;
+
+    /**
      * Store additional information in extras.
      */
     private Map<String, Object> extras;
@@ -41,7 +46,26 @@ public class Request implements Serializable {
     }
 
     public Request(String url) {
+        this(url, null);
+    }
+
+    public Request(String url, String method) {
+        this(url, method, true, 0);
+    }
+
+    public Request(String url, boolean requestAsText) {
+        this(url, null, requestAsText, 0);
+    }
+
+    public Request(String url, long priority) {
+        this(url, null, true, priority);
+    }
+
+    public Request(String url, String method, boolean requestAsText, long priority) {
         this.url = url;
+        this.method = method;
+        this.requestAsText = requestAsText;
+        this.priority = priority;
     }
 
     public long getPriority() {
@@ -122,6 +146,14 @@ public class Request implements Serializable {
 
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    public boolean isRequestAsText() {
+        return requestAsText;
+    }
+
+    public void setRequestAsText(boolean requestAsText) {
+        this.requestAsText = requestAsText;
     }
 
     @Override

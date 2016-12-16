@@ -17,8 +17,8 @@
   
   <path id="webmagic-core.module.production.classpath">
     <path refid="${module.jdk.classpath.webmagic-core}"/>
-    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.2.4.classpath"/>
-    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.2.4.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.5.2.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.5.2.classpath"/>
     <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
     <path refid="library.maven:_commons-codec:commons-codec:1.6.classpath"/>
     <path refid="library.maven:_com.google.guava:guava:13.0.1.classpath"/>
@@ -32,8 +32,8 @@
   
   <path id="webmagic-core.runtime.production.module.classpath">
     <pathelement location="${webmagic-core.output.dir}"/>
-    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.2.4.classpath"/>
-    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.2.4.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.5.2.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.5.2.classpath"/>
     <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
     <path refid="library.maven:_commons-codec:commons-codec:1.6.classpath"/>
     <path refid="library.maven:_com.google.guava:guava:13.0.1.classpath"/>
@@ -48,8 +48,8 @@
   <path id="webmagic-core.module.classpath">
     <path refid="${module.jdk.classpath.webmagic-core}"/>
     <pathelement location="${webmagic-core.output.dir}"/>
-    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.2.4.classpath"/>
-    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.2.4.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.5.2.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.5.2.classpath"/>
     <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
     <path refid="library.maven:_commons-codec:commons-codec:1.6.classpath"/>
     <path refid="library.maven:_junit:junit:4.7.classpath"/>
@@ -65,8 +65,8 @@
   <path id="webmagic-core.runtime.module.classpath">
     <pathelement location="${webmagic-core.testoutput.dir}"/>
     <pathelement location="${webmagic-core.output.dir}"/>
-    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.2.4.classpath"/>
-    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.2.4.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.5.2.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.5.2.classpath"/>
     <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
     <path refid="library.maven:_commons-codec:commons-codec:1.6.classpath"/>
     <path refid="library.maven:_junit:junit:4.7.classpath"/>
