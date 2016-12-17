@@ -91,8 +91,9 @@ public class HttpClientGenerator {
         }
 
 
-        SocketConfig socketConfig = SocketConfig.custom().setSoKeepAlive(true).setTcpNoDelay(true).build();
+        SocketConfig socketConfig = SocketConfig.custom().setSoTimeout(site.getTimeOut()).setSoKeepAlive(true).setTcpNoDelay(true).build();
         httpClientBuilder.setDefaultSocketConfig(socketConfig);
+        connectionManager.setDefaultSocketConfig(socketConfig);
         if (site != null) {
             httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(site.getRetryTimes(), true));
         }
