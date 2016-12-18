@@ -403,7 +403,9 @@ public class Spider implements Runnable, Task {
     protected void processRequest(Request request) {
         Page page = downloader.download(request, this);
         if (page == null) {
-            throw new RuntimeException("unaccpetable response status");
+            sleep(site.getSleepTime());
+            onError(request);
+            return;
         }
         // for cycle retry
         if (page.isNeedCycleRetry()) {
