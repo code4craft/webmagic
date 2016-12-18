@@ -13,14 +13,14 @@ public class MonitorExample {
 
     public static void main(String[] args) throws Exception {
 
-        Spider zhihuPageProcessor = Spider.create(new ZhihuPageProcessor())
+        Spider zhihuSpider = Spider.create(new ZhihuPageProcessor())
                 .addUrl("http://my.oschina.net/flashsword/blog");
         Spider githubSpider = Spider.create(new GithubRepoPageProcessor())
                 .addUrl("https://github.com/code4craft");
 
-        SpiderMonitor.instance().register(zhihuPageProcessor);
+        SpiderMonitor.instance().register(zhihuSpider);
         SpiderMonitor.instance().register(githubSpider);
-        zhihuPageProcessor.start();
+        zhihuSpider.start();
         githubSpider.start();
     }
 }
