@@ -2,7 +2,7 @@ title: Webmagic
 description: 一个网络爬虫工具包
 google_analytics: UA-41279861-1
 show_downloads: true
-theme: jekyll-theme-architect
+theme: jekyll-theme-cayman
 
 gems:
   - jekyll-mentions
