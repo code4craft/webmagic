@@ -1,0 +1,8 @@
+title: Webmagic
+description: 一个网络爬虫工具包
+google_analytics: UA-41279861-1
+show_downloads: true
+theme: jekyll-theme-architect
+
+gems:
+  - jekyll-mentions
