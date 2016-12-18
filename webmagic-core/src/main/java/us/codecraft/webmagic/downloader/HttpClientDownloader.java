@@ -107,11 +107,11 @@ public class HttpClientDownloader extends AbstractDownloader {
                 onSuccess(request);
                 return page;
             } else {
-                logger.warn("code error " + statusCode + "\t" + request.getUrl());
+                logger.warn("get page {} error, status code {} ",request.getUrl(),statusCode);
                 return null;
             }
         } catch (IOException e) {
-            logger.warn("download page " + request.getUrl() + " error", e);
+            logger.warn("download page {} error", request.getUrl(), e);
             if (site.getCycleRetryTimes() > 0) {
                 return addToCycleRetry(request, site);
             }
@@ -154,7 +154,7 @@ public class HttpClientDownloader extends AbstractDownloader {
                 .setConnectionRequestTimeout(site.getTimeOut())
                 .setSocketTimeout(site.getTimeOut())
                 .setConnectTimeout(site.getTimeOut())
-                .setCookieSpec(CookieSpecs.BEST_MATCH);
+                .setCookieSpec(CookieSpecs.DEFAULT);
         if (proxy !=null) {
 			requestConfigBuilder.setProxy(proxy);
 			request.putExtra(Request.PROXY, proxy);
