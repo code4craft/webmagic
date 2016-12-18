@@ -4,7 +4,6 @@ import us.codecraft.webmagic.Page;
 
 /**
  * @author code4crafter@gmail.com
- * @date 14-4-5
  */
 public interface SubPageProcessor extends RequestMatcher {
 

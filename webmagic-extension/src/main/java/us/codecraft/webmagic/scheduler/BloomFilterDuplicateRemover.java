@@ -1,9 +1,16 @@
-package us.codecraft.webmagic.scheduler.component;
+package us.codecraft.webmagic.scheduler;
+
+/**
+ * @author code4crafter@gmail.com
+ *         Date: 16/12/18
+ *         Time: 上午10:23
+ */
 
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
 import java.nio.charset.Charset;
 import java.util.concurrent.atomic.AtomicInteger;
