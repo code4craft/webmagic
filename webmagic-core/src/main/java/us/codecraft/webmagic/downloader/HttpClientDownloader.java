@@ -154,7 +154,7 @@ public class HttpClientDownloader extends AbstractDownloader {
                 .setConnectionRequestTimeout(site.getTimeOut())
                 .setSocketTimeout(site.getTimeOut())
                 .setConnectTimeout(site.getTimeOut())
-                .setCookieSpec(CookieSpecs.DEFAULT);
+                .setCookieSpec(CookieSpecs.BEST_MATCH);
         if (proxy !=null) {
 			requestConfigBuilder.setProxy(proxy);
 			request.putExtra(Request.PROXY, proxy);
