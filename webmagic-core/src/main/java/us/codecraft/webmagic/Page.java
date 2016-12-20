@@ -6,6 +6,7 @@ import us.codecraft.webmagic.selector.Json;
 import us.codecraft.webmagic.selector.Selectable;
 import us.codecraft.webmagic.utils.UrlUtils;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,8 @@ public class Page {
     private String rawText;
 
     private byte[] rawBytes;
+
+    private InputStream inputStream;
 
     private Selectable url;
 
@@ -109,17 +112,17 @@ public class Page {
      * @param requests requests
      */
     public void addTargetRequests(List<String> requests) {
-        addTargetRequests(requests, true);
+        addTargetRequests(requests, Request.Type.TEXT);
     }
 
     /**
      * add urls to fetch
      *
      * @param requests requests
-     * @param requestAsText requestAsText
+     * @param type type
      */
-    public void addTargetRequests(List<String> requests, boolean requestAsText) {
-        addTargetRequests(requests, requestAsText, 0);
+    public void addTargetRequests(List<String> requests, Request.Type type) {
+        addTargetRequests(requests, type, 0);
     }
 
     /**
@@ -129,24 +132,24 @@ public class Page {
      * @param priority priority
      */
     public void addTargetRequests(List<String> requests, long priority) {
-        addTargetRequests(requests, true, priority);
+        addTargetRequests(requests, Request.Type.TEXT, priority);
     }
 
     /**
      * add urls to fetch
      *
      * @param requests requests
-     * @param requestAsText requestAsText
+     * @param type type
      * @param priority priority
      */
-    public void addTargetRequests(List<String> requests, boolean requestAsText, long priority) {
+    public void addTargetRequests(List<String> requests, Request.Type type, long priority) {
         synchronized (targetRequests) {
             for (String s : requests) {
                 if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
                     continue;
                 }
                 s = UrlUtils.canonicalizeUrl(s, url.toString());
-                targetRequests.add(new Request(s, null, requestAsText, priority));
+                targetRequests.add(new Request(s, null, type, priority));
             }
         }
     }
@@ -157,22 +160,22 @@ public class Page {
      * @param requestString requestString
      */
     public void addTargetRequest(String requestString) {
-        addTargetRequest(requestString, true);
+        addTargetRequest(requestString, Request.Type.TEXT);
     }
 
     /**
      * add url to fetch
      *
      * @param requestString requestString
-     * @param requestAsText requestAsText
+     * @param type type
      */
-    public void addTargetRequest(String requestString, boolean requestAsText) {
+    public void addTargetRequest(String requestString, Request.Type type) {
         if (StringUtils.isBlank(requestString) || requestString.equals("#")) {
             return;
         }
         synchronized (targetRequests) {
             requestString = UrlUtils.canonicalizeUrl(requestString, url.toString());
-            targetRequests.add(new Request(requestString, requestAsText));
+            targetRequests.add(new Request(requestString, type));
         }
     }
 
@@ -238,17 +241,26 @@ public class Page {
         return rawText;
     }
 
-    public byte[] getRawBytes() {
-        return rawBytes;
-    }
-
     public Page setRawText(String rawText) {
         this.rawText = rawText;
         return this;
     }
 
+    public byte[] getRawBytes() {
+        return rawBytes;
+    }
+
     public Page setRawBytes(byte[] rawBytes) {
         this.rawBytes = rawBytes;
+        return this;
+    }
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public Page setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
         return this;
     }
 
@@ -259,6 +271,7 @@ public class Page {
                 ", resultItems=" + resultItems +
                 ", rawText='" + rawText + '\'' +
                 ", rawBytes='" + rawBytes + '\'' +
+                ", inputStream='" + inputStream + '\'' +
                 ", url=" + url +
                 ", statusCode=" + statusCode +
                 ", targetRequests=" + targetRequests +

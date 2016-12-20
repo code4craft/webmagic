@@ -28,7 +28,7 @@ public class Request implements Serializable {
     /**
      * process response as text after request
      */
-    private boolean requestAsText = true;
+    private Request.Type type = Type.TEXT;
 
     /**
      * Store additional information in extras.
@@ -46,25 +46,25 @@ public class Request implements Serializable {
     }
 
     public Request(String url) {
-        this(url, null);
+        this(url, (String)null);
     }
 
     public Request(String url, String method) {
-        this(url, method, true, 0);
+        this(url, method, Type.TEXT, 0);
     }
 
-    public Request(String url, boolean requestAsText) {
-        this(url, null, requestAsText, 0);
+    public Request(String url, Request.Type type) {
+        this(url, null, type, 0);
     }
 
     public Request(String url, long priority) {
-        this(url, null, true, priority);
+        this(url, null, Type.TEXT, priority);
     }
 
-    public Request(String url, String method, boolean requestAsText, long priority) {
+    public Request(String url, String method, Request.Type type, long priority) {
         this.url = url;
         this.method = method;
-        this.requestAsText = requestAsText;
+        this.type = type;
         this.priority = priority;
     }
 
@@ -148,12 +148,16 @@ public class Request implements Serializable {
         this.method = method;
     }
 
-    public boolean isRequestAsText() {
-        return requestAsText;
+    /**
+     * The http response handle type
+     * @return
+     */
+    public Type getType() {
+        return type;
     }
 
-    public void setRequestAsText(boolean requestAsText) {
-        this.requestAsText = requestAsText;
+    public void setType(Type type) {
+        this.type = type;
     }
 
     @Override
@@ -161,8 +165,39 @@ public class Request implements Serializable {
         return "Request{" +
                 "url='" + url + '\'' +
                 ", method='" + method + '\'' +
+                ", type='" + type + '\'' +
                 ", extras=" + extras +
                 ", priority=" + priority +
                 '}';
+    }
+
+    /**
+     * Http response handle type
+     */
+    public static enum Type {
+        TEXT(0, "plain text"),
+        BYTES(1, "byte array"),
+        STREAM(2, "input stream"),
+        ;
+
+        private int value;
+        private String name;
+
+        Type(int value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Type.BYTES);
     }
 }
