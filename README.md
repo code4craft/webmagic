@@ -2,8 +2,6 @@
 
 [Readme in Chinese](https://github.com/code4craft/webmagic/tree/master/README-zh.md)
 
-[User Manual (Chinese)](https://github.com/code4craft/webmagic/blob/master/user-manual.md)
-
 
 [![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
 
