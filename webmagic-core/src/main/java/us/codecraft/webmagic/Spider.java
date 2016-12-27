@@ -714,6 +714,24 @@ public class Spider implements Runnable, Task {
         return this;
     }
 
+    public Spider addSpiderListeners(List<SpiderListener> spiderListeners) {
+        if (this.spiderListeners == null) {
+            this.spiderListeners = spiderListeners;
+        }
+        else {
+            this.spiderListeners.addAll(spiderListeners);
+        }
+        return this;
+    }
+
+    public Spider addSpiderListener(SpiderListener spiderListener) {
+        if (this.spiderListeners == null) {
+            this.spiderListeners = new LinkedList<SpiderListener>();
+        }
+        spiderListeners.add(spiderListener);
+        return this;
+    }
+
     public Date getStartTime() {
         return startTime;
     }
