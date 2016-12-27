@@ -19,9 +19,6 @@ public class OneFilePipeline extends FilePersistentBase implements Pipeline {
 
     private PrintWriter printWriter;
 
-    /**
-     * create a FilePipeline with default path"/data/webmagic/"
-     */
     public OneFilePipeline() throws FileNotFoundException, UnsupportedEncodingException {
         this("/data/webmagic/");
     }

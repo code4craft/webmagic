@@ -45,6 +45,7 @@ public class SpiderMonitor {
      *
      * @param spiders spiders
      * @return this
+     * @throws JMException
      */
     public synchronized SpiderMonitor register(Spider... spiders) throws JMException {
         for (Spider spider : spiders) {

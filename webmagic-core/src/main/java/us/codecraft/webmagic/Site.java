@@ -1,13 +1,10 @@
 package us.codecraft.webmagic;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
 import org.apache.http.HttpHost;
-
-import us.codecraft.webmagic.proxy.Proxy;
-import us.codecraft.webmagic.proxy.SimpleProxyPool;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.proxy.ProxyPool;
+import us.codecraft.webmagic.proxy.SimpleProxyPool;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.util.*;
@@ -27,7 +24,7 @@ public class Site {
 
     private Map<String, String> defaultCookies = new LinkedHashMap<String, String>();
 
-    private Table<String, String, String> cookies = HashBasedTable.create();
+    private Map<String, Map<String, String>> cookies = new HashMap<String, Map<String, String>>();
 
     private String charset;
 
@@ -104,7 +101,10 @@ public class Site {
      * @return this
      */
     public Site addCookie(String domain, String name, String value) {
-        cookies.put(domain, name, value);
+        if (!cookies.containsKey(domain)){
+            cookies.put(domain,new HashMap<String, String>());
+        }
+        cookies.get(domain).put(name, value);
         return this;
     }
 
@@ -134,7 +134,7 @@ public class Site {
      * @return get cookies
      */
     public Map<String,Map<String, String>> getAllCookies() {
-        return cookies.rowMap();
+        return cookies;
     }
 
     /**
@@ -483,6 +483,7 @@ public class Site {
      * Set httpProxyPool, String[0]:ip, String[1]:port <br>
      *
      * @param httpProxyList httpProxyList
+     * @param isUseLastProxy isUseLastProxy
      * @return this
      */
     public Site setHttpProxyPool(List<String[]> httpProxyList, boolean isUseLastProxy) {

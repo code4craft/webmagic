@@ -1,6 +1,5 @@
 package us.codecraft.webmagic.downloader;
 
-import com.google.common.collect.Sets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
@@ -28,6 +27,7 @@ import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.HttpConstant;
 import us.codecraft.webmagic.utils.UrlUtils;
+import us.codecraft.webmagic.utils.WMCollections;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -83,7 +83,7 @@ public class HttpClientDownloader extends AbstractDownloader {
             charset = site.getCharset();
             headers = site.getHeaders();
         } else {
-            acceptStatCode = Sets.newHashSet(200);
+            acceptStatCode = WMCollections.newHashSet(200);
         }
         logger.info("downloading page {}", request.getUrl());
         CloseableHttpResponse httpResponse = null;
@@ -107,11 +107,11 @@ public class HttpClientDownloader extends AbstractDownloader {
                 onSuccess(request);
                 return page;
             } else {
-                logger.warn("code error " + statusCode + "\t" + request.getUrl());
+                logger.warn("get page {} error, status code {} ",request.getUrl(),statusCode);
                 return null;
             }
         } catch (IOException e) {
-            logger.warn("download page " + request.getUrl() + " error", e);
+            logger.warn("download page {} error", request.getUrl(), e);
             if (site.getCycleRetryTimes() > 0) {
                 return addToCycleRetry(request, site);
             }

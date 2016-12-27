@@ -1,6 +1,5 @@
 package us.codecraft.webmagic.scripts;
 
-import com.google.common.collect.Sets;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -8,6 +7,7 @@ import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.pipeline.Pipeline;
+import us.codecraft.webmagic.utils.WMCollections;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,8 +29,8 @@ public class ScriptConsole {
         private static Map<Language, Set<String>> alias = new HashMap<Language, Set<String>>();
 
         static {
-            alias.put(Language.JavaScript, Sets.<String>newHashSet("js", "javascript", "JavaScript", "JS"));
-            alias.put(Language.JRuby, Sets.<String>newHashSet("ruby", "jruby", "Ruby", "JRuby"));
+            alias.put(Language.JavaScript, WMCollections.<String>newHashSet("js", "javascript", "JavaScript", "JS"));
+            alias.put(Language.JRuby, WMCollections.<String>newHashSet("ruby", "jruby", "Ruby", "JRuby"));
         }
 
         public void setLanguagefromArg(String arg) {
@@ -93,7 +93,7 @@ public class ScriptConsole {
                 .language(params.getLanguage()).scriptFromFile(params.getScriptFileName()).thread(params.getThread()).build();
         pageProcessor.getSite().setSleepTime(params.getSleepTime());
         pageProcessor.getSite().setRetryTimes(3);
-        pageProcessor.getSite().setAcceptStatCode(Sets.<Integer>newHashSet(200, 404,403, 500,502));
+        pageProcessor.getSite().setAcceptStatCode(WMCollections.<Integer>newHashSet(200, 404,403, 500,502));
         Spider spider = Spider.create(pageProcessor).thread(params.getThread());
         spider.clearPipeline().addPipeline(new Pipeline() {
             @Override

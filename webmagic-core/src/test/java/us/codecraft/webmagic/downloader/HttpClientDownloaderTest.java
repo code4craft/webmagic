@@ -1,11 +1,11 @@
 package us.codecraft.webmagic.downloader;
 
-import com.github.dreamhead.moco.*;
+import com.github.dreamhead.moco.HttpServer;
 import com.github.dreamhead.moco.Runnable;
+import com.github.dreamhead.moco.Runner;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.junit.Ignore;
 import org.junit.Test;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
@@ -26,19 +26,12 @@ import static org.junit.Assert.assertTrue;
  */
 public class HttpClientDownloaderTest {
 
-    @Ignore
-    @Test
-    public void testCookie() {
-        Site site = Site.me().setDomain("www.diandian.com").addCookie("t", "43ztv9srfszl99yxv2aumx3zr7el7ybb");
-        HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
-        Page download = httpClientDownloader.download(new Request("http://www.diandian.com"), site.toTask());
-        assertTrue(download.getHtml().toString().contains("flashsword30"));
-    }
+    public static final String PAGE_ALWAYS_NOT_EXISTS = "http://localhost:13421/404";
 
     @Test
     public void testDownloader() {
         HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
-        Html html = httpClientDownloader.download("https://github.com");
+        Html html = httpClientDownloader.download("https://www.baidu.com/");
         assertTrue(!html.getFirstSourceText().isEmpty());
     }
 
@@ -52,7 +45,7 @@ public class HttpClientDownloaderTest {
     public void testCycleTriedTimes() {
         HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
         Task task = Site.me().setDomain("localhost").setCycleRetryTimes(5).toTask();
-        Request request = new Request("http://localhost/404");
+        Request request = new Request(PAGE_ALWAYS_NOT_EXISTS);
         Page page = httpClientDownloader.download(request, task);
         assertThat(page.getTargetRequests().size() > 0);
         assertThat((Integer) page.getTargetRequests().get(0).getExtra(Request.CYCLE_TRIED_TIMES)).isEqualTo(1);
