@@ -6,7 +6,6 @@ import us.codecraft.webmagic.model.annotation.ExtractBy;
 
 /**
  * @author code4crafter@gmail.com
- * @date 14-4-9
  */
 public class BaiduNews {
 

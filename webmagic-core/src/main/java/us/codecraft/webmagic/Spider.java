@@ -1,6 +1,5 @@
 package us.codecraft.webmagic;
 
-import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +14,7 @@ import us.codecraft.webmagic.scheduler.QueueScheduler;
 import us.codecraft.webmagic.scheduler.Scheduler;
 import us.codecraft.webmagic.thread.CountableThreadPool;
 import us.codecraft.webmagic.utils.UrlUtils;
+import us.codecraft.webmagic.utils.WMCollections;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -172,9 +172,9 @@ public class Spider implements Runnable, Task {
      *
      * @param scheduler scheduler
      * @return this
-     * @Deprecated
      * @see #setScheduler(us.codecraft.webmagic.scheduler.Scheduler)
      */
+    @Deprecated
     public Spider scheduler(Scheduler scheduler) {
         return setScheduler(scheduler);
     }
@@ -498,7 +498,7 @@ public class Spider implements Runnable, Task {
     }
 
     public <T> T get(String url) {
-        List<String> urls = Lists.newArrayList(url);
+        List<String> urls = WMCollections.newArrayList(url);
         List<T> resultItemses = getAll(urls);
         if (resultItemses != null && resultItemses.size() > 0) {
             return resultItemses.get(0);

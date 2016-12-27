@@ -37,7 +37,7 @@ public class PhantomJSDownloader extends AbstractDownloader {
        *    phantomjs --ignore-ssl-errors=yes 忽略抓取地址是https时的一些错误
        *    /usr/local/bin/phantomjs 命令的绝对路径，避免因系统环境变量引起的IOException
        *   
-       * @param phantomJsCommand
+       * @param phantomJsCommand phantomJsCommand
        */
     public PhantomJSDownloader(String phantomJsCommand) {
         this.initPhantomjsCrawlPath();

@@ -54,7 +54,6 @@
         <module>webmagic-selenium</module>
         <module>webmagic-saxon</module>
         <module>webmagic-samples</module>
-        <module>webmagic-avalon</module>
     </modules>
 
     <dependencyManagement>
@@ -74,6 +73,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>15.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jayway.jsonpath</groupId>
+                <artifactId>json-path</artifactId>
+                <version>2.2.0</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>

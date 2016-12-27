@@ -8,7 +8,6 @@ import us.codecraft.webmagic.model.annotation.TargetUrl;
 
 /**
  * @author code4crafter@gmail.com
- * @date 14-4-11
  */
 @TargetUrl("http://meishi.qq.com/beijing/c/all[\\-p2]*")
 @ExtractBy(value = "//ul[@id=\"promos_list2\"]/li",multi = true)

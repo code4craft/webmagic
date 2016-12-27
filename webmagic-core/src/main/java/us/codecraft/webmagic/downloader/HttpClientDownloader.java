@@ -1,6 +1,5 @@
 package us.codecraft.webmagic.downloader;
 
-import com.google.common.collect.Sets;
 import org.apache.http.HttpHost;
 import org.apache.http.NameValuePair;
 import org.apache.http.annotation.ThreadSafe;
@@ -18,6 +17,7 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.utils.HttpConstant;
+import us.codecraft.webmagic.utils.WMCollections;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -82,7 +82,7 @@ public class HttpClientDownloader extends AbstractDownloader {
             charset = site.getCharset();
             headers = site.getHeaders();
         } else {
-            acceptStatCode = Sets.newHashSet(200);
+            acceptStatCode = WMCollections.newHashSet(200);
         }
         logger.info("downloading page {}", request.getUrl());
         CloseableHttpResponse httpResponse = null;
@@ -106,11 +106,11 @@ public class HttpClientDownloader extends AbstractDownloader {
                 onSuccess(request);
                 return page;
             } else {
-                logger.warn("code error " + statusCode + "\t" + request.getUrl());
+                logger.warn("get page {} error, status code {} ",request.getUrl(),statusCode);
                 return null;
             }
         } catch (IOException e) {
-            logger.warn("download page " + request.getUrl() + " error", e);
+            logger.warn("download page {} error", request.getUrl(), e);
             if (site.getCycleRetryTimes() > 0) {
                 return addToCycleRetry(request, site);
             }
@@ -184,76 +184,4 @@ public class HttpClientDownloader extends AbstractDownloader {
         throw new IllegalArgumentException("Illegal HTTP Method " + method);
     }
 
-//    protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
-//        Page page = new Page();
-//        if (request.isRequestAsText()) {
-//            String content = getContent(charset, httpResponse);
-//            page.setRawText(content);
-//        }
-//        else {
-//            byte[] bytes = getContent(httpResponse);
-//            page.setRawBytes(bytes);
-//        }
-//        page.setUrl(new PlainText(request.getUrl()));
-//        page.setRequest(request);
-//        page.setStatusCode(httpResponse.getStatusLine().getStatusCode());
-//        return page;
-//    }
-//
-//    protected byte[] getContent(HttpResponse httpResponse) throws IOException {
-//        return IOUtils.toByteArray(httpResponse.getEntity().getContent());
-//    }
-//
-//    protected String getContent(String charset, HttpResponse httpResponse) throws IOException {
-//        if (charset == null) {
-//            byte[] contentBytes = IOUtils.toByteArray(httpResponse.getEntity().getContent());
-//            String htmlCharset = getHtmlCharset(httpResponse, contentBytes);
-//            if (htmlCharset != null) {
-//                return new String(contentBytes, htmlCharset);
-//            } else {
-//                logger.warn("Charset autodetect failed, use {} as charset. Please specify charset in Site.setCharset()", Charset.defaultCharset());
-//                return new String(contentBytes);
-//            }
-//        } else {
-//            return IOUtils.toString(httpResponse.getEntity().getContent(), charset);
-//        }
-//    }
-//
-//    protected String getHtmlCharset(HttpResponse httpResponse, byte[] contentBytes) throws IOException {
-//        String charset;
-//        // charset
-//        // 1、encoding in http header Content-Type
-//        String value = httpResponse.getEntity().getContentType().getValue();
-//        charset = UrlUtils.getCharset(value);
-//        if (StringUtils.isNotBlank(charset)) {
-//            logger.debug("Auto get charset: {}", charset);
-//            return charset;
-//        }
-//        // use default charset to decode first time
-//        Charset defaultCharset = Charset.defaultCharset();
-//        String content = new String(contentBytes, defaultCharset.name());
-//        // 2、charset in meta
-//        if (StringUtils.isNotEmpty(content)) {
-//            Document document = Jsoup.parse(content);
-//            Elements links = document.select("meta");
-//            for (Element link : links) {
-//                // 2.1、html4.01 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-//                String metaContent = link.attr("content");
-//                String metaCharset = link.attr("charset");
-//                if (metaContent.indexOf("charset") != -1) {
-//                    metaContent = metaContent.substring(metaContent.indexOf("charset"), metaContent.length());
-//                    charset = metaContent.split("=")[1];
-//                    break;
-//                }
-//                // 2.2、html5 <meta charset="UTF-8" />
-//                else if (StringUtils.isNotEmpty(metaCharset)) {
-//                    charset = metaCharset;
-//                    break;
-//                }
-//            }
-//        }
-//        logger.debug("Auto get charset: {}", charset);
-//        // 3、todo use tools as cpdetector for content decode
-//        return charset;
-//    }
 }

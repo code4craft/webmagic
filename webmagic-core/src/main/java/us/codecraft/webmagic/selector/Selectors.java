@@ -33,11 +33,11 @@ public abstract class Selectors {
     }
 
     /**
-     * @Deprecated
      * @see #xpath(String)
      * @param expr expr
      * @return new selector
      */
+    @Deprecated
     public static XpathSelector xsoup(String expr) {
         return new XpathSelector(expr);
     }
