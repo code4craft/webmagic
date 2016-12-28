@@ -2,8 +2,6 @@
 
 [Readme in Chinese](https://github.com/code4craft/webmagic/tree/master/README-zh.md)
 
-[User Manual (Chinese)](https://github.com/code4craft/webmagic/blob/master/user-manual.md)
-
 
 [![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
 
@@ -25,12 +23,12 @@ Add dependencies to your pom.xml:
 <dependency>
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-core</artifactId>
-    <version>0.5.3</version>
+    <version>0.6.0</version>
 </dependency>
 <dependency>
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-extension</artifactId>
-    <version>0.5.3</version>
+    <version>0.6.0</version>
 </dependency>
 ```
         
