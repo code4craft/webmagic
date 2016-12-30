@@ -403,7 +403,9 @@ public class Spider implements Runnable, Task {
     protected void processRequest(Request request) {
         Page page = downloader.download(request, this);
         if (page == null) {
-            throw new RuntimeException("unaccpetable response status");
+            sleep(site.getSleepTime());
+            onError(request);
+            return;
         }
         // for cycle retry
         if (page.isNeedCycleRetry()) {
@@ -711,6 +713,24 @@ public class Spider implements Runnable, Task {
 
     public Spider setSpiderListeners(List<SpiderListener> spiderListeners) {
         this.spiderListeners = spiderListeners;
+        return this;
+    }
+
+    public Spider addSpiderListeners(List<SpiderListener> spiderListeners) {
+        if (this.spiderListeners == null) {
+            this.spiderListeners = spiderListeners;
+        }
+        else {
+            this.spiderListeners.addAll(spiderListeners);
+        }
+        return this;
+    }
+
+    public Spider addSpiderListener(SpiderListener spiderListener) {
+        if (this.spiderListeners == null) {
+            this.spiderListeners = new LinkedList<SpiderListener>();
+        }
+        spiderListeners.add(spiderListener);
         return this;
     }
 
