@@ -19,7 +19,6 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>15.0</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>us.codecraft</groupId>

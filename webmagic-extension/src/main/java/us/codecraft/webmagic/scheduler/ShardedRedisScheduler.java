@@ -50,6 +50,24 @@ public class ShardedRedisScheduler extends DuplicateRemovedScheduler implements 
         }
     }
 
+    public Long allowDuplicateRequest(String url, Task task) {
+        ShardedJedis jedis = pool.getResource();
+        try {
+            return jedis.srem(getSetKey(task), url);
+        } finally {
+            jedis.close();
+        }
+    }
+
+    public Long allowDuplicateRequest(Request request, Task task) {
+        return allowDuplicateRequest(request.getUrl(), task);
+    }
+
+    public void pushWithoutDuplicateCheck(Request request, Task task) {
+        logger.debug("push to queue {}", request.getUrl());
+        pushWhenNoDuplicate(request, task);
+    }
+
     @Override
     public boolean isDuplicate(Request request, Task task) {
         ShardedJedis jedis = pool.getResource();
