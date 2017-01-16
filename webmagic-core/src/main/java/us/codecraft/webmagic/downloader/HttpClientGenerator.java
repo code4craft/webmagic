@@ -89,8 +89,9 @@ public class HttpClientGenerator {
                 }
             });
         }
-
-
+        //解决post/redirect/post 302跳转问题
+        httpClientBuilder.setRedirectStrategy(new CustomRedirectStrategy());
+        
         SocketConfig socketConfig = SocketConfig.custom().setSoTimeout(site.getTimeOut()).setSoKeepAlive(true).setTcpNoDelay(true).build();
         httpClientBuilder.setDefaultSocketConfig(socketConfig);
         connectionManager.setDefaultSocketConfig(socketConfig);
