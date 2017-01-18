@@ -3,9 +3,12 @@ package us.codecraft.webmagic.scheduler;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Task;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+import us.codecraft.webmagic.*;
+import us.codecraft.webmagic.monitor.SpiderMonitor;
+import us.codecraft.webmagic.pipeline.Pipeline;
+import us.codecraft.webmagic.processor.SimplePageProcessor;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -39,5 +42,40 @@ public class RedisSchedulerTest {
         Request poll = redisScheduler.poll(task);
         System.out.println(poll);
 
+    }
+
+    @Ignore("long time")
+    @Test
+    public void testStartAndStop() throws Exception {
+        SimplePageProcessor pageProcessor = new SimplePageProcessor("http://www.oschina.net/", "http://www.oschina.net/*");
+//        Pipeline pipeline = new ConsolePipeline();
+        Pipeline pipeline = new Pipeline() {
+            @Override
+            public void process(ResultItems resultItems, Task task) {
+//                System.out.println(resultItems);
+                System.out.println(resultItems.get("title"));
+            }
+        };
+
+
+        JedisPool jedisPool = new JedisPool(new JedisPoolConfig(), "127.0.0.1", 6379, 2000, "123456");
+        Scheduler scheduler = new RedisScheduler(jedisPool);
+
+        Spider spider = Spider
+                .create(pageProcessor)
+                .addPipeline(pipeline)
+                .setScheduler(scheduler)
+                .thread(6);
+
+        SpiderMonitor.instance().register(spider);
+
+        spider.run();
+
+//        spider.start();
+//        Thread.sleep(10000);
+//        spider.stop();
+//        Thread.sleep(10000);
+//        spider.start();
+//        Thread.sleep(10000);
     }
 }

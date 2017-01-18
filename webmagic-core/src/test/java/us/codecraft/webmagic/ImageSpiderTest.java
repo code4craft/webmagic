@@ -1,5 +1,6 @@
 package us.codecraft.webmagic;
 
+import org.jsoup.Jsoup;
 import org.junit.Ignore;
 import org.junit.Test;
 import us.codecraft.webmagic.downloader.Downloader;
@@ -8,67 +9,43 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.scheduler.QueueScheduler;
 import us.codecraft.webmagic.scheduler.Scheduler;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author code4crafter@gmail.com
  */
-public class SpiderTest {
+public class ImageSpiderTest {
 
     @Ignore("long time")
     @Test
     public void testStartAndStop() throws InterruptedException {
-        Request request = new Request("http://issuecdn.baidupcs.com/issue/netdisk/yunguanjia/BaiduNetdisk_5.5.1.exe", Request.Type.STREAM);
+//        PageProcessor pageProcessor = new ImagePageProcessor("http://www.oschina.net/", "http://www.oschina.net/*");
         PageProcessor pageProcessor = new PageProcessor() {
             @Override
             public void process(Page page) {
-                if (page.getRequest().getType() == Request.Type.STREAM) {
-                    handleDownload(page);
-                    page.setSkip(true);
-                    return;
+                if (page.getRequest().getType() == Request.Type.TEXT) {
+                    page.putField("title", page.getHtml().xpath("//title"));
+
+                    String url = Jsoup.parse(page.getRawText(), page.getRequest().getUrl()).select("a.pdtname img").first().absUrl("src");
+                    page.addTargetRequest(url, Request.Type.BYTES);
+                }
+                else {
+                    page.putField("bytes", page.getRawBytes());
                 }
             }
-
-            private void handleDownload(Page page) {
-                InputStream is = page.getInputStream();
-                try {
-                    BufferedInputStream bis = new BufferedInputStream(is, 8192);
-                    FileOutputStream fos = new FileOutputStream("F:/test.exe");
-                    BufferedOutputStream bos = new BufferedOutputStream(fos);
-
-                    byte[] buffer = new byte[8192];
-                    while (bis.read(buffer) != -1) {
-                        bos.write(buffer);
-                    }
-                    bos.flush();
-                }
-                catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                finally {
-                    try {
-                        is.close();
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-
             @Override
             public Site getSite() {
-                return Site.me();
+                return null;
             }
         };
-
         Pipeline pipeline = new Pipeline() {
             @Override
             public void process(ResultItems resultItems, Task task) {
-                System.out.println("finished");
+                System.out.println(resultItems.get("title"));
+
+                byte[] bytes = resultItems.get("bytes");
+                System.out.println(bytes);
             }
         };
 
@@ -78,18 +55,9 @@ public class SpiderTest {
                 .create(pageProcessor)
                 .addPipeline(pipeline)
                 .setScheduler(scheduler)
-                .thread(6)
-                .addRequest(request)
-                ;
+                .thread(6);
 
         spider.run();
-
-//        spider.start();
-//        Thread.sleep(10000);
-//        spider.stop();
-//        Thread.sleep(10000);
-//        spider.start();
-//        Thread.sleep(10000);
     }
 
     @Ignore("long time")

@@ -6,6 +6,7 @@ import us.codecraft.webmagic.selector.Json;
 import us.codecraft.webmagic.selector.Selectable;
 import us.codecraft.webmagic.utils.UrlUtils;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,10 @@ public class Page {
     private Json json;
 
     private String rawText;
+
+    private byte[] rawBytes;
+
+    private InputStream inputStream;
 
     private Selectable url;
 
@@ -69,7 +74,7 @@ public class Page {
      * @return html
      */
     public Html getHtml() {
-        if (html == null) {
+        if (html == null && rawText != null) {
             html = new Html(UrlUtils.fixAllRelativeHrefs(rawText, request.getUrl()));
         }
         return html;
@@ -82,7 +87,7 @@ public class Page {
      * @since 0.5.0
      */
     public Json getJson() {
-        if (json == null) {
+        if (json == null && rawText != null) {
             json = new Json(rawText);
         }
         return json;
@@ -107,15 +112,17 @@ public class Page {
      * @param requests requests
      */
     public void addTargetRequests(List<String> requests) {
-        synchronized (targetRequests) {
-            for (String s : requests) {
-                if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
-                    continue;
-                }
-                s = UrlUtils.canonicalizeUrl(s, url.toString());
-                targetRequests.add(new Request(s));
-            }
-        }
+        addTargetRequests(requests, Request.Type.TEXT);
+    }
+
+    /**
+     * add urls to fetch
+     *
+     * @param requests requests
+     * @param type type
+     */
+    public void addTargetRequests(List<String> requests, Request.Type type) {
+        addTargetRequests(requests, type, 0);
     }
 
     /**
@@ -125,13 +132,24 @@ public class Page {
      * @param priority priority
      */
     public void addTargetRequests(List<String> requests, long priority) {
+        addTargetRequests(requests, Request.Type.TEXT, priority);
+    }
+
+    /**
+     * add urls to fetch
+     *
+     * @param requests requests
+     * @param type type
+     * @param priority priority
+     */
+    public void addTargetRequests(List<String> requests, Request.Type type, long priority) {
         synchronized (targetRequests) {
             for (String s : requests) {
                 if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
                     continue;
                 }
                 s = UrlUtils.canonicalizeUrl(s, url.toString());
-                targetRequests.add(new Request(s).setPriority(priority));
+                targetRequests.add(new Request(s, null, type, priority));
             }
         }
     }
@@ -142,12 +160,22 @@ public class Page {
      * @param requestString requestString
      */
     public void addTargetRequest(String requestString) {
+        addTargetRequest(requestString, Request.Type.TEXT);
+    }
+
+    /**
+     * add url to fetch
+     *
+     * @param requestString requestString
+     * @param type type
+     */
+    public void addTargetRequest(String requestString, Request.Type type) {
         if (StringUtils.isBlank(requestString) || requestString.equals("#")) {
             return;
         }
         synchronized (targetRequests) {
             requestString = UrlUtils.canonicalizeUrl(requestString, url.toString());
-            targetRequests.add(new Request(requestString));
+            targetRequests.add(new Request(requestString, type));
         }
     }
 
@@ -218,12 +246,32 @@ public class Page {
         return this;
     }
 
+    public byte[] getRawBytes() {
+        return rawBytes;
+    }
+
+    public Page setRawBytes(byte[] rawBytes) {
+        this.rawBytes = rawBytes;
+        return this;
+    }
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public Page setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Page{" +
                 "request=" + request +
                 ", resultItems=" + resultItems +
                 ", rawText='" + rawText + '\'' +
+                ", rawBytes='" + rawBytes + '\'' +
+                ", inputStream='" + inputStream + '\'' +
                 ", url=" + url +
                 ", statusCode=" + statusCode +
                 ", targetRequests=" + targetRequests +

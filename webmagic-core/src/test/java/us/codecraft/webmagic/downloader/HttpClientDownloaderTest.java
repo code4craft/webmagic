@@ -82,6 +82,7 @@ public class HttpClientDownloaderTest {
 
             private String getCharsetByUrl(String url) {
                 HttpClientDownloader downloader = new HttpClientDownloader();
+                DefaultHttpResponseHandler httpResponseHandler = new DefaultHttpResponseHandler();
                 Site site = Site.me();
                 CloseableHttpClient httpClient = new HttpClientGenerator().getClient(site, null);
                 // encoding in http header Content-Type
@@ -95,7 +96,7 @@ public class HttpClientDownloaderTest {
                 String charset = null;
                 try {
                     byte[] contentBytes = IOUtils.toByteArray(httpResponse.getEntity().getContent());
-                    charset = downloader.getHtmlCharset(httpResponse,contentBytes);
+                    charset = httpResponseHandler.getHtmlCharset(httpResponse,contentBytes);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
