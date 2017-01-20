@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Map;
 
 import javax.net.ssl.SSLContext;
@@ -11,6 +12,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
@@ -33,6 +35,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.protocol.HttpContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.proxy.Proxy;
@@ -42,46 +46,51 @@ import us.codecraft.webmagic.proxy.Proxy;
  * @since 0.4.0
  */
 public class HttpClientGenerator {
-
+	
+	private transient Logger logger = LoggerFactory.getLogger(getClass());
+	
     private PoolingHttpClientConnectionManager connectionManager;
 
     public HttpClientGenerator() {
-		SSLConnectionSocketFactory sslConnectionSocketFactory = null;
-		try {
-			sslConnectionSocketFactory = new SSLConnectionSocketFactory(createIgnoreVerifySSL());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
         Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory>create()
                 .register("http", PlainConnectionSocketFactory.INSTANCE)
-//                .register("https", SSLConnectionSocketFactory.getSocketFactory())
-                .register("https", sslConnectionSocketFactory)
+                .register("https", buildSSLConnectionSocketFactory())
                 .build();
         connectionManager = new PoolingHttpClientConnectionManager(reg);
         connectionManager.setDefaultMaxPerRoute(100);
     }
 
-	private SSLContext createIgnoreVerifySSL() throws NoSuchAlgorithmException, KeyManagementException {
-		SSLContext sc = SSLContext.getInstance("SSLv3");
+	private SSLConnectionSocketFactory buildSSLConnectionSocketFactory() {
+		try {
+			return new SSLConnectionSocketFactory(createIgnoreVerifySSL()); // 优先绕过安全证书
+		} catch (KeyManagementException e) {
+			logger.error(ExceptionUtils.getStackTrace(e));
+		} catch (NoSuchAlgorithmException e) {
+			logger.error(ExceptionUtils.getStackTrace(e));
+		}
+		return SSLConnectionSocketFactory.getSocketFactory();
+	}
 
+	private SSLContext createIgnoreVerifySSL() throws NoSuchAlgorithmException, KeyManagementException {
 		// 实现一个X509TrustManager接口，用于绕过验证，不用修改里面的方法
 		X509TrustManager trustManager = new X509TrustManager() {
+
 			@Override
-			public void checkClientTrusted(java.security.cert.X509Certificate[] paramArrayOfX509Certificate,
-					String paramString) throws CertificateException {
+			public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 			}
 
 			@Override
-			public void checkServerTrusted(java.security.cert.X509Certificate[] paramArrayOfX509Certificate,
-					String paramString) throws CertificateException {
+			public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 			}
 
 			@Override
-			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+			public X509Certificate[] getAcceptedIssuers() {
 				return null;
 			}
+			
 		};
-
+		
+		SSLContext sc = SSLContext.getInstance("SSLv3");
 		sc.init(null, new TrustManager[] { trustManager }, null);
 		return sc;
 	}
