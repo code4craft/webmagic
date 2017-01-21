@@ -1,18 +1,6 @@
 package us.codecraft.webmagic.downloader;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.Map;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
@@ -26,20 +14,24 @@ import org.apache.http.config.SocketConfig;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.*;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.protocol.HttpContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.proxy.Proxy;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Map;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -64,10 +56,10 @@ public class HttpClientGenerator {
 		try {
 			return new SSLConnectionSocketFactory(createIgnoreVerifySSL()); // 优先绕过安全证书
 		} catch (KeyManagementException e) {
-			logger.error(ExceptionUtils.getStackTrace(e));
-		} catch (NoSuchAlgorithmException e) {
-			logger.error(ExceptionUtils.getStackTrace(e));
-		}
+            logger.error("ssl connection fail", e);
+        } catch (NoSuchAlgorithmException e) {
+            logger.error("ssl connection fail", e);
+        }
 		return SSLConnectionSocketFactory.getSocketFactory();
 	}
 
