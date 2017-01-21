@@ -39,7 +39,6 @@ public class PhantomJSDownloader extends AbstractDownloader {
      *    /usr/local/bin/phantomjs 命令的绝对路径，避免因系统环境变量引起的IOException
      *   
      * @param phantomJsCommand
-     * @return this
      */
     public PhantomJSDownloader(String phantomJsCommand) {
         this.initPhantomjsCrawlPath();
@@ -49,7 +48,7 @@ public class PhantomJSDownloader extends AbstractDownloader {
     /**
      * 新增构造函数，支持crawl.js路径自定义，因为当其他项目依赖此jar包时，runtime.exec()执行phantomjs命令时无使用法jar包中的crawl.js
      * <pre>
-     * crawl.js start -->>
+     * crawl.js start --
      * 
      *   var system = require('system');
      *   var url = system.args[1];
@@ -69,7 +68,7 @@ public class PhantomJSDownloader extends AbstractDownloader {
      *       phantom.exit();
      *   });
      *   
-     * <<-- crawl.js end
+     * -- crawl.js end
      * </pre>
      * 具体项目时可以将以上js代码复制下来使用
      *   
@@ -78,7 +77,6 @@ public class PhantomJSDownloader extends AbstractDownloader {
      * 
      * @param phantomJsCommand phantomJsCommand
      * @param crawlJsPath crawlJsPath
-     * @return this
      */
     public PhantomJSDownloader(String phantomJsCommand, String crawlJsPath) {
       PhantomJSDownloader.phantomJsCommand = phantomJsCommand;
