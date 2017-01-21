@@ -292,7 +292,7 @@ public class Spider implements Runnable, Task {
         }
         if (startRequests != null) {
             for (Request request : startRequests) {
-                scheduler.push(request, this);
+                addRequest(request);
             }
             startRequests.clear();
         }
