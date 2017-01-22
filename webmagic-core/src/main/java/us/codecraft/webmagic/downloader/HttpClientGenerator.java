@@ -18,10 +18,19 @@ import org.apache.http.impl.client.*;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.protocol.HttpContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.proxy.Proxy;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Map;
 
 /**
@@ -29,18 +38,55 @@ import java.util.Map;
  * @since 0.4.0
  */
 public class HttpClientGenerator {
-
+	
+	private transient Logger logger = LoggerFactory.getLogger(getClass());
+	
     private PoolingHttpClientConnectionManager connectionManager;
 
     public HttpClientGenerator() {
         Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory>create()
                 .register("http", PlainConnectionSocketFactory.INSTANCE)
-                .register("https", SSLConnectionSocketFactory.getSocketFactory())
+                .register("https", buildSSLConnectionSocketFactory())
                 .build();
         connectionManager = new PoolingHttpClientConnectionManager(reg);
         connectionManager.setDefaultMaxPerRoute(100);
     }
 
+	private SSLConnectionSocketFactory buildSSLConnectionSocketFactory() {
+		try {
+			return new SSLConnectionSocketFactory(createIgnoreVerifySSL()); // 优先绕过安全证书
+		} catch (KeyManagementException e) {
+            logger.error("ssl connection fail", e);
+        } catch (NoSuchAlgorithmException e) {
+            logger.error("ssl connection fail", e);
+        }
+		return SSLConnectionSocketFactory.getSocketFactory();
+	}
+
+	private SSLContext createIgnoreVerifySSL() throws NoSuchAlgorithmException, KeyManagementException {
+		// 实现一个X509TrustManager接口，用于绕过验证，不用修改里面的方法
+		X509TrustManager trustManager = new X509TrustManager() {
+
+			@Override
+			public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+			}
+
+			@Override
+			public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+			}
+
+			@Override
+			public X509Certificate[] getAcceptedIssuers() {
+				return null;
+			}
+			
+		};
+		
+		SSLContext sc = SSLContext.getInstance("SSLv3");
+		sc.init(null, new TrustManager[] { trustManager }, null);
+		return sc;
+	}
+    
     public HttpClientGenerator setPoolSize(int poolSize) {
         connectionManager.setMaxTotal(poolSize);
         return this;
