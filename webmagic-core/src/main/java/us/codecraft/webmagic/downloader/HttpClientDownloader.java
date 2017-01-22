@@ -8,10 +8,12 @@ import org.apache.http.NameValuePair;
 import org.apache.http.annotation.ThreadSafe;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -31,9 +33,7 @@ import us.codecraft.webmagic.utils.WMCollections;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -167,13 +167,26 @@ public class HttpClientDownloader extends AbstractDownloader {
         String method = request.getMethod();
         if (method == null || method.equalsIgnoreCase(HttpConstant.Method.GET)) {
             //default get
-            return RequestBuilder.get();
+            RequestBuilder requestBuilder=RequestBuilder.get();
+            if (request.getParams() != null) {
+                for (Map.Entry<String, String> entry : request.getParams().entrySet()) {
+                    requestBuilder.addParameter(entry.getKey(), entry.getValue());
+                }
+            }
+            return requestBuilder;
         } else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
             RequestBuilder requestBuilder = RequestBuilder.post();
             NameValuePair[] nameValuePair = (NameValuePair[]) request.getExtra("nameValuePair");
+            List<NameValuePair> allNameValuePair=new ArrayList<NameValuePair>();
             if (nameValuePair != null && nameValuePair.length > 0) {
-                requestBuilder.addParameters(nameValuePair);
+                allNameValuePair= Arrays.asList(nameValuePair);
             }
+            if (request.getParams() != null) {
+                for (String key : request.getParams().keySet()) {
+                    allNameValuePair.add(new BasicNameValuePair(key, request.getParams().get(key)));
+                }
+            }
+            requestBuilder.setEntity(new UrlEncodedFormEntity(allNameValuePair, Charset.forName("utf8")));
             return requestBuilder;
         } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
             return RequestBuilder.head();
