@@ -102,7 +102,7 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
 
     /**
      * @param key1 key1
-     * @return
+     * @return map
      */
     public Map<K2, V> remove(K1 key1) {
         Map<K2, V> remove = map.remove(key1);
