@@ -98,8 +98,8 @@ public class HttpClientDownloader extends AbstractDownloader {
                 proxyHost = site.getHttpProxy();
             }
             
-            HttpUriRequest httpUriRequest = getHttpUriRequest(request, site, headers, proxyHost);//���������˴���
-            httpResponse = getHttpClient(site, proxy).execute(httpUriRequest);//getHttpClient�������˴�����֤
+            HttpUriRequest httpUriRequest = getHttpUriRequest(request, site, headers, proxyHost);
+            httpResponse = getHttpClient(site, proxy).execute(httpUriRequest);
             statusCode = httpResponse.getStatusLine().getStatusCode();
             request.putExtra(Request.STATUS_CODE, statusCode);
             if (statusAccept(acceptStatCode, statusCode)) {
