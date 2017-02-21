@@ -50,6 +50,7 @@ public abstract class AbstractDownloader implements Downloader {
             int cycleTriedTimes = (Integer) cycleTriedTimesObject;
             cycleTriedTimes++;
             if (cycleTriedTimes >= site.getCycleRetryTimes()) {
+                onError(request);
                 return null;
             }
             page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, cycleTriedTimes));

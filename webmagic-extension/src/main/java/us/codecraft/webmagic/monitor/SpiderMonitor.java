@@ -91,6 +91,12 @@ public class SpiderMonitor {
             errorCount.incrementAndGet();
         }
 
+        @Override
+        public void onError(Request request, Exception e) {
+            errorUrls.add(request.getUrl());
+            errorCount.incrementAndGet();
+        }
+
         public AtomicInteger getSuccessCount() {
             return successCount;
         }
