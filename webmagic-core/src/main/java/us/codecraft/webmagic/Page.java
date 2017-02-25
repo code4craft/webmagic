@@ -107,14 +107,12 @@ public class Page {
      * @param requests requests
      */
     public void addTargetRequests(List<String> requests) {
-        synchronized (targetRequests) {
-            for (String s : requests) {
-                if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
-                    continue;
-                }
-                s = UrlUtils.canonicalizeUrl(s, url.toString());
-                targetRequests.add(new Request(s));
+        for (String s : requests) {
+            if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
+                continue;
             }
+            s = UrlUtils.canonicalizeUrl(s, url.toString());
+            targetRequests.add(new Request(s));
         }
     }
 
@@ -125,14 +123,12 @@ public class Page {
      * @param priority priority
      */
     public void addTargetRequests(List<String> requests, long priority) {
-        synchronized (targetRequests) {
-            for (String s : requests) {
-                if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
-                    continue;
-                }
-                s = UrlUtils.canonicalizeUrl(s, url.toString());
-                targetRequests.add(new Request(s).setPriority(priority));
+        for (String s : requests) {
+            if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
+                continue;
             }
+            s = UrlUtils.canonicalizeUrl(s, url.toString());
+            targetRequests.add(new Request(s).setPriority(priority));
         }
     }
 
@@ -145,10 +141,8 @@ public class Page {
         if (StringUtils.isBlank(requestString) || requestString.equals("#")) {
             return;
         }
-        synchronized (targetRequests) {
-            requestString = UrlUtils.canonicalizeUrl(requestString, url.toString());
-            targetRequests.add(new Request(requestString));
-        }
+        requestString = UrlUtils.canonicalizeUrl(requestString, url.toString());
+        targetRequests.add(new Request(requestString));
     }
 
     /**
@@ -157,9 +151,7 @@ public class Page {
      * @param request request
      */
     public void addTargetRequest(Request request) {
-        synchronized (targetRequests) {
-            targetRequests.add(request);
-        }
+        targetRequests.add(request);
     }
 
     /**
