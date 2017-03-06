@@ -586,6 +586,7 @@ public class Spider implements Runnable, Task {
         if (threadNum <= 0) {
             throw new IllegalArgumentException("threadNum should be more than one!");
         }
+        this.executorService = executorService;
         return this;
     }
 
