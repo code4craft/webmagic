@@ -81,25 +81,8 @@ public class Request implements Serializable {
         return url;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Request request = (Request) o;
-
-        if (!url.equals(request.url)) return false;
-
-        return true;
-    }
-
     public Map<String, Object> getExtras() {
         return extras;
-    }
-
-    @Override
-    public int hashCode() {
-        return url.hashCode();
     }
 
     public void setExtras(Map<String, Object> extras) {
@@ -132,5 +115,23 @@ public class Request implements Serializable {
                 ", extras=" + extras +
                 ", priority=" + priority +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Request request = (Request) o;
+
+        if (url != null ? !url.equals(request.url) : request.url != null) return false;
+        return method != null ? method.equals(request.method) : request.method == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = url != null ? url.hashCode() : 0;
+        result = 31 * result + (method != null ? method.hashCode() : 0);
+        return result;
     }
 }
