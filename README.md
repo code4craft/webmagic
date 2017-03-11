@@ -114,9 +114,7 @@ The architecture of webmagic (refered to [Scrapy](http://scrapy.org/))
 
 ![image](http://code4craft.github.io/images/posts/webmagic.png)
 
-Javadocs: [http://code4craft.github.io/webmagic/docs/en/](http://code4craft.github.io/webmagic/docs/en/)
-
-There are some samples in `webmagic-samples` package.
+There are more examples in `webmagic-samples` package.
 
 ### Lisence:
 
