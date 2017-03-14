@@ -156,14 +156,19 @@ public class SimpleProxyPool implements ProxyPool {
         isEnable = true;
         for (String[] s : httpProxyList) {
             try {
-                if (allProxy.containsKey(s[2])) {
+                if (allProxy.containsKey(s[0])) {
                     continue;
                 }
-                HttpHost item = new HttpHost(InetAddress.getByName(s[2]), Integer.valueOf(s[3]));
+                HttpHost item = new HttpHost(InetAddress.getByName(s[0]), Integer.valueOf(s[1]));
                 if (!validateWhenInit || ProxyUtils.validateProxy(item)) {
-                    Proxy p = new Proxy(item, reuseInterval, s[0], s[1]);
+                    Proxy p;
+                    if(s.length == 2){
+                        p = new Proxy(item, reuseInterval);
+                    }else{
+                        p = new Proxy(item, reuseInterval, s[2], s[3]);
+                    }
                     proxyQueue.add(p);
-                    allProxy.put(s[2], p);
+                    allProxy.put(s[0], p);
                 }
             } catch (NumberFormatException e) {
                 logger.error("HttpHost init error:", e);
@@ -179,7 +184,7 @@ public class SimpleProxyPool implements ProxyPool {
         try {
             Long time = System.currentTimeMillis();
             proxy = proxyQueue.take();
-            double costTime = (System.currentTimeMillis() - time) / 1000.0;
+            double costTime = System.currentTimeMillis() - time;
             if (costTime > reuseInterval) {
                 logger.info("get proxy time >>>> " + costTime);
             }
