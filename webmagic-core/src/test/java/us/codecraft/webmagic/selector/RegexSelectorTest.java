@@ -22,4 +22,20 @@ public class RegexSelectorTest {
         String select = regexSelector.select(source);
         Assertions.assertThat(select).isEqualTo(source);
     }
+
+    @Test
+    public void testRegexWithZeroWidthAssertions() {
+        String regex = "^.*(?=\\?)";
+        String source = "hello world?xxxx";
+        RegexSelector regexSelector = new RegexSelector(regex);
+        String select = regexSelector.select(source);
+        Assertions.assertThat(select).isEqualTo("hello world");
+
+
+        regex = "\\d{3}(?!\\d)";
+        source = "123456asdf";
+        regexSelector = new RegexSelector(regex);
+        select = regexSelector.select(source);
+        Assertions.assertThat(select).isEqualTo("456");
+    }
 }
