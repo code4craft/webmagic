@@ -29,6 +29,10 @@ public class Request implements Serializable {
      * Store additional information in extras.
      */
     private Map<String, Object> extras;
+    /**
+     * POST/GET param set
+     * */
+    private Map<String,String> params=new HashMap<String, String>();
 
     /**
      * Priority of the request.<br>
@@ -107,6 +111,21 @@ public class Request implements Serializable {
         this.method = method;
     }
 
+    public Map<String, String> getParams() {
+        return params;
+    }
+    /**
+     * POST/GET参数设置
+     * */
+    public void setParams(Map<String, String> params) {
+        this.params = params;
+    }
+    /**
+     * POST/GET参数设置
+     * */
+    public void putParams(String key,String value) {
+        params.put(key,value);
+    }
     @Override
     public String toString() {
         return "Request{" +
