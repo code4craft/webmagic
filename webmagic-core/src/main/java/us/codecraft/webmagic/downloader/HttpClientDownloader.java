@@ -162,13 +162,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         String method = request.getMethod();
         if (method == null || method.equalsIgnoreCase(HttpConstant.Method.GET)) {
             //default get
-            RequestBuilder requestBuilder=RequestBuilder.get();
-            if (request.getParams() != null) {
-                for (Map.Entry<String, String> entry : request.getParams().entrySet()) {
-                    requestBuilder.addParameter(entry.getKey(), entry.getValue());
-                }
-            }
-            return requestBuilder;
+            return addParams(RequestBuilder.get(),request.getParams());
         } else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
             RequestBuilder requestBuilder = RequestBuilder.post();
             NameValuePair[] nameValuePair = (NameValuePair[]) request.getExtra("nameValuePair");
@@ -184,15 +178,24 @@ public class HttpClientDownloader extends AbstractDownloader {
             requestBuilder.setEntity(new UrlEncodedFormEntity(allNameValuePair, Charset.forName("utf8")));
             return requestBuilder;
         } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
-            return RequestBuilder.head();
+            return addParams(RequestBuilder.head(),request.getParams());
         } else if (method.equalsIgnoreCase(HttpConstant.Method.PUT)) {
-            return RequestBuilder.put();
+            return addParams(RequestBuilder.put(),request.getParams());
         } else if (method.equalsIgnoreCase(HttpConstant.Method.DELETE)) {
-            return RequestBuilder.delete();
+            return addParams(RequestBuilder.delete(),request.getParams());
         } else if (method.equalsIgnoreCase(HttpConstant.Method.TRACE)) {
-            return RequestBuilder.trace();
+            return addParams(RequestBuilder.trace(),request.getParams());
         }
         throw new IllegalArgumentException("Illegal HTTP Method " + method);
+    }
+
+    private RequestBuilder addParams(RequestBuilder requestBuilder, Map<String, String> params) {
+        if (params != null) {
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                requestBuilder.addParameter(entry.getKey(), entry.getValue());
+            }
+        }
+        return requestBuilder;
     }
 
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {

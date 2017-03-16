@@ -115,14 +115,18 @@ public class Request implements Serializable {
         return params;
     }
     /**
-     * POST/GET参数设置
+     * set params for request
+     * <br>
+     * DO NOT set this for request already has params, like 'https://github.com/search?q=webmagic'
      * @param params params
      * */
     public void setParams(Map<String, String> params) {
         this.params = params;
     }
     /**
-     * POST/GET参数设置
+     * set params for request
+     * <br>
+     * DO NOT set this for request already has params, like 'https://github.com/search?q=webmagic'
      * @param key key
      * @param value value
      * */
