@@ -116,24 +116,18 @@ public class Request implements Serializable {
     }
     /**
      * POST/GET参数设置
+     * @param params params
      * */
     public void setParams(Map<String, String> params) {
         this.params = params;
     }
     /**
      * POST/GET参数设置
+     * @param key key
+     * @param value value
      * */
     public void putParams(String key,String value) {
         params.put(key,value);
-    }
-    @Override
-    public String toString() {
-        return "Request{" +
-                "url='" + url + '\'' +
-                ", method='" + method + '\'' +
-                ", extras=" + extras +
-                ", priority=" + priority +
-                '}';
     }
 
     @Override
@@ -144,13 +138,26 @@ public class Request implements Serializable {
         Request request = (Request) o;
 
         if (url != null ? !url.equals(request.url) : request.url != null) return false;
-        return method != null ? method.equals(request.method) : request.method == null;
+        if (method != null ? !method.equals(request.method) : request.method != null) return false;
+        return params != null ? params.equals(request.params) : request.params == null;
     }
 
     @Override
     public int hashCode() {
         int result = url != null ? url.hashCode() : 0;
         result = 31 * result + (method != null ? method.hashCode() : 0);
+        result = 31 * result + (params != null ? params.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Request{" +
+                "url='" + url + '\'' +
+                ", method='" + method + '\'' +
+                ", extras=" + extras +
+                ", params=" + params +
+                ", priority=" + priority +
+                '}';
     }
 }
