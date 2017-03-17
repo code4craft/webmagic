@@ -100,7 +100,7 @@ public class HttpClientGenerator {
         CredentialsProvider credsProvider = null;
         HttpClientBuilder httpClientBuilder = HttpClients.custom();
         
-        if(proxy!=null && StringUtils.isNotBlank(proxy.getUser()) && StringUtils.isNotBlank(proxy.getPassword()))
+        if (proxy != null && StringUtils.isNotBlank(proxy.getUser()) && StringUtils.isNotBlank(proxy.getPassword()))
         {
             credsProvider= new BasicCredentialsProvider();
             credsProvider.setCredentials(
@@ -109,7 +109,7 @@ public class HttpClientGenerator {
             httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
         }
 
-        if(site!=null&&site.getHttpProxy()!=null&&site.getUsernamePasswordCredentials()!=null){
+        if (site != null && site.getHttpProxy()!= null && site.getUsernamePasswordCredentials() != null){
             credsProvider = new BasicCredentialsProvider();
             credsProvider.setCredentials(
                     new AuthScope(site.getHttpProxy()),//可以访问的范围
@@ -137,14 +137,19 @@ public class HttpClientGenerator {
         }
         //解决post/redirect/post 302跳转问题
         httpClientBuilder.setRedirectStrategy(new CustomRedirectStrategy());
-        
-        SocketConfig socketConfig = SocketConfig.custom().setSoTimeout(site.getTimeOut()).setSoKeepAlive(true).setTcpNoDelay(true).build();
+
+        SocketConfig.Builder socketConfigBuilder = SocketConfig.custom();
+        socketConfigBuilder.setSoKeepAlive(true).setTcpNoDelay(true);
+        if (site != null) {
+            socketConfigBuilder.setSoTimeout(site.getTimeOut());
+        }
+        SocketConfig socketConfig = socketConfigBuilder.build();
         httpClientBuilder.setDefaultSocketConfig(socketConfig);
         connectionManager.setDefaultSocketConfig(socketConfig);
         if (site != null) {
             httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(site.getRetryTimes(), true));
+            generateCookie(httpClientBuilder, site);
         }
-        generateCookie(httpClientBuilder, site);
         return httpClientBuilder.build();
     }
 
