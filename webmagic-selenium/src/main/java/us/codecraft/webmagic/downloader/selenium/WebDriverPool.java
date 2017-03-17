@@ -45,7 +45,7 @@ class WebDriverPool {
 	private WebDriver mDriver = null;
 	private boolean mAutoQuitDriver = true;
 
-	private static final String CONFIG_FILE = "/Users/Bingo/Documents/workspace/webmagic/webmagic-selenium/config.ini";
+	private static final String DEFAULT_CONFIG_FILE = "/data/webmagic/webmagic-selenium/config.ini";
 	private static final String DRIVER_FIREFOX = "firefox";
 	private static final String DRIVER_CHROME = "chrome";
 	private static final String DRIVER_PHANTOMJS = "phantomjs";
@@ -64,7 +64,11 @@ class WebDriverPool {
 	public void configure() throws IOException {
 		// Read config file
 		sConfig = new Properties();
-		sConfig.load(new FileReader(CONFIG_FILE));
+		String configFile = DEFAULT_CONFIG_FILE;
+		if (System.getProperty("selenuim_config")!=null){
+			configFile = System.getProperty("selenuim_config");
+		}
+		sConfig.load(new FileReader(configFile));
 
 		// Prepare capabilities
 		sCaps = new DesiredCapabilities();

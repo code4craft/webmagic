@@ -1,7 +1,6 @@
 package us.codecraft.webmagic.downloader;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -15,10 +14,6 @@ import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
@@ -27,8 +22,8 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.selector.PlainText;
+import us.codecraft.webmagic.utils.CharsetUtils;
 import us.codecraft.webmagic.utils.HttpConstant;
-import us.codecraft.webmagic.utils.UrlUtils;
 import us.codecraft.webmagic.utils.WMCollections;
 
 import java.io.IOException;
@@ -98,8 +93,8 @@ public class HttpClientDownloader extends AbstractDownloader {
                 proxyHost = site.getHttpProxy();
             }
             
-            HttpUriRequest httpUriRequest = getHttpUriRequest(request, site, headers, proxyHost);//���������˴���
-            httpResponse = getHttpClient(site, proxy).execute(httpUriRequest);//getHttpClient�������˴�����֤
+            HttpUriRequest httpUriRequest = getHttpUriRequest(request, site, headers, proxyHost);
+            httpResponse = getHttpClient(site, proxy).execute(httpUriRequest);
             statusCode = httpResponse.getStatusLine().getStatusCode();
             request.putExtra(Request.STATUS_CODE, statusCode);
             if (statusAccept(acceptStatCode, statusCode)) {
@@ -167,37 +162,42 @@ public class HttpClientDownloader extends AbstractDownloader {
         String method = request.getMethod();
         if (method == null || method.equalsIgnoreCase(HttpConstant.Method.GET)) {
             //default get
-            RequestBuilder requestBuilder=RequestBuilder.get();
-            if (request.getParams() != null) {
-                for (Map.Entry<String, String> entry : request.getParams().entrySet()) {
-                    requestBuilder.addParameter(entry.getKey(), entry.getValue());
-                }
-            }
-            return requestBuilder;
+            return addQueryParams(RequestBuilder.get(),request.getParams());
         } else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
-            RequestBuilder requestBuilder = RequestBuilder.post();
-            NameValuePair[] nameValuePair = (NameValuePair[]) request.getExtra("nameValuePair");
-            List<NameValuePair> allNameValuePair=new ArrayList<NameValuePair>();
-            if (nameValuePair != null && nameValuePair.length > 0) {
-                allNameValuePair= Arrays.asList(nameValuePair);
-            }
-            if (request.getParams() != null) {
-                for (String key : request.getParams().keySet()) {
-                    allNameValuePair.add(new BasicNameValuePair(key, request.getParams().get(key)));
-                }
-            }
-            requestBuilder.setEntity(new UrlEncodedFormEntity(allNameValuePair, Charset.forName("utf8")));
-            return requestBuilder;
+            return addFormParams(RequestBuilder.post(), (NameValuePair[]) request.getExtra("nameValuePair"), request.getParams());
         } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
-            return RequestBuilder.head();
+            return addQueryParams(RequestBuilder.head(),request.getParams());
         } else if (method.equalsIgnoreCase(HttpConstant.Method.PUT)) {
-            return RequestBuilder.put();
+            return addFormParams(RequestBuilder.put(), (NameValuePair[]) request.getExtra("nameValuePair"), request.getParams());
         } else if (method.equalsIgnoreCase(HttpConstant.Method.DELETE)) {
-            return RequestBuilder.delete();
+            return addQueryParams(RequestBuilder.delete(),request.getParams());
         } else if (method.equalsIgnoreCase(HttpConstant.Method.TRACE)) {
-            return RequestBuilder.trace();
+            return addQueryParams(RequestBuilder.trace(),request.getParams());
         }
         throw new IllegalArgumentException("Illegal HTTP Method " + method);
+    }
+
+    private RequestBuilder addFormParams(RequestBuilder requestBuilder, NameValuePair[] nameValuePair, Map<String, String> params) {
+        List<NameValuePair> allNameValuePair=new ArrayList<NameValuePair>();
+        if (nameValuePair != null && nameValuePair.length > 0) {
+            allNameValuePair= Arrays.asList(nameValuePair);
+        }
+        if (params != null) {
+            for (String key : params.keySet()) {
+                allNameValuePair.add(new BasicNameValuePair(key, params.get(key)));
+            }
+        }
+        requestBuilder.setEntity(new UrlEncodedFormEntity(allNameValuePair, Charset.forName("utf8")));
+        return requestBuilder;
+    }
+
+    private RequestBuilder addQueryParams(RequestBuilder requestBuilder, Map<String, String> params) {
+        if (params != null) {
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                requestBuilder.addParameter(entry.getKey(), entry.getValue());
+            }
+        }
+        return requestBuilder;
     }
 
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
@@ -226,40 +226,6 @@ public class HttpClientDownloader extends AbstractDownloader {
     }
 
     protected String getHtmlCharset(HttpResponse httpResponse, byte[] contentBytes) throws IOException {
-        String charset;
-        // charset
-        // 1、encoding in http header Content-Type
-        String value = httpResponse.getEntity().getContentType().getValue();
-        charset = UrlUtils.getCharset(value);
-        if (StringUtils.isNotBlank(charset)) {
-            logger.debug("Auto get charset: {}", charset);
-            return charset;
-        }
-        // use default charset to decode first time
-        Charset defaultCharset = Charset.defaultCharset();
-        String content = new String(contentBytes, defaultCharset.name());
-        // 2、charset in meta
-        if (StringUtils.isNotEmpty(content)) {
-            Document document = Jsoup.parse(content);
-            Elements links = document.select("meta");
-            for (Element link : links) {
-                // 2.1、html4.01 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-                String metaContent = link.attr("content");
-                String metaCharset = link.attr("charset");
-                if (metaContent.indexOf("charset") != -1) {
-                    metaContent = metaContent.substring(metaContent.indexOf("charset"), metaContent.length());
-                    charset = metaContent.split("=")[1];
-                    break;
-                }
-                // 2.2、html5 <meta charset="UTF-8" />
-                else if (StringUtils.isNotEmpty(metaCharset)) {
-                    charset = metaCharset;
-                    break;
-                }
-            }
-        }
-        logger.debug("Auto get charset: {}", charset);
-        // 3、todo use tools as cpdetector for content decode
-        return charset;
+        return CharsetUtils.detectCharset(httpResponse.getEntity().getContentType().getValue(), contentBytes);
     }
 }

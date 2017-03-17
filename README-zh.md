@@ -168,30 +168,6 @@ webmagic的使用可以参考：[oschina openapi 应用：博客搬家](http://m
 
 webmagic遵循[Apache 2.0协议](http://opensource.org/licenses/Apache-2.0)
 
-### 贡献者:
-
-以下是为WebMagic提交过代码或者issue的朋友:
-
-* [ccliangbo](https://github.com/ccliangbo)
-* [yuany](https://github.com/yuany)
-* [yxssfxwzy](https://github.com/yxssfxwzy)
-* [linkerlin](https://github.com/linkerlin)
-* [d0ngw](https://github.com/d0ngw)
-* [xuchaoo](https://github.com/xuchaoo)
-* [supermicah](https://github.com/supermicah)
-* [SimpleExpress](https://github.com/SimpleExpress)
-* [aruanruan](https://github.com/aruanruan)
-* [l1z2g9](https://github.com/l1z2g9)
-* [zhegexiaohuozi](https://github.com/zhegexiaohuozi)
-* [ywooer](https://github.com/ywooer)
-* [yyw258520](https://github.com/yyw258520)
-* [perfecking](https://github.com/perfecking)
-* [lidongyang](http://my.oschina.net/lidongyang)
-* [seveniu](https://github.com/seveniu)
-* [sebastian1118](https://github.com/sebastian1118)
-* [codev777](https://github.com/codev777)
-* [fengwuze](https://github.com/fengwuze)
-
 ### 邮件组:
 
 Gmail：

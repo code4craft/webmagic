@@ -59,7 +59,7 @@ public class GithubRepoPageProcessor implements PageProcessor {
     public void process(Page page) {
         page.addTargetRequests(page.getHtml().links().regex("(https://github\\.com/\\w+/\\w+)").all());
         page.putField("author", page.getUrl().regex("https://github\\.com/(\\w+)/.*").toString());
-        page.putField("name", page.getHtml().xpath("//h1[@class='entry-title public']/strong/a/text()").toString());
+        page.putField("name", page.getHtml().xpath("//h1[@class='public']/strong/a/text()").toString());
         if (page.getResultItems().get("name")==null){
             //skip this page
             page.setSkip(true);
@@ -89,7 +89,7 @@ You can also use annotation way:
 @HelpUrl("https://github.com/\\w+")
 public class GithubRepo {
 
-    @ExtractBy(value = "//h1[@class='entry-title public']/strong/a/text()", notNull = true)
+    @ExtractBy(value = "//h1[@class='public']/strong/a/text()", notNull = true)
     private String name;
 
     @ExtractByUrl("https://github\\.com/(\\w+)/.*")
@@ -114,38 +114,11 @@ The architecture of webmagic (refered to [Scrapy](http://scrapy.org/))
 
 ![image](http://code4craft.github.io/images/posts/webmagic.png)
 
-Javadocs: [http://code4craft.github.io/webmagic/docs/en/](http://code4craft.github.io/webmagic/docs/en/)
-
-There are some samples in `webmagic-samples` package.
+There are more examples in `webmagic-samples` package.
 
 ### Lisence:
 
 Lisenced under [Apache 2.0 lisence](http://opensource.org/licenses/Apache-2.0)
-
-### Contributors:
-
-Thanks these people for commiting source code, reporting bugs or suggesting for new feature:
-
-* [ccliangbo](https://github.com/ccliangbo)
-* [yuany](https://github.com/yuany)
-* [yxssfxwzy](https://github.com/yxssfxwzy)
-* [linkerlin](https://github.com/linkerlin)
-* [d0ngw](https://github.com/d0ngw)
-* [xuchaoo](https://github.com/xuchaoo)
-* [supermicah](https://github.com/supermicah)
-* [SimpleExpress](https://github.com/SimpleExpress)
-* [aruanruan](https://github.com/aruanruan)
-* [l1z2g9](https://github.com/l1z2g9)
-* [zhegexiaohuozi](https://github.com/zhegexiaohuozi)
-* [ywooer](https://github.com/ywooer)
-* [yyw258520](https://github.com/yyw258520)
-* [perfecking](https://github.com/perfecking)
-* [lidongyang](http://my.oschina.net/lidongyang)
-* [seveniu](https://github.com/seveniu)
-* [sebastian1118](https://github.com/sebastian1118)
-* [codev777](https://github.com/codev777)
-* [fengwuze](https://github.com/fengwuze)
-
 
 ### Thanks:
 

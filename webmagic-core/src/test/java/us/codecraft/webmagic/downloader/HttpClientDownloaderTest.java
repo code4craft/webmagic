@@ -5,13 +5,17 @@ import com.github.dreamhead.moco.Runnable;
 import com.github.dreamhead.moco.Runner;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.selector.Html;
+import us.codecraft.webmagic.utils.HttpConstant;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -100,6 +104,44 @@ public class HttpClientDownloaderTest {
                     e.printStackTrace();
                 }
                 return charset;
+            }
+        });
+    }
+
+    @Test
+    public void test_selectRequestMethod() throws Exception {
+        HttpServer server = httpserver(12306);
+        server.get(eq(query("q"), "webmagic")).response("get");
+        server.post(eq(form("q"), "webmagic")).response("post");
+        server.put(eq(form("q"), "webmagic")).response("put");
+        server.delete(eq(query("q"), "webmagic")).response("delete");
+        server.request(and(by(method("HEAD")),eq(query("q"), "webmagic"))).response(header("method","head"));
+        server.request(and(by(method("TRACE")),eq(query("q"), "webmagic"))).response("trace");
+        Runner.running(server, new Runnable() {
+            @Override
+            public void run() throws Exception {
+                HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+                Request request = new Request();
+                request.setUrl("http://127.0.0.1:12306/search");
+                request.putParams("q", "webmagic");
+                request.setMethod(HttpConstant.Method.GET);
+                RequestBuilder requestBuilder = httpClientDownloader.selectRequestMethod(request).setUri(request.getUrl());
+                assertThat(EntityUtils.toString(HttpClients.custom().build().execute(requestBuilder.build()).getEntity())).isEqualTo("get");
+                request.setMethod(HttpConstant.Method.POST);
+                requestBuilder = httpClientDownloader.selectRequestMethod(request).setUri(request.getUrl());
+                assertThat(EntityUtils.toString(HttpClients.custom().build().execute(requestBuilder.build()).getEntity())).isEqualTo("post");
+                request.setMethod(HttpConstant.Method.PUT);
+                requestBuilder = httpClientDownloader.selectRequestMethod(request).setUri(request.getUrl());
+                assertThat(EntityUtils.toString(HttpClients.custom().build().execute(requestBuilder.build()).getEntity())).isEqualTo("put");
+                request.setMethod(HttpConstant.Method.DELETE);
+                requestBuilder = httpClientDownloader.selectRequestMethod(request).setUri(request.getUrl());
+                assertThat(EntityUtils.toString(HttpClients.custom().build().execute(requestBuilder.build()).getEntity())).isEqualTo("delete");
+                request.setMethod(HttpConstant.Method.HEAD);
+                requestBuilder = httpClientDownloader.selectRequestMethod(request).setUri(request.getUrl());
+                assertThat(HttpClients.custom().build().execute(requestBuilder.build()).getFirstHeader("method").getValue()).isEqualTo("head");
+                request.setMethod(HttpConstant.Method.TRACE);
+                requestBuilder = httpClientDownloader.selectRequestMethod(request).setUri(request.getUrl());
+                assertThat(EntityUtils.toString(HttpClients.custom().build().execute(requestBuilder.build()).getEntity())).isEqualTo("trace");
             }
         });
     }

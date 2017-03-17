@@ -305,7 +305,7 @@ public class Spider implements Runnable, Task {
         initComponent();
         logger.info("Spider " + getUUID() + " started!");
         while (!Thread.currentThread().isInterrupted() && stat.get() == STAT_RUNNING) {
-            Request request = scheduler.poll(this);
+            final Request request = scheduler.poll(this);
             if (request == null) {
                 if (threadPool.getThreadAlive() == 0 && exitWhenComplete) {
                     break;
@@ -313,16 +313,15 @@ public class Spider implements Runnable, Task {
                 // wait until new url added
                 waitNewUrl();
             } else {
-                final Request requestFinal = request;
                 threadPool.execute(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            processRequest(requestFinal);
-                            onSuccess(requestFinal);
+                            processRequest(request);
+                            onSuccess(request);
                         } catch (Exception e) {
-                            onError(requestFinal);
-                            logger.error("process request " + requestFinal + " error", e);
+                            onError(request);
+                            logger.error("process request " + request + " error", e);
                         } finally {
                             pageCount.incrementAndGet();
                             signalNewUrl();
@@ -587,6 +586,7 @@ public class Spider implements Runnable, Task {
         if (threadNum <= 0) {
             throw new IllegalArgumentException("threadNum should be more than one!");
         }
+        this.executorService = executorService;
         return this;
     }
 

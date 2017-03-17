@@ -22,7 +22,7 @@ public class HuabanProcessor implements PageProcessor {
     public void process(Page page) {
         page.addTargetRequests(page.getHtml().links().regex("http://huaban\\.com/.*").all());
         if (page.getUrl().toString().contains("pins")) {
-            page.putField("img", page.getHtml().xpath("//div[@id='pin_img']/a/img/@src").toString());
+            page.putField("img", page.getHtml().xpath("//div[@class='image-holder']/a/img/@src").toString());
         } else {
             page.getResultItems().setSkip(true);
         }

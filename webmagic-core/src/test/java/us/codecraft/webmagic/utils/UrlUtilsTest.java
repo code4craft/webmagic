@@ -20,6 +20,9 @@ public class UrlUtilsTest {
         absoluteUrl = UrlUtils.canonicalizeUrl("../aa", "http://www.dianping.com/sh/ss/com");
         assertThat(absoluteUrl).isEqualTo("http://www.dianping.com/sh/aa");
 
+        absoluteUrl = UrlUtils.canonicalizeUrl("../mshz", "http://www.court.gov.cn/zgcpwsw/zgrmfy/");
+        assertThat(absoluteUrl).isEqualTo("http://www.court.gov.cn/zgcpwsw/mshz");
+
         absoluteUrl = UrlUtils.canonicalizeUrl("..aa", "http://www.dianping.com/sh/ss/com");
         assertThat(absoluteUrl).isEqualTo("http://www.dianping.com/sh/ss/..aa");
 

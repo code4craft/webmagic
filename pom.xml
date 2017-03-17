@@ -65,6 +65,12 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>1.10.19</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>4.5.2</version>
@@ -97,7 +103,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.21</version>
+                <version>1.2.28</version>
             </dependency>
             <dependency>
                 <groupId>com.github.dreamhead</groupId>
@@ -130,7 +136,7 @@
             <dependency>
                 <groupId>commons-collections</groupId>
                 <artifactId>commons-collections</artifactId>
-                <version>3.2.1</version>
+                <version>3.2.2</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>

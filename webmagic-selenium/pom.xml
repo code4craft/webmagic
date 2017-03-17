@@ -13,7 +13,7 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>2.46.0</version>
+			<version>2.41.0</version>
 		</dependency>
 		<dependency>
 			<groupId>us.codecraft</groupId>
