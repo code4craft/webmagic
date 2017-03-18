@@ -145,4 +145,20 @@ public class HttpClientDownloaderTest {
             }
         });
     }
+
+    @Test
+    public void test_download_when_task_is_null() throws Exception {
+        HttpServer server = httpserver(12306);
+        server.response("foo");
+        Runner.running(server, new Runnable() {
+            @Override
+            public void run() throws Exception {
+                final HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+                Request request = new Request();
+                request.setUrl("http://127.0.0.1:12306/");
+                Page page = httpClientDownloader.download(request, null);
+                assertThat(page.getRawText()).isEqualTo("foo");
+            }
+        });
+    }
 }
