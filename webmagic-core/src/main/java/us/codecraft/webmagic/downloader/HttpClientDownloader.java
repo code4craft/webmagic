@@ -113,18 +113,14 @@ public class HttpClientDownloader extends AbstractDownloader {
             onError(request);
             return null;
         } finally {
+            if (httpResponse != null) {
+                //ensure the connection is released back to pool
+                EntityUtils.consumeQuietly(httpResponse.getEntity());
+            }
         	request.putExtra(Request.STATUS_CODE, statusCode);
             if (site != null && site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
                 site.returnHttpProxyToPool((HttpHost) request.getExtra(Request.PROXY), (Integer) request
                         .getExtra(Request.STATUS_CODE));
-            }
-            try {
-                if (httpResponse != null) {
-                    //ensure the connection is released back to pool
-                    EntityUtils.consume(httpResponse.getEntity());
-                }
-            } catch (IOException e) {
-                logger.warn("close response fail", e);
             }
         }
     }
