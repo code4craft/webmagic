@@ -4,7 +4,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.proxy.ProxyPool;
-import us.codecraft.webmagic.proxy.SimpleProxyPool;
+import us.codecraft.webmagic.proxy.TimerReuseProxyPool;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.util.*;
@@ -487,12 +487,12 @@ public class Site {
      * @return this
      */
     public Site setHttpProxyPool(List<String[]> httpProxyList, boolean isUseLastProxy) {
-        this.httpProxyPool=new SimpleProxyPool(httpProxyList, isUseLastProxy);
+        this.httpProxyPool=new TimerReuseProxyPool(httpProxyList, isUseLastProxy);
         return this;
     }
 
     public Site enableHttpProxyPool() {
-        this.httpProxyPool=new SimpleProxyPool();
+        this.httpProxyPool=new TimerReuseProxyPool();
         return this;
     }
 

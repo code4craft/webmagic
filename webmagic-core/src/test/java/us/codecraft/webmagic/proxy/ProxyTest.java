@@ -29,7 +29,7 @@ public class ProxyTest {
 
 	@Test
 	public void testProxy() {
-		SimpleProxyPool proxyPool = new SimpleProxyPool(httpProxyList,false);
+		TimerReuseProxyPool proxyPool = new TimerReuseProxyPool(httpProxyList,false);
 		proxyPool.setReuseInterval(500);
 		assertThat(proxyPool.getIdleNum()).isEqualTo(4);
 		for (int i = 0; i < 2; i++) {

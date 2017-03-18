@@ -1,19 +1,14 @@
 package us.codecraft.webmagic.utils;
 
-import java.io.IOException;
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.NetworkInterface;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.Enumeration;
-import java.util.regex.Pattern;
-
 import org.apache.http.HttpHost;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import us.codecraft.webmagic.proxy.ProxyHost;
+
+import java.io.IOException;
+import java.net.*;
+import java.util.Enumeration;
+import java.util.regex.Pattern;
 
 /**
  * Pooled Proxy Object
@@ -69,7 +64,11 @@ public class ProxyUtils {
 		}
 	}
 
-	public static boolean validateProxy(HttpHost p) {
+	public static HttpHost convert(ProxyHost p){
+		return new HttpHost(p.getHost(),p.getPort());
+	}
+
+	public static boolean validateProxy(ProxyHost p) {
 		if (localAddr == null) {
 			logger.error("cannot get local IP");
 			return false;
@@ -79,7 +78,7 @@ public class ProxyUtils {
 		try {
 			socket = new Socket();
 			socket.bind(new InetSocketAddress(localAddr, 0));
-			InetSocketAddress endpointSocketAddr = new InetSocketAddress(p.getAddress().getHostAddress(), p.getPort());
+			InetSocketAddress endpointSocketAddr = new InetSocketAddress(p.getHost(), p.getPort());
 			socket.connect(endpointSocketAddr, 3000);
 			logger.debug("SUCCESS - connection established! Local: " + localAddr.getHostAddress() + " remote: " + p);
 			isReachable = true;

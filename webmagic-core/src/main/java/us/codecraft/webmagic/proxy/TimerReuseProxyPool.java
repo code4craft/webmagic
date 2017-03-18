@@ -22,12 +22,12 @@ import java.util.concurrent.DelayQueue;
  * @see Proxy
  * @since 0.5.1
  */
-public class SimpleProxyPool implements ProxyPool {
+public class TimerReuseProxyPool implements ProxyPool {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private BlockingQueue<Proxy> proxyQueue = new DelayQueue<Proxy>();
-    private Map<String, Proxy> allProxy = new ConcurrentHashMap<String, Proxy>();
+    private BlockingQueue<TimerReuseProxy> proxyQueue = new DelayQueue<TimerReuseProxy>();
+    private Map<String, TimerReuseProxy> allProxy = new ConcurrentHashMap<String, TimerReuseProxy>();
 
     private int reuseInterval = 1500;// ms
     private int reviveTime = 2 * 60 * 60 * 1000;// ms
@@ -50,15 +50,15 @@ public class SimpleProxyPool implements ProxyPool {
         }
     };
 
-    public SimpleProxyPool() {
+    public TimerReuseProxyPool() {
         this(null, true);
     }
 
-    public SimpleProxyPool(List<String[]> httpProxyList) {
+    public TimerReuseProxyPool(List<String[]> httpProxyList) {
         this(httpProxyList, true);
     }
 
-    public SimpleProxyPool(List<String[]> httpProxyList, boolean isUseLastProxy) {
+    public TimerReuseProxyPool(List<String[]> httpProxyList, boolean isUseLastProxy) {
         if (httpProxyList != null) {
             addProxy(httpProxyList.toArray(new String[httpProxyList.size()][]));
         }
@@ -109,9 +109,9 @@ public class SimpleProxyPool implements ProxyPool {
     }
 
     private Map<String, Proxy> prepareForSaving() {
-        Map<String, Proxy> tmp = new HashMap<String, Proxy>();
-        for (Entry<String, Proxy> e : allProxy.entrySet()) {
-            Proxy p = e.getValue();
+        Map<String, TimerReuseProxy> tmp = new HashMap<String, TimerReuseProxy>();
+        for (Entry<String, TimerReuseProxy> e : allProxy.entrySet()) {
+            TimerReuseProxy p = e.getValue();
             p.setFailedNum(0);
             tmp.put(e.getKey(), p);
         }
@@ -152,30 +152,20 @@ public class SimpleProxyPool implements ProxyPool {
         logger.info("proxy pool size>>>>" + allProxy.size());
     }
 
-    public void addProxy(String[]... httpProxyList) {
+    public void addProxy(Proxy... httpProxyList) {
         isEnable = true;
-        for (String[] s : httpProxyList) {
-            try {
-                if (allProxy.containsKey(s[2])) {
-                    continue;
-                }
-                HttpHost item = new HttpHost(InetAddress.getByName(s[2]), Integer.valueOf(s[3]));
-                if (!validateWhenInit || ProxyUtils.validateProxy(item)) {
-                    Proxy p = new Proxy(item, reuseInterval, s[0], s[1]);
-                    proxyQueue.add(p);
-                    allProxy.put(s[2], p);
-                }
-            } catch (NumberFormatException e) {
-                logger.error("HttpHost init error:", e);
-            } catch (UnknownHostException e) {
-                logger.error("HttpHost init error:", e);
+        for (Proxy proxy : httpProxyList) {
+            if (!validateWhenInit || ProxyUtils.validateProxy(proxy.getProxyHost())) {
+                TimerReuseProxy p = new TimerReuseProxy(proxy.getProxyHost(), proxy.getUser(), proxy.getPassword(), reuseInterval);
+                proxyQueue.add(p);
+                allProxy.put(p.getProxyHost().getHost(), p);
             }
         }
         logger.info("proxy pool size>>>>" + allProxy.size());
     }
 
-    public Proxy getProxy() {
-        Proxy proxy = null;
+    public TimerReuseProxy getProxy() {
+        TimerReuseProxy proxy = null;
         try {
             Long time = System.currentTimeMillis();
             proxy = proxyQueue.take();
@@ -183,7 +173,7 @@ public class SimpleProxyPool implements ProxyPool {
             if (costTime > reuseInterval) {
                 logger.info("get proxy time >>>> " + costTime);
             }
-            Proxy p = allProxy.get(proxy.getHttpHost().getAddress().getHostAddress());
+            TimerReuseProxy p = allProxy.get(proxy.getProxyHost().getHost());
             p.setLastBorrowTime(System.currentTimeMillis());
             p.borrowNumIncrement(1);
         } catch (InterruptedException e) {
