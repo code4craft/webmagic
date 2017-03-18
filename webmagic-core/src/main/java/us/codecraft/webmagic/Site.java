@@ -513,8 +513,4 @@ public class Site {
         return httpProxyPool.getProxy();
     }
 
-    public void returnHttpProxyToPool(HttpHost proxy,int statusCode) {
-        httpProxyPool.returnProxy(proxy,statusCode);
-    }
-
 }

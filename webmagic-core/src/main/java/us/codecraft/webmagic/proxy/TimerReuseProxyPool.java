@@ -186,31 +186,31 @@ public class TimerReuseProxyPool implements ProxyPool {
     }
 
     public void returnProxy(HttpHost host, int statusCode) {
-        Proxy p = allProxy.get(host.getAddress().getHostAddress());
+        TimerReuseProxy p = allProxy.get(host.getAddress().getHostAddress());
         if (p == null) {
             return;
         }
         switch (statusCode) {
-            case Proxy.SUCCESS:
+            case TimerReuseProxy.SUCCESS:
                 p.setReuseTimeInterval(reuseInterval);
                 p.setFailedNum(0);
                 p.setFailedErrorType(new ArrayList<Integer>());
                 p.recordResponse();
                 p.successNumIncrement(1);
                 break;
-            case Proxy.ERROR_403:
+            case TimerReuseProxy.ERROR_403:
                 // banned,try longer interval
-                p.fail(Proxy.ERROR_403);
+                p.fail(TimerReuseProxy.ERROR_403);
                 p.setReuseTimeInterval(reuseInterval * p.getFailedNum());
                 logger.info(host + " >>>> reuseTimeInterval is >>>> " + p.getReuseTimeInterval() / 1000.0);
                 break;
-            case Proxy.ERROR_BANNED:
-                p.fail(Proxy.ERROR_BANNED);
+            case TimerReuseProxy.ERROR_BANNED:
+                p.fail(TimerReuseProxy.ERROR_BANNED);
                 p.setReuseTimeInterval(10 * 60 * 1000 * p.getFailedNum());
                 logger.warn("this proxy is banned >>>> " + p.getHttpHost());
                 logger.info(host + " >>>> reuseTimeInterval is >>>> " + p.getReuseTimeInterval() / 1000.0);
                 break;
-            case Proxy.ERROR_404:
+            case TimerReuseProxy.ERROR_404:
                 // p.fail(Proxy.ERROR_404);
                 // p.setReuseTimeInterval(reuseInterval * p.getFailedNum());
                 break;
