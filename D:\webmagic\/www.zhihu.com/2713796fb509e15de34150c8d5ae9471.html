@@ -1,0 +1,93 @@
+url:	http://www.zhihu.com/question/21142149
+vote:	2301
+content:	<div class="zm-editable-content clearfix">
+  为什么收藏数是赞的两倍多?似乎是知乎定律。 
+ <br> 
+ <br>想说说自己Spring的学习路程，课余自学Spring将近一年了，还是不得其道。去年暑假学习了一下JSP，并没有深入理解，所以导致学习Spring时对着书本写一些demo，感觉自己理解了，其实并不知道内部时什么原理，出了问题不停的百度，一个小问题好几天解决不了。 
+ <br> 学习一种框架最先需要知道的是为什么需要使用这个框架，任何一个框架的发明都是为了解决编程中的一些痛点，打开任何一本hibernate或者其他框架的入门书，第一章都是介绍框架的理念和优势。如果需要理解这些理念和优势，那么你需要知道不使用这个框架之前是怎么处理的，才能知道框架做了一些什么事情。 
+ <br> 针对Spring的学习，第一步就是理解IoC和AOP；这是基础；然后学习SpringMVC,其实还是Java EE开发，如果要理解这个框架，就要知道没有这个框架之前，使用的是什么技术。 
+ <br> 
+ <blockquote>
+   很多新的技术只不过是引入了新的编程元素对原来技术进行了封装。 
+  <br> 
+ </blockquote> Web开发，首先需要理解的是 HTTP协议，这部分一定要深入理解。理解http请求，其实就是要知道下面这张图的含义。 
+ <br> 
+ <noscript> 
+  <img src="https://pic1.zhimg.com/bfb576a894f3702b39a0bc3588b72ab0_b.jpg" data-rawwidth="800" data-rawheight="228" class="origin_image zh-lightbox-thumb" width="800" data-original="https://pic1.zhimg.com/bfb576a894f3702b39a0bc3588b72ab0_r.jpg"> 
+ </noscript> 
+ <img src="//zhstatic.zhihu.com/assets/zhihu/ztext/whitedot.jpg" data-rawwidth="800" data-rawheight="228" class="origin_image zh-lightbox-thumb lazy" width="800" data-original="https://pic1.zhimg.com/bfb576a894f3702b39a0bc3588b72ab0_r.jpg" data-actualsrc="https://pic1.zhimg.com/bfb576a894f3702b39a0bc3588b72ab0_b.jpg"> 
+ <br>还要知道服务器发送给浏览器的响应是没有没有JS，CSS和图片等外部资源的，浏览器在解析响应时才会再次请求这些资源， 
+ <b>这里会出现一些静态资源请求不到的问题，SpringMVC是怎么配置的？</b> 
+ <br> 接下来，学习Servlet和JSP。这个步骤不是可以跳过的，现在流行的框架Spring MVC和Struts2其实都是基于Servlet的，只有深入理解了Servlet才能理解后面的新技术。 
+ <br>下面几个知识点可以检测你是否理解了Servlet： 
+ <br>1、什么是ServletContext，和tomcat等web容器的关系时什么？ 
+ <a href="http://link.zhihu.com/?target=http%3A//www.ibm.com/developerworks/cn/java/j-lo-servlet/" class=" wrap external" target="_blank" rel="nofollow noreferrer">Servlet 工作原理解析<i class="icon-external"></i></a> 
+ <br>简单的说，我们在浏览器点击链接和按钮产生的消息不是发送给Servlet的，而是发送给web容器的(在JSP出现之前，web容器也叫Servlet容器)，web容器接收消息后不知道怎么处理，转交给我们编写的Servlet处理，那么web容器怎么和Servlet交流呢？于是就出现了Servlet接口， 
+ <b>接口是定义一种规范的良好表达形式。</b> 只要我们编写的Java类符合Servlet规范，那么就能被Web容器识别并被容器管理。 
+ <br>2、什么是Session？Session在实际工程中的应用场景。以及@SessionAttribute注解的局限性。 
+ <br>3、 
+ <b>JSP是面向服务器的</b>，它并不知道浏览器是什么鬼，是我们在写JSP时预设客户端是浏览器， 
+ <b>JSP就是一个Servlet。JSP的常用对象和指令。</b> 
+ <br>4、JSP的中文编码乱码有几种情况？各自的解决方法？提示： JSP文件的编码，浏览器的解析编码，GET请求的编码，POST的编码。 
+ <br>5、Servlet是一种接口规范，其中请求和响应是Servlet容器通过向方法的参数赋值HttpServletRequest或者HttpServletResponse传递的。在Struts1里面，将doGet()方法里的响应移到返回值里。在Struts2里则: 
+ <br> 
+ <blockquote> 
+  <ul> 
+   <li>在Controller中彻底杜绝引入HttpServletRequest或者HttpServletResponse这样的原生Servlet对象。</li> 
+   <li>同时将请求参数和响应数据都从响应方法中剥离到了Controller中的属性变量。</li> 
+  </ul> 
+ </blockquote>这是一个很大的技术改造，也造成了Struts2的盛行。Spring MVC走的是中间路线，Spring的2.0.8之前的版本甚至直接使用Servlet的doGet的。Spring MVC现在开始流行主要还是因为Schema xml的精简和基于注解的配置。所以这里出现了新的知识点：Schema Based XML的相关知识和Java5引入的注解原理。 
+ <br>参考文献： 
+ <br> 
+ <a href="http://link.zhihu.com/?target=http%3A//www.iteye.com/blogs/subjects/springmvc-explore" class=" wrap external" target="_blank" rel="nofollow noreferrer">博客专栏 - SpringMVC深度探险<i class="icon-external"></i></a> 
+ <br>强烈推荐看两遍。 
+ <br>还有关于Spring 容器和MVC容器的关系，这里有一篇很好的介绍： 
+ <br> 
+ <a href="http://link.zhihu.com/?target=http%3A//blog.arganzheng.me/posts/spring-and-web-mvc-integration-web-application-context.html" class=" wrap external" target="_blank" rel="nofollow noreferrer">Spring与web MVC的整合——Spring的应用上下文管理<i class="icon-external"></i></a> 
+ <br>书籍：推荐许令波的书《深入分析Java Web技术内幕(修订版)》和计文柯的《深入理解spring技术内幕》，特别是第二本，对spring的分析很是彻底。 
+ <br> 
+ <br> 
+ <br> 查看源码是比较快的学习方法，在一个项目里直接利用debug的方式追踪变量查看源码，而不是去阅读源码。 
+ <br>如何使用eclipse的debug： 
+ <a href="http://link.zhihu.com/?target=http%3A//blog.csdn.net/jackpk/article/details/7655777" class=" wrap external" target="_blank" rel="nofollow noreferrer">★ Eclipse Debug 界面应用详解——Eclipse Debug不为人知的秘密<i class="icon-external"></i></a> 
+ <br>简单说下步骤：新建一个maven web项目，将需要的依赖都添加到pom中去，在pom文件夹中打开终端，运行"mvn dependency:sources"就可以下载所有pom中依赖的源码。如果是eclipse，选中项目，右键 run as 选择 maven build... ，在goal中填入“dependency:sources”，没有mvn。接着简单写一个mvc项目。假设有一个如下的handler method：我们在方法的第一行打一个断点，进行调试 。 
+ <br> 
+ <div class="highlight"> 
+  <pre><code class="language-java">        <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="n">ModelAndView</span> <span class="nf">indexHandler</span><span class="o">(){</span>
+		
+		<span class="n">ModelAndView</span> <span class="n">mv</span><span class="o">=</span><span class="k">new</span> <span class="n">ModelAndView</span><span class="o">(</span><span class="s">"success"</span><span class="o">);</span>
+		<span class="n">mv</span><span class="o">.</span><span class="na">addObject</span><span class="o">(</span><span class="s">"key"</span><span class="o">,</span> <span class="s">"hello,hsiung!"</span><span class="o">);</span>
+		<span class="n">mv</span><span class="o">.</span><span class="na">addObject</span><span class="o">(</span><span class="s">"time"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Date</span><span class="o">());</span>
+		
+		<span class="k">return</span> <span class="n">mv</span><span class="o">;</span>
+	<span class="o">}</span>
+</code></pre> 
+ </div> 
+ <br>一步一步往下看，可以在outline的窗口清楚地看到ModelAndView的属性和方法，可以看到ModelAndView有两个属性很重要，一个是view:Object;一个是model：ModelMap，接着可以看到上面方法的第二行调用的是如下代码： 
+ <br> 
+ <div class="highlight"> 
+  <pre><code class="language-text">public ModelAndView addObject(String attributeName, Object attributeValue) {
+		getModelMap().addAttribute(attributeName, attributeValue);
+		return this;
+	}
+</code></pre> 
+ </div>所以model中实际使用的是ModelMap这个类，那这个类的结构是什么呢？按住Ctrl再单击ModelMap，就可以看到其实就是一个LinkedHashMap&lt;String, Object&gt;。 
+ <br> 2015.6.22 
+ <br> 
+ <br>这里提供非常有用的几个eclipse使用技巧： 
+ <br>1.在面向接口编程中，我们很多时候看到一个方法返回的的是静态类型是接口的变量，并且实际类型被方法隐藏了。当然，你可以通过追溯进方法去看。其实一般来说，一个接口，会有一个抽象类，然后会有一个default类，一般想要知道接口的具体实现，去看default类就可以。spring比较特殊，很多默认配置的类不是default开头的。只能靠阅读guide了确定了。 
+ <br>2. 看一个类在哪些地方被引用，选中类名，Ctrl+Shift+G， 
+ <br>3. 看一个方法在哪些地方被调用，选中方法名，Ctrl+Alt+H。 
+ <br>4.学会看eclipse右侧的outline窗口。 
+ <br> 
+ <br>---------------------没想到有人看，修改了了一下错别字和细节 2015.6.23----------------- 
+ <br> 
+ <br>关于demo，其实spring project提供了一些很好的MVC demo， 
+ <br> 
+ <a href="http://link.zhihu.com/?target=http%3A//github.com/spring-projects/spring-mvc-showcase" class=" wrap external" target="_blank" rel="nofollow noreferrer">spring-projects/spring-mvc-showcase · GitHub<i class="icon-external"></i></a>， 
+ <br> 
+ <a href="http://link.zhihu.com/?target=https%3A//github.com/spring-projects/spring-petclinic" class=" wrap external" target="_blank" rel="nofollow noreferrer">spring-projects/spring-petclinic · GitHub<i class="icon-external"></i></a>。 
+ <br>下载源码，到pom目录下打开终端 运行： mvn eclipse:eclipse ,构建成功后直接导入eclipse就可以运行查看效果了。注意，mvn 命令经常一次不能成功，主要是有些maven插件下载失败以及国内网络的问题，手动删除下载失败的依赖，然后命令多运行几次就可以成功了。也可以使用开源中国的maven源。 
+</div>
+userid:	null

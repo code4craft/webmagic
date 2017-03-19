@@ -1,0 +1,79 @@
+url:	http://www.zhihu.com/question/19834302
+vote:	4951
+content:	<div class="zm-editable-content clearfix"> 
+ <i>（前端变化太快，以下内容我会不定期更新，第三方网站请不要转载，如果实在想转载，请只转载摘要，并保留原文链接，谢谢）</i> 
+ <br> 
+ <br> 
+ <br>网站开发开发大致分为前端和后端，前端主要负责实现视觉和交互效果，以及与服务器通信，完成业务逻辑。其核心价值在于对用户体验的追求。可以按如下思路学习系统学习： 
+ <br> 
+ <br> 
+ <b>基础知识</b>： 
+ <br>1. html + css 这部分建议在 
+ <a href="http://link.zhihu.com/?target=http%3A//www.w3school.com.cn" class=" wrap external" target="_blank" rel="nofollow noreferrer">w3school 在线教程<i class="icon-external"></i></a> 上学习，边学边练，每章后还有小测试。 之后可以模仿一些网站做些页面。 
+ <br> 2. javascript 要学的内容实在很多，如果没有其他编程语言的基础的话，学起来可能要费些力，还是建议先在 w3school上学习。之后建议马上看《javascript语言精粹》，js是一门很混乱的语言，这本书能够帮助你区分哪些是语言的精华，哪些是糟粕，对于语言精华，应该深入学习。糟粕部分能看懂别人写的代码就行，自己就不用尝试了。 
+ <br> 
+ <br> 
+ <i>对于习惯看视频学习的同学，以上内容也可以在 <a href="http://link.zhihu.com/?target=http%3A//www.imooc.com/" class=" wrap external" target="_blank" rel="nofollow noreferrer">慕课网-国内最大的IT技能学习平台<i class="icon-external"></i></a> 上学习。虽然我没用过，但好几位同学推荐过了，大概看了下，内容还不错。</i> 
+ <br> 
+ <br> 
+ <b>进阶</b>： 
+ <br>有了以上基础，就可以进行一般的静态网页设计，不过对于复杂的页面还需要进一步学习。 
+ <br> 
+ <br>1. css。截至今日（2015.12.08），天猫、淘宝、支付宝都已停止对ie6,7的支持，未来相信大多数网站都会停止对ie6，7的支持，ie8的市场份额也不像两年前那么高了（天猫即将停止对IE8的支持，2016.12.13），webkit内核已成为市场主流。对于css的学习，我推荐分三块：“基础概念”，“css2.1规范”，“css3规范”。必看 
+ <a href="http://link.zhihu.com/?target=http%3A//book.douban.com/subject/4736167/" class=" wrap external" target="_blank" rel="nofollow noreferrer">精通CSS（第2版） (豆瓣)<i class="icon-external"></i></a>，看完这本书你应该对：盒子模型，流动，block，inline，层叠，样式优先级，等概念非常了解了。这本确实有些年头了，但基础概念部分讲述非常清晰，可以称之为经典。ie6，7相关的内容可以不看。css3的部分可以参考： 
+ <a href="http://link.zhihu.com/?target=http%3A//book.douban.com/subject/10482084/" class=" wrap external" target="_blank" rel="nofollow noreferrer">CSS3实用指南 (豆瓣)<i class="icon-external"></i></a>。这本书同样有些老，只是最新出版的书中没发现有特别好的。 
+ <br> 
+ <br>2. javascript。上面提到内容还不足以让你胜任js编程。在有了基础之后，进一步学习内容包括： 
+ <br> 
+ <br>a) 框架。推荐 zepto，简单易用，在w3school简单学习js后，直接上手 zepto 即可完成一些简单的项目。zepto 源码简单清晰，也适合新手阅读。补充： 可以使用 
+ <a href="http://link.zhihu.com/?target=http%3A//www.codecademy.com/" class=" wrap external" target="_blank" rel="nofollow noreferrer">codecademy<i class="icon-external"></i></a> 学习 javascript，zepto，用户体验真的很好（感谢 
+ <a href="http://www.zhihu.com/people/tonyouyang" class="internal">TonyOuyang</a> ）。最近比较热门的框架是React, VUE, Angular这些, 根据需要稍作了解即可。随着ie浏览器市场份额的下降，以及移动端的发展，标准原生js已经可以在实际项目中使用（目前还需要借助es5shim、babel等），重点还是ES5, ES6, ES7。 
+ <br> 
+ <br>b) javascript 语言范式 。这个名字可能并不恰当，只是我找不到可以描述“面向对象”，“函数式”这个两个概念的概念。javascript不完全是一个面向对象的语言，它的很多设计理念都有函数编程语言的影子，甚至说如果你不用面向对象，完全可以把它理解成一门函数式编程语言。javascript的很多语言特性，都是因为他具有函数式语言的特点才存在的。这部分推荐先学习面向对象的基本理论，对封装，继承，多态等概念要理解，维基百科，百度百科会是你的帮手，另外推荐《object oriented javascript》，应该有中文版。对与函数式编程可以参考这篇文章： 
+ <a href="http://link.zhihu.com/?target=http%3A//www.ibm.com/developerworks/cn/web/1006_qiujt_jsfunctional/" class=" wrap external" target="_blank" rel="nofollow noreferrer">JavaScript 中的函数式编程实践<i class="icon-external"></i></a> 
+ <br> 
+ <br>c) javascript 语言内部机制。必须弄清如下概念：js中变量的作用域，变量传递方式，函数的定义环境与执行环境，闭包，函数的四种调用方式（一般函数，对象的方法，apply，call），以及四种调用方式下，‘this'指向的是谁。这部分内容你会在《javascript语言精粹》中详细了解。 
+ <br> 
+ <br>d) dom编程，这个web前端工程师的核心技能之一。必读《dom编程艺术》，另外《高性能javascript》这本书中关于dom编程的部分讲的也很好。 
+ <br> 
+ <br>e) ajax编程，这是另一核心技术。ajax建议在网上查些资料，了解这个概念的来龙去脉，百度百科，维基百科上的内容就足够了。真正编程是很容易的，如今几乎所有框架都对ajax有良好的封装，编程并不复杂。另外，ajax未来几年会被 
+ <a href="http://link.zhihu.com/?target=https%3A//fetch.spec.whatwg.org/" class=" wrap external" target="_blank" rel="nofollow noreferrer">Fetch Standard<i class="icon-external"></i></a> 取代，也需要了解。另外关于xhr2，cors（跨站资源共享），formData文件上传，也需要了解。 
+ <br> 
+ <br>f) es5, es6。现在开发js大部分基于es5的，ie8以下通过es5-shim。但利用一些工具，现在已经可以直接写es6代码了，尤其在reactjs，nodejs类型的项目中。对于从es5，es6每个阶段js发生了哪些变化都需要系统学习，学习顺序建议是 JavaScript基础 -&gt; es5 -&gt; es6，越靠前的越重要。一些参考链接： 
+ <a href="http://link.zhihu.com/?target=http%3A//kangax.github.io/compat-table/es5/" class=" wrap external" target="_blank" rel="nofollow noreferrer">ECMAScript 5 compatibility table<i class="icon-external"></i></a> 
+ <a href="http://link.zhihu.com/?target=http%3A//es6.ruanyifeng.com/" class=" wrap external" target="_blank" rel="nofollow noreferrer">ECMAScript 6入门<i class="icon-external"></i></a> 
+ <a href="http://link.zhihu.com/?target=http%3A//www.zhangxinxu.com/wordpress/tag/es5/" class=" wrap external" target="_blank" rel="nofollow noreferrer">ES5 « 张鑫旭<i class="icon-external"></i></a> 
+ <br> 
+ <br>3. html5。需要了解html都提供了哪些api，然后项目中用起来。这部分没有什么难理解的，关键在于能用html5解决业务问题，以及不支持html5的浏览器的降级方案。这部分体现了前端的一个思想：面向未来编程，尽早将新技术引入业务中来，而不是过分考虑兼容性问题，进而导致面向过去编程。 
+ <br> 
+ <br> 
+ <b>再进一阶 · 代码层面</b>： 
+ <br>有了以上知识，对于大多数小型网站，你应该已经可以写出能够工作的代码了。但要想成为更专业的前端，你还需继续努力。更高的要求大概还有四方面：1易维护，2可测试，3高性能，4低流量（移动端）。 
+ <br>1. 易维护。对于页面你该理解‘样式’，‘数据’，‘行为’三者分离，对应的当然就是css,html,js。对于js代码，你最好了解设计模式，重构，MVC等内容。 
+ <br>2. 可测性。就是保证你的代码能沟通单元测试100%覆盖到所有分支 
+ <br>3. 高性能。必读《高性能javascript》 
+ <br>4. 低流量。移动端关注比较多，PC端现在可以不用太关注了 
+ <br> 
+ <br> 
+ <b>再进一阶 · 工程层面</b>： 
+ <br>前端项目同样面临软件生命周期的各个环节，首先是代码管理，你必须学会使用svn和git。其次是代码的构建，如今前端代码构建已经不是简单的压缩一下了，需要进行依赖管理、模块合并、各种编译，必须要学会使用grunt、gulp、webpack、rollup等前端构建工具，以及前端模块管理的方式，amd，cmd，es6 module 等等。 
+ <br> 
+ <br> 
+ <b>然后呢？</b> 
+ <br>以上内容只是简单说了前端学习的顺序。前端工程师应该有的知识结构请参考这里： 
+ <a href="http://link.zhihu.com/?target=https%3A//github.com/JacksonTian/fks" class=" wrap external" target="_blank" rel="nofollow noreferrer">JacksonTian/fks · GitHub<i class="icon-external"></i></a> 
+ <br> 
+ <br> 
+ <b>补充</b>： 
+ <br>对于前段开发，基本内容就这些了，可以根据自己的兴趣爱好选择性学习以下内容。 
+ <br>1. 交互设计。大公司依然有专业人士搞这些，不过不懂交互的前端一定不是好前端。推荐《简约至上》。 
+ <br>2. 后端。应该说前段工程师必须至少了解一门后端语言，不过如果爱好也可深入学习，入手难度比较低的应该是php了。这部分由可分为基于页面，基于框架两种。大型项目都是基于框架开发的，建议至少了解一个MVC框架，比如php的ci, yii, yaf 等，好还框架的设计思想都大同小异。如今NodeJs在大公司已经得到普遍的使用，推荐大家使用在Node上使用Koa框架做一些后端服务的开发。 
+ <br>3. Android和ios开发。时至今日，前端的工作领域已经非常广泛，native的界面开发本质上也是前端开发，个大公司都面临着Native环境和web环境页面同时维护的问题，如果能够在技术上得到统一，将会有巨大的价值。对于学有余力的同学，应该了解Native开发的基本流程，至少了解到界面构建的技术。 
+ <br>4. 如果你能够认真看到这里，说明你对前端有真爱，最后说一个编程习惯的问题，绝对是保你工作平安，少出故障。代码提交前必须做的三个事情：A. git diff（svn diff）,检查所有变更；B. 跑一边单元测试；C. 手动运行一遍所有demo. 
+ <br> 
+ <br> 
+ <b>如果你以上内容你都已掌握，想加入一个牛B的前端团队，可以私信我。坐标：杭州·天猫·前端</b> 
+ <br> 
+ <br>（以上内容最初发布于2012年上半年，已经更新过几次了，我会持续维护，希望对后来人有帮助。加油、共勉！最后更新时间：2016-12-13 13:30） 
+</div>
+userid:	http://www.zhihu.com/people/kingzs70

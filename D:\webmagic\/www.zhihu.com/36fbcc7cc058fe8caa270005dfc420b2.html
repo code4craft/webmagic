@@ -1,0 +1,63 @@
+url:	http://www.zhihu.com/question/20104312
+vote:	1218
+content:	<div class="zm-editable-content clearfix">
+  感谢邀请。 
+ <br> 
+ <br>在计算机还全都是些庞然大物的石器时代，写程序是靠「机器语言」。虽然名字叫做「语言」，实际上用到的就真的只有两个数字 0 和 1（考虑到三进制计算机[1]的话，也许还要算上 -1）而已。一些特定的数字组合，对于计算机来说有特定的意义，会让计算机做出特定的动作——其实我们甚至不该叫它们「数字」，因为它们并不代表任何「数量」，而是代表「模式」（pattern）的信号。这是什么意思呢？就好比你伸出一只手去按钢琴键盘的同一部分，缩起来的指头记作 0，伸开来的指头记作 1，01000 和 11110 按出来的声音是不一样的，计算机接受的数字组合与之类似。01000000 这个指令输入一块小芯片的时候，芯片里面有八坨晶体管组成的小装置被「按下」了，其中第二个被通上高电压，另外七个则是低电压，而这个组合会继而引发更多的、由芯片工程师所预先设计的一系列连锁反应。无数这样的模式数字接踵而至，才最终让你面前的屏幕上出现一些能被人理解的图案来。 
+ <br> 
+ <br>给计算机输入这种相当于「命令」的数字——称为「指令」——来让它做一些事情，包括处理其他的数字（不管那些数字是真正代表数量的数，还是另一些代表指令的模式），就是编程的本质活动。明白了这一点之后，不妨来猜猜这台 COSMAC ELF 计算机是怎么编程的…… 
+ <br> 
+ <br> 
+ <noscript> 
+  <img src="https://pic2.zhimg.com/11e52aff63a5baa947300926363ec409_b.jpg" data-rawwidth="640" data-rawheight="665" class="origin_image zh-lightbox-thumb" width="640" data-original="https://pic2.zhimg.com/11e52aff63a5baa947300926363ec409_r.jpg"> 
+ </noscript> 
+ <img src="//zhstatic.zhihu.com/assets/zhihu/ztext/whitedot.jpg" data-rawwidth="640" data-rawheight="665" class="origin_image zh-lightbox-thumb lazy" width="640" data-original="https://pic2.zhimg.com/11e52aff63a5baa947300926363ec409_r.jpg" data-actualsrc="https://pic2.zhimg.com/11e52aff63a5baa947300926363ec409_b.jpg"> 
+ <br>嗯，对，是货真价实地靠下面那排开关的上与下来代表 0 和 1，扳好一排之后，按一下左上角的按钮，代表你输入好了一条指令，然后再输下一条。而具体某一个组合能够做什么，在这台计算机上有明确的行为，在其他计算机上却不一定，也就是说，这种从「模式」到「指令」的映射，从最开始就没有一个共同的标准，基本上是各家计算机厂商自行定义，故此同样的一组数字，对于不同型号的计算机来说，有可能代表完全不同的指令——这一点直到今天仍旧没有改变，那些通过金属引脚接受 0 和 1 输入的 CPU 之所谓「指令集」，本质上就是由芯片制造厂商给出的数字组合定义。由芯片设计结构的不同，每种芯片的指令集也就跟着不同，比如常见用于台式计算机的 Intel 芯片指令集就与常见于手持设备的 ARM 芯片指令集不同。你看，「计算机语言」从这一层面开始，区分就已经产生了。 
+ <br> 
+ <br>用纯数字的机器语言编程的难度可想而知，所以从数字到助记符号的转译很快随之出现，称作汇编语言。比如若是一组数字 0010 0000 可以让芯片把内部的一个存储单位，称作「寄存器 X」，加上一个值 Y，那么不妨就把这组数字和助记符「ADD」对应起来，上面的指令就可以写作「ADD X, Y」这样。一条条类似的指令写成一串，就是一个对于程序的 
+ <b>描述</b>。相对于纯数字来说，这是个质的飞跃——终于不必去扳开关了不是吗？而这样的一串字符，可以由专用的小程序来「翻译」成二进制的机器码，也就是真正可以输入处理器去按下晶体管的程序电子信号。当然，每种处理器的汇编语言仍旧是不同的。 
+ <br> 
+ <br>机器语言、汇编语言的优点在于，每一条指令都几乎对应于芯片能做的一件事，比如一条指令把一个数字从内存转入寄存器，另一条指令给它加上一，第三条指令将它写回内存去——直接对于一块芯片下命令，效率非常高。相应的缺点则是，如果你只是想把一个数字加一，却每次都要连续写三条指令，时间一长非常痛苦。而且既然不同芯片支持的指令集不同，就意味着这块芯片上需要三条命令完成的事情，另一块芯片可能需要不太一样的五条命令。假如能将一部分固定出现的操作，像连续技一样一次性施放，每次只需要打一个指令，却能够在不同结构的芯片上都做同样的事该有多好？换句话说，如果能有一种更倾向于描述需要解决的问题（给一个数字加一）而不是描述计算机具体进行何种操作（读数，加数，写数）的语言，来 
+ <b>封装</b>那些不需要关心的细节，把细小步骤想要达成的意图 
+ <b>抽象</b>出来，该有多好？ 
+ <br> 
+ <br>所谓「高级」计算机语言就是为了这一目的而出现的。最古老的高级语言有 FORTRAN、ALGOL 和 COBOL，以及一种同样古老但是来源迥异的 LISP（严格来说，LISP 是先作为一种形式语言发明出来，继而人们发现它可以用汇编语言转写给机器执行，后来甚至有专门运行 LISTP 的机器出现[2]）。这些都是二十世纪五六十年代出现的语言。所以题目中的说法其实某种程度上并没有错：你可以说目前流行的一切计算机语言， 
+ <b>几乎</b>全都是上述四种古老语言的综合演进，而且如果看看 TIOBE 的流行语言榜[3]，你会发现这四种语言都好端端地活在它的徒子徒孙中间，LISP 甚至名列第十五，FORTRAN、COBOL 也都没有掉出前五十。就如同芯片从一开始就有很多种类，这些彼此不尽相同的高级语言也都是几乎同时出现——一定要追寻个中原因的话，也许就是「自由市场经济」吧，每个人都有可能（也有资源）去自由地按照自己的想法开发一种语言，不会有（也不应该有）外界的权威从一开始就去限制、整合它们的差异。 
+ <br> 
+ <br>六十年代到七十年代，人们开始将这几种当时还很年轻的、主要针对科研（除 COBOL 是针对商业）领域的计算机语言加以修饰、扩展和融合。其动机和幅度，主要取决于程序员的实际需求。与当初「不想记住数字」导致汇编语言的出现、「不想重复劳动」导致宏（macro） / 过程（procedure）的出现类似，因为「想要把数据和操作数据的动作组织到一起」，导致语言增添原生支持物件导向（object orientation）的数据类型和语法；「能方便地把一小块功能隔离 / 独立出来，便于维护 / 分享使用」的需求，导致语言的模块化支持（比如 Python 的 import）；「方便干净地在局部处理突发意外状况」的需求，导致异常处理（try…catch…finally）机制的出现；「免于手动管理内存」的需求，导致垃圾收集的出现；「将运算（computation）抽象出来」的需求，导致许多语言开始将函数视为类型系统的一等公民；「一件事做到一半时可以跳开去做另一件事然后还能回来」的需求，导致协程（coroutine）的发明…… 当然，并不都是所有的语言特性都是以语言使用者的需求为本，比如 C 就是这样一个例子——它的若干设计最开始只是为了能快速方便地在不同结构的计算机上写出它的编译器来；还有些语言做的一些尝试完全就是「想看看这样有什么效果」而已。总而言之，那是个不断摸索的时代，因为许多事情都没有人做过，所以大家也不知道怎么做才算好。 
+ <br> 
+ <br>后来计算机逐步小型化并变得廉价，应用范围大幅度扩展到各种产业。工程方面不断有新的应用实践，也会发现新的可以偷懒 / 改进之处，从而产生新的语言特性需求。这种进程如此之快，语言设计者们不可能一下子追踪、汇总所有的需求，总要有所侧重，好在此时语言的种种可能特性都差不多尝试过一遍了，所以新发明的语言往往会侧重于一种特定的方法、制作特定的语言功能，来使得编写某种特定形式的程序特别便利。这就是编程的所谓「范式（paradigm）」。几乎可以说，许多现今很流行的语言从一开始的设计目标，都是支持一种或几种主要的范式，因为许多设计者的最初目的仅仅是想要满足一个小圈子，甚至就是他自己，在某个领域（domain）的需要，而无法预见到它日后的走红。除此之外，语言设计者对于代码的态度也是一个决定因素，比如强调代码应该「易读」、「好维护」呢，还是「易写」、「好编译」？不同的选择会催生完全不同的两种语言。 
+ <br> 
+ <br>于是接下来的二十年间涌现的语言大都个性鲜明，比如同样作为教学语言出现的 LOGO 和 BASIC 彼此大相径庭——Apple II 计算机上面同时有两种语言、并且可以在两种语言之间切换对我来说是最初的「原来程序语言可以有思路完全不同的很多种」之启蒙——而感谢此前的多年试错，许多语言都学会了遵循着一组特定的准则（principle）来设计，比如著名的 The Zen of Python[4]。可与此同时也不乏有巨匠试图将语言做得大而全，填入很多特性，支持尽可能多的范式，但这种语言也因此而变得畸形而难以驾驭，到最后连他自己都说，「there is a much smaller and cleaner language struggling to get out」。而最终在语言进化之中「胜出」的，并不是那些设计「完美」的语言。Dennis Ritchie 说 C 是「quirky, flawed, and an enormous success」，同样的评语也可以用在许多其他语言上面，比如在统计学和生物信息学领域中大获成功的 R。重要的是，这些语言都能 
+ <b>解决领域内的问题</b>。毕竟语言使用者的需求和，呃，计算机语言 connoisseur 们的着眼点完全不同。语言使用者会不惜（或者说「无意识地」）使用最为愚蠢和肮脏的方式来使用一种编程语言，只要它能达到自己需要的效果；语言使用者也轻易不会切换到另一种不熟悉的语言，不论后者可能会在理论上带来多少倍的好处。 
+ <br> 
+ <br>这就触及到了一个问题：不同的计算机语言拥有不同的「个性」，实际却都是对于最底层 0 与 1 的抽象和封装，只是方式与层级不一样——但人类对于这些方式与层级的选择态度，是非常难以改变的。也就是说，如果把语言抽象和封装的层级排成一列，那么每个人都能在这条线上找到自己的舒适区域（comfortable zone），呆在里面很舒服；抽象程度再高阶一些就会嫌不自由，再低一点却又觉得麻烦——如果这样说不够直观，那么不妨搬一个现成的例子：iOS 设备很好用，老太婆和小孩子都能搞定；但 Android 用户会说它不够「开放」（whatever that means），意思其实就是，认为它封装了太多东西，自己则希望掌控更多细节；可是除了刷 ROM 之外，多数 Android 用户从未给自己的手机写过任何一个程序——即便他对于某个理想中的 app 应该如何运作有着非常高深的见解。 
+ <br> 
+ <br>既然我们应该允许人们自由决定使用哪一款电子产品，哪怕他们会因此展开圣战、互斥「脑残」，那么容许甚至鼓励不同风格的编程语言并存，也就是顺利成章的事情了。而且人都是会变的，一辈子闷在 comfortable zone 里多无聊呢？A quote for quote's sake：「我就是不喜歡舒舒服服的」[5]。 
+ <br> 
+ <br>所以也许哪天我也会去学学 Haskell，或者，用用 Android。 
+ <br> 
+ <br>以上内容挂一漏万，如果感兴趣的话，推荐两本书，一本是《Code: The Hidden Language of Computer Hardware and Software》[6]，另一本是《Seven Languages in Seven Weeks: A Pragmatic Guide to Learning Programming Languages》[7]。前者几乎是一本科普读物，但是对于理解计算机许多「何以如此」的问题非常有助益；后者则会带着你浏览几种设计迥异的编程语言，并把它们解决问题的核心思路以及措施解释给你。两本书都值得读一遍，多写点代码，回头再读一遍。 
+ <br> 
+ <br> 
+ <br>[1] 
+ <a href="http://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Ternary_computer" class=" external" target="_blank" rel="nofollow noreferrer"><span class="invisible">http://</span><span class="visible">en.wikipedia.org/wiki/T</span><span class="invisible">ernary_computer</span><span class="ellipsis"></span><i class="icon-external"></i></a> 
+ <br>[2] 
+ <a href="http://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Steve_Russell" class=" external" target="_blank" rel="nofollow noreferrer"><span class="invisible">http://</span><span class="visible">en.wikipedia.org/wiki/S</span><span class="invisible">teve_Russell</span><span class="ellipsis"></span><i class="icon-external"></i></a> , 
+ <a href="http://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Lisp_machine" class=" external" target="_blank" rel="nofollow noreferrer"><span class="invisible">http://</span><span class="visible">en.wikipedia.org/wiki/L</span><span class="invisible">isp_machine</span><span class="ellipsis"></span><i class="icon-external"></i></a> 
+ <br>[3] 
+ <a href="http://link.zhihu.com/?target=http%3A//www.tiobe.com/index.php/content/paperinfo/tpci/index.html" class=" external" target="_blank" rel="nofollow noreferrer"><span class="invisible">http://www.</span><span class="visible">tiobe.com/index.php/con</span><span class="invisible">tent/paperinfo/tpci/index.html</span><span class="ellipsis"></span><i class="icon-external"></i></a> 
+ <br>[4] 
+ <a href="http://link.zhihu.com/?target=http%3A//www.python.org/dev/peps/pep-0020/" class=" external" target="_blank" rel="nofollow noreferrer"><span class="invisible">http://www.</span><span class="visible">python.org/dev/peps/pep</span><span class="invisible">-0020/</span><span class="ellipsis"></span><i class="icon-external"></i></a> 
+ <br>[5] 
+ <a href="http://www.zhihu.com/question/19932294/answer/13526476" class="internal"><span class="invisible">http://www.</span><span class="visible">zhihu.com/question/1993</span><span class="invisible">2294/answer/13526476</span><span class="ellipsis"></span></a> 
+ <br>[6] 
+ <a href="http://link.zhihu.com/?target=http%3A//www.amazon.com/dp/0735611319" class=" external" target="_blank" rel="nofollow noreferrer"><span class="invisible">http://www.</span><span class="visible">amazon.com/dp/073561131</span><span class="invisible">9</span><span class="ellipsis"></span><i class="icon-external"></i></a> 
+ <br>[7] 
+ <a href="http://link.zhihu.com/?target=http%3A//www.amazon.com/dp/193435659X" class=" external" target="_blank" rel="nofollow noreferrer"><span class="invisible">http://www.</span><span class="visible">amazon.com/dp/193435659</span><span class="invisible">X</span><span class="ellipsis"></span><i class="icon-external"></i></a> 
+ <br> 
+ <br>—— 
+ <br> 
+ <br>呃，这答案在草稿里呆了七个月，虽然仍旧觉得不够那个，可是再不写完，就要过年了…… 
+</div>
+userid:	null

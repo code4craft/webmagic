@@ -1,0 +1,140 @@
+url:	http://www.zhihu.com/question/23667442
+vote:	2450
+content:	<div class="zm-editable-content clearfix">
+  对题目中提到的“冰山算法”，我刚好有一些了解，可以给大家讲讲。很多人对“量化交易”的理解实在太过片面，基本上把它等同于生钱工具，我不赞同这种观点。交易首先是交易本身，有它自身的经济学意义，忽略这一点而单纯把它看成使钱增值的数字游戏，很容易就会迷失本心。 
+ <br> 
+ <br>我也不认为算法本身有什么稀奇，再好的算法也是死的，真正的核心价值一定是掌握和使用算法的人。实际上我讲的东西也都是公开的信息，但是即便了解了技术细节，能真正做好的人也寥寥无几。 
+ <br> 
+ <br>希望这个回答可以让你对量化和高频交易有一个更清醒的认识。 
+ <br> 
+ <br>～～～～～～～～～～～～～～～～～～ 
+ <br> 
+ <br>首先我相信不少人概念里的高频交易还是这个样子的： 
+ <br> 
+ <noscript> 
+  <img src="https://pic3.zhimg.com/0320bbc08c1d67dc51c721e4fa400232_b.jpg" data-rawwidth="400" data-rawheight="284" class="content_image" width="400"> 
+ </noscript> 
+ <img src="//zhstatic.zhihu.com/assets/zhihu/ztext/whitedot.jpg" data-rawwidth="400" data-rawheight="284" class="content_image lazy" width="400" data-actualsrc="https://pic3.zhimg.com/0320bbc08c1d67dc51c721e4fa400232_b.jpg"> 
+ <br>但对高频交易来说，这种信息是非常粗糙的。所以这里先要对不熟悉背景的同学介绍一下什么叫做Order Book。现在主流的交易所一般都使用Order Book进行交易，交易所在内部的Order Book上记录所有买家和卖家的报价，比如像这样： 
+ <br> 
+ <noscript> 
+  <img src="https://pic2.zhimg.com/e508ba3a0951bd23c8d4d62e90f054d9_b.jpg" data-rawwidth="387" data-rawheight="204" class="content_image" width="387"> 
+ </noscript> 
+ <img src="//zhstatic.zhihu.com/assets/zhihu/ztext/whitedot.jpg" data-rawwidth="387" data-rawheight="204" class="content_image lazy" width="387" data-actualsrc="https://pic2.zhimg.com/e508ba3a0951bd23c8d4d62e90f054d9_b.jpg"> 
+ <br> 
+ <br>Bid表示买家，Offer表示卖家，这张报价单表示买卖双方发出的所有报价单（Limit Order）。这张表才是高频交易最关心的信息。任意时刻，买家的出价总是低于卖家（比如这里的98对101）。所以报价虽然一直在变化，但是只有报价是不会有任何成交的。 
+ <br> 
+ <br>什么时候会产生交易呢？有两种情况，第一是任一方发出市价单（Market Order），比如一个买家发出一张单量为10的市价单，就可以买到卖方在101价格上挂的10份，这个交易成功之后，Order Book会变成这样： 
+ <br> 
+ <noscript> 
+  <img src="https://pic1.zhimg.com/874601e9fb4147559f198cbb09cf0668_b.jpg" data-rawwidth="387" data-rawheight="204" class="content_image" width="387"> 
+ </noscript> 
+ <img src="//zhstatic.zhihu.com/assets/zhihu/ztext/whitedot.jpg" data-rawwidth="387" data-rawheight="204" class="content_image lazy" width="387" data-actualsrc="https://pic1.zhimg.com/874601e9fb4147559f198cbb09cf0668_b.jpg"> 
+ <br>第二是发出一个价格等于对方最优报价的限价单，也会产生和上述情况相同的结果。 
+ <br> 
+ <br>需要强调的是，虽然真正的Order Book只存在于交易所内部，所有交易都在交易所内完成，但是交易所会把每笔报价和市价单都转发给所有人，所以所有的买家和卖家都可以自己维护一个同样的数据结构，相当于交易所Order Book的镜像。通过跟踪分析自己手里这份的镜像变化，来制定交易策略，是高频交易算法的核心思想。 
+ <br> 
+ <br>～～～～～～～～～～～～～～～～～～ 
+ <br> 
+ <br>基础知识介绍完毕，下面为了方便大家理解，我采用一种更形象的方式来表示Order Book： 
+ <br> 
+ <noscript> 
+  <img src="https://pic1.zhimg.com/31dc04d433647e4bf4f52ca7af44b03c_b.jpg" data-rawwidth="468" data-rawheight="135" class="origin_image zh-lightbox-thumb" width="468" data-original="https://pic1.zhimg.com/31dc04d433647e4bf4f52ca7af44b03c_r.jpg"> 
+ </noscript> 
+ <img src="//zhstatic.zhihu.com/assets/zhihu/ztext/whitedot.jpg" data-rawwidth="468" data-rawheight="135" class="origin_image zh-lightbox-thumb lazy" width="468" data-original="https://pic1.zhimg.com/31dc04d433647e4bf4f52ca7af44b03c_r.jpg" data-actualsrc="https://pic1.zhimg.com/31dc04d433647e4bf4f52ca7af44b03c_b.jpg"> 
+ <br>这张图对应文章开始时的那个Order Book，应该可以明白地看出，横轴表示价格，纵轴表示订单量，绿色表示买家，红四表示卖家。这样做的目的是为了引出本篇讨论的主题：冰山订单。 
+ <br> 
+ <br>通过上述基本分析大家可以看出，交易所内的交易数据是完全公开的，市场上任意时刻，有谁想要买／卖多少，所有人一目了然，没有任何秘密。这样做本身是有经济学意义的，因为只有展示出买卖的需求，才会吸引潜在的商家来交易，所以 
+ <b>在市场上一定程度的公开自己的需求是必要的</b>。但这样同时带来一个严重的后果，一旦有某个人想要大量买／卖，他所发出的巨额限价单会直接展示给所有人。比如一个买家挂出巨额买单后，Order Book会像这样： 
+ <br> 
+ <noscript> 
+  <img src="https://pic3.zhimg.com/ab980cdba9d438bfbfa57fc311f3efb2_b.jpg" data-rawwidth="468" data-rawheight="135" class="origin_image zh-lightbox-thumb" width="468" data-original="https://pic3.zhimg.com/ab980cdba9d438bfbfa57fc311f3efb2_r.jpg"> 
+ </noscript> 
+ <img src="//zhstatic.zhihu.com/assets/zhihu/ztext/whitedot.jpg" data-rawwidth="468" data-rawheight="135" class="origin_image zh-lightbox-thumb lazy" width="468" data-original="https://pic3.zhimg.com/ab980cdba9d438bfbfa57fc311f3efb2_r.jpg" data-actualsrc="https://pic3.zhimg.com/ab980cdba9d438bfbfa57fc311f3efb2_b.jpg"> 
+ <br>这对他非常不利，因为所有人都会利用这个信息来跟他做对。大家会判断，现在市场上存在大量的买压，于是会出现一大批为了赚钱而冲进来的人抢购，价格会快速上升，这样原来这个人可以在98这个价位买到的东西，很快就变得要在更高的价位上才能买到。这种情况，那些后来的人做的就是 
+ <a href="http://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Front_running" class=" wrap external" target="_blank" rel="nofollow noreferrer">Front running<i class="icon-external"></i></a>，而原来的那个人则面对 
+ <a href="http://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Adverse_selection" class=" wrap external" target="_blank" rel="nofollow noreferrer">逆向选择风险<i class="icon-external"></i></a>。 
+ <br> 
+ <br>为了解决这个问题，交易所提供了一种针对性的工具，就是所谓的冰山订单（Iceberg Order）。这种订单可以很大，但只有一小部分是公开出来的，大部分则隐藏起来，除了交易所和发单者本人谁也看不到，真的像一座“冰山”一样。比如像这样： 
+ <br> 
+ <noscript> 
+  <img src="https://pic3.zhimg.com/898a932857c397440c4fccaa350137e2_b.jpg" data-rawwidth="468" data-rawheight="291" class="origin_image zh-lightbox-thumb" width="468" data-original="https://pic3.zhimg.com/898a932857c397440c4fccaa350137e2_r.jpg"> 
+ </noscript> 
+ <img src="//zhstatic.zhihu.com/assets/zhihu/ztext/whitedot.jpg" data-rawwidth="468" data-rawheight="291" class="origin_image zh-lightbox-thumb lazy" width="468" data-original="https://pic3.zhimg.com/898a932857c397440c4fccaa350137e2_r.jpg" data-actualsrc="https://pic3.zhimg.com/898a932857c397440c4fccaa350137e2_b.jpg"> 
+ <br>灰色的部分就是冰山订单隐藏的部分。这样，只有当有对应隐藏量的交易发生时，交易所才会通知其他人，就避免了别人利用显示订单的信息来做 
+ <a href="http://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Front_running" class=" wrap external" target="_blank" rel="nofollow noreferrer">Front running<i class="icon-external"></i></a>。 
+ <br> 
+ <br>凡事有一利必有一弊。冰山订单虽然保护了发单者的利益，但是对于其他市场参与者来说却又变成了一种不公平的规则。那些有真实的交易需求的参与者，会因为对局势的误判而损失惨重。所以接下来的问题就变成，如何发现市场上的冰山订单？ 
+ <br> 
+ <br>首先有一种最简单的方法。有的时候，冰山订单是挂在最优买价和卖价之间（spread），像这样： 
+ <br> 
+ <noscript> 
+  <img src="https://pic4.zhimg.com/b8e9efa6142ec48ee18f2e1fac55516f_b.jpg" data-rawwidth="468" data-rawheight="291" class="origin_image zh-lightbox-thumb" width="468" data-original="https://pic4.zhimg.com/b8e9efa6142ec48ee18f2e1fac55516f_r.jpg"> 
+ </noscript> 
+ <img src="//zhstatic.zhihu.com/assets/zhihu/ztext/whitedot.jpg" data-rawwidth="468" data-rawheight="291" class="origin_image zh-lightbox-thumb lazy" width="468" data-original="https://pic4.zhimg.com/b8e9efa6142ec48ee18f2e1fac55516f_r.jpg" data-actualsrc="https://pic4.zhimg.com/b8e9efa6142ec48ee18f2e1fac55516f_b.jpg"> 
+ <br>对于这种情况，有一个非常简单的探测方法，即发一个最小额度的限价单在spread里，紧跟着取消这个订单。比如这个例子中，发出一个卖价为99的限价单然后取消。因为这个价格本身对不上显式的买价（98），如果没有冰山单的存在，一定不会成交。但有冰山单的情况下，一旦交易所收到这个卖单，会立刻成交冰山单中对应的量，而之后的取消指令就无效了。这样，以一种微小的成本，就可以发现市场中隐藏着的订单。事实上，的确有人会做这种事情，频繁的发单然后取消，在最优价差之间形成一种高频扰动，用来探测隐藏单。 
+ <br> 
+ <br>为了应对这种扰动探测，大家一般都不会直接挂单在spread里。而是会像之前那样和普通的限价单挂在一起，这样发生交易之后，你就很难推测消耗掉的究竟是正常的限价单，还是冰山订单。那么应该怎么做呢？ 
+ <br> 
+ <br>首先有一个直接的思路。冰山订单的存在，一定程度上反映了挂单人对市场情况的解读，认为有必要使用冰山订单而做出的判断。需要强调的是，使用冰山订单并不是没有代价的，因为你隐藏了真实的需求，在屏蔽掉潜在的攻击者的同时，也屏蔽掉了真正的交易者！而且会使得成交时间显著增加－－因为没人知道你想买／卖这么多，你只能慢慢等待对手盘的出现。所以当有人下决定发出冰山订单的时候，也会有对市场情况的考虑，只有合适的时机才会做这种选择。 
+ <br> 
+ <br>什么是合适的时机？有一些数据应该是相关的，比如买卖价差spread，买单量对卖单量的比值等。对这些数据，你可以在历史数据上做回归分析，建立起他们和冰山订单之间的线性／非线性模型。通过历史数据训练出来的这个模型，就可以作为你在实时交易时使用的冰山订单探测器。这是 
+ <a href="http://link.zhihu.com/?target=http%3A//www.tinbergen.nl/%7Esofie2012/papers/HautschHuang2012.pdf" class=" wrap external" target="_blank" rel="nofollow noreferrer">On the Dark Side of the Market: Identifying and Analyzing Hidden Order Placements<i class="icon-external"></i></a> 这篇论文使用的方法。 
+ <br> 
+ <br>基本模型可以定义为：F(spread，bidSize/offerSize，……) = Probability(Iceberg) 
+ <br> 
+ <br>如果你想玩高深的，还可以在此基础上做HMM，SVM，神经网络之类的高级模型，但基本思路是一致的：通过盘口分析计算存在冰山订单的概率。 
+ <br> 
+ <br>～～～～～～～～～～～～～～～～～～ 
+ <br> 
+ <br>上面说的这个方法，看起来很高级，实际效果如何呢？我想大家也看出来了，这种建模不是很精确。作为事后分析手段用来说明什么情况下可能会出现冰山订单还不错，但是作为实时交易的探测器就不是很放心。因为使用的信息太模糊了，而且说到底建模的对象只是一种相关性，没有什么保证冰山订单的发送者一定是按照这个逻辑出牌的。 
+ <br> 
+ <br>所以接下来介绍的，才是真正具有高频玩家神采的方法，来自 
+ <a href="http://link.zhihu.com/?target=http%3A//www.iijournals.com/doi/abs/10.3905/jot.2013.8.3.068%23sthash.rg6lIM8a.dpbs" class=" wrap external" target="_blank" rel="nofollow noreferrer">Prediction of Hidden Liquidity in the Limit Order Book of GLOBEX Futures<i class="icon-external"></i></a> 这篇论文。 
+ <br> 
+ <br>～～～～～～～～～～～～～～～～～～ 
+ <br> 
+ <br>高频世界里，有一条永恒的建模准则值得铭记：先看数据再建模。如果你看了上面的介绍就开始天马行空的思考数学模型，那基本上是死路一条。我见过很多年轻人，特别有热情，一上来就开始做数学定义，然后推导偏微分方程，数学公式写满一摞纸，最后一接触数据才发现模型根本行不通，这是非常遗憾的。 
+ <br> 
+ <br>而看了数据的人会怎么样呢？他很可能会发现，对于冰山订单的处理，交易所的规则是非常值得寻味的。有的交易所是这样做的：一个冰山订单包含两个参数，V表示订单总量，p表示公开显示的量。比如V=100，p=10的冰山单，实际上隐藏的量是90。如果有针对这个订单的交易发生，比如交易量10，交易所会顺序发出三条信息： 
+ <br> 
+ <ol> 
+  <li>成交10</li> 
+  <li>Order Book的Top bid size -10</li> 
+  <li>新Bid +10</li> 
+ </ol>这三条信息一定会连续出现，并且第三条和第一条的时差dt很小。这样做的原因是尽管冰山订单存在隐藏量，但是每次的交易只能对显示出的量（p）发生，p被消耗掉以后，才会从剩余的隐藏量中翻新出一分新的p量。这样，每个人从交易所收到的信息仍然可以在逻辑上正确的更新Order Book，就好像冰山订单并不存在一样。 
+ <br> 
+ <br>因此，一旦在数据中观察到这个规律，我们就可以非常有把握的判定市场中存在冰山订单，并且连p的值都可以确定！接下来的关键问题是，如何确定V的值，即判断这个冰山订单的剩余存量有多少？ 
+ <br> 
+ <br>这个问题从本质上说没法精确求解，因为V和p都是由下单人自己决定的，可以是任意值。但可以从两点考虑：第一，两个值都是整数；第二，人类不是完美的随机数生成器，下决定会遵循一定规律。 
+ <br> 
+ <br>从这两点出发，可以对V和p建立概率模型，即计算一个给定的（V，p）值组合出现的概率是多少？这里不去深入探讨数学分析，感兴趣的朋友可以自己去看原文。简单说，可以在历史数据上通过kernel estimation技术来估算他们的概率密度函数的形状。顺带一提，如果你亲手编写过这种估算程序，就会理解我为什么在“ 
+ <a href="http://www.zhihu.com/question/24577564/answer/28678695" class="internal">要想成为一名优秀的 Quant 需要什么样的编程水平？</a>”这个答案中如此强调编程的重要性。在数据上估算出来的概率密度函数可能会是这样的： 
+ <br> 
+ <noscript> 
+  <img src="https://pic2.zhimg.com/f8468753f25b5e205777b6c7fd15b695_b.jpg" data-rawwidth="825" data-rawheight="559" class="origin_image zh-lightbox-thumb" width="825" data-original="https://pic2.zhimg.com/f8468753f25b5e205777b6c7fd15b695_r.jpg"> 
+ </noscript> 
+ <img src="//zhstatic.zhihu.com/assets/zhihu/ztext/whitedot.jpg" data-rawwidth="825" data-rawheight="559" class="origin_image zh-lightbox-thumb lazy" width="825" data-original="https://pic2.zhimg.com/f8468753f25b5e205777b6c7fd15b695_r.jpg" data-actualsrc="https://pic2.zhimg.com/f8468753f25b5e205777b6c7fd15b695_b.jpg"> 
+ <br>这样，当你在实时数据中观测到一个p的值时，就可以得出对应的V值的条件概率密度函数，即上图的一个切面，比如（p = 8）： 
+ <br> 
+ <noscript> 
+  <img src="https://pic1.zhimg.com/13e890f9cc1d8ecbd6a78ed8f38044e8_b.jpg" data-rawwidth="468" data-rawheight="293" class="origin_image zh-lightbox-thumb" width="468" data-original="https://pic1.zhimg.com/13e890f9cc1d8ecbd6a78ed8f38044e8_r.jpg"> 
+ </noscript> 
+ <img src="//zhstatic.zhihu.com/assets/zhihu/ztext/whitedot.jpg" data-rawwidth="468" data-rawheight="293" class="origin_image zh-lightbox-thumb lazy" width="468" data-original="https://pic1.zhimg.com/13e890f9cc1d8ecbd6a78ed8f38044e8_r.jpg" data-actualsrc="https://pic1.zhimg.com/13e890f9cc1d8ecbd6a78ed8f38044e8_b.jpg"> 
+ <br>接下来显然就很容易计算V最可能是什么值了。这条函数曲线还有一个重要的作用是帮助你动态评估剩余存量，比如当你观察到已经有5份p被消耗掉，即可推出V&gt;=40，由上图即可推出新的V值和剩余存量（V-5p）。 
+ <br> 
+ <br>综上，算法的核心在于，通过在实时数据中监测短时间内连续出现的三条相关记录判断冰山订单的存在，而对冰山订单的量化则通过由历史数据训练出的概率模型来完成。 
+ <br> 
+ <br>相信你也会看出，这种算法并不是什么作弊神器。它只是利用市场上的公开数据所做的一种推测。而且这个推测也仅仅是基于概率的，更多的应该是作为一种参考。它对做市商这种流动性提供者很有意义，可以使他们避免因为对局势的误判而遭受损失。但如果你想用它来作为一种攻击手段，觉得自己能发现隐藏大单而去Front run，那实在是很不明智的选择。 
+ <br> 
+ <br>最后，这种算法也只是针对特定的交易所。其他的交易所也许不会采用同样的冰山订单处理方式。所以真正有价值的是这种从实际数据出发的建模思路，具体的算法并不值钱。 
+ <br> 
+ <br>～～～～～～～～～～～～～～～～～～ 
+ <br> 
+ <br>这个小算法给你展示了高频交易领域的“冰山一角”。它看起来也许不算很复杂，但是我却很喜欢。因为它清晰地展示了什么叫做先有思路，再有量化。因为有“冰山订单”这样一个从经济学基本的供需关系出发的真实需求，通过分析实际数据找到一丝线索，最后通过数学模型刻画出定量的策略，这才是漂亮的策略研发。 
+ <br> 
+ <br>如果违背这个原则，一上来就去搬各种高级的模型去套数据，指望模型自动给你生成交易信号，这在我看来无异于痴人说梦。遗憾的是，这个梦的确太过诱人，而这个世界也从来不缺少莽夫。 
+ <br> 
+ <br>且行且珍惜。 
+</div>
+userid:	http://www.zhihu.com/people/dongkeren
