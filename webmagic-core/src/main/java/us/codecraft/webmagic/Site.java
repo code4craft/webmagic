@@ -3,7 +3,6 @@ package us.codecraft.webmagic;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import us.codecraft.webmagic.proxy.ProxyProvider;
-import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.util.*;
 
@@ -25,11 +24,6 @@ public class Site {
     private Map<String, Map<String, String>> cookies = new HashMap<String, Map<String, String>>();
 
     private String charset;
-
-    /**
-     * startUrls is the urls the crawler to start with.
-     */
-    private List<Request> startRequests = new ArrayList<Request>();
 
     private int sleepTime = 5000;
 
@@ -224,52 +218,6 @@ public class Site {
     }
 
     /**
-     * get start urls
-     *
-     * @return start urls
-     * @see #getStartRequests
-     * @deprecated
-     */
-    @Deprecated
-    public List<String> getStartUrls() {
-        return UrlUtils.convertToUrls(startRequests);
-    }
-
-    public List<Request> getStartRequests() {
-        return startRequests;
-    }
-
-    /**
-     * Add a url to start url.<br>
-     * Because urls are more a Spider's property than Site, move it to {@link Spider#addUrl(String...)}}
-     *
-     * @param startUrl startUrl
-     * @return this
-     * @see Spider#addUrl(String...)
-     * @deprecated
-     */
-    public Site addStartUrl(String startUrl) {
-        return addStartRequest(new Request(startUrl));
-    }
-
-    /**
-     * Add a url to start url.<br>
-     * Because urls are more a Spider's property than Site, move it to {@link Spider#addRequest(Request...)}}
-     *
-     * @param startRequest startRequest
-     * @return this
-     * @see Spider#addRequest(Request...)
-     * @deprecated
-     */
-    public Site addStartRequest(Request startRequest) {
-        this.startRequests.add(startRequest);
-        if (domain == null && startRequest.getUrl() != null) {
-            domain = UrlUtils.getDomain(startRequest.getUrl());
-        }
-        return this;
-    }
-
-    /**
      * Set the interval between the processing of two pages.<br>
      * Time unit is micro seconds.<br>
      *
@@ -348,21 +296,6 @@ public class Site {
         return this;
     }
 
-    public HttpHost getHttpProxy() {
-        return httpProxy;
-    }
-
-    /**
-     * set up httpProxy for this site
-     *
-     * @param httpProxy httpProxy
-     * @return this
-     */
-    public Site setHttpProxy(HttpHost httpProxy) {
-        this.httpProxy = httpProxy;
-        return this;
-    }
-
     public boolean isUseGzip() {
         return useGzip;
     }
@@ -430,8 +363,6 @@ public class Site {
             return false;
         if (domain != null ? !domain.equals(site.domain) : site.domain != null) return false;
         if (headers != null ? !headers.equals(site.headers) : site.headers != null) return false;
-        if (startRequests != null ? !startRequests.equals(site.startRequests) : site.startRequests != null)
-            return false;
         if (userAgent != null ? !userAgent.equals(site.userAgent) : site.userAgent != null) return false;
 
         return true;
@@ -443,7 +374,6 @@ public class Site {
         result = 31 * result + (userAgent != null ? userAgent.hashCode() : 0);
         result = 31 * result + (defaultCookies != null ? defaultCookies.hashCode() : 0);
         result = 31 * result + (charset != null ? charset.hashCode() : 0);
-        result = 31 * result + (startRequests != null ? startRequests.hashCode() : 0);
         result = 31 * result + sleepTime;
         result = 31 * result + retryTimes;
         result = 31 * result + cycleRetryTimes;
@@ -460,7 +390,6 @@ public class Site {
                 ", userAgent='" + userAgent + '\'' +
                 ", cookies=" + defaultCookies +
                 ", charset='" + charset + '\'' +
-                ", startRequests=" + startRequests +
                 ", sleepTime=" + sleepTime +
                 ", retryTimes=" + retryTimes +
                 ", cycleRetryTimes=" + cycleRetryTimes +
