@@ -10,6 +10,7 @@ import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.utils.HttpConstant;
 
 import java.nio.charset.Charset;
@@ -25,14 +26,10 @@ import java.util.Map;
  */
 public class HttpUriRequestConverter {
 
-    public HttpUriRequest convert(Request request, Site site) {
-        return null;
-    }
-
-    private HttpUriRequest getHttpUriRequest(Request request, Site site, Map<String, String> headers, HttpHost proxy) {
+    public HttpUriRequest convert(Request request, Site site, Proxy proxy) {
         RequestBuilder requestBuilder = selectRequestMethod(request).setUri(request.getUrl());
-        if (headers != null) {
-            for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
+        if (site.getHeaders() != null) {
+            for (Map.Entry<String, String> headerEntry : site.getHeaders().entrySet()) {
                 requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
             }
         }
@@ -46,7 +43,7 @@ public class HttpUriRequestConverter {
         }
 
         if (proxy != null) {
-            requestConfigBuilder.setProxy(proxy);
+            requestConfigBuilder.setProxy(new HttpHost(proxy.getProxyHost().getHost(), proxy.getProxyHost().getPort()));
         }
         requestBuilder.setConfig(requestConfigBuilder.build());
         return requestBuilder.build();

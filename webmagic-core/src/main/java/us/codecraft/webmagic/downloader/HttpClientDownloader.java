@@ -86,7 +86,7 @@ public class HttpClientDownloader extends AbstractDownloader {
             authState.update(new BasicScheme(), new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
             httpContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, authState);
         }
-        HttpUriRequest httpUriRequest = httpUriRequestConverter.convert(request, site);
+        HttpUriRequest httpUriRequest = httpUriRequestConverter.convert(request, site, proxy);
         CloseableHttpClient httpClient = getHttpClient(site);
         try {
             httpResponse = httpClient.execute(httpUriRequest, httpContext);
