@@ -21,7 +21,7 @@ public class DianpingFtlDataScanner implements AfterExtractor {
 	private List<String> data;
 
 	public static void main(String[] args) {
-		OOSpider.create(Site.me().addStartUrl("http://w.alpha.dp/").setSleepTime(0), DianpingFtlDataScanner.class)
+		OOSpider.create(Site.me().setSleepTime(0), DianpingFtlDataScanner.class)
 				.thread(5).run();
 	}
 
