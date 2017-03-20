@@ -5,7 +5,7 @@ import us.codecraft.webmagic.Task;
 /**
  * Created by edwardsbean on 15-2-28.
  */
-public interface ProxyPool {
+public interface ProxyProvider {
 
     void returnProxy(Proxy proxy, boolean banned, Task task);
 

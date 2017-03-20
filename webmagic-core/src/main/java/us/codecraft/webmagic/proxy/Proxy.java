@@ -6,42 +6,36 @@ package us.codecraft.webmagic.proxy;
 
 public class Proxy {
 
-	private ProxyHost proxyHost;
+	private String host;
+	private int port;
 	private String username;
 	private String password;
 
-	public Proxy(ProxyHost proxyHost, String username, String password) {
-		this.proxyHost = proxyHost;
+	public Proxy(String host, int port) {
+		this.host = host;
+		this.port = port;
+	}
+
+	public Proxy(String host, int port, String username, String password) {
+		this.host = host;
+		this.port = port;
 		this.username = username;
 		this.password = password;
 	}
 
-	public Proxy(ProxyHost proxyHost) {
-		this.proxyHost = proxyHost;
+	public String getHost() {
+		return host;
 	}
 
-	public ProxyHost getProxyHost() {
-		return proxyHost;
-	}
-
-	public void setProxyHost(ProxyHost proxyHost) {
-		this.proxyHost = proxyHost;
+	public int getPort() {
+		return port;
 	}
 
 	public String getUsername() {
 		return username;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
 	public String getPassword() {
 		return password;
 	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 }

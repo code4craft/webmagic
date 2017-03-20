@@ -20,6 +20,7 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.proxy.Proxy;
+import us.codecraft.webmagic.proxy.ProxyProvider;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.CharsetUtils;
 
@@ -45,9 +46,15 @@ public class HttpClientDownloader extends AbstractDownloader {
     private HttpClientGenerator httpClientGenerator = new HttpClientGenerator();
 
     private HttpUriRequestConverter httpUriRequestConverter = new HttpUriRequestConverter();
+    
+    private ProxyProvider proxyProvider;
 
     public void setHttpUriRequestConverter(HttpUriRequestConverter httpUriRequestConverter) {
         this.httpUriRequestConverter = httpUriRequestConverter;
+    }
+
+    public void setProxyProvider(ProxyProvider proxyProvider) {
+        this.proxyProvider = proxyProvider;
     }
 
     private CloseableHttpClient getHttpClient(Site site) {
@@ -79,8 +86,8 @@ public class HttpClientDownloader extends AbstractDownloader {
         Site site = task.getSite();
         Proxy proxy = null;
         HttpContext httpContext = new BasicHttpContext();
-        if (site.getHttpProxyPool() != null) {
-            proxy = site.getHttpProxyPool().getProxy(task);
+        if (proxyProvider != null) {
+            proxy = proxyProvider.getProxy(task);
             request.putExtra(Request.PROXY, proxy);
             AuthState authState = new AuthState();
             authState.update(new BasicScheme(), new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
@@ -110,9 +117,6 @@ public class HttpClientDownloader extends AbstractDownloader {
             if (httpResponse != null) {
                 //ensure the connection is released back to pool
                 EntityUtils.consumeQuietly(httpResponse.getEntity());
-            }
-            if (proxy != null) {
-                site.getHttpProxyPool().returnProxy(proxy, statusCode, task);
             }
         }
     }

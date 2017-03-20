@@ -72,14 +72,10 @@ public class TimerReuseProxy extends Proxy implements Delayed, Serializable {
 
 	private List<Integer> failedErrorType = new ArrayList<Integer>();
 
-	public TimerReuseProxy(ProxyHost proxyHost, String user, String password) {
-		super(proxyHost, user, password);
+	public TimerReuseProxy(String host, int port, String username, String password) {
+		super(host, port, username, password);
 	}
 
-	public TimerReuseProxy(ProxyHost proxyHost, String user, String password, int reuseTimeInterval) {
-		super(proxyHost, user, password);
-		this.reuseTimeInterval = reuseTimeInterval;
-	}
 
 	public int getSuccessNum() {
 		return successNum;

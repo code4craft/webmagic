@@ -43,7 +43,7 @@ public class HttpUriRequestConverter {
         }
 
         if (proxy != null) {
-            requestConfigBuilder.setProxy(new HttpHost(proxy.getProxyHost().getHost(), proxy.getProxyHost().getPort()));
+            requestConfigBuilder.setProxy(new HttpHost(proxy.getHost(), proxy.getPort()));
         }
         requestBuilder.setConfig(requestConfigBuilder.build());
         return requestBuilder.build();

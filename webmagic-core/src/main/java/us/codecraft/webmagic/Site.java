@@ -2,8 +2,7 @@ package us.codecraft.webmagic;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import us.codecraft.webmagic.proxy.ProxyPool;
-import us.codecraft.webmagic.proxy.TimerReuseProxyPool;
+import us.codecraft.webmagic.proxy.ProxyProvider;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.util.*;
@@ -52,7 +51,7 @@ public class Site {
 
     private UsernamePasswordCredentials usernamePasswordCredentials; //代理用户名密码设置
 
-    private ProxyPool httpProxyPool;
+    private ProxyProvider httpProxyPool;
 
     private boolean useGzip = true;
 
@@ -399,7 +398,11 @@ public class Site {
         return new Task() {
             @Override
             public String getUUID() {
-                return Site.this.getDomain();
+                String uuid = Site.this.getDomain();
+                if (uuid == null) {
+                    uuid = UUID.randomUUID().toString();
+                }
+                return uuid;
             }
 
             @Override
@@ -465,47 +468,6 @@ public class Site {
                 ", acceptStatCode=" + acceptStatCode +
                 ", headers=" + headers +
                 '}';
-    }
-
-    /**
-     * Set httpProxyPool, String[0]:ip, String[1]:port <br>
-     *
-     * @param proxyPool proxyPool
-     * @return this
-     */
-    public Site setHttpProxyPool(ProxyPool proxyPool) {
-        this.httpProxyPool = proxyPool;
-        return this;
-    }
-
-    /**
-     * Set httpProxyPool, String[0]:ip, String[1]:port <br>
-     *
-     * @param httpProxyList httpProxyList
-     * @param isUseLastProxy isUseLastProxy
-     * @return this
-     */
-    public Site setHttpProxyPool(List<String[]> httpProxyList, boolean isUseLastProxy) {
-        this.httpProxyPool=new TimerReuseProxyPool(httpProxyList, isUseLastProxy);
-        return this;
-    }
-
-    public Site enableHttpProxyPool() {
-        this.httpProxyPool=new TimerReuseProxyPool();
-        return this;
-    }
-
-    public UsernamePasswordCredentials getUsernamePasswordCredentials() {
-        return usernamePasswordCredentials;
-    }
-
-    public Site setUsernamePasswordCredentials(UsernamePasswordCredentials usernamePasswordCredentials) {
-        this.usernamePasswordCredentials = usernamePasswordCredentials;
-        return this;
-    }
-
-    public ProxyPool getHttpProxyPool() {
-        return httpProxyPool;
     }
 
 }
