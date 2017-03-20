@@ -479,7 +479,9 @@ public class Spider implements Runnable, Task {
     public <T> List<T> getAll(Collection<String> urls) {
         destroyWhenExit = false;
         spawnUrl = false;
-        startRequests.clear();
+        if (startRequests!=null){
+            startRequests.clear();
+        }
         for (Request request : UrlUtils.convertToRequests(urls)) {
             addRequest(request);
         }

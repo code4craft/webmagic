@@ -95,12 +95,12 @@ public class HttpClientGenerator {
         HttpClientBuilder httpClientBuilder = HttpClients.custom();
         
         httpClientBuilder.setConnectionManager(connectionManager);
-        if (site != null && site.getUserAgent() != null) {
+        if (site.getUserAgent() != null) {
             httpClientBuilder.setUserAgent(site.getUserAgent());
         } else {
             httpClientBuilder.setUserAgent("");
         }
-        if (site == null || site.isUseGzip()) {
+        if (site.isUseGzip()) {
             httpClientBuilder.addInterceptorFirst(new HttpRequestInterceptor() {
 
                 public void process(
@@ -117,16 +117,12 @@ public class HttpClientGenerator {
 
         SocketConfig.Builder socketConfigBuilder = SocketConfig.custom();
         socketConfigBuilder.setSoKeepAlive(true).setTcpNoDelay(true);
-        if (site != null) {
-            socketConfigBuilder.setSoTimeout(site.getTimeOut());
-        }
+        socketConfigBuilder.setSoTimeout(site.getTimeOut());
         SocketConfig socketConfig = socketConfigBuilder.build();
         httpClientBuilder.setDefaultSocketConfig(socketConfig);
         connectionManager.setDefaultSocketConfig(socketConfig);
-        if (site != null) {
-            httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(site.getRetryTimes(), true));
-            generateCookie(httpClientBuilder, site);
-        }
+        httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(site.getRetryTimes(), true));
+        generateCookie(httpClientBuilder, site);
         return httpClientBuilder.build();
     }
 

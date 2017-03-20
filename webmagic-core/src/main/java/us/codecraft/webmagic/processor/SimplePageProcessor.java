@@ -2,7 +2,6 @@ package us.codecraft.webmagic.processor;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.util.List;
 
@@ -18,9 +17,8 @@ public class SimplePageProcessor implements PageProcessor {
 
     private Site site;
 
-    public SimplePageProcessor(String startUrl, String urlPattern) {
-        this.site = Site.me().addStartUrl(startUrl).
-                setDomain(UrlUtils.getDomain(startUrl));
+    public SimplePageProcessor(String urlPattern) {
+        this.site = Site.me();
         //compile "*" expression to regex
         this.urlPattern = "(" + urlPattern.replace(".", "\\.").replace("*", "[^\"'#]*") + ")";
 

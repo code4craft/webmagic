@@ -1,9 +1,5 @@
 package us.codecraft.webmagic;
 
-import org.apache.http.HttpHost;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import us.codecraft.webmagic.proxy.ProxyProvider;
-
 import java.util.*;
 
 /**
@@ -40,12 +36,6 @@ public class Site {
     private Set<Integer> acceptStatCode = DEFAULT_STATUS_CODE_SET;
 
     private Map<String, String> headers = new HashMap<String, String>();
-
-    private HttpHost httpProxy;
-
-    private UsernamePasswordCredentials usernamePasswordCredentials; //代理用户名密码设置
-
-    private ProxyProvider httpProxyPool;
 
     private boolean useGzip = true;
 
