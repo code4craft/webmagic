@@ -419,8 +419,6 @@ public class Spider implements Runnable, Task {
                 pipeline.process(page.getResultItems(), this);
             }
         }
-        //for proxy status management
-        request.putExtra(Request.STATUS_CODE, page.getStatusCode());
         sleep(site.getSleepTime());
     }
 

@@ -10,7 +10,6 @@ import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.utils.HttpConstant;
 
 import java.nio.charset.Charset;
@@ -26,7 +25,7 @@ import java.util.Map;
  */
 public class HttpUriRequestConverter {
 
-    public HttpUriRequest convert(Request request, Site site, Proxy proxy) {
+    public HttpUriRequest convert(Request request, Site site) {
         return null;
     }
 

@@ -7,12 +7,12 @@ package us.codecraft.webmagic.proxy;
 public class Proxy {
 
 	private ProxyHost proxyHost;
-	private String user;
+	private String username;
 	private String password;
 
-	public Proxy(ProxyHost proxyHost, String user, String password) {
+	public Proxy(ProxyHost proxyHost, String username, String password) {
 		this.proxyHost = proxyHost;
-		this.user = user;
+		this.username = username;
 		this.password = password;
 	}
 
@@ -28,12 +28,12 @@ public class Proxy {
 		this.proxyHost = proxyHost;
 	}
 
-	public String getUser() {
-		return user;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {

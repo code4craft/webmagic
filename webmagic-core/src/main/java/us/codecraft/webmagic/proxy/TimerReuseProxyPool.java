@@ -7,8 +7,6 @@ import us.codecraft.webmagic.utils.FilePersistentBase;
 import us.codecraft.webmagic.utils.ProxyUtils;
 
 import java.io.*;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.BlockingQueue;
@@ -156,7 +154,7 @@ public class TimerReuseProxyPool implements ProxyPool {
         isEnable = true;
         for (Proxy proxy : httpProxyList) {
             if (!validateWhenInit || ProxyUtils.validateProxy(proxy.getProxyHost())) {
-                TimerReuseProxy p = new TimerReuseProxy(proxy.getProxyHost(), proxy.getUser(), proxy.getPassword(), reuseInterval);
+                TimerReuseProxy p = new TimerReuseProxy(proxy.getProxyHost(), proxy.getUsername(), proxy.getPassword(), reuseInterval);
                 proxyQueue.add(p);
                 allProxy.put(p.getProxyHost().getHost(), p);
             }
@@ -185,8 +183,8 @@ public class TimerReuseProxyPool implements ProxyPool {
         return proxy;
     }
 
-    public void returnProxy(HttpHost host, int statusCode) {
-        TimerReuseProxy p = allProxy.get(host.getAddress().getHostAddress());
+    public void returnProxy(Proxy proxy, int statusCode) {
+        TimerReuseProxy p = allProxy.get(proxy.getProxyHost());
         if (p == null) {
             return;
         }
@@ -202,13 +200,13 @@ public class TimerReuseProxyPool implements ProxyPool {
                 // banned,try longer interval
                 p.fail(TimerReuseProxy.ERROR_403);
                 p.setReuseTimeInterval(reuseInterval * p.getFailedNum());
-                logger.info(host + " >>>> reuseTimeInterval is >>>> " + p.getReuseTimeInterval() / 1000.0);
+                logger.info(proxy + " >>>> reuseTimeInterval is >>>> " + p.getReuseTimeInterval() / 1000.0);
                 break;
             case TimerReuseProxy.ERROR_BANNED:
                 p.fail(TimerReuseProxy.ERROR_BANNED);
                 p.setReuseTimeInterval(10 * 60 * 1000 * p.getFailedNum());
                 logger.warn("this proxy is banned >>>> " + p.getHttpHost());
-                logger.info(host + " >>>> reuseTimeInterval is >>>> " + p.getReuseTimeInterval() / 1000.0);
+                logger.info(proxy + " >>>> reuseTimeInterval is >>>> " + p.getReuseTimeInterval() / 1000.0);
                 break;
             case TimerReuseProxy.ERROR_404:
                 // p.fail(Proxy.ERROR_404);
@@ -220,13 +218,13 @@ public class TimerReuseProxyPool implements ProxyPool {
         }
         if (p.getFailedNum() > 20) {
             p.setReuseTimeInterval(reviveTime);
-            logger.error("remove proxy >>>> " + host + ">>>>" + p.getFailedType() + " >>>> remain proxy >>>> " + proxyQueue.size());
+            logger.error("remove proxy >>>> " + proxy + ">>>>" + p.getFailedType() + " >>>> remain proxy >>>> " + proxyQueue.size());
             return;
         }
         if (p.getFailedNum() > 0 && p.getFailedNum() % 5 == 0) {
-            if (!ProxyUtils.validateProxy(host)) {
+            if (!ProxyUtils.validateProxy(proxy)) {
                 p.setReuseTimeInterval(reviveTime);
-                logger.error("remove proxy >>>> " + host + ">>>>" + p.getFailedType() + " >>>> remain proxy >>>> " + proxyQueue.size());
+                logger.error("remove proxy >>>> " + proxy + ">>>>" + p.getFailedType() + " >>>> remain proxy >>>> " + proxyQueue.size());
                 return;
             }
         }

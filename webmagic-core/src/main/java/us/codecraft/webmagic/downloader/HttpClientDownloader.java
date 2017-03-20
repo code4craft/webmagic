@@ -1,7 +1,6 @@
 package us.codecraft.webmagic.downloader;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.annotation.ThreadSafe;
 import org.apache.http.auth.AuthState;
@@ -23,13 +22,11 @@ import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.CharsetUtils;
-import us.codecraft.webmagic.utils.WMCollections;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -80,28 +77,22 @@ public class HttpClientDownloader extends AbstractDownloader {
         CloseableHttpResponse httpResponse = null;
         int statusCode = 0;
         Site site = task.getSite();
-        try {
-            Proxy proxy = null;
-            if (site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
-                proxy = site.getHttpProxyFromPool();
-            } else if (site != null && site.getHttpProxy() != null){
-                proxy = site.getHttpProxy();
-                request.putExtra(Request.PROXY, site.getHttpProxy());
-            }
+        Proxy proxy = null;
+        HttpContext httpContext = new BasicHttpContext();
+        if (site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
+            proxy = site.getHttpProxyFromPool();
             request.putExtra(Request.PROXY, proxy);
-
-            HttpContext httpContext = new BasicHttpContext();
-
-            HttpUriRequest httpUriRequest = httpUriRequestConverter.convert(request,site);
             AuthState authState = new AuthState();
-            authState.update(new BasicScheme(), new UsernamePasswordCredentials("userName", "password"));
+            authState.update(new BasicScheme(), new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
             httpContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, authState);
-            CloseableHttpClient httpClient = getHttpClient(site, proxy);
+        }
+        HttpUriRequest httpUriRequest = httpUriRequestConverter.convert(request, site);
+        CloseableHttpClient httpClient = getHttpClient(site);
+        try {
             httpResponse = httpClient.execute(httpUriRequest, httpContext);
             statusCode = httpResponse.getStatusLine().getStatusCode();
-            request.putExtra(Request.STATUS_CODE, statusCode);
-            if (statusAccept(acceptStatCode, statusCode)) {
-                Page page = handleResponse(request, charset, httpResponse, task);
+            if (site.getAcceptStatCode().contains(statusCode)) {
+                Page page = handleResponse(request, site.getCharset(), httpResponse, task);
                 onSuccess(request);
                 return page;
             } else {
@@ -120,10 +111,8 @@ public class HttpClientDownloader extends AbstractDownloader {
                 //ensure the connection is released back to pool
                 EntityUtils.consumeQuietly(httpResponse.getEntity());
             }
-        	request.putExtra(Request.STATUS_CODE, statusCode);
-            if (site != null && site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
-                site.returnHttpProxyToPool((HttpHost) request.getExtra(Request.PROXY), (Integer) request
-                        .getExtra(Request.STATUS_CODE));
+            if (proxy != null) {
+                site.getHttpProxyPool().returnProxy(proxy, statusCode);
             }
         }
     }
@@ -131,10 +120,6 @@ public class HttpClientDownloader extends AbstractDownloader {
     @Override
     public void setThread(int thread) {
         httpClientGenerator.setPoolSize(thread);
-    }
-
-    protected boolean statusAccept(Set<Integer> acceptStatCode, int statusCode) {
-        return acceptStatCode.contains(statusCode);
     }
 
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
