@@ -2,7 +2,6 @@ package us.codecraft.webmagic;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.proxy.ProxyPool;
 import us.codecraft.webmagic.proxy.TimerReuseProxyPool;
 import us.codecraft.webmagic.utils.UrlUtils;
@@ -507,10 +506,6 @@ public class Site {
 
     public ProxyPool getHttpProxyPool() {
         return httpProxyPool;
-    }
-
-    public Proxy getHttpProxyFromPool() {
-        return httpProxyPool.getProxy();
     }
 
 }

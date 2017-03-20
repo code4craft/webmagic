@@ -79,8 +79,8 @@ public class HttpClientDownloader extends AbstractDownloader {
         Site site = task.getSite();
         Proxy proxy = null;
         HttpContext httpContext = new BasicHttpContext();
-        if (site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
-            proxy = site.getHttpProxyFromPool();
+        if (site.getHttpProxyPool() != null) {
+            proxy = site.getHttpProxyPool().getProxy(task);
             request.putExtra(Request.PROXY, proxy);
             AuthState authState = new AuthState();
             authState.update(new BasicScheme(), new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
@@ -112,7 +112,7 @@ public class HttpClientDownloader extends AbstractDownloader {
                 EntityUtils.consumeQuietly(httpResponse.getEntity());
             }
             if (proxy != null) {
-                site.getHttpProxyPool().returnProxy(proxy, statusCode);
+                site.getHttpProxyPool().returnProxy(proxy, statusCode, task);
             }
         }
     }
