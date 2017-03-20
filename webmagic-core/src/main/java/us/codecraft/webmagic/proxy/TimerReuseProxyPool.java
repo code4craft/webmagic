@@ -34,100 +34,9 @@ public class TimerReuseProxyPool implements ProxyPool {
     private boolean isEnable = false;
     private boolean validateWhenInit = false;
     // private boolean isUseLastProxy = true;
-    private String proxyFilePath = "/data/webmagic/lastUse.proxy";
-
-    private FilePersistentBase fBase = new FilePersistentBase();
-
-    private Timer timer = new Timer(true);
-    private TimerTask saveProxyTask = new TimerTask() {
-
-        @Override
-        public void run() {
-            saveProxyList();
-            logger.info(allProxyStatus());
-        }
-    };
-
-    public TimerReuseProxyPool() {
-        this(null, true);
-    }
-
+    
     public TimerReuseProxyPool(List<String[]> httpProxyList) {
         this(httpProxyList, true);
-    }
-
-    public TimerReuseProxyPool(List<String[]> httpProxyList, boolean isUseLastProxy) {
-        if (httpProxyList != null) {
-            addProxy(httpProxyList.toArray(new String[httpProxyList.size()][]));
-        }
-        if (isUseLastProxy) {
-            if (!new File(proxyFilePath).exists()) {
-                setFilePath();
-            }
-            readProxyList();
-            timer.schedule(saveProxyTask, 0, saveProxyInterval);
-        }
-    }
-
-    private void setFilePath() {
-        String tmpDir = System.getProperty("java.io.tmpdir");
-        String path = tmpDir + FilePersistentBase.PATH_SEPERATOR + "webmagic" + FilePersistentBase.PATH_SEPERATOR + "lastUse.proxy";
-        if (tmpDir != null && new File(tmpDir).isDirectory()) {
-            fBase.setPath(tmpDir + FilePersistentBase.PATH_SEPERATOR + "webmagic");
-            File f = fBase.getFile(path);
-            if (!f.exists()) {
-                try {
-                    f.createNewFile();
-
-                } catch (IOException e) {
-                    logger.error("proxy file create error", e);
-                }
-            }
-
-        } else {
-            logger.error("java tmp dir not exists");
-        }
-        this.proxyFilePath = path;
-    }
-
-    private void saveProxyList() {
-        if (allProxy.size() == 0) {
-            return;
-        }
-        try {
-            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(fBase.getFile(proxyFilePath)));
-            os.writeObject(prepareForSaving());
-            os.close();
-            logger.info("save proxy");
-        } catch (FileNotFoundException e) {
-            logger.error("proxy file not found", e);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private Map<String, Proxy> prepareForSaving() {
-        Map<String, TimerReuseProxy> tmp = new HashMap<String, TimerReuseProxy>();
-        for (Entry<String, TimerReuseProxy> e : allProxy.entrySet()) {
-            TimerReuseProxy p = e.getValue();
-            p.setFailedNum(0);
-            tmp.put(e.getKey(), p);
-        }
-        return tmp;
-    }
-
-    private void readProxyList() {
-        try {
-            ObjectInputStream is = new ObjectInputStream(new FileInputStream(fBase.getFile(proxyFilePath)));
-            addProxy((Map<String, Proxy>) is.readObject());
-            is.close();
-        } catch (FileNotFoundException e) {
-            logger.info("last use proxy file not found", e);
-        } catch (IOException e) {
-            // e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            // e.printStackTrace();
-        }
     }
 
     private void addProxy(Map<String, Proxy> httpProxyMap) {
@@ -205,7 +114,6 @@ public class TimerReuseProxyPool implements ProxyPool {
             case TimerReuseProxy.ERROR_BANNED:
                 p.fail(TimerReuseProxy.ERROR_BANNED);
                 p.setReuseTimeInterval(10 * 60 * 1000 * p.getFailedNum());
-                logger.warn("this proxy is banned >>>> " + p.getHttpHost());
                 logger.info(proxy + " >>>> reuseTimeInterval is >>>> " + p.getReuseTimeInterval() / 1000.0);
                 break;
             case TimerReuseProxy.ERROR_404:
