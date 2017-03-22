@@ -11,6 +11,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -164,11 +165,11 @@ public class HttpClientDownloader extends AbstractDownloader {
             //default get
             return addQueryParams(RequestBuilder.get(),request.getParams());
         } else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
-            return addFormParams(RequestBuilder.post(), (NameValuePair[]) request.getExtra("nameValuePair"), request.getParams());
+            return addFormParams(RequestBuilder.post(), request.getExtra("nameValuePair"), request.getParams());
         } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
             return addQueryParams(RequestBuilder.head(),request.getParams());
         } else if (method.equalsIgnoreCase(HttpConstant.Method.PUT)) {
-            return addFormParams(RequestBuilder.put(), (NameValuePair[]) request.getExtra("nameValuePair"), request.getParams());
+            return addFormParams(RequestBuilder.put(), request.getExtra("nameValuePair"), request.getParams());
         } else if (method.equalsIgnoreCase(HttpConstant.Method.DELETE)) {
             return addQueryParams(RequestBuilder.delete(),request.getParams());
         } else if (method.equalsIgnoreCase(HttpConstant.Method.TRACE)) {
@@ -176,7 +177,19 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
         throw new IllegalArgumentException("Illegal HTTP Method " + method);
     }
-
+    
+    private RequestBuilder addFormParams(RequestBuilder requestBuilder, Object nameValuePair, Map<String, String> params) {
+        if(String.class.isInstance(nameValuePair)){
+        	return addFormParams(requestBuilder, (String)nameValuePair);
+        }
+        return addFormParams(requestBuilder, (NameValuePair[]) nameValuePair, params);
+    }
+    
+    private RequestBuilder addFormParams(RequestBuilder requestBuilder, String postValueString) {
+        requestBuilder.setEntity(new StringEntity(postValueString, Charset.forName("utf8")));
+        return requestBuilder;
+    }
+    
     private RequestBuilder addFormParams(RequestBuilder requestBuilder, NameValuePair[] nameValuePair, Map<String, String> params) {
         List<NameValuePair> allNameValuePair=new ArrayList<NameValuePair>();
         if (nameValuePair != null && nameValuePair.length > 0) {
