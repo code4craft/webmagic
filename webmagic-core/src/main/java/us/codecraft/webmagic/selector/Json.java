@@ -52,6 +52,6 @@ public class Json extends PlainText {
     @Override
     public Selectable jsonPath(String jsonPath) {
         JsonPathSelector jsonPathSelector = new JsonPathSelector(jsonPath);
-        return selectList(jsonPathSelector,getSourceTexts());
+        return new Json(selectList(jsonPathSelector,getSourceTexts()).all());
     }
 }
