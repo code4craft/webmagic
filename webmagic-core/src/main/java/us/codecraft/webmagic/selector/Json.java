@@ -56,11 +56,11 @@ public class Json extends PlainText {
     }
     
     @Override
-	public List<Selectable> nodes(){
-		List<Selectable> nodes = new ArrayList<Selectable>(getSourceTexts().size());
+    public List<Selectable> nodes(){
+        List<Selectable> nodes = new ArrayList<Selectable>(getSourceTexts().size());
         for (String string : getSourceTexts()) {
             nodes.add(new Json(string));
         }
         return nodes;
-	}
+    }
 }
