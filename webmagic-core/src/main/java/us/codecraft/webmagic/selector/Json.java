@@ -54,4 +54,13 @@ public class Json extends PlainText {
         JsonPathSelector jsonPathSelector = new JsonPathSelector(jsonPath);
         return new Json(selectList(jsonPathSelector,getSourceTexts()).all());
     }
+    
+    @Override
+	public List<Selectable> nodes(){
+		List<Selectable> nodes = new ArrayList<Selectable>(getSourceTexts().size());
+        for (String string : getSourceTexts()) {
+            nodes.add(new Json(string));
+        }
+        return nodes;
+	}
 }
