@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import us.codecraft.xsoup.XTokenQueue;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * parse json
