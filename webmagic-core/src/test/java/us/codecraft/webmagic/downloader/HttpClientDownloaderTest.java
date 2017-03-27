@@ -15,6 +15,7 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.selector.Html;
+import us.codecraft.webmagic.utils.CharsetUtils;
 import us.codecraft.webmagic.utils.HttpConstant;
 
 import java.io.IOException;
@@ -99,7 +100,7 @@ public class HttpClientDownloaderTest {
                 String charset = null;
                 try {
                     byte[] contentBytes = IOUtils.toByteArray(httpResponse.getEntity().getContent());
-                    charset = downloader.getHtmlCharset(httpResponse,contentBytes);
+                    charset = CharsetUtils.detectCharset(httpResponse.getEntity().getContentType().getValue(), contentBytes);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
