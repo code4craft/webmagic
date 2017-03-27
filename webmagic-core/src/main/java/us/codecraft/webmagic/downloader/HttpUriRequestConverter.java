@@ -39,7 +39,7 @@ public class HttpUriRequestConverter {
             requestConfigBuilder.setConnectionRequestTimeout(site.getTimeOut())
                     .setSocketTimeout(site.getTimeOut())
                     .setConnectTimeout(site.getTimeOut())
-                    .setCookieSpec(CookieSpecs.BEST_MATCH);
+                    .setCookieSpec(CookieSpecs.STANDARD);
         }
 
         if (proxy != null) {

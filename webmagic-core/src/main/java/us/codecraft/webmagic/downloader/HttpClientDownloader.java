@@ -23,6 +23,7 @@ import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.proxy.ProxyProvider;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.CharsetUtils;
+import us.codecraft.webmagic.utils.HttpClientUtils;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -48,6 +49,8 @@ public class HttpClientDownloader extends AbstractDownloader {
     private HttpUriRequestConverter httpUriRequestConverter = new HttpUriRequestConverter();
     
     private ProxyProvider proxyProvider;
+
+    private boolean responseHeader = true;
 
     public void setHttpUriRequestConverter(HttpUriRequestConverter httpUriRequestConverter) {
         this.httpUriRequestConverter = httpUriRequestConverter;
@@ -88,13 +91,12 @@ public class HttpClientDownloader extends AbstractDownloader {
         HttpContext httpContext = new BasicHttpContext();
         if (proxyProvider != null) {
             proxy = proxyProvider.getProxy(task);
-            request.putExtra(Request.PROXY, proxy);
             AuthState authState = new AuthState();
             authState.update(new BasicScheme(), new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
             httpContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, authState);
         }
-        HttpUriRequest httpUriRequest = httpUriRequestConverter.convert(request, site, proxy);
         CloseableHttpClient httpClient = getHttpClient(site);
+        HttpUriRequest httpUriRequest = httpUriRequestConverter.convert(request, site, proxy);
         try {
             httpResponse = httpClient.execute(httpUriRequest, httpContext);
             statusCode = httpResponse.getStatusLine().getStatusCode();
@@ -133,10 +135,13 @@ public class HttpClientDownloader extends AbstractDownloader {
         page.setUrl(new PlainText(request.getUrl()));
         page.setRequest(request);
         page.setStatusCode(httpResponse.getStatusLine().getStatusCode());
+        if (responseHeader) {
+            page.setHeaders(HttpClientUtils.convertHeaders(httpResponse.getAllHeaders()));
+        }
         return page;
     }
 
-    protected String getContent(String charset, HttpResponse httpResponse) throws IOException {
+    private String getContent(String charset, HttpResponse httpResponse) throws IOException {
         if (charset == null) {
             byte[] contentBytes = IOUtils.toByteArray(httpResponse.getEntity().getContent());
             String htmlCharset = getHtmlCharset(httpResponse, contentBytes);
@@ -151,7 +156,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
     }
 
-    protected String getHtmlCharset(HttpResponse httpResponse, byte[] contentBytes) throws IOException {
+    private String getHtmlCharset(HttpResponse httpResponse, byte[] contentBytes) throws IOException {
         return CharsetUtils.detectCharset(httpResponse.getEntity().getContentType().getValue(), contentBytes);
     }
 }

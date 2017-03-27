@@ -39,16 +39,6 @@ public class Site {
 
     private boolean useGzip = true;
 
-    /**
-     * @see us.codecraft.webmagic.utils.HttpConstant.Header
-     * @deprecated
-     */
-    public static interface HeaderConst {
-
-        public static final String REFERER = "Referer";
-    }
-
-
     static {
         DEFAULT_STATUS_CODE_SET.add(200);
     }

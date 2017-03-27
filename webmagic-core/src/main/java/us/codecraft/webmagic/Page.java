@@ -8,6 +8,7 @@ import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Object storing extracted result and urls to fetch.<br>
@@ -37,6 +38,8 @@ public class Page {
     private String rawText;
 
     private Selectable url;
+
+    private Map<String,List<String>> headers;
 
     private int statusCode;
 
@@ -210,6 +213,14 @@ public class Page {
         return this;
     }
 
+    public Map<String, List<String>> getHeaders() {
+        return headers;
+    }
+
+    public void setHeaders(Map<String, List<String>> headers) {
+        this.headers = headers;
+    }
+
     @Override
     public String toString() {
         return "Page{" +
@@ -217,7 +228,9 @@ public class Page {
                 ", resultItems=" + resultItems +
                 ", rawText='" + rawText + '\'' +
                 ", url=" + url +
+                ", headers=" + headers +
                 ", statusCode=" + statusCode +
+                ", needCycleRetry=" + needCycleRetry +
                 ", targetRequests=" + targetRequests +
                 '}';
     }
