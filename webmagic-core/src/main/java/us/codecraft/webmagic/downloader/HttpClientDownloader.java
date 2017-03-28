@@ -82,14 +82,14 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
         logger.info("downloading page {}", request.getUrl());
         CloseableHttpResponse httpResponse = null;
-        int statusCode=0;
+        int statusCode = 0;
         try {
             HttpHost proxyHost = null;
             Proxy proxy = null; //TODO
-            if (site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
+            if (site != null && site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
                 proxy = site.getHttpProxyFromPool();
                 proxyHost = proxy.getHttpHost();
-            } else if(site.getHttpProxy()!= null){
+            } else if (site != null && site.getHttpProxy() != null){
                 proxyHost = site.getHttpProxy();
             }
             
@@ -107,24 +107,20 @@ public class HttpClientDownloader extends AbstractDownloader {
             }
         } catch (IOException e) {
             logger.warn("download page {} error", request.getUrl(), e);
-            if (site.getCycleRetryTimes() > 0) {
+            if (site != null && site.getCycleRetryTimes() > 0) {
                 return addToCycleRetry(request, site);
             }
             onError(request);
             return null;
         } finally {
+            if (httpResponse != null) {
+                //ensure the connection is released back to pool
+                EntityUtils.consumeQuietly(httpResponse.getEntity());
+            }
         	request.putExtra(Request.STATUS_CODE, statusCode);
-            if (site.getHttpProxyPool()!=null && site.getHttpProxyPool().isEnable()) {
+            if (site != null && site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
                 site.returnHttpProxyToPool((HttpHost) request.getExtra(Request.PROXY), (Integer) request
                         .getExtra(Request.STATUS_CODE));
-            }
-            try {
-                if (httpResponse != null) {
-                    //ensure the connection is released back to pool
-                    EntityUtils.consume(httpResponse.getEntity());
-                }
-            } catch (IOException e) {
-                logger.warn("close response fail", e);
             }
         }
     }
@@ -138,19 +134,23 @@ public class HttpClientDownloader extends AbstractDownloader {
         return acceptStatCode.contains(statusCode);
     }
 
-    protected HttpUriRequest getHttpUriRequest(Request request, Site site, Map<String, String> headers,HttpHost proxy) {
+    protected HttpUriRequest getHttpUriRequest(Request request, Site site, Map<String, String> headers, HttpHost proxy) {
         RequestBuilder requestBuilder = selectRequestMethod(request).setUri(request.getUrl());
         if (headers != null) {
             for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
                 requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
             }
         }
-        RequestConfig.Builder requestConfigBuilder = RequestConfig.custom()
-                .setConnectionRequestTimeout(site.getTimeOut())
-                .setSocketTimeout(site.getTimeOut())
-                .setConnectTimeout(site.getTimeOut())
-                .setCookieSpec(CookieSpecs.BEST_MATCH);
-        if (proxy !=null) {
+
+        RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
+        if (site != null) {
+            requestConfigBuilder.setConnectionRequestTimeout(site.getTimeOut())
+                    .setSocketTimeout(site.getTimeOut())
+                    .setConnectTimeout(site.getTimeOut())
+                    .setCookieSpec(CookieSpecs.BEST_MATCH);
+        }
+
+        if (proxy != null) {
 			requestConfigBuilder.setProxy(proxy);
 			request.putExtra(Request.PROXY, proxy);
 		}
