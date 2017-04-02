@@ -1,21 +1,37 @@
 package us.codecraft.webmagic.downloader;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.annotation.ThreadSafe;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
@@ -25,10 +41,6 @@ import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.CharsetUtils;
 import us.codecraft.webmagic.utils.HttpConstant;
 import us.codecraft.webmagic.utils.WMCollections;
-
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.*;
 
 
 /**
@@ -94,11 +106,26 @@ public class HttpClientDownloader extends AbstractDownloader {
             }
             
             HttpUriRequest httpUriRequest = getHttpUriRequest(request, site, headers, proxyHost);
-            httpResponse = getHttpClient(site, proxy).execute(httpUriRequest);
+            HttpClientContext context=null;
+            if(request.getCookies()!=null && CollectionUtils.isNotEmpty(request.getCookies())){
+            	context=new HttpClientContext();
+            	CookieStore cookieStore=new BasicCookieStore();
+            	for(Cookie c:request.getCookies()){
+            		cookieStore.addCookie(c);
+            	}
+            	context.setCookieStore(cookieStore);
+            }
+            if(request.getHeaders()!=null && CollectionUtils.isNotEmpty(request.getHeaders())){
+            	for(Header h:request.getHeaders()){
+            		httpUriRequest.setHeader(h);
+            	}
+            }
+            httpResponse = getHttpClient(site, proxy).execute(httpUriRequest,context);
             statusCode = httpResponse.getStatusLine().getStatusCode();
             request.putExtra(Request.STATUS_CODE, statusCode);
             if (statusAccept(acceptStatCode, statusCode)) {
                 Page page = handleResponse(request, charset, httpResponse, task);
+                page.setHeaders(httpResponse.getAllHeaders());
                 onSuccess(request);
                 return page;
             } else {
@@ -164,7 +191,11 @@ public class HttpClientDownloader extends AbstractDownloader {
             //default get
             return addQueryParams(RequestBuilder.get(),request.getParams());
         } else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
-            return addFormParams(RequestBuilder.post(), (NameValuePair[]) request.getExtra("nameValuePair"), request.getParams());
+        	if(request.getEntity()!=null){
+        		return RequestBuilder.post().setEntity(request.getEntity());
+        	}else{
+        		return addFormParams(RequestBuilder.post(), (NameValuePair[]) request.getExtra("nameValuePair"), request.getParams());
+        	}
         } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
             return addQueryParams(RequestBuilder.head(),request.getParams());
         } else if (method.equalsIgnoreCase(HttpConstant.Method.PUT)) {

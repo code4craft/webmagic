@@ -1,13 +1,15 @@
 package us.codecraft.webmagic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.Header;
+
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Json;
 import us.codecraft.webmagic.selector.Selectable;
 import us.codecraft.webmagic.utils.UrlUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Object storing extracted result and urls to fetch.<br>
@@ -43,6 +45,11 @@ public class Page {
     private boolean needCycleRetry;
 
     private List<Request> targetRequests = new ArrayList<Request>();
+    
+    /**
+     * Http响应头
+     */
+    private Header[] headers=null;
 
     public Page() {
     }
@@ -210,6 +217,14 @@ public class Page {
         return this;
     }
 
+    public Header[] getHeaders() {
+		return headers;
+	}
+
+	public void setHeaders(Header[] headers) {
+		this.headers = headers;
+	}
+	
     @Override
     public String toString() {
         return "Page{" +
@@ -219,6 +234,11 @@ public class Page {
                 ", url=" + url +
                 ", statusCode=" + statusCode +
                 ", targetRequests=" + targetRequests +
+                ", headers=" + headers+
                 '}';
     }
+
+	
+
+	
 }
