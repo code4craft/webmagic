@@ -289,11 +289,13 @@ class PageModelExtractor {
                     List<String> value;
                     switch (fieldExtractor.getSource()) {
                         case RawHtml:
-                            value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
+                            // edited by wangnima
+                            value = page.getRawHtml().selectDocumentForList(fieldExtractor.getSelector());
                             break;
                         case Html:
                             if (isRaw) {
-                                value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
+                                // edited by wangnima
+                                value = page.getRawHtml().selectDocumentForList(fieldExtractor.getSelector());
                             } else {
                                 value = fieldExtractor.getSelector().selectList(html);
                             }

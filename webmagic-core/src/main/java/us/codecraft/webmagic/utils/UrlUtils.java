@@ -108,6 +108,16 @@ public class UrlUtils {
         return html;
     }
 
+    /**
+     *
+     * @author wangnima
+     */
+    public static String fixAllRelativeHrefsSimple(String html, String url) {
+//        html = replaceByPattern(html, url, patternForHrefWithQuote);
+        html = replaceByPattern(html, url, patternForHrefWithoutQuote);
+        return html;
+    }
+
     public static String replaceByPattern(String html, String url, Pattern pattern) {
         StringBuilder stringBuilder = new StringBuilder();
         Matcher matcher = pattern.matcher(html);
