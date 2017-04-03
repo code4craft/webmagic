@@ -26,7 +26,7 @@ public abstract class CharsetUtils {
         // charset
         // 1、encoding in http header Content-Type
         charset = UrlUtils.getCharset(contentType);
-        if (StringUtils.isNotBlank(contentType)) {
+        if (StringUtils.isNotBlank(contentType) && StringUtils.isNotBlank(charset)) {
             logger.debug("Auto get charset: {}", charset);
             return charset;
         }

@@ -1,10 +1,20 @@
 package us.codecraft.webmagic;
 
-import us.codecraft.webmagic.utils.Experimental;
-
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.cookie.BasicClientCookie;
+import org.apache.http.message.BasicHeader;
+
+import us.codecraft.webmagic.utils.Experimental;
+import us.codecraft.webmagic.utils.UrlUtils;
 
 /**
  * Object contains url to crawl.<br>
@@ -33,6 +43,18 @@ public class Request implements Serializable {
      * POST/GET param set
      * */
     private Map<String,String> params=new HashMap<String, String>();
+    
+    /**
+     * support for json,xml or more,在post时，设置此选项会使params参数和nameValuePair extra失效。
+     */
+    private HttpEntity entity;
+    
+    /**
+     * cookies for current url, if not set use Site's cookies
+     */
+    private List<Cookie> cookies=new ArrayList<Cookie>();
+    
+    private List<Header> headers=new ArrayList<Header>();
 
     /**
      * Priority of the request.<br>
@@ -145,12 +167,59 @@ public class Request implements Serializable {
         if (method != null ? !method.equals(request.method) : request.method != null) return false;
         return params != null ? params.equals(request.params) : request.params == null;
     }
+    public void addHeader(String name,String value){
+    	Header header=new BasicHeader(name,value);
+    	headers.add(header);
+    }
+    public List<Header> getHeaders(){
+    	return headers;
+    }
+    public void addCookie(String key,String value){
+    	BasicClientCookie c=new BasicClientCookie(key, value);
+    	c.setDomain(UrlUtils.getDomain(url));
+    	cookies.add(c);
+    }
+	public List<Cookie> getCookies() {
+		return cookies;
+	}
 
+	public void setCookies(List<Cookie> cookies) {
+		this.cookies = cookies;
+	}
+    /**
+     * 设置json参数
+     */
+    public void setJsonParam(String jsonStr,String encoding){
+    	StringEntity e=new StringEntity(jsonStr,encoding==null?"UTF-8":encoding);
+    	e.setContentEncoding(encoding==null?"UTF-8":encoding);    
+    	e.setContentType("application/json");
+    	entity=e;
+    }
+    /**
+     * 设置xml参数
+     */
+    public void setXmlParam(String xmlStr,String encoding){
+    	StringEntity e=new StringEntity(xmlStr,encoding==null?"UTF-8":encoding);
+    	e.setContentEncoding(encoding==null?"UTF-8":encoding);    
+    	e.setContentType("text/xml");
+    	entity=e;
+    }
+	public HttpEntity getEntity() {
+		return entity;
+	}
+
+	public void setEntity(HttpEntity entity) {
+		this.entity = entity;
+	}
     @Override
     public int hashCode() {
         int result = url != null ? url.hashCode() : 0;
         result = 31 * result + (method != null ? method.hashCode() : 0);
         result = 31 * result + (params != null ? params.hashCode() : 0);
+        result = 31 * result + (headers != null ? headers.hashCode() : 0);
+        result = 31 * result + (entity != null ? entity.hashCode() : 0);
+        result = 31 * result + (cookies != null ? cookies.hashCode() : 0);
+        
         return result;
     }
 
@@ -162,6 +231,10 @@ public class Request implements Serializable {
                 ", extras=" + extras +
                 ", params=" + params +
                 ", priority=" + priority +
+                ", headers=" + headers +
+                ", entity=" + entity +
+                ", cookies="+ cookies+
                 '}';
     }
+
 }
