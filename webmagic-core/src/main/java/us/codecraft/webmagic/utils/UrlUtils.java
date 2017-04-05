@@ -1,6 +1,11 @@
 package us.codecraft.webmagic.utils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.select.NodeVisitor;
 import us.codecraft.webmagic.Request;
 
 import java.net.MalformedURLException;
@@ -25,7 +30,7 @@ public class UrlUtils {
      * <br>
      * Borrowed from Jsoup.
      *
-     * @param url url
+     * @param url   url
      * @param refer refer
      * @return canonicalizeUrl
      */
@@ -50,7 +55,6 @@ public class UrlUtils {
     }
 
     /**
-     *
      * @param url url
      * @return new url
      */
@@ -87,44 +91,33 @@ public class UrlUtils {
         int portIndex = domain.indexOf(":");
         if (portIndex != -1) {
             return domain.substring(0, portIndex);
-        }else {
+        } else {
             return domain;
         }
     }
 
-    /**
-     * allow blank space in quote
-     */
-    private static Pattern patternForHrefWithQuote = Pattern.compile("(<a[^<>]*href=)[\"']([^\"'<>]*)[\"']", Pattern.CASE_INSENSITIVE);
-
-    /**
-     * disallow blank space without quote
-     */
-    private static Pattern patternForHrefWithoutQuote = Pattern.compile("(<a[^<>]*href=)([^\"'<>\\s]+)", Pattern.CASE_INSENSITIVE);
-
-    public static String fixAllRelativeHrefs(String html, String url) {
-        html = replaceByPattern(html, url, patternForHrefWithQuote);
-        html = replaceByPattern(html, url, patternForHrefWithoutQuote);
-        return html;
-    }
-
-    public static String replaceByPattern(String html, String url, Pattern pattern) {
-        StringBuilder stringBuilder = new StringBuilder();
-        Matcher matcher = pattern.matcher(html);
-        int lastEnd = 0;
-        boolean modified = false;
-        while (matcher.find()) {
-            modified = true;
-            stringBuilder.append(StringUtils.substring(html, lastEnd, matcher.start()));
-            stringBuilder.append(matcher.group(1));
-            stringBuilder.append("\"").append(canonicalizeUrl(matcher.group(2), url)).append("\"");
-            lastEnd = matcher.end();
-        }
-        if (!modified) {
-            return html;
-        }
-        stringBuilder.append(StringUtils.substring(html, lastEnd));
-        return stringBuilder.toString();
+    public static Document fixAllRelativeHrefs(String html, String url) {
+        Document document = Jsoup.parse(html, url);
+        document.traverse(new NodeVisitor() {
+            @Override
+            public void head(Node node, int i) {
+                if (node instanceof Element) {
+                    Element element = (Element) node;
+                    if (element.hasAttr("href")) {
+                        String absHref = element.attr("abs:href");
+                        element.attr("href", absHref);
+                    }
+                    if (element.hasAttr("src")) {
+                        String absSrc = element.attr("abs:src");
+                        element.attr("src", absSrc);
+                    }
+                }
+            }
+            @Override
+            public void tail(Node node, int i) {
+            }
+        });
+        return document;
     }
 
     public static List<Request> convertToRequests(Collection<String> urls) {
