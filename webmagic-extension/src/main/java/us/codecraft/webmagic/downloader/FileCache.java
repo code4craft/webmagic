@@ -59,7 +59,7 @@ public class FileCache extends FilePersistentBase implements Downloader, Pipelin
                 page = new Page();
                 page.setRequest(request);
                 page.setUrl(PlainText.create(request.getUrl()));
-                page.setHtml(Html.create(UrlUtils.fixAllRelativeHrefs(html, request.getUrl())));
+                page.setHtml(new Html(UrlUtils.fixAllRelativeHrefs(html, request.getUrl())));
             }
         } catch (IOException e) {
             if (e instanceof FileNotFoundException) {
