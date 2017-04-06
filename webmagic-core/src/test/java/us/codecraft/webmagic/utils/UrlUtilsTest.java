@@ -54,6 +54,19 @@ public class UrlUtilsTest {
         originHtml = "<img src=/a.png>";
         replacedHtml = UrlUtils.fixAllRelativeHrefs(originHtml, "http://www.dianping.com/");
         assertThat(replacedHtml.outerHtml()).contains("<img src=\"http://www.dianping.com/a.png\">");
+
+        originHtml = "<a href=/start tag><img src=/a.png>";
+        replacedHtml = UrlUtils.fixAllRelativeHrefs(originHtml, "http://www.dianping.com/");
+        assertThat(replacedHtml.outerHtml()).contains("<img src=\"http://www.dianping.com/a.png\">");
+        assertThat(replacedHtml.outerHtml()).contains("<a href=\"http://www.dianping.com/start\" tag>");
+
+        originHtml = "<a href=/start tag>";
+        replacedHtml = UrlUtils.fixAllRelativeHrefs(originHtml, "http://www.dianping.com/");
+        assertThat(replacedHtml.select("a").first().attr("href")).isEqualTo("http://www.dianping.com/start");
+
+        originHtml = "<img src=/a.png>";
+        replacedHtml = UrlUtils.fixAllRelativeHrefs(originHtml, "http://www.dianping.com/");
+        assertThat(replacedHtml.select("img").first().attr("src")).isEqualTo("http://www.dianping.com/a.png");
     }
 
     @Test
