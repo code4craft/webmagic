@@ -25,7 +25,9 @@ import java.util.Map;
 /**
  * @author code4crafter@gmail.com
  *         Date: 17/3/18
- *         Time: 上午11:28
+ *         Time: 11:28
+ *
+ * @since 0.7.0
  */
 public class HttpUriRequestConverter {
 

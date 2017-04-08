@@ -112,7 +112,7 @@ public class HttpClientDownloader extends AbstractDownloader {
     }
 
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
-        String content = getContent(charset, httpResponse);
+        String content = getResponseContent(charset, httpResponse);
         Page page = new Page();
         page.setRawText(content);
         page.setUrl(new PlainText(request.getUrl()));
@@ -124,7 +124,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         return page;
     }
 
-    private String getContent(String charset, HttpResponse httpResponse) throws IOException {
+    private String getResponseContent(String charset, HttpResponse httpResponse) throws IOException {
         if (charset == null) {
             byte[] contentBytes = IOUtils.toByteArray(httpResponse.getEntity().getContent());
             String htmlCharset = getHtmlCharset(httpResponse, contentBytes);
