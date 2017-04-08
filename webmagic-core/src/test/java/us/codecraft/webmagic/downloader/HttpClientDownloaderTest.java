@@ -96,7 +96,7 @@ public class HttpClientDownloaderTest {
                 Request requestGBK = new Request(url);
                 CloseableHttpResponse httpResponse = null;
                 try {
-                    httpResponse = httpClient.execute(new HttpUriRequestConverter().convert(requestGBK, site, null));
+                    httpResponse = httpClient.execute(new HttpUriRequestConverter().convert(requestGBK, site, null).getHttpUriRequest());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -131,24 +131,24 @@ public class HttpClientDownloaderTest {
                 request.setMethod(HttpConstant.Method.GET);
                 Map<String,Object> params = new HashedMap();
                 params.put("q","webmagic");
-                HttpUriRequest  httpUriRequest = httpUriRequestConverter.convert(request,site,null);
+                HttpUriRequest  httpUriRequest = httpUriRequestConverter.convert(request,site,null).getHttpUriRequest();
                 assertThat(EntityUtils.toString(HttpClients.custom().build().execute(httpUriRequest).getEntity())).isEqualTo("get");
                 request.setMethod(HttpConstant.Method.DELETE);
-                httpUriRequest = httpUriRequestConverter.convert(request, site, null);
+                httpUriRequest = httpUriRequestConverter.convert(request, site, null).getHttpUriRequest();
                 assertThat(EntityUtils.toString(HttpClients.custom().build().execute(httpUriRequest).getEntity())).isEqualTo("delete");
                 request.setMethod(HttpConstant.Method.HEAD);
-                httpUriRequest = httpUriRequestConverter.convert(request, site, null);
+                httpUriRequest = httpUriRequestConverter.convert(request, site, null).getHttpUriRequest();
                 assertThat(HttpClients.custom().build().execute(httpUriRequest).getFirstHeader("method").getValue()).isEqualTo("head");
                 request.setMethod(HttpConstant.Method.TRACE);
-                httpUriRequest = httpUriRequestConverter.convert(request, site, null);
+                httpUriRequest = httpUriRequestConverter.convert(request, site, null).getHttpUriRequest();
                 assertThat(EntityUtils.toString(HttpClients.custom().build().execute(httpUriRequest).getEntity())).isEqualTo("trace");
                 request.setUrl("http://127.0.0.1:12306/search");
                 request.setMethod(HttpConstant.Method.POST);
                 request.setRequestBody(HttpRequestBody.form(params, "utf-8"));
-                httpUriRequest = httpUriRequestConverter.convert(request, site, null);
+                httpUriRequest = httpUriRequestConverter.convert(request, site, null).getHttpUriRequest();
                 assertThat(EntityUtils.toString(HttpClients.custom().build().execute(httpUriRequest).getEntity())).isEqualTo("post");
                 request.setMethod(HttpConstant.Method.PUT);
-                httpUriRequest = httpUriRequestConverter.convert(request, site, null);
+                httpUriRequest = httpUriRequestConverter.convert(request, site, null).getHttpUriRequest();
                 assertThat(EntityUtils.toString(HttpClients.custom().build().execute(httpUriRequest).getEntity())).isEqualTo("put");
             }
         });
