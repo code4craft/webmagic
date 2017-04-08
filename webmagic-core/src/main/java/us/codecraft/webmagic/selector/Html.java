@@ -44,6 +44,16 @@ public class Html extends HtmlNode {
      */
     private Document document;
 
+    public Html(String text, String url) {
+        try {
+            disableJsoupHtmlEntityEscape();
+            this.document = Jsoup.parse(text, url);
+        } catch (Exception e) {
+            this.document = null;
+            logger.warn("parse document error ", e);
+        }
+    }
+
     public Html(String text) {
         try {
 			disableJsoupHtmlEntityEscape();

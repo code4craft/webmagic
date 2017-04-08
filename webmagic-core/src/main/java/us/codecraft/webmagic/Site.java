@@ -1,12 +1,5 @@
 package us.codecraft.webmagic;
 
-import org.apache.http.HttpHost;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import us.codecraft.webmagic.proxy.Proxy;
-import us.codecraft.webmagic.proxy.ProxyPool;
-import us.codecraft.webmagic.proxy.SimpleProxyPool;
-import us.codecraft.webmagic.utils.UrlUtils;
-
 import java.util.*;
 
 /**
@@ -28,11 +21,6 @@ public class Site {
 
     private String charset;
 
-    /**
-     * startUrls is the urls the crawler to start with.
-     */
-    private List<Request> startRequests = new ArrayList<Request>();
-
     private int sleepTime = 5000;
 
     private int retryTimes = 0;
@@ -49,23 +37,7 @@ public class Site {
 
     private Map<String, String> headers = new HashMap<String, String>();
 
-    private HttpHost httpProxy;
-
-    private UsernamePasswordCredentials usernamePasswordCredentials; //代理用户名密码设置
-
-    private ProxyPool httpProxyPool;
-
     private boolean useGzip = true;
-
-    /**
-     * @see us.codecraft.webmagic.utils.HttpConstant.Header
-     * @deprecated
-     */
-    public static interface HeaderConst {
-
-        public static final String REFERER = "Referer";
-    }
-
 
     static {
         DEFAULT_STATUS_CODE_SET.add(200);
@@ -226,52 +198,6 @@ public class Site {
     }
 
     /**
-     * get start urls
-     *
-     * @return start urls
-     * @see #getStartRequests
-     * @deprecated
-     */
-    @Deprecated
-    public List<String> getStartUrls() {
-        return UrlUtils.convertToUrls(startRequests);
-    }
-
-    public List<Request> getStartRequests() {
-        return startRequests;
-    }
-
-    /**
-     * Add a url to start url.<br>
-     * Because urls are more a Spider's property than Site, move it to {@link Spider#addUrl(String...)}}
-     *
-     * @param startUrl startUrl
-     * @return this
-     * @see Spider#addUrl(String...)
-     * @deprecated
-     */
-    public Site addStartUrl(String startUrl) {
-        return addStartRequest(new Request(startUrl));
-    }
-
-    /**
-     * Add a url to start url.<br>
-     * Because urls are more a Spider's property than Site, move it to {@link Spider#addRequest(Request...)}}
-     *
-     * @param startRequest startRequest
-     * @return this
-     * @see Spider#addRequest(Request...)
-     * @deprecated
-     */
-    public Site addStartRequest(Request startRequest) {
-        this.startRequests.add(startRequest);
-        if (domain == null && startRequest.getUrl() != null) {
-            domain = UrlUtils.getDomain(startRequest.getUrl());
-        }
-        return this;
-    }
-
-    /**
      * Set the interval between the processing of two pages.<br>
      * Time unit is micro seconds.<br>
      *
@@ -350,21 +276,6 @@ public class Site {
         return this;
     }
 
-    public HttpHost getHttpProxy() {
-        return httpProxy;
-    }
-
-    /**
-     * set up httpProxy for this site
-     *
-     * @param httpProxy httpProxy
-     * @return this
-     */
-    public Site setHttpProxy(HttpHost httpProxy) {
-        this.httpProxy = httpProxy;
-        return this;
-    }
-
     public boolean isUseGzip() {
         return useGzip;
     }
@@ -400,7 +311,11 @@ public class Site {
         return new Task() {
             @Override
             public String getUUID() {
-                return Site.this.getDomain();
+                String uuid = Site.this.getDomain();
+                if (uuid == null) {
+                    uuid = UUID.randomUUID().toString();
+                }
+                return uuid;
             }
 
             @Override
@@ -428,8 +343,6 @@ public class Site {
             return false;
         if (domain != null ? !domain.equals(site.domain) : site.domain != null) return false;
         if (headers != null ? !headers.equals(site.headers) : site.headers != null) return false;
-        if (startRequests != null ? !startRequests.equals(site.startRequests) : site.startRequests != null)
-            return false;
         if (userAgent != null ? !userAgent.equals(site.userAgent) : site.userAgent != null) return false;
 
         return true;
@@ -441,7 +354,6 @@ public class Site {
         result = 31 * result + (userAgent != null ? userAgent.hashCode() : 0);
         result = 31 * result + (defaultCookies != null ? defaultCookies.hashCode() : 0);
         result = 31 * result + (charset != null ? charset.hashCode() : 0);
-        result = 31 * result + (startRequests != null ? startRequests.hashCode() : 0);
         result = 31 * result + sleepTime;
         result = 31 * result + retryTimes;
         result = 31 * result + cycleRetryTimes;
@@ -458,7 +370,6 @@ public class Site {
                 ", userAgent='" + userAgent + '\'' +
                 ", cookies=" + defaultCookies +
                 ", charset='" + charset + '\'' +
-                ", startRequests=" + startRequests +
                 ", sleepTime=" + sleepTime +
                 ", retryTimes=" + retryTimes +
                 ", cycleRetryTimes=" + cycleRetryTimes +
@@ -466,55 +377,6 @@ public class Site {
                 ", acceptStatCode=" + acceptStatCode +
                 ", headers=" + headers +
                 '}';
-    }
-
-    /**
-     * Set httpProxyPool, String[0]:ip, String[1]:port <br>
-     *
-     * @param proxyPool proxyPool
-     * @return this
-     */
-    public Site setHttpProxyPool(ProxyPool proxyPool) {
-        this.httpProxyPool = proxyPool;
-        return this;
-    }
-
-    /**
-     * Set httpProxyPool, String[0]:ip, String[1]:port <br>
-     *
-     * @param httpProxyList httpProxyList
-     * @param isUseLastProxy isUseLastProxy
-     * @return this
-     */
-    public Site setHttpProxyPool(List<String[]> httpProxyList, boolean isUseLastProxy) {
-        this.httpProxyPool=new SimpleProxyPool(httpProxyList, isUseLastProxy);
-        return this;
-    }
-
-    public Site enableHttpProxyPool() {
-        this.httpProxyPool=new SimpleProxyPool();
-        return this;
-    }
-
-    public UsernamePasswordCredentials getUsernamePasswordCredentials() {
-        return usernamePasswordCredentials;
-    }
-
-    public Site setUsernamePasswordCredentials(UsernamePasswordCredentials usernamePasswordCredentials) {
-        this.usernamePasswordCredentials = usernamePasswordCredentials;
-        return this;
-    }
-
-    public ProxyPool getHttpProxyPool() {
-        return httpProxyPool;
-    }
-
-    public Proxy getHttpProxyFromPool() {
-        return httpProxyPool.getProxy();
-    }
-
-    public void returnHttpProxyToPool(HttpHost proxy,int statusCode) {
-        httpProxyPool.returnProxy(proxy,statusCode);
     }
 
 }

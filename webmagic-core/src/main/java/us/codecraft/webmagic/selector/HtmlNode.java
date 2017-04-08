@@ -34,7 +34,7 @@ public class HtmlNode extends AbstractSelectable {
 
     @Override
     public Selectable links() {
-        return xpath("//a/@href");
+        return selectElements(new LinksSelector());
     }
 
     @Override

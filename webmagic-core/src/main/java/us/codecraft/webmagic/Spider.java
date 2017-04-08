@@ -126,7 +126,6 @@ public class Spider implements Runnable, Task {
     public Spider(PageProcessor pageProcessor) {
         this.pageProcessor = pageProcessor;
         this.site = pageProcessor.getSite();
-        this.startRequests = pageProcessor.getSite().getStartRequests();
     }
 
     /**
@@ -419,8 +418,6 @@ public class Spider implements Runnable, Task {
                 pipeline.process(page.getResultItems(), this);
             }
         }
-        //for proxy status management
-        request.putExtra(Request.STATUS_CODE, page.getStatusCode());
         sleep(site.getSleepTime());
     }
 
@@ -482,7 +479,9 @@ public class Spider implements Runnable, Task {
     public <T> List<T> getAll(Collection<String> urls) {
         destroyWhenExit = false;
         spawnUrl = false;
-        startRequests.clear();
+        if (startRequests!=null){
+            startRequests.clear();
+        }
         for (Request request : UrlUtils.convertToRequests(urls)) {
             addRequest(request);
         }

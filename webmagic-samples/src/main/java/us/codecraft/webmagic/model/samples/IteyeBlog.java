@@ -28,7 +28,7 @@ public class IteyeBlog implements Blog{
     }
 
     public static void main(String[] args) {
-        OOSpider.create(Site.me().addStartUrl("http://flashsword20.iteye.com/blog"), IteyeBlog.class).run();
+        OOSpider.create(Site.me(), IteyeBlog.class).addUrl("http://flashsword20.iteye.com/blog").run();
     }
 
     public String getTitle() {

@@ -1,46 +1,26 @@
 package us.codecraft.webmagic.downloader;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.Header;
-import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.annotation.ThreadSafe;
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.config.CookieSpecs;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.proxy.Proxy;
+import us.codecraft.webmagic.proxy.ProxyProvider;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.CharsetUtils;
-import us.codecraft.webmagic.utils.HttpConstant;
-import us.codecraft.webmagic.utils.WMCollections;
+import us.codecraft.webmagic.utils.HttpClientUtils;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -58,9 +38,23 @@ public class HttpClientDownloader extends AbstractDownloader {
 
     private HttpClientGenerator httpClientGenerator = new HttpClientGenerator();
 
-    private CloseableHttpClient getHttpClient(Site site, Proxy proxy) {
+    private HttpUriRequestConverter httpUriRequestConverter = new HttpUriRequestConverter();
+    
+    private ProxyProvider proxyProvider;
+
+    private boolean responseHeader = true;
+
+    public void setHttpUriRequestConverter(HttpUriRequestConverter httpUriRequestConverter) {
+        this.httpUriRequestConverter = httpUriRequestConverter;
+    }
+
+    public void setProxyProvider(ProxyProvider proxyProvider) {
+        this.proxyProvider = proxyProvider;
+    }
+
+    private CloseableHttpClient getHttpClient(Site site) {
         if (site == null) {
-            return httpClientGenerator.getClient(null, proxy);
+            return httpClientGenerator.getClient(null);
         }
         String domain = site.getDomain();
         CloseableHttpClient httpClient = httpClients.get(domain);
@@ -68,7 +62,7 @@ public class HttpClientDownloader extends AbstractDownloader {
             synchronized (this) {
                 httpClient = httpClients.get(domain);
                 if (httpClient == null) {
-                    httpClient = httpClientGenerator.getClient(site, proxy);
+                    httpClient = httpClientGenerator.getClient(site);
                     httpClients.put(domain, httpClient);
                 }
             }
@@ -78,54 +72,19 @@ public class HttpClientDownloader extends AbstractDownloader {
 
     @Override
     public Page download(Request request, Task task) {
-        Site site = null;
-        if (task != null) {
-            site = task.getSite();
+        if (task == null || task.getSite() == null) {
+            throw new NullPointerException("task or site can not be null");
         }
-        Set<Integer> acceptStatCode;
-        String charset = null;
-        Map<String, String> headers = null;
-        if (site != null) {
-            acceptStatCode = site.getAcceptStatCode();
-            charset = site.getCharset();
-            headers = site.getHeaders();
-        } else {
-            acceptStatCode = WMCollections.newHashSet(200);
-        }
-        logger.info("downloading page {}", request.getUrl());
+        logger.debug("downloading page {}", request.getUrl());
         CloseableHttpResponse httpResponse = null;
-        int statusCode = 0;
+        Site site = task.getSite();
+        CloseableHttpClient httpClient = getHttpClient(site);
+        HttpClientRequestContext requestContext = httpUriRequestConverter.convert(request, site, proxyProvider != null ? proxyProvider.getProxy(task) : null);
         try {
-            HttpHost proxyHost = null;
-            Proxy proxy = null; //TODO
-            if (site != null && site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
-                proxy = site.getHttpProxyFromPool();
-                proxyHost = proxy.getHttpHost();
-            } else if (site != null && site.getHttpProxy() != null){
-                proxyHost = site.getHttpProxy();
-            }
-            
-            HttpUriRequest httpUriRequest = getHttpUriRequest(request, site, headers, proxyHost);
-            HttpClientContext context=null;
-            if(request.getCookies()!=null && CollectionUtils.isNotEmpty(request.getCookies())){
-            	context=new HttpClientContext();
-            	CookieStore cookieStore=new BasicCookieStore();
-            	for(Cookie c:request.getCookies()){
-            		cookieStore.addCookie(c);
-            	}
-            	context.setCookieStore(cookieStore);
-            }
-            if(request.getHeaders()!=null && CollectionUtils.isNotEmpty(request.getHeaders())){
-            	for(Header h:request.getHeaders()){
-            		httpUriRequest.setHeader(h);
-            	}
-            }
-            httpResponse = getHttpClient(site, proxy).execute(httpUriRequest,context);
-            statusCode = httpResponse.getStatusLine().getStatusCode();
-            request.putExtra(Request.STATUS_CODE, statusCode);
-            if (statusAccept(acceptStatCode, statusCode)) {
-                Page page = handleResponse(request, charset, httpResponse, task);
-                page.setHeaders(httpResponse.getAllHeaders());
+            httpResponse = httpClient.execute(requestContext.getHttpUriRequest(), requestContext.getHttpClientContext());
+            int statusCode = httpResponse.getStatusLine().getStatusCode();
+            if (site.getAcceptStatCode().contains(statusCode)) {
+                Page page = handleResponse(request, site.getCharset(), httpResponse, task);
                 onSuccess(request);
                 return page;
             } else {
@@ -144,11 +103,6 @@ public class HttpClientDownloader extends AbstractDownloader {
                 //ensure the connection is released back to pool
                 EntityUtils.consumeQuietly(httpResponse.getEntity());
             }
-        	request.putExtra(Request.STATUS_CODE, statusCode);
-            if (site != null && site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
-                site.returnHttpProxyToPool((HttpHost) request.getExtra(Request.PROXY), (Integer) request
-                        .getExtra(Request.STATUS_CODE));
-            }
         }
     }
 
@@ -157,91 +111,20 @@ public class HttpClientDownloader extends AbstractDownloader {
         httpClientGenerator.setPoolSize(thread);
     }
 
-    protected boolean statusAccept(Set<Integer> acceptStatCode, int statusCode) {
-        return acceptStatCode.contains(statusCode);
-    }
-
-    protected HttpUriRequest getHttpUriRequest(Request request, Site site, Map<String, String> headers, HttpHost proxy) {
-        RequestBuilder requestBuilder = selectRequestMethod(request).setUri(request.getUrl());
-        if (headers != null) {
-            for (Map.Entry<String, String> headerEntry : headers.entrySet()) {
-                requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
-            }
-        }
-
-        RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
-        if (site != null) {
-            requestConfigBuilder.setConnectionRequestTimeout(site.getTimeOut())
-                    .setSocketTimeout(site.getTimeOut())
-                    .setConnectTimeout(site.getTimeOut())
-                    .setCookieSpec(CookieSpecs.BEST_MATCH);
-        }
-
-        if (proxy != null) {
-			requestConfigBuilder.setProxy(proxy);
-			request.putExtra(Request.PROXY, proxy);
-		}
-        requestBuilder.setConfig(requestConfigBuilder.build());
-        return requestBuilder.build();
-    }
-
-    protected RequestBuilder selectRequestMethod(Request request) {
-        String method = request.getMethod();
-        if (method == null || method.equalsIgnoreCase(HttpConstant.Method.GET)) {
-            //default get
-            return addQueryParams(RequestBuilder.get(),request.getParams());
-        } else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
-        	if(request.getEntity()!=null){
-        		return RequestBuilder.post().setEntity(request.getEntity());
-        	}else{
-        		return addFormParams(RequestBuilder.post(), (NameValuePair[]) request.getExtra("nameValuePair"), request.getParams());
-        	}
-        } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
-            return addQueryParams(RequestBuilder.head(),request.getParams());
-        } else if (method.equalsIgnoreCase(HttpConstant.Method.PUT)) {
-            return addFormParams(RequestBuilder.put(), (NameValuePair[]) request.getExtra("nameValuePair"), request.getParams());
-        } else if (method.equalsIgnoreCase(HttpConstant.Method.DELETE)) {
-            return addQueryParams(RequestBuilder.delete(),request.getParams());
-        } else if (method.equalsIgnoreCase(HttpConstant.Method.TRACE)) {
-            return addQueryParams(RequestBuilder.trace(),request.getParams());
-        }
-        throw new IllegalArgumentException("Illegal HTTP Method " + method);
-    }
-
-    private RequestBuilder addFormParams(RequestBuilder requestBuilder, NameValuePair[] nameValuePair, Map<String, String> params) {
-        List<NameValuePair> allNameValuePair=new ArrayList<NameValuePair>();
-        if (nameValuePair != null && nameValuePair.length > 0) {
-            allNameValuePair= Arrays.asList(nameValuePair);
-        }
-        if (params != null) {
-            for (String key : params.keySet()) {
-                allNameValuePair.add(new BasicNameValuePair(key, params.get(key)));
-            }
-        }
-        requestBuilder.setEntity(new UrlEncodedFormEntity(allNameValuePair, Charset.forName("utf8")));
-        return requestBuilder;
-    }
-
-    private RequestBuilder addQueryParams(RequestBuilder requestBuilder, Map<String, String> params) {
-        if (params != null) {
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                requestBuilder.addParameter(entry.getKey(), entry.getValue());
-            }
-        }
-        return requestBuilder;
-    }
-
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
-        String content = getContent(charset, httpResponse);
+        String content = getResponseContent(charset, httpResponse);
         Page page = new Page();
         page.setRawText(content);
         page.setUrl(new PlainText(request.getUrl()));
         page.setRequest(request);
         page.setStatusCode(httpResponse.getStatusLine().getStatusCode());
+        if (responseHeader) {
+            page.setHeaders(HttpClientUtils.convertHeaders(httpResponse.getAllHeaders()));
+        }
         return page;
     }
 
-    protected String getContent(String charset, HttpResponse httpResponse) throws IOException {
+    private String getResponseContent(String charset, HttpResponse httpResponse) throws IOException {
         if (charset == null) {
             byte[] contentBytes = IOUtils.toByteArray(httpResponse.getEntity().getContent());
             String htmlCharset = getHtmlCharset(httpResponse, contentBytes);
@@ -256,7 +139,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
     }
 
-    protected String getHtmlCharset(HttpResponse httpResponse, byte[] contentBytes) throws IOException {
+    private String getHtmlCharset(HttpResponse httpResponse, byte[] contentBytes) throws IOException {
         return CharsetUtils.detectCharset(httpResponse.getEntity().getContentType().getValue(), contentBytes);
     }
 }

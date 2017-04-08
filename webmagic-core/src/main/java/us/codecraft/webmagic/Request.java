@@ -1,20 +1,11 @@
 package us.codecraft.webmagic;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.cookie.BasicClientCookie;
-import org.apache.http.message.BasicHeader;
-
+import us.codecraft.webmagic.model.HttpRequestBody;
 import us.codecraft.webmagic.utils.Experimental;
-import us.codecraft.webmagic.utils.UrlUtils;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Object contains url to crawl.<br>
@@ -28,33 +19,24 @@ public class Request implements Serializable {
     private static final long serialVersionUID = 2062192774891352043L;
 
     public static final String CYCLE_TRIED_TIMES = "_cycle_tried_times";
-    public static final String STATUS_CODE = "statusCode";
-    public static final String PROXY = "proxy";
 
     private String url;
 
     private String method;
 
+    private HttpRequestBody requestBody;
+
     /**
      * Store additional information in extras.
      */
     private Map<String, Object> extras;
-    /**
-     * POST/GET param set
-     * */
-    private Map<String,String> params=new HashMap<String, String>();
-    
-    /**
-     * support for json,xml or more,在post时，设置此选项会使params参数和nameValuePair extra失效。
-     */
-    private HttpEntity entity;
-    
+
     /**
      * cookies for current url, if not set use Site's cookies
      */
-    private List<Cookie> cookies=new ArrayList<Cookie>();
-    
-    private List<Header> headers=new ArrayList<Header>();
+    private Map<String, String> cookies = new HashMap<String, String>();
+
+    private Map<String, String> headers = new HashMap<String, String>();
 
     /**
      * Priority of the request.<br>
@@ -133,27 +115,11 @@ public class Request implements Serializable {
         this.method = method;
     }
 
-    public Map<String, String> getParams() {
-        return params;
-    }
-    /**
-     * set params for request
-     * <br>
-     * DO NOT set this for request already has params, like 'https://github.com/search?q=webmagic'
-     * @param params params
-     * */
-    public void setParams(Map<String, String> params) {
-        this.params = params;
-    }
-    /**
-     * set params for request
-     * <br>
-     * DO NOT set this for request already has params, like 'https://github.com/search?q=webmagic'
-     * @param key key
-     * @param value value
-     * */
-    public void putParams(String key,String value) {
-        params.put(key,value);
+    @Override
+    public int hashCode() {
+        int result = url != null ? url.hashCode() : 0;
+        result = 31 * result + (method != null ? method.hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -164,63 +130,33 @@ public class Request implements Serializable {
         Request request = (Request) o;
 
         if (url != null ? !url.equals(request.url) : request.url != null) return false;
-        if (method != null ? !method.equals(request.method) : request.method != null) return false;
-        return params != null ? params.equals(request.params) : request.params == null;
+        return method != null ? method.equals(request.method) : request.method == null;
     }
-    public void addHeader(String name,String value){
-    	Header header=new BasicHeader(name,value);
-    	headers.add(header);
-    }
-    public List<Header> getHeaders(){
-    	return headers;
-    }
-    public void addCookie(String key,String value){
-    	BasicClientCookie c=new BasicClientCookie(key, value);
-    	c.setDomain(UrlUtils.getDomain(url));
-    	cookies.add(c);
-    }
-	public List<Cookie> getCookies() {
-		return cookies;
-	}
 
-	public void setCookies(List<Cookie> cookies) {
-		this.cookies = cookies;
-	}
-    /**
-     * 设置json参数
-     */
-    public void setJsonParam(String jsonStr,String encoding){
-    	StringEntity e=new StringEntity(jsonStr,encoding==null?"UTF-8":encoding);
-    	e.setContentEncoding(encoding==null?"UTF-8":encoding);    
-    	e.setContentType("application/json");
-    	entity=e;
+    public Request addCookie(String name, String value) {
+        cookies.put(name, value);
+        return this;
     }
-    /**
-     * 设置xml参数
-     */
-    public void setXmlParam(String xmlStr,String encoding){
-    	StringEntity e=new StringEntity(xmlStr,encoding==null?"UTF-8":encoding);
-    	e.setContentEncoding(encoding==null?"UTF-8":encoding);    
-    	e.setContentType("text/xml");
-    	entity=e;
-    }
-	public HttpEntity getEntity() {
-		return entity;
-	}
 
-	public void setEntity(HttpEntity entity) {
-		this.entity = entity;
-	}
-    @Override
-    public int hashCode() {
-        int result = url != null ? url.hashCode() : 0;
-        result = 31 * result + (method != null ? method.hashCode() : 0);
-        result = 31 * result + (params != null ? params.hashCode() : 0);
-        result = 31 * result + (headers != null ? headers.hashCode() : 0);
-        result = 31 * result + (entity != null ? entity.hashCode() : 0);
-        result = 31 * result + (cookies != null ? cookies.hashCode() : 0);
-        
-        return result;
+    public Request addHeader(String name, String value) {
+        headers.put(name, value);
+        return this;
+    }
+
+    public Map<String, String> getCookies() {
+        return cookies;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    public HttpRequestBody getRequestBody() {
+        return requestBody;
+    }
+
+    public void setRequestBody(HttpRequestBody requestBody) {
+        this.requestBody = requestBody;
     }
 
     @Override
@@ -229,10 +165,8 @@ public class Request implements Serializable {
                 "url='" + url + '\'' +
                 ", method='" + method + '\'' +
                 ", extras=" + extras +
-                ", params=" + params +
                 ", priority=" + priority +
                 ", headers=" + headers +
-                ", entity=" + entity +
                 ", cookies="+ cookies+
                 '}';
     }

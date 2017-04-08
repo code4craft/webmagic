@@ -32,12 +32,12 @@ public class Kr36NewsModel {
 
     public static void main(String[] args) throws IOException, JMException {
         //Just for benchmark
-        Spider thread = OOSpider.create(Site.me().addStartUrl("http://www.36kr.com/").setSleepTime(0), new PageModelPipeline() {
+        Spider thread = OOSpider.create(Site.me().setSleepTime(0), new PageModelPipeline() {
             @Override
             public void process(Object o, Task task) {
 
             }
-        }, Kr36NewsModel.class).thread(20);
+        }, Kr36NewsModel.class).thread(20).addUrl("http://www.36kr.com/");
         thread.start();
         SpiderMonitor spiderMonitor = SpiderMonitor.instance();
         spiderMonitor.register(thread);
