@@ -1,15 +1,26 @@
 package us.codecraft.webmagic.downloader;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.annotation.ThreadSafe;
 import org.apache.http.auth.AuthState;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.auth.BasicScheme;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
@@ -24,11 +35,11 @@ import us.codecraft.webmagic.proxy.ProxyProvider;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.CharsetUtils;
 import us.codecraft.webmagic.utils.HttpClientUtils;
+import us.codecraft.webmagic.utils.HttpConstant;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -88,7 +99,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         int statusCode = 0;
         Site site = task.getSite();
         Proxy proxy = null;
-        HttpContext httpContext = new BasicHttpContext();
+        HttpClientContext httpContext = new HttpClientContext();
         if (proxyProvider != null) {
             proxy = proxyProvider.getProxy(task);
             AuthState authState = new AuthState();
@@ -97,6 +108,18 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
         CloseableHttpClient httpClient = getHttpClient(site);
         HttpUriRequest httpUriRequest = httpUriRequestConverter.convert(request, site, proxy);
+        if (request.getCookies() != null && CollectionUtils.isNotEmpty(request.getCookies())) {
+            CookieStore cookieStore = new BasicCookieStore();
+            for (Cookie c : request.getCookies()) {
+                cookieStore.addCookie(c);
+            }
+            httpContext.setCookieStore(cookieStore);
+        }
+        if (request.getHeaders() != null && CollectionUtils.isNotEmpty(request.getHeaders())) {
+            for (Header h : request.getHeaders()) {
+                httpUriRequest.setHeader(h);
+            }
+        }
         try {
             httpResponse = httpClient.execute(httpUriRequest, httpContext);
             statusCode = httpResponse.getStatusLine().getStatusCode();

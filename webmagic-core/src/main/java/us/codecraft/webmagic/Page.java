@@ -1,13 +1,16 @@
 package us.codecraft.webmagic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.Header;
+
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Json;
 import us.codecraft.webmagic.selector.Selectable;
 import us.codecraft.webmagic.utils.UrlUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,7 +49,7 @@ public class Page {
     private boolean needCycleRetry;
 
     private List<Request> targetRequests = new ArrayList<Request>();
-
+    
     public Page() {
     }
 
@@ -232,6 +235,11 @@ public class Page {
                 ", statusCode=" + statusCode +
                 ", needCycleRetry=" + needCycleRetry +
                 ", targetRequests=" + targetRequests +
+                ", headers=" + headers+
                 '}';
     }
+
+	
+
+	
 }

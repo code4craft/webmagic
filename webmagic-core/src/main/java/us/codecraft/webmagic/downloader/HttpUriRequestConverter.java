@@ -1,22 +1,16 @@
 package us.codecraft.webmagic.downloader;
 
 import org.apache.http.HttpHost;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.entity.ByteArrayEntity;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.utils.HttpConstant;
 
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,32 +47,27 @@ public class HttpUriRequestConverter {
         String method = request.getMethod();
         if (method == null || method.equalsIgnoreCase(HttpConstant.Method.GET)) {
             //default get
-            return addQueryParams(RequestBuilder.get(),request.getParams());
+            return RequestBuilder.get();
         } else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
-            return addFormParams(RequestBuilder.post(), (NameValuePair[]) request.getExtra("nameValuePair"), request.getParams());
+            return addFormParams(RequestBuilder.post(),request);
         } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
-            return addQueryParams(RequestBuilder.head(),request.getParams());
+            return RequestBuilder.head();
         } else if (method.equalsIgnoreCase(HttpConstant.Method.PUT)) {
-            return addFormParams(RequestBuilder.put(), (NameValuePair[]) request.getExtra("nameValuePair"), request.getParams());
+            return addFormParams(RequestBuilder.put(), request);
         } else if (method.equalsIgnoreCase(HttpConstant.Method.DELETE)) {
-            return addQueryParams(RequestBuilder.delete(),request.getParams());
+            return RequestBuilder.delete();
         } else if (method.equalsIgnoreCase(HttpConstant.Method.TRACE)) {
-            return addQueryParams(RequestBuilder.trace(),request.getParams());
+            return RequestBuilder.trace();
         }
         throw new IllegalArgumentException("Illegal HTTP Method " + method);
     }
 
-    private RequestBuilder addFormParams(RequestBuilder requestBuilder, NameValuePair[] nameValuePair, Map<String, String> params) {
-        List<NameValuePair> allNameValuePair=new ArrayList<NameValuePair>();
-        if (nameValuePair != null && nameValuePair.length > 0) {
-            allNameValuePair= Arrays.asList(nameValuePair);
+    private RequestBuilder addFormParams(RequestBuilder requestBuilder, Request request) {
+        if (request.getRequestBody() != null) {
+            ByteArrayEntity entity = new ByteArrayEntity(request.getRequestBody().getBody());
+            entity.setContentType(request.getRequestBody().getContentType());
+            requestBuilder.setEntity(entity);
         }
-        if (params != null) {
-            for (String key : params.keySet()) {
-                allNameValuePair.add(new BasicNameValuePair(key, params.get(key)));
-            }
-        }
-        requestBuilder.setEntity(new UrlEncodedFormEntity(allNameValuePair, Charset.forName("utf8")));
         return requestBuilder;
     }
 

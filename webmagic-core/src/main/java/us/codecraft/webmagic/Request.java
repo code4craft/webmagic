@@ -1,9 +1,14 @@
 package us.codecraft.webmagic;
 
+import org.apache.http.Header;
+import org.apache.http.cookie.Cookie;
+import us.codecraft.webmagic.model.HttpRequestBody;
 import us.codecraft.webmagic.utils.Experimental;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,14 +28,19 @@ public class Request implements Serializable {
 
     private String method;
 
+    private HttpRequestBody requestBody;
+
     /**
      * Store additional information in extras.
      */
     private Map<String, Object> extras;
+
     /**
-     * POST/GET param set
-     * */
-    private Map<String,String> params=new HashMap<String, String>();
+     * cookies for current url, if not set use Site's cookies
+     */
+    private List<Cookie> cookies=new ArrayList<Cookie>();
+    
+    private List<Header> headers=new ArrayList<Header>();
 
     /**
      * Priority of the request.<br>
@@ -109,47 +119,26 @@ public class Request implements Serializable {
         this.method = method;
     }
 
-    public Map<String, String> getParams() {
-        return params;
-    }
-    /**
-     * set params for request
-     * <br>
-     * DO NOT set this for request already has params, like 'https://github.com/search?q=webmagic'
-     * @param params params
-     * */
-    public void setParams(Map<String, String> params) {
-        this.params = params;
-    }
-    /**
-     * set params for request
-     * <br>
-     * DO NOT set this for request already has params, like 'https://github.com/search?q=webmagic'
-     * @param key key
-     * @param value value
-     * */
-    public void putParams(String key,String value) {
-        params.put(key,value);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Request request = (Request) o;
-
-        if (url != null ? !url.equals(request.url) : request.url != null) return false;
-        if (method != null ? !method.equals(request.method) : request.method != null) return false;
-        return params != null ? params.equals(request.params) : request.params == null;
-    }
-
     @Override
     public int hashCode() {
         int result = url != null ? url.hashCode() : 0;
         result = 31 * result + (method != null ? method.hashCode() : 0);
-        result = 31 * result + (params != null ? params.hashCode() : 0);
+        result = 31 * result + (headers != null ? headers.hashCode() : 0);
+        result = 31 * result + (cookies != null ? cookies.hashCode() : 0);
+        
         return result;
+    }
+
+    public List<Cookie> getCookies() {
+        return cookies;
+    }
+
+    public List<Header> getHeaders() {
+        return headers;
+    }
+
+    public HttpRequestBody getRequestBody() {
+        return requestBody;
     }
 
     @Override
@@ -158,8 +147,10 @@ public class Request implements Serializable {
                 "url='" + url + '\'' +
                 ", method='" + method + '\'' +
                 ", extras=" + extras +
-                ", params=" + params +
                 ", priority=" + priority +
+                ", headers=" + headers +
+                ", cookies="+ cookies+
                 '}';
     }
+
 }
