@@ -34,7 +34,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class HttpClientDownloaderTest {
 
-    public static final String PAGE_ALWAYS_NOT_EXISTS = "http://localhost:13421/404";
+    public static final String PAGE_ALWAYS_NOT_EXISTS = "http://localhost:13423/404";
 
     @Test
     public void testDownloader() {
@@ -63,7 +63,7 @@ public class HttpClientDownloaderTest {
 
     @Test
     public void testGetHtmlCharset() throws Exception {
-        HttpServer server = httpserver(12306);
+        HttpServer server = httpserver(13423);
         server.get(by(uri("/header"))).response(header("Content-Type", "text/html; charset=gbk"));
         server.get(by(uri("/meta4"))).response(with(text("<html>\n" +
                 "  <head>\n" +
@@ -80,11 +80,11 @@ public class HttpClientDownloaderTest {
         Runner.running(server, new Runnable() {
             @Override
             public void run() {
-                String charset = getCharsetByUrl("http://127.0.0.1:12306/header");
+                String charset = getCharsetByUrl("http://127.0.0.1:13423/header");
                 assertEquals(charset, "gbk");
-                charset = getCharsetByUrl("http://127.0.0.1:12306/meta4");
+                charset = getCharsetByUrl("http://127.0.0.1:13423/meta4");
                 assertEquals(charset, "gbk");
-                charset = getCharsetByUrl("http://127.0.0.1:12306/meta5");
+                charset = getCharsetByUrl("http://127.0.0.1:13423/meta5");
                 assertEquals(charset, "gbk");
             }
 
@@ -114,7 +114,7 @@ public class HttpClientDownloaderTest {
 
     @Test
     public void test_selectRequestMethod() throws Exception {
-        HttpServer server = httpserver(12306);
+        HttpServer server = httpserver(13423);
         server.get(eq(query("q"), "webmagic")).response("get");
         server.post(eq(form("q"), "webmagic")).response("post");
         server.put(eq(form("q"), "webmagic")).response("put");
@@ -127,7 +127,7 @@ public class HttpClientDownloaderTest {
             @Override
             public void run() throws Exception {
                 Request request = new Request();
-                request.setUrl("http://127.0.0.1:12306/search?q=webmagic");
+                request.setUrl("http://127.0.0.1:13423/search?q=webmagic");
                 request.setMethod(HttpConstant.Method.GET);
                 Map<String,Object> params = new HashedMap();
                 params.put("q","webmagic");
@@ -142,7 +142,7 @@ public class HttpClientDownloaderTest {
                 request.setMethod(HttpConstant.Method.TRACE);
                 httpUriRequest = httpUriRequestConverter.convert(request, site, null).getHttpUriRequest();
                 assertThat(EntityUtils.toString(HttpClients.custom().build().execute(httpUriRequest).getEntity())).isEqualTo("trace");
-                request.setUrl("http://127.0.0.1:12306/search");
+                request.setUrl("http://127.0.0.1:13423/search");
                 request.setMethod(HttpConstant.Method.POST);
                 request.setRequestBody(HttpRequestBody.form(params, "utf-8"));
                 httpUriRequest = httpUriRequestConverter.convert(request, site, null).getHttpUriRequest();
@@ -155,15 +155,66 @@ public class HttpClientDownloaderTest {
     }
 
     @Test
+    public void test_set_request_cookie() throws Exception {
+        HttpServer server = httpserver(13423);
+        server.get(eq(cookie("cookie"), "cookie-webmagic")).response("ok");
+        Runner.running(server, new Runnable() {
+            @Override
+            public void run() throws Exception {
+                HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+                Request request = new Request();
+                request.setUrl("http://127.0.0.1:13423");
+                request.addCookie("cookie","cookie-webmagic");
+                Page page = httpClientDownloader.download(request, Site.me().toTask());
+                assertThat(page.getRawText()).isEqualTo("ok");
+            }
+        });
+    }
+
+    @Test
+    public void test_set_request_header() throws Exception {
+        HttpServer server = httpserver(13423);
+        server.get(eq(header("header"), "header-webmagic")).response("ok");
+        Runner.running(server, new Runnable() {
+            @Override
+            public void run() throws Exception {
+                HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+                Request request = new Request();
+                request.setUrl("http://127.0.0.1:13423");
+                request.addHeader("header","header-webmagic");
+                Page page = httpClientDownloader.download(request, Site.me().toTask());
+                assertThat(page.getRawText()).isEqualTo("ok");
+            }
+        });
+    }
+
+    @Test
+    public void test_set_site_cookie() throws Exception {
+        HttpServer server = httpserver(13423);
+        server.get(eq(cookie("cookie"), "cookie-webmagic")).response("ok");
+        Runner.running(server, new Runnable() {
+            @Override
+            public void run() throws Exception {
+                HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+                Request request = new Request();
+                request.setUrl("http://127.0.0.1:13423");
+                Site site = Site.me().addCookie("cookie", "cookie-webmagic").setDomain("127.0.0.1");
+                Page page = httpClientDownloader.download(request, site.toTask());
+                assertThat(page.getRawText()).isEqualTo("ok");
+            }
+        });
+    }
+
+    @Test
     public void test_download_when_task_is_null() throws Exception {
-        HttpServer server = httpserver(12306);
+        HttpServer server = httpserver(13423);
         server.response("foo");
         Runner.running(server, new Runnable() {
             @Override
             public void run() throws Exception {
                 final HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
                 Request request = new Request();
-                request.setUrl("http://127.0.0.1:12306/");
+                request.setUrl("http://127.0.0.1:13423/");
                 Page page = httpClientDownloader.download(request, Site.me().toTask());
                 assertThat(page.getRawText()).isEqualTo("foo");
             }

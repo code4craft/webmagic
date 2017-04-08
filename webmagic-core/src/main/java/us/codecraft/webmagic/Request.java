@@ -1,14 +1,10 @@
 package us.codecraft.webmagic;
 
-import org.apache.http.Header;
-import org.apache.http.cookie.Cookie;
 import us.codecraft.webmagic.model.HttpRequestBody;
 import us.codecraft.webmagic.utils.Experimental;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,9 +34,9 @@ public class Request implements Serializable {
     /**
      * cookies for current url, if not set use Site's cookies
      */
-    private List<Cookie> cookies=new ArrayList<Cookie>();
-    
-    private List<Header> headers=new ArrayList<Header>();
+    private Map<String, String> cookies = new HashMap<String, String>();
+
+    private Map<String, String> headers = new HashMap<String, String>();
 
     /**
      * Priority of the request.<br>
@@ -137,11 +133,21 @@ public class Request implements Serializable {
         return method != null ? method.equals(request.method) : request.method == null;
     }
 
-    public List<Cookie> getCookies() {
+    public Request addCookie(String name, String value) {
+        cookies.put(name, value);
+        return this;
+    }
+
+    public Request addHeader(String name, String value) {
+        headers.put(name, value);
+        return this;
+    }
+
+    public Map<String, String> getCookies() {
         return cookies;
     }
 
-    public List<Header> getHeaders() {
+    public Map<String, String> getHeaders() {
         return headers;
     }
 

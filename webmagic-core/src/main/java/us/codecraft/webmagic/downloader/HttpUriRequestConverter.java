@@ -1,7 +1,5 @@
 package us.codecraft.webmagic.downloader;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthState;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -11,14 +9,15 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.utils.HttpConstant;
+import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.util.Map;
 
@@ -45,10 +44,12 @@ public class HttpUriRequestConverter {
             authState.update(new BasicScheme(), new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
             httpContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, authState);
         }
-        if (request.getCookies() != null && CollectionUtils.isNotEmpty(request.getCookies())) {
+        if (request.getCookies() != null && !request.getCookies().isEmpty()) {
             CookieStore cookieStore = new BasicCookieStore();
-            for (Cookie c : request.getCookies()) {
-                cookieStore.addCookie(c);
+            for (Map.Entry<String, String> cookieEntry : request.getCookies().entrySet()) {
+                BasicClientCookie cookie1 = new BasicClientCookie(cookieEntry.getKey(), cookieEntry.getValue());
+                cookie1.setDomain(UrlUtils.removePort(UrlUtils.getDomain(request.getUrl())));
+                cookieStore.addCookie(cookie1);
             }
             httpContext.setCookieStore(cookieStore);
         }
@@ -76,9 +77,9 @@ public class HttpUriRequestConverter {
         }
         requestBuilder.setConfig(requestConfigBuilder.build());
         HttpUriRequest httpUriRequest = requestBuilder.build();
-        if (request.getHeaders() != null && CollectionUtils.isNotEmpty(request.getHeaders())) {
-            for (Header h : request.getHeaders()) {
-                httpUriRequest.setHeader(h);
+        if (request.getHeaders() != null && !request.getHeaders().isEmpty()) {
+            for (Map.Entry<String, String> header : request.getHeaders().entrySet()) {
+                httpUriRequest.addHeader(header.getKey(), header.getValue());
             }
         }
         return httpUriRequest;
