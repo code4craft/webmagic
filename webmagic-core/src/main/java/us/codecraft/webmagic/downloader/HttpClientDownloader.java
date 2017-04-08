@@ -1,28 +1,10 @@
 package us.codecraft.webmagic.downloader;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.Header;
-import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.annotation.ThreadSafe;
-import org.apache.http.auth.AuthState;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.config.CookieSpecs;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,16 +12,15 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.proxy.ProxyProvider;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.CharsetUtils;
 import us.codecraft.webmagic.utils.HttpClientUtils;
-import us.codecraft.webmagic.utils.HttpConstant;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -96,33 +77,12 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
         logger.debug("downloading page {}", request.getUrl());
         CloseableHttpResponse httpResponse = null;
-        int statusCode = 0;
         Site site = task.getSite();
-        Proxy proxy = null;
-        HttpClientContext httpContext = new HttpClientContext();
-        if (proxyProvider != null) {
-            proxy = proxyProvider.getProxy(task);
-            AuthState authState = new AuthState();
-            authState.update(new BasicScheme(), new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
-            httpContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, authState);
-        }
         CloseableHttpClient httpClient = getHttpClient(site);
-        HttpUriRequest httpUriRequest = httpUriRequestConverter.convert(request, site, proxy);
-        if (request.getCookies() != null && CollectionUtils.isNotEmpty(request.getCookies())) {
-            CookieStore cookieStore = new BasicCookieStore();
-            for (Cookie c : request.getCookies()) {
-                cookieStore.addCookie(c);
-            }
-            httpContext.setCookieStore(cookieStore);
-        }
-        if (request.getHeaders() != null && CollectionUtils.isNotEmpty(request.getHeaders())) {
-            for (Header h : request.getHeaders()) {
-                httpUriRequest.setHeader(h);
-            }
-        }
+        HttpClientRequestContext requestContext = httpUriRequestConverter.convert(request, site, proxyProvider != null ? proxyProvider.getProxy(task) : null);
         try {
-            httpResponse = httpClient.execute(httpUriRequest, httpContext);
-            statusCode = httpResponse.getStatusLine().getStatusCode();
+            httpResponse = httpClient.execute(requestContext.getHttpUriRequest(), requestContext.getHttpClientContext());
+            int statusCode = httpResponse.getStatusLine().getStatusCode();
             if (site.getAcceptStatCode().contains(statusCode)) {
                 Page page = handleResponse(request, site.getCharset(), httpResponse, task);
                 onSuccess(request);
