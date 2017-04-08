@@ -141,6 +141,10 @@ public class Request implements Serializable {
         return requestBody;
     }
 
+    public void setRequestBody(HttpRequestBody requestBody) {
+        this.requestBody = requestBody;
+    }
+
     @Override
     public String toString() {
         return "Request{" +
