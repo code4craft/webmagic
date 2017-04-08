@@ -123,10 +123,18 @@ public class Request implements Serializable {
     public int hashCode() {
         int result = url != null ? url.hashCode() : 0;
         result = 31 * result + (method != null ? method.hashCode() : 0);
-        result = 31 * result + (headers != null ? headers.hashCode() : 0);
-        result = 31 * result + (cookies != null ? cookies.hashCode() : 0);
-        
         return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Request request = (Request) o;
+
+        if (url != null ? !url.equals(request.url) : request.url != null) return false;
+        return method != null ? method.equals(request.method) : request.method == null;
     }
 
     public List<Cookie> getCookies() {

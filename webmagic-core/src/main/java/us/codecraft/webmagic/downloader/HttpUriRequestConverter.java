@@ -38,9 +38,11 @@ public class HttpUriRequestConverter {
 
     private HttpClientContext convertHttpClientContext(Request request, Site site, Proxy proxy) {
         HttpClientContext httpContext = new HttpClientContext();
-        AuthState authState = new AuthState();
-        authState.update(new BasicScheme(), new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
-        httpContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, authState);
+        if (proxy != null) {
+            AuthState authState = new AuthState();
+            authState.update(new BasicScheme(), new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
+            httpContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, authState);
+        }
         if (request.getCookies() != null && CollectionUtils.isNotEmpty(request.getCookies())) {
             CookieStore cookieStore = new BasicCookieStore();
             for (Cookie c : request.getCookies()) {
@@ -104,15 +106,6 @@ public class HttpUriRequestConverter {
             ByteArrayEntity entity = new ByteArrayEntity(request.getRequestBody().getBody());
             entity.setContentType(request.getRequestBody().getContentType());
             requestBuilder.setEntity(entity);
-        }
-        return requestBuilder;
-    }
-
-    private RequestBuilder addQueryParams(RequestBuilder requestBuilder, Map<String, String> params) {
-        if (params != null) {
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                requestBuilder.addParameter(entry.getKey(), entry.getValue());
-            }
         }
         return requestBuilder;
     }
