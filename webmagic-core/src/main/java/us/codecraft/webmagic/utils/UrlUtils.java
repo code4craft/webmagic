@@ -80,7 +80,7 @@ public class UrlUtils {
         if (i > 0) {
             domain = StringUtils.substring(domain, 0, i);
         }
-        return domain;
+        return removePort(domain);
     }
 
     public static String removePort(String domain) {
