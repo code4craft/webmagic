@@ -90,7 +90,7 @@ public class HtmlNode extends AbstractSelectable {
      * See: https://github.com/code4craft/webmagic/issues/113
      *
      * @param elementIterator elementIterator
-     * @param element element
+     * @return element element
      */
     private Element checkElementAndConvert(ListIterator<Element> elementIterator) {
         Element element = elementIterator.next();
