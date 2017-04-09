@@ -1,6 +1,7 @@
 package us.codecraft.webmagic;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.downloader.Downloader;
@@ -398,34 +399,59 @@ public class Spider implements Runnable, Task {
         }
     }
 
-    protected void processRequest(Request request) {
+    private void processRequest(Request request) {
         Page page = downloader.download(request, this);
-        if (page == null) {
-            sleep(site.getSleepTime());
-            onError(request);
-            return;
+        if (page.isDownloadSuccess()){
+            onDownloadSuccess(request, page);
+        } else {
+            onDownloaderFail(request);
         }
-        // for cycle retry
-        if (page.isNeedCycleRetry()) {
-            extractAndAddRequests(page, true);
-            sleep(site.getRetrySleepTime());
-            return;
-        }
-        pageProcessor.process(page);
-        extractAndAddRequests(page, spawnUrl);
-        if (!page.getResultItems().isSkip()) {
-            for (Pipeline pipeline : pipelines) {
-                pipeline.process(page.getResultItems(), this);
+    }
+
+    private void onDownloadSuccess(Request request, Page page) {
+        onSuccess(request);
+        if (site.getAcceptStatCode().contains(page.getStatusCode())){
+            pageProcessor.process(page);
+            extractAndAddRequests(page, spawnUrl);
+            if (!page.getResultItems().isSkip()) {
+                for (Pipeline pipeline : pipelines) {
+                    pipeline.process(page.getResultItems(), this);
+                }
             }
         }
         sleep(site.getSleepTime());
+        return;
+    }
+
+    private void onDownloaderFail(Request request) {
+        if (site.getCycleRetryTimes() == 0) {
+            sleep(site.getSleepTime());
+        } else {
+            // for cycle retry
+            doCycleRetry(request);
+        }
+        onError(request);
+    }
+
+    private void doCycleRetry(Request request) {
+        Object cycleTriedTimesObject = request.getExtra(Request.CYCLE_TRIED_TIMES);
+        if (cycleTriedTimesObject == null) {
+            addRequest(SerializationUtils.clone(request).setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, 1));
+        } else {
+            int cycleTriedTimes = (Integer) cycleTriedTimesObject;
+            cycleTriedTimes++;
+            if (cycleTriedTimes < site.getCycleRetryTimes()) {
+                addRequest(SerializationUtils.clone(request).setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, cycleTriedTimes));
+            }
+        }
+        sleep(site.getRetrySleepTime());
     }
 
     protected void sleep(int time) {
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error("Thread interrupted when sleep",e);
         }
     }
 

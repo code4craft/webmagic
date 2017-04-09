@@ -50,15 +50,12 @@ public class HttpClientDownloaderTest {
     }
 
     @Test
-    public void testCycleTriedTimes() {
+    public void test_download_fail() {
         HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
         Task task = Site.me().setDomain("localhost").setCycleRetryTimes(5).toTask();
         Request request = new Request(PAGE_ALWAYS_NOT_EXISTS);
         Page page = httpClientDownloader.download(request, task);
-        assertThat(page.getTargetRequests().size() > 0);
-        assertThat((Integer) page.getTargetRequests().get(0).getExtra(Request.CYCLE_TRIED_TIMES)).isEqualTo(1);
-        page = httpClientDownloader.download(page.getTargetRequests().get(0), task);
-        assertThat((Integer) page.getTargetRequests().get(0).getExtra(Request.CYCLE_TRIED_TIMES)).isEqualTo(2);
+        assertThat(page.isDownloadSuccess()).isFalse();
     }
 
     @Test

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Json;
 import us.codecraft.webmagic.selector.Selectable;
+import us.codecraft.webmagic.utils.HttpConstant;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.util.ArrayList;
@@ -41,13 +42,19 @@ public class Page {
 
     private Map<String,List<String>> headers;
 
-    private int statusCode;
+    private int statusCode = HttpConstant.StatusCode.CODE_200;
 
-    private boolean needCycleRetry;
+    private boolean downloadSuccess = true;
 
     private List<Request> targetRequests = new ArrayList<Request>();
     
     public Page() {
+    }
+
+    public static Page fail(){
+        Page page = new Page();
+        page.setDownloadSuccess(false);
+        return page;
     }
 
     public Page setSkip(boolean skip) {
@@ -179,14 +186,6 @@ public class Page {
         return request;
     }
 
-    public boolean isNeedCycleRetry() {
-        return needCycleRetry;
-    }
-
-    public void setNeedCycleRetry(boolean needCycleRetry) {
-        this.needCycleRetry = needCycleRetry;
-    }
-
     public void setRequest(Request request) {
         this.request = request;
         this.resultItems.setRequest(request);
@@ -221,22 +220,27 @@ public class Page {
         this.headers = headers;
     }
 
+    public boolean isDownloadSuccess() {
+        return downloadSuccess;
+    }
+
+    public void setDownloadSuccess(boolean downloadSuccess) {
+        this.downloadSuccess = downloadSuccess;
+    }
+
     @Override
     public String toString() {
         return "Page{" +
                 "request=" + request +
                 ", resultItems=" + resultItems +
+                ", html=" + html +
+                ", json=" + json +
                 ", rawText='" + rawText + '\'' +
                 ", url=" + url +
                 ", headers=" + headers +
                 ", statusCode=" + statusCode +
-                ", needCycleRetry=" + needCycleRetry +
+                ", success=" + downloadSuccess +
                 ", targetRequests=" + targetRequests +
-                ", headers=" + headers+
                 '}';
     }
-
-	
-
-	
 }

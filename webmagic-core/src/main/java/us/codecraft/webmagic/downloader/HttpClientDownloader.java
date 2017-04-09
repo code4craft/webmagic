@@ -77,27 +77,18 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
         logger.debug("downloading page {}", request.getUrl());
         CloseableHttpResponse httpResponse = null;
-        Site site = task.getSite();
-        CloseableHttpClient httpClient = getHttpClient(site);
-        HttpClientRequestContext requestContext = httpUriRequestConverter.convert(request, site, proxyProvider != null ? proxyProvider.getProxy(task) : null);
+        CloseableHttpClient httpClient = getHttpClient(task.getSite());
+        HttpClientRequestContext requestContext = httpUriRequestConverter.convert(request, task.getSite(), proxyProvider != null ? proxyProvider.getProxy(task) : null);
         try {
             httpResponse = httpClient.execute(requestContext.getHttpUriRequest(), requestContext.getHttpClientContext());
-            int statusCode = httpResponse.getStatusLine().getStatusCode();
-            if (site.getAcceptStatCode().contains(statusCode)) {
-                Page page = handleResponse(request, site.getCharset(), httpResponse, task);
-                onSuccess(request);
-                return page;
-            } else {
-                logger.warn("get page {} error, status code {} ",request.getUrl(),statusCode);
-                return null;
-            }
+            Page page = handleResponse(request, task.getSite().getCharset(), httpResponse, task);
+            onSuccess(request);
+            logger.debug("downloading page success {}", page);
+            return page;
         } catch (IOException e) {
             logger.warn("download page {} error", request.getUrl(), e);
-            if (site != null && site.getCycleRetryTimes() > 0) {
-                return addToCycleRetry(request, site);
-            }
             onError(request);
-            return null;
+            return Page.fail();
         } finally {
             if (httpResponse != null) {
                 //ensure the connection is released back to pool
@@ -118,6 +109,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         page.setUrl(new PlainText(request.getUrl()));
         page.setRequest(request);
         page.setStatusCode(httpResponse.getStatusLine().getStatusCode());
+        page.setDownloadSuccess(true);
         if (responseHeader) {
             page.setHeaders(HttpClientUtils.convertHeaders(httpResponse.getAllHeaders()));
         }

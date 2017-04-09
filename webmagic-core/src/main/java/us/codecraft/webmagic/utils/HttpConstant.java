@@ -25,6 +25,12 @@ public abstract class HttpConstant {
 
     }
 
+    public static abstract class StatusCode {
+
+        public static final int CODE_200 = 200;
+
+    }
+
     public static abstract class Header {
 
         public static final String REFERER = "Referer";

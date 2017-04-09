@@ -1,5 +1,7 @@
 package us.codecraft.webmagic;
 
+import us.codecraft.webmagic.utils.HttpConstant;
+
 import java.util.*;
 
 /**
@@ -40,7 +42,7 @@ public class Site {
     private boolean useGzip = true;
 
     static {
-        DEFAULT_STATUS_CODE_SET.add(200);
+        DEFAULT_STATUS_CODE_SET.add(HttpConstant.StatusCode.CODE_200);
     }
 
     /**
