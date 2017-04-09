@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.selector;
 
+import org.jsoup.Jsoup;
 import org.junit.Test;
 
 import java.util.List;
@@ -15,7 +16,12 @@ public class LinksSelectorTest {
 
     @Test
     public void testLinks() throws Exception {
-        List<String> links = new LinksSelector().selectList(html);
+        LinksSelector linksSelector = new LinksSelector();
+        List<String> links = linksSelector.selectList(html);
+        System.out.println(links);
+
+        html = "<div><a href='aaa'></a></div><div><a href='http://whatever.com/bbb'></a></div><div><a href='http://other.com/bbb'></a></div>";
+        links = linksSelector.selectList(Jsoup.parse(html, "http://whatever.com/"));
         System.out.println(links);
     }
 }
