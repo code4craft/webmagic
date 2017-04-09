@@ -12,6 +12,7 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.proxy.ProxyProvider;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.CharsetUtils;
@@ -78,21 +79,26 @@ public class HttpClientDownloader extends AbstractDownloader {
         logger.debug("downloading page {}", request.getUrl());
         CloseableHttpResponse httpResponse = null;
         CloseableHttpClient httpClient = getHttpClient(task.getSite());
-        HttpClientRequestContext requestContext = httpUriRequestConverter.convert(request, task.getSite(), proxyProvider != null ? proxyProvider.getProxy(task) : null);
+        Proxy proxy = proxyProvider != null ? proxyProvider.getProxy(task) : null;
+        HttpClientRequestContext requestContext = httpUriRequestConverter.convert(request, task.getSite(), proxy);
+        Page page = Page.fail();
         try {
             httpResponse = httpClient.execute(requestContext.getHttpUriRequest(), requestContext.getHttpClientContext());
-            Page page = handleResponse(request, task.getSite().getCharset(), httpResponse, task);
+            page = handleResponse(request, task.getSite().getCharset(), httpResponse, task);
             onSuccess(request);
             logger.debug("downloading page success {}", page);
             return page;
         } catch (IOException e) {
             logger.warn("download page {} error", request.getUrl(), e);
             onError(request);
-            return Page.fail();
+            return page;
         } finally {
             if (httpResponse != null) {
                 //ensure the connection is released back to pool
                 EntityUtils.consumeQuietly(httpResponse.getEntity());
+            }
+            if (proxyProvider != null && proxy != null) {
+                proxyProvider.returnProxy(proxy, page, task);
             }
         }
     }
