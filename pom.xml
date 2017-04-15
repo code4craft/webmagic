@@ -231,11 +231,20 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>2.10.4</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
+                    <doctitle>WebMagic 0.7.0-SNAPSHOT</doctitle>
+                    <locale>en_US</locale>
                 </configuration>
                 <executions>
+                    <execution>
+                        <id>aggregate</id>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                        <phase>site</phase>
+                    </execution>
                     <execution>
                         <id>attach-javadocs</id>
                         <goals>
