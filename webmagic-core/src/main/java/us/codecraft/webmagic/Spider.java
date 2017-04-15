@@ -500,6 +500,7 @@ public class Spider implements Runnable, Task {
      * Download urls synchronizing.
      *
      * @param urls urls
+     * @param <T> type of process result
      * @return list downloaded
      */
     public <T> List<T> getAll(Collection<String> urls) {

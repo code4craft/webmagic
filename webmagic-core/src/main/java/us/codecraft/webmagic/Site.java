@@ -238,7 +238,7 @@ public class Site {
      * Put an Http header for downloader. <br>
      * Use {@link #addCookie(String, String)} for cookie and {@link #setUserAgent(String)} for user-agent. <br>
      *
-     * @param key   key of http header, there are some keys constant in {@link HeaderConst}
+     * @param key   key of http header, there are some keys constant in {@link HttpConstant.Header}
      * @param value value of header
      * @return this
      */
