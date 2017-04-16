@@ -10,12 +10,15 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.model.HttpRequestBody;
+import us.codecraft.webmagic.proxy.Proxy;
+import us.codecraft.webmagic.proxy.SimpleProxyProvider;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.utils.CharsetUtils;
 import us.codecraft.webmagic.utils.HttpConstant;
@@ -217,4 +220,16 @@ public class HttpClientDownloaderTest {
             }
         });
     }
+
+    @Ignore("need proxy server")
+    @Test
+    public void test_download_by_SimpleProxyProvider(){
+        HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+        httpClientDownloader.setProxyProvider(SimpleProxyProvider.from(new Proxy("127.0.0.1", 1087)));
+        Request request = new Request();
+        request.setUrl("https://www.baidu.com");
+        Page page = httpClientDownloader.download(request, Site.me().toTask());
+        assertThat(page.isDownloadSuccess());
+    }
+
 }

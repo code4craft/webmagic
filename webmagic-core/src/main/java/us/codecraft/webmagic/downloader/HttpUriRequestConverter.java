@@ -39,7 +39,7 @@ public class HttpUriRequestConverter {
 
     private HttpClientContext convertHttpClientContext(Request request, Site site, Proxy proxy) {
         HttpClientContext httpContext = new HttpClientContext();
-        if (proxy != null) {
+        if (proxy != null && proxy.getUsername() != null) {
             AuthState authState = new AuthState();
             authState.update(new BasicScheme(), new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
             httpContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, authState);
