@@ -25,8 +25,8 @@ public class RegexSelectorTest {
 
     @Test
     public void testRegexWithZeroWidthAssertions() {
-        String regex = "^.*(?=\\?)";
-        String source = "hello world?xxxx";
+        String regex = "^.*(?=\\?)(?!\\?yy)";
+        String source = "hello world?xx?yy";
         RegexSelector regexSelector = new RegexSelector(regex);
         String select = regexSelector.select(source);
         Assertions.assertThat(select).isEqualTo("hello world");
