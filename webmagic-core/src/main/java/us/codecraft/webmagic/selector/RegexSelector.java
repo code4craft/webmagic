@@ -45,24 +45,14 @@ public class RegexSelector implements Selector {
     }
 
     private boolean hasGroup(String regexStr) {
-        if (StringUtils.countMatches(regexStr, "(") - StringUtils.countMatches(regexStr, "\\(") ==
-                StringUtils.countMatches(regexStr, "(?:") - StringUtils.countMatches(regexStr, "\\(?:")){
-            return false;
-        }
-        if (StringUtils.countMatches(regexStr, "(") - StringUtils.countMatches(regexStr, "\\(") ==
-                StringUtils.countMatches(regexStr, "(?=") - StringUtils.countMatches(regexStr, "\\(?=") ) {
-            return false;
-        }
-        if (StringUtils.countMatches(regexStr, "(") - StringUtils.countMatches(regexStr, "\\(") ==
-                StringUtils.countMatches(regexStr, "(?<") - StringUtils.countMatches(regexStr, "\\(?<") ) {
-            return false;
-        }
-        if (StringUtils.countMatches(regexStr, "(") - StringUtils.countMatches(regexStr, "\\(") ==
-                StringUtils.countMatches(regexStr, "(?!") - StringUtils.countMatches(regexStr, "\\(?!") ) {
-            return false;
-        }
-        if (StringUtils.countMatches(regexStr, "(") - StringUtils.countMatches(regexStr, "\\(") ==
-                StringUtils.countMatches(regexStr, "(?#") - StringUtils.countMatches(regexStr, "\\(?#") ) {
+        int x = StringUtils.countMatches(regexStr, "(") - StringUtils.countMatches(regexStr, "\\(");
+        int a = StringUtils.countMatches(regexStr, "(?:") - StringUtils.countMatches(regexStr, "\\(?:");
+        int b = StringUtils.countMatches(regexStr, "(?=") - StringUtils.countMatches(regexStr, "\\(?=");
+        int c = StringUtils.countMatches(regexStr, "(?<") - StringUtils.countMatches(regexStr, "\\(?<");
+        int d = StringUtils.countMatches(regexStr, "(?!") - StringUtils.countMatches(regexStr, "\\(?!");
+        int e = StringUtils.countMatches(regexStr, "(?#") - StringUtils.countMatches(regexStr, "\\(?#");
+        
+        if (x == (a + b + c + d + e)) {
             return false;
         }
         return true;
