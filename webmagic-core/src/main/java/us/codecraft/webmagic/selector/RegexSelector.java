@@ -26,14 +26,16 @@ public class RegexSelector implements Selector {
         if (StringUtils.isBlank(regexStr)) {
             throw new IllegalArgumentException("regex must not be empty");
         }
-        // Check bracket for regex group. Add default group 1 if there is no group.
-        // Only check if there exists the valid left parenthesis, leave regexp validation for Pattern.
-        if ( ! hasGroup(regexStr) ){
-            regexStr = "(" + regexStr + ")";
-        }
-        this.regexStr = regexStr;
+        
         try {
             regex = Pattern.compile(regexStr, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+            // Check bracket for regex group. Add default group 1 if there is no group.
+            // Only check if there exists the valid left parenthesis, leave regexp validation for Pattern.
+            if ( regex.matcher("").groupCount() == 0 ){
+                regexStr = "(" + regexStr + ")";
+                regex = Pattern.compile(regexStr, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+            }
+            this.regexStr = regexStr;
         } catch (PatternSyntaxException e) {
             throw new IllegalArgumentException("invalid regex", e);
         }
@@ -42,20 +44,6 @@ public class RegexSelector implements Selector {
 
     public RegexSelector(String regexStr) {
         this(regexStr, 1);
-    }
-
-    private boolean hasGroup(String regexStr) {
-        int x = StringUtils.countMatches(regexStr, "(") - StringUtils.countMatches(regexStr, "\\(");
-        int a = StringUtils.countMatches(regexStr, "(?:") - StringUtils.countMatches(regexStr, "\\(?:");
-        int b = StringUtils.countMatches(regexStr, "(?=") - StringUtils.countMatches(regexStr, "\\(?=");
-        int c = StringUtils.countMatches(regexStr, "(?<") - StringUtils.countMatches(regexStr, "\\(?<");
-        int d = StringUtils.countMatches(regexStr, "(?!") - StringUtils.countMatches(regexStr, "\\(?!");
-        int e = StringUtils.countMatches(regexStr, "(?#") - StringUtils.countMatches(regexStr, "\\(?#");
-        
-        if (x == (a + b + c + d + e)) {
-            return false;
-        }
-        return true;
     }
 
     @Override
