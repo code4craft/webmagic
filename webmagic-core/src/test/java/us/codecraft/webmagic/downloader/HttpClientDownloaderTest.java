@@ -63,20 +63,20 @@ public class HttpClientDownloaderTest {
 
     @Test
     public void testGetHtmlCharset() throws Exception {
-        HttpServer server = httpserver(13423);
+        HttpServer server = httpServer(13423);
         server.get(by(uri("/header"))).response(header("Content-Type", "text/html; charset=gbk"));
         server.get(by(uri("/meta4"))).response(with(text("<html>\n" +
                 "  <head>\n" +
                 "    <meta charset='gbk'/>\n" +
                 "  </head>\n" +
                 "  <body></body>\n" +
-                "</html>")),header("Content-Type",""));
+                "</html>")),header("Content-Type","text/html; charset=gbk"));
         server.get(by(uri("/meta5"))).response(with(text("<html>\n" +
                 "  <head>\n" +
                 "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=gbk\" />\n" +
                 "  </head>\n" +
                 "  <body></body>\n" +
-                "</html>")),header("Content-Type",""));
+                "</html>")),header("Content-Type","text/html"));
         Runner.running(server, new Runnable() {
             @Override
             public void run() {
@@ -114,7 +114,8 @@ public class HttpClientDownloaderTest {
 
     @Test
     public void test_selectRequestMethod() throws Exception {
-        HttpServer server = httpserver(13423);
+        final int port = 13423;
+        HttpServer server = httpServer(port);
         server.get(eq(query("q"), "webmagic")).response("get");
         server.post(eq(form("q"), "webmagic")).response("post");
         server.put(eq(form("q"), "webmagic")).response("put");
@@ -127,11 +128,11 @@ public class HttpClientDownloaderTest {
             @Override
             public void run() throws Exception {
                 Request request = new Request();
-                request.setUrl("http://127.0.0.1:13423/search?q=webmagic");
+                request.setUrl("http://127.0.0.1:" + port + "/search?q=webmagic");
                 request.setMethod(HttpConstant.Method.GET);
                 Map<String,Object> params = new HashedMap();
                 params.put("q","webmagic");
-                HttpUriRequest  httpUriRequest = httpUriRequestConverter.convert(request,site,null).getHttpUriRequest();
+                HttpUriRequest httpUriRequest = httpUriRequestConverter.convert(request,site,null).getHttpUriRequest();
                 assertThat(EntityUtils.toString(HttpClients.custom().build().execute(httpUriRequest).getEntity())).isEqualTo("get");
                 request.setMethod(HttpConstant.Method.DELETE);
                 httpUriRequest = httpUriRequestConverter.convert(request, site, null).getHttpUriRequest();
@@ -142,7 +143,7 @@ public class HttpClientDownloaderTest {
                 request.setMethod(HttpConstant.Method.TRACE);
                 httpUriRequest = httpUriRequestConverter.convert(request, site, null).getHttpUriRequest();
                 assertThat(EntityUtils.toString(HttpClients.custom().build().execute(httpUriRequest).getEntity())).isEqualTo("trace");
-                request.setUrl("http://127.0.0.1:13423/search");
+                request.setUrl("http://127.0.0.1:" + port + "/search");
                 request.setMethod(HttpConstant.Method.POST);
                 request.setRequestBody(HttpRequestBody.form(params, "utf-8"));
                 httpUriRequest = httpUriRequestConverter.convert(request, site, null).getHttpUriRequest();
@@ -156,7 +157,7 @@ public class HttpClientDownloaderTest {
 
     @Test
     public void test_set_request_cookie() throws Exception {
-        HttpServer server = httpserver(13423);
+        HttpServer server = httpServer(13423);
         server.get(eq(cookie("cookie"), "cookie-webmagic")).response("ok");
         Runner.running(server, new Runnable() {
             @Override
@@ -173,7 +174,7 @@ public class HttpClientDownloaderTest {
 
     @Test
     public void test_set_request_header() throws Exception {
-        HttpServer server = httpserver(13423);
+        HttpServer server = httpServer(13423);
         server.get(eq(header("header"), "header-webmagic")).response("ok");
         Runner.running(server, new Runnable() {
             @Override
@@ -190,7 +191,7 @@ public class HttpClientDownloaderTest {
 
     @Test
     public void test_set_site_cookie() throws Exception {
-        HttpServer server = httpserver(13423);
+        HttpServer server = httpServer(13423);
         server.get(eq(cookie("cookie"), "cookie-webmagic")).response("ok");
         Runner.running(server, new Runnable() {
             @Override
@@ -207,7 +208,7 @@ public class HttpClientDownloaderTest {
 
     @Test
     public void test_download_when_task_is_null() throws Exception {
-        HttpServer server = httpserver(13423);
+        HttpServer server = httpServer(13423);
         server.response("foo");
         Runner.running(server, new Runnable() {
             @Override
