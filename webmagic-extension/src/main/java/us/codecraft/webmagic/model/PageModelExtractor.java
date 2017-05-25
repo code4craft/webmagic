@@ -115,7 +115,11 @@ class PageModelExtractor {
     }
 
     private ObjectFormatter getObjectFormatter(Field field, Class<?> fieldClazz, Formatter formatter) {
-        return initFormatter(ObjectFormatters.get(fieldClazz));
+        ObjectFormatter objectFormatter = initFormatter(ObjectFormatters.get(fieldClazz));
+        if(formatter != null && formatter.value() != null){
+          objectFormatter.initParam(formatter.value());
+        }
+        return objectFormatter;
     }
 
     private ObjectFormatter initFormatter(Class<? extends ObjectFormatter> formatterClazz) {
