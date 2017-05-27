@@ -97,4 +97,9 @@ public class OOSpider<T> extends Spider {
         return this;
     }
 
+    public OOSpider setIsExtractLinks(boolean isExtractLinks){
+        modelPageProcessor.setExtractLinks(isExtractLinks);
+        return this;
+    }
+
 }
