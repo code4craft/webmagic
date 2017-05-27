@@ -93,12 +93,14 @@ public class Request implements Serializable {
         return extras;
     }
 
-    public void setExtras(Map<String, Object> extras) {
+    public Request setExtras(Map<String, Object> extras) {
         this.extras = extras;
+        return this;
     }
 
-    public void setUrl(String url) {
+    public Request setUrl(String url) {
         this.url = url;
+        return this;
     }
 
     /**
@@ -111,8 +113,9 @@ public class Request implements Serializable {
         return method;
     }
 
-    public void setMethod(String method) {
+    public Request setMethod(String method) {
         this.method = method;
+        return this;
     }
 
     @Override
