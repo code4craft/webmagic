@@ -21,6 +21,10 @@ public class SimpleProxyProvider implements ProxyProvider {
 
     private final AtomicInteger pointer;
 
+    public SimpleProxyProvider(List<Proxy> proxies) {
+        this(proxies, new AtomicInteger(-1));
+    }
+
     private SimpleProxyProvider(List<Proxy> proxies, AtomicInteger pointer) {
         this.proxies = proxies;
         this.pointer = pointer;
@@ -31,7 +35,7 @@ public class SimpleProxyProvider implements ProxyProvider {
         for (Proxy proxy : proxies) {
             proxiesTemp.add(proxy);
         }
-        return new SimpleProxyProvider(Collections.unmodifiableList(proxiesTemp), new AtomicInteger(-1));
+        return new SimpleProxyProvider(Collections.unmodifiableList(proxiesTemp));
     }
 
     @Override
