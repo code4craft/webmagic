@@ -127,6 +127,10 @@ public class HttpClientGenerator {
     }
 
     private void generateCookie(HttpClientBuilder httpClientBuilder, Site site) {
+        if (site.isDisableCookieManagement()) {
+            httpClientBuilder.disableCookieManagement();
+            return;
+        }
         CookieStore cookieStore = new BasicCookieStore();
         for (Map.Entry<String, String> cookieEntry : site.getCookies().entrySet()) {
             BasicClientCookie cookie = new BasicClientCookie(cookieEntry.getKey(), cookieEntry.getValue());

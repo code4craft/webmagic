@@ -138,6 +138,6 @@ public class HttpClientDownloader extends AbstractDownloader {
     }
 
     private String getHtmlCharset(HttpResponse httpResponse, byte[] contentBytes) throws IOException {
-        return CharsetUtils.detectCharset(httpResponse.getEntity().getContentType().getValue(), contentBytes);
+        return CharsetUtils.detectCharset(httpResponse.getEntity().getContentType() == null ? "" : httpResponse.getEntity().getContentType().getValue(), contentBytes);
     }
 }

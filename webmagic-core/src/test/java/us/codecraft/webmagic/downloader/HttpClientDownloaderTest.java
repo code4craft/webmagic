@@ -173,6 +173,23 @@ public class HttpClientDownloaderTest {
     }
 
     @Test
+    public void test_disableCookieManagement() throws Exception {
+        HttpServer server = httpServer(13423);
+        server.get(not(eq(cookie("cookie"), "cookie-webmagic"))).response("ok");
+        Runner.running(server, new Runnable() {
+            @Override
+            public void run() throws Exception {
+                HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+                Request request = new Request();
+                request.setUrl("http://127.0.0.1:13423");
+                request.addCookie("cookie","cookie-webmagic");
+                Page page = httpClientDownloader.download(request, Site.me().setDisableCookieManagement(true).toTask());
+                assertThat(page.getRawText()).isEqualTo("ok");
+            }
+        });
+    }
+
+    @Test
     public void test_set_request_header() throws Exception {
         HttpServer server = httpServer(13423);
         server.get(eq(header("header"), "header-webmagic")).response("ok");

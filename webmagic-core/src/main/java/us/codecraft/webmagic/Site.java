@@ -41,6 +41,8 @@ public class Site {
 
     private boolean useGzip = true;
 
+    private boolean disableCookieManagement = false;
+
     static {
         DEFAULT_STATUS_CODE_SET.add(HttpConstant.StatusCode.CODE_200);
     }
@@ -306,6 +308,21 @@ public class Site {
      */
     public Site setUseGzip(boolean useGzip) {
         this.useGzip = useGzip;
+        return this;
+    }
+
+    public boolean isDisableCookieManagement() {
+        return disableCookieManagement;
+    }
+
+    /**
+     * Downloader is supposed to store response cookie.
+     * Disable it to ignore all cookie fields and stay clean.
+     * Warning: Set cookie will still NOT work if disableCookieManagement is true.
+     * @param disableCookieManagement disableCookieManagement
+     */
+    public Site setDisableCookieManagement(boolean disableCookieManagement) {
+        this.disableCookieManagement = disableCookieManagement;
         return this;
     }
 
