@@ -320,6 +320,7 @@ public class Site {
      * Disable it to ignore all cookie fields and stay clean.
      * Warning: Set cookie will still NOT work if disableCookieManagement is true.
      * @param disableCookieManagement disableCookieManagement
+     * @return this
      */
     public Site setDisableCookieManagement(boolean disableCookieManagement) {
         this.disableCookieManagement = disableCookieManagement;
