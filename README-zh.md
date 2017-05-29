@@ -161,7 +161,7 @@ public class OschinaBlog {
 
 webmagic-samples目录里有一些定制PageProcessor以抽取不同站点的例子。
 
-webmagic的使用可以参考：[oschina openapi 应用：博客搬家](http://my.oschina.net/oscfox/blog/194507)
+webmagic的使用可以参考：[oschina openapi 应用：博客搬家](https://git.oschina.net/yashin/MoveBlog)
 
 
 ### 协议
