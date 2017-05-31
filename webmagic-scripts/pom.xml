@@ -9,6 +9,9 @@
 
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-scripts</artifactId>
+    <properties>
+        <kotlin.version>1.1.2-2</kotlin.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -16,6 +19,12 @@
             <artifactId>jruby</artifactId>
             <version>1.7.6</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
@@ -48,6 +57,7 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>${project.basedir}/src/main/kotlin,${project.basedir}/src/main/groovy,${project.basedir}/src/main/java</sourceDirectory>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
