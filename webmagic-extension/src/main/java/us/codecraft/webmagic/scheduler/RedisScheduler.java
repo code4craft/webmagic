@@ -34,13 +34,19 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         setDuplicateRemover(this);
     }
 
+    public void returnResource(Jedis jedis) {
+        if (jedis != null) {
+            jedis.close();
+        }
+    }
+
     @Override
     public void resetDuplicateCheck(Task task) {
         Jedis jedis = pool.getResource();
         try {
             jedis.del(getSetKey(task));
         } finally {
-            pool.returnResource(jedis);
+            returnResource(jedis);
         }
     }
 
@@ -48,9 +54,9 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     public boolean isDuplicate(Request request, Task task) {
         Jedis jedis = pool.getResource();
         try {
-            return jedis.sadd(getSetKey(task), request.getUrl()) > 0;
+            return !(jedis.sadd(getSetKey(task), request.getUrl()) > 0);
         } finally {
-            pool.returnResource(jedis);
+            returnResource(jedis);
         }
 
     }
@@ -66,7 +72,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
                 jedis.hset((ITEM_PREFIX + task.getUUID()), field, value);
             }
         } finally {
-            pool.returnResource(jedis);
+            returnResource(jedis);
         }
     }
 
@@ -88,7 +94,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
                 Request request = new Request(url);
             return request;
         } finally {
-            pool.returnResource(jedis);
+            returnResource(jedis);
         }
     }
 
@@ -112,7 +118,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
             Long size = jedis.llen(getQueueKey(task));
             return size.intValue();
         } finally {
-            pool.returnResource(jedis);
+            returnResource(jedis);
         }
     }
 
@@ -123,7 +129,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
             Long size = jedis.scard(getSetKey(task));
             return size.intValue();
         } finally {
-            pool.returnResource(jedis);
+            returnResource(jedis);
         }
     }
 }
