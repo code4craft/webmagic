@@ -66,6 +66,14 @@ public class PageModelExtractorTest {
 
     }
 
+    public static class ModelCustomList {
+
+        @Formatter(subClazz = Date.class, value = "yyyyMMdd",formatter = DateFormatter.class)
+        @ExtractBy("//li[@class='dates']/text()")
+        private List<Date> dates;
+
+    }
+
     @Test
     public void testXpath() throws Exception {
         ModelDateStr modelDate = (ModelDateStr) PageModelExtractor.create(ModelDateStr.class).process(pageMocker.getMockPage());
@@ -99,6 +107,12 @@ public class PageModelExtractorTest {
     @Test
     public void testExtractDateList() throws Exception {
         ModelDateList modelDate = (ModelDateList) PageModelExtractor.create(ModelDateList.class).process(pageMocker.getMockPage());
+        assertThat(modelDate.dates).containsExactly(DateUtils.parseDate("20170601", "yyyyMMdd"), DateUtils.parseDate("20170602", "yyyyMMdd"), DateUtils.parseDate("20170603", "yyyyMMdd"), DateUtils.parseDate("20170604", "yyyyMMdd"));
+    }
+
+    @Test
+    public void testExtractCustomList() throws Exception {
+        ModelCustomList modelDate = (ModelCustomList) PageModelExtractor.create(ModelCustomList.class).process(pageMocker.getMockPage());
         assertThat(modelDate.dates).containsExactly(DateUtils.parseDate("20170601", "yyyyMMdd"), DateUtils.parseDate("20170602", "yyyyMMdd"), DateUtils.parseDate("20170603", "yyyyMMdd"), DateUtils.parseDate("20170604", "yyyyMMdd"));
     }
 }
