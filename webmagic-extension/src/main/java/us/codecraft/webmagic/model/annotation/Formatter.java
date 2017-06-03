@@ -38,6 +38,6 @@ public @interface Formatter {
      * If there are more than one formatter for a class, just specify the implement.
      * @return implement
      */
-    Class<? extends ObjectFormatter> formatter() default DEFAULT_FORMATTER;
+    Class<? extends ObjectFormatter> formatter() default ObjectFormatter.class;
 
 }
