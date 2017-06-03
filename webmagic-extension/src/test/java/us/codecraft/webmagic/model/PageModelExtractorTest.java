@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.model;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.Formatter;
@@ -44,7 +45,7 @@ public class PageModelExtractorTest {
 
     public static class ModelStringList {
 
-        @ExtractBy("//a/@href")
+        @ExtractBy("//li[@class='list']/a/@href")
         private List<String> links;
 
     }
@@ -86,18 +87,18 @@ public class PageModelExtractorTest {
     @Test
     public void testExtractList() throws Exception {
         ModelStringList modelDate = (ModelStringList) PageModelExtractor.create(ModelStringList.class).process(pageMocker.getMockPage());
-        assertThat(modelDate.links).hasSize(8);
+        assertThat(modelDate.links).containsExactly("http://webmagic.io/list/1","http://webmagic.io/list/2","http://webmagic.io/list/3","http://webmagic.io/list/4");
     }
 
     @Test
     public void testExtractIntList() throws Exception {
         ModelIntList modelDate = (ModelIntList) PageModelExtractor.create(ModelIntList.class).process(pageMocker.getMockPage());
-        assertThat(modelDate.numbers).hasSize(4);
+        assertThat(modelDate.numbers).containsExactly(1,2,3,4);
     }
 
     @Test
     public void testExtractDateList() throws Exception {
         ModelDateList modelDate = (ModelDateList) PageModelExtractor.create(ModelDateList.class).process(pageMocker.getMockPage());
-        assertThat(modelDate.dates).hasSize(4);
+        assertThat(modelDate.dates).containsExactly(DateUtils.parseDate("20170601", "yyyyMMdd"), DateUtils.parseDate("20170602", "yyyyMMdd"), DateUtils.parseDate("20170603", "yyyyMMdd"), DateUtils.parseDate("20170604", "yyyyMMdd"));
     }
 }

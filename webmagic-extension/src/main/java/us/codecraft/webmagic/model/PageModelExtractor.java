@@ -5,9 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.model.annotation.*;
-import us.codecraft.webmagic.model.formatter.BasicTypeFormatter;
 import us.codecraft.webmagic.model.formatter.ObjectFormatter;
-import us.codecraft.webmagic.model.formatter.ObjectFormatters;
+import us.codecraft.webmagic.model.formatter.ObjectFormatterBuilder;
 import us.codecraft.webmagic.selector.*;
 import us.codecraft.webmagic.utils.ClassUtils;
 import us.codecraft.webmagic.utils.ExtractorUtils;
@@ -70,55 +69,9 @@ class PageModelExtractor {
                 fieldExtractor = fieldExtractorTmp;
             }
             if (fieldExtractor != null) {
-                checkFormat(field, fieldExtractor);
+                fieldExtractor.setObjectFormatter(new ObjectFormatterBuilder().setField(field).build());
                 fieldExtractors.add(fieldExtractor);
             }
-        }
-    }
-
-    private void checkFormat(Field field, FieldExtractor fieldExtractor) {
-        //check custom formatter
-        Formatter formatter = field.getAnnotation(Formatter.class);
-        if (formatter == null) {
-            return;
-        }
-        if (!formatter.formatter().equals(Formatter.DEFAULT_FORMATTER)) {
-            ObjectFormatter objectFormatter = initFormatter(formatter.formatter(), formatter.value());
-            fieldExtractor.setObjectFormatter(objectFormatter);
-            return;
-        }
-        if (!fieldExtractor.isMulti() && !String.class.isAssignableFrom(field.getType())) {
-            Class<?> fieldClazz = BasicTypeFormatter.detectBasicClass(field.getType());
-            ObjectFormatter objectFormatter = initFormatter(ObjectFormatters.get(fieldClazz), formatter.value());
-            if (objectFormatter == null) {
-                throw new IllegalStateException("Can't find formatter for field " + field.getName() + " of type " + fieldClazz);
-            } else {
-                fieldExtractor.setObjectFormatter(objectFormatter);
-            }
-        } else if (fieldExtractor.isMulti()) {
-            if (!List.class.isAssignableFrom(field.getType())) {
-                throw new IllegalStateException("Field " + field.getName() + " must be list");
-            }
-            if (!formatter.subClazz().equals(Void.class)) {
-                ObjectFormatter objectFormatter = initFormatter(ObjectFormatters.get(formatter.subClazz()), formatter.value());
-                if (objectFormatter == null) {
-                    throw new IllegalStateException("Can't find formatter for field " + field.getName() + " of type " + formatter.subClazz());
-                } else {
-                    fieldExtractor.setObjectFormatter(objectFormatter);
-                }
-            }
-        }
-    }
-
-    private ObjectFormatter initFormatter(Class<? extends ObjectFormatter> formatterClazz, String[] params) {
-        try {
-            ObjectFormatter objectFormatter = formatterClazz.newInstance();
-            objectFormatter.initParam(params);
-            return objectFormatter;
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
         }
     }
 
