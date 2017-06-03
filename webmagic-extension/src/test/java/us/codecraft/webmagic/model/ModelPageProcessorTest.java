@@ -34,8 +34,8 @@ public class ModelPageProcessorTest {
 
     }
 
-    @TargetUrl(value = "http://webmagic.io/post/\\d+",sourceRegion = "//li[@class='post']")
-    @HelpUrl(value = "http://webmagic.io/list/\\d+",sourceRegion = "//li[@class='list']")
+    @TargetUrl(value = "http://webmagic.io/foo/\\d+",sourceRegion = "//li[@class='bar']")
+    @HelpUrl(value = "http://webmagic.io/bar/\\d+",sourceRegion = "//li[@class='foo']")
     public static class MockModel {
 
     }
@@ -56,8 +56,16 @@ public class ModelPageProcessorTest {
         ModelPageProcessor modelPageProcessor = ModelPageProcessor.create(null, MockModel.class);
         Page page = pageMocker.getMockPage();
         modelPageProcessor.process(page);
-        assertThat(page.getTargetRequests()).containsExactly(new Request("http://webmagic.io/list/1"), new Request("http://webmagic.io/list/2"), new Request("http://webmagic.io/post/1"), new Request("http://webmagic.io/post/2"));
+        assertThat(page.getTargetRequests()).containsExactly(new Request("http://webmagic.io/bar/3"), new Request("http://webmagic.io/bar/4"), new Request("http://webmagic.io/foo/3"), new Request("http://webmagic.io/foo/4"));
+    }
 
+    @Test
+    public void testExtractNoLinks() throws Exception {
+        ModelPageProcessor modelPageProcessor = ModelPageProcessor.create(null, MockModel.class);
+        Page page = pageMocker.getMockPage();
+        modelPageProcessor.setExtractLinks(false);
+        modelPageProcessor.process(page);
+        assertThat(page.getTargetRequests()).isEmpty();
     }
 
 
