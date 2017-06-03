@@ -1,14 +1,18 @@
 package us.codecraft.webmagic.model;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.junit.Test;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
+import us.codecraft.webmagic.model.annotation.Formatter;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
+import us.codecraft.webmagic.model.formatter.DateFormatter;
 import us.codecraft.webmagic.selector.PlainText;
 
 import java.io.IOException;
+import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,6 +38,17 @@ public class ModelPageProcessorTest {
 
     }
 
+    public static class ModelDate {
+
+        @Formatter(value = "yyyyMMdd", formatter = DateFormatter.class)
+        @ExtractBy(value = "//div[@class='date']/text()", notNull = true)
+        private Date date;
+
+        public Date getDate() {
+            return date;
+        }
+    }
+
     @Test
     public void testMultiModel_should_not_skip_when_match() throws Exception {
         Page page = new Page();
@@ -52,6 +67,15 @@ public class ModelPageProcessorTest {
         modelPageProcessor.process(page);
         assertThat(page.getTargetRequests()).containsExactly(new Request("http://webmagic.io/list/1"), new Request("http://webmagic.io/list/2"), new Request("http://webmagic.io/post/1"), new Request("http://webmagic.io/post/2"));
 
+    }
+
+    @Test
+    public void testExtractDate() throws Exception {
+        ModelPageProcessor modelPageProcessor = ModelPageProcessor.create(null, ModelDate.class);
+        Page page = getMockPage();
+        modelPageProcessor.process(page);
+        ModelDate modelDate = (ModelDate) page.getResultItems().get(ModelDate.class.getCanonicalName());
+        assertThat(DateFormatUtils.format(modelDate.getDate(),"yyyyMMdd")).isEqualTo("20170603");
     }
 
     private Page getMockPage() throws IOException {
