@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static us.codecraft.webmagic.model.annotation.ExtractBy.Source.RawText;
+
 /**
  * The main internal logic of page model extractor.
  *
@@ -125,9 +127,12 @@ class PageModelExtractor {
         ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
         if (extractBy != null) {
             Selector selector = ExtractorUtils.getSelector(extractBy);
-
+            ExtractBy.Source source0 = extractBy.source();
+            if (extractBy.type()== ExtractBy.Type.JsonPath){
+                source0 = RawText;
+            }
             FieldExtractor.Source source = null;
-            switch (extractBy.source()){
+            switch (source0){
                 case RawText:
                     source = FieldExtractor.Source.RawText;
                     break;
