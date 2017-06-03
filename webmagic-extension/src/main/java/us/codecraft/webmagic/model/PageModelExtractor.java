@@ -163,12 +163,12 @@ class PageModelExtractor {
     private void initClassExtractors() {
         Annotation annotation = clazz.getAnnotation(TargetUrl.class);
         if (annotation == null) {
-            targetUrlPatterns.add(Pattern.compile("(.*)"));
+            targetUrlPatterns.add(Pattern.compile(".*"));
         } else {
             TargetUrl targetUrl = (TargetUrl) annotation;
             String[] value = targetUrl.value();
             for (String s : value) {
-                targetUrlPatterns.add(Pattern.compile("(" + s.replace(".", "\\.").replace("*", "[^\"'#]*") + ")"));
+                targetUrlPatterns.add(Pattern.compile(s.replace(".", "\\.").replace("*", "[^\"'#]*")));
             }
             if (!targetUrl.sourceRegion().equals("")) {
                 targetUrlRegionSelector = new XpathSelector(targetUrl.sourceRegion());
@@ -179,7 +179,7 @@ class PageModelExtractor {
             HelpUrl helpUrl = (HelpUrl) annotation;
             String[] value = helpUrl.value();
             for (String s : value) {
-                helpUrlPatterns.add(Pattern.compile("(" + s.replace(".", "\\.").replace("*", "[^\"'#]*") + ")"));
+                helpUrlPatterns.add(Pattern.compile(s.replace(".", "\\.").replace("*", "[^\"'#]*")));
             }
             if (!helpUrl.sourceRegion().equals("")) {
                 helpUrlRegionSelector = new XpathSelector(helpUrl.sourceRegion());

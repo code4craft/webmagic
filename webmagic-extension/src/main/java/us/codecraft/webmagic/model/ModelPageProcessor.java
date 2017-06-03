@@ -74,7 +74,7 @@ class ModelPageProcessor implements PageProcessor {
             for (Pattern targetUrlPattern : urlPatterns) {
                 Matcher matcher = targetUrlPattern.matcher(link);
                 if (matcher.find()) {
-                    page.addTargetRequest(new Request(matcher.group(1)));
+                    page.addTargetRequest(new Request(matcher.group(0)));
                 }
             }
         }
