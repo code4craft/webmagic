@@ -86,8 +86,4 @@ public class SimpleHttpClientTest {
         assertThat(weather).isNotNull();
     }
 
-    @Test
-    public void test_issue409() throws Exception {
-        System.out.println(new SimpleHttpClient(Site.me()).get("https://www.beijing-hyundai.com.cn").getHtml());
-    }
 }
