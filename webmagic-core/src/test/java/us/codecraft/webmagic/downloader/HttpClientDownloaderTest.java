@@ -207,6 +207,22 @@ public class HttpClientDownloaderTest {
     }
 
     @Test
+    public void test_set_site_header() throws Exception {
+        HttpServer server = httpServer(13423);
+        server.get(eq(header("header"), "header-webmagic")).response("ok");
+        Runner.running(server, new Runnable() {
+            @Override
+            public void run() throws Exception {
+                HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+                Request request = new Request();
+                request.setUrl("http://127.0.0.1:13423");
+                Page page = httpClientDownloader.download(request, Site.me().addHeader("header","header-webmagic").toTask());
+                assertThat(page.getRawText()).isEqualTo("ok");
+            }
+        });
+    }
+
+    @Test
     public void test_set_site_cookie() throws Exception {
         HttpServer server = httpServer(13423);
         server.get(eq(cookie("cookie"), "cookie-webmagic")).response("ok");
