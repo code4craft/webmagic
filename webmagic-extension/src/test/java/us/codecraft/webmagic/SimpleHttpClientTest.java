@@ -5,8 +5,6 @@ import org.junit.Test;
 import us.codecraft.webmagic.model.AfterExtractor;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
  * @author code4crafter@gmail.com
  *         Date: 2017/6/3
@@ -79,13 +77,16 @@ public class SimpleHttpClientTest {
         }
     }
 
-    @Ignore
     @Test
     public void test() throws Exception {
-        SimpleHttpClient simpleClient = new SimpleHttpClient(Site.me().setUserAgent(
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.115 Safari/537.36"));
-        Weather weather = simpleClient.get("http://www.weather.com.cn/weather/101020100.shtml", Weather.class);
-        assertThat(weather).isNotNull();
+//        SimpleHttpClient simpleClient = ;
+//        Weather weather = simpleClient.get("http://www.weather.com.cn/weather/101020100.shtml", Weather.class);
+//        assertThat(weather).isNotNull();
+    }
 
+    @Ignore
+    @Test
+    public void test_issue409() throws Exception {
+        System.out.println(new SimpleHttpClient(Site.me()).get("https://www.beijing-hyundai.com.cn").getHtml());
     }
 }
