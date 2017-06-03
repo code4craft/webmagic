@@ -83,14 +83,13 @@ class PageModelExtractor {
             return;
         }
         if (!formatter.formatter().equals(Formatter.DEFAULT_FORMATTER)) {
-            ObjectFormatter objectFormatter = initFormatter(formatter.formatter());
-            objectFormatter.initParam(formatter.value());
+            ObjectFormatter objectFormatter = initFormatter(formatter.formatter(), formatter.value());
             fieldExtractor.setObjectFormatter(objectFormatter);
             return;
         }
         if (!fieldExtractor.isMulti() && !String.class.isAssignableFrom(field.getType())) {
             Class<?> fieldClazz = BasicTypeFormatter.detectBasicClass(field.getType());
-            ObjectFormatter objectFormatter = getObjectFormatter(field, fieldClazz, formatter);
+            ObjectFormatter objectFormatter = initFormatter(ObjectFormatters.get(fieldClazz), formatter.value());
             if (objectFormatter == null) {
                 throw new IllegalStateException("Can't find formatter for field " + field.getName() + " of type " + fieldClazz);
             } else {
@@ -100,30 +99,22 @@ class PageModelExtractor {
             if (!List.class.isAssignableFrom(field.getType())) {
                 throw new IllegalStateException("Field " + field.getName() + " must be list");
             }
-            if (formatter != null) {
-                if (!formatter.subClazz().equals(Void.class)) {
-                    ObjectFormatter objectFormatter = getObjectFormatter(field, formatter.subClazz(), formatter);
-                    if (objectFormatter == null) {
-                        throw new IllegalStateException("Can't find formatter for field " + field.getName() + " of type " + formatter.subClazz());
-                    } else {
-                        fieldExtractor.setObjectFormatter(objectFormatter);
-                    }
+            if (!formatter.subClazz().equals(Void.class)) {
+                ObjectFormatter objectFormatter = initFormatter(ObjectFormatters.get(formatter.subClazz()), formatter.value());
+                if (objectFormatter == null) {
+                    throw new IllegalStateException("Can't find formatter for field " + field.getName() + " of type " + formatter.subClazz());
+                } else {
+                    fieldExtractor.setObjectFormatter(objectFormatter);
                 }
             }
         }
     }
 
-    private ObjectFormatter getObjectFormatter(Field field, Class<?> fieldClazz, Formatter formatter) {
-        ObjectFormatter objectFormatter = initFormatter(ObjectFormatters.get(fieldClazz));
-        if(formatter != null && formatter.value() != null){
-          objectFormatter.initParam(formatter.value());
-        }
-        return objectFormatter;
-    }
-
-    private ObjectFormatter initFormatter(Class<? extends ObjectFormatter> formatterClazz) {
+    private ObjectFormatter initFormatter(Class<? extends ObjectFormatter> formatterClazz, String[] params) {
         try {
-            return formatterClazz.newInstance();
+            ObjectFormatter objectFormatter = formatterClazz.newInstance();
+            objectFormatter.initParam(params);
+            return objectFormatter;
         } catch (InstantiationException e) {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
