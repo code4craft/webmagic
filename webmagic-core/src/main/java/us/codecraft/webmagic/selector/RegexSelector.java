@@ -23,27 +23,33 @@ public class RegexSelector implements Selector {
     private int group = 1;
 
     public RegexSelector(String regexStr, int group) {
-        if (StringUtils.isBlank(regexStr)) {
-            throw new IllegalArgumentException("regex must not be empty");
-        }
-        
-        try {
-            regex = Pattern.compile(regexStr, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
-            // Check bracket for regex group. Add default group 1 if there is no group.
-            // Only check if there exists the valid left parenthesis, leave regexp validation for Pattern.
-            if ( regex.matcher("").groupCount() == 0 ){
-                regexStr = "(" + regexStr + ")";
-                regex = Pattern.compile(regexStr, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
-            }
-            this.regexStr = regexStr;
-        } catch (PatternSyntaxException e) {
-            throw new IllegalArgumentException("invalid regex", e);
-        }
+        this.compileRegex(regexStr);
         this.group = group;
     }
 
+    private void compileRegex(String regexStr) {
+        if (StringUtils.isBlank(regexStr)) {
+            throw new IllegalArgumentException("regex must not be empty");
+        }
+        try {
+            this.regex = Pattern.compile(regexStr, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+            this.regexStr = regexStr;
+        } catch (PatternSyntaxException e) {
+            throw new IllegalArgumentException("invalid regex "+regexStr, e);
+        }
+    }
+
+    /**
+     * Create a RegexSelector. When there is no capture group, the value is set to 0 else set to 1.
+     * @param regexStr
+     */
     public RegexSelector(String regexStr) {
-        this(regexStr, 1);
+        this.compileRegex(regexStr);
+        if (regex.matcher("").groupCount() == 0) {
+            this.group = 0;
+        } else {
+            this.group = 1;
+        }
     }
 
     @Override
