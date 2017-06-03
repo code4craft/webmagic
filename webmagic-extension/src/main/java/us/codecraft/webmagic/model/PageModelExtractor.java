@@ -79,15 +79,14 @@ class PageModelExtractor {
     private void checkFormat(Field field, FieldExtractor fieldExtractor) {
         //check custom formatter
         Formatter formatter = field.getAnnotation(Formatter.class);
-        if (formatter != null && !formatter.formatter().equals(ObjectFormatter.class)) {
-            if (formatter != null) {
-                if (!formatter.formatter().equals(ObjectFormatter.class)) {
-                    ObjectFormatter objectFormatter = initFormatter(formatter.formatter());
-                    objectFormatter.initParam(formatter.value());
-                    fieldExtractor.setObjectFormatter(objectFormatter);
-                    return;
-                }
-            }
+        if (formatter == null) {
+            return;
+        }
+        if (!formatter.formatter().equals(Formatter.DEFAULT_FORMATTER)) {
+            ObjectFormatter objectFormatter = initFormatter(formatter.formatter());
+            objectFormatter.initParam(formatter.value());
+            fieldExtractor.setObjectFormatter(objectFormatter);
+            return;
         }
         if (!fieldExtractor.isMulti() && !String.class.isAssignableFrom(field.getType())) {
             Class<?> fieldClazz = BasicTypeFormatter.detectBasicClass(field.getType());
@@ -126,11 +125,10 @@ class PageModelExtractor {
         try {
             return formatterClazz.newInstance();
         } catch (InstantiationException e) {
-            logger.error("init ObjectFormatter fail", e);
+            throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
-            logger.error("init ObjectFormatter fail", e);
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     private FieldExtractor getAnnotationExtractByUrl(Class clazz, Field field) {
@@ -201,7 +199,7 @@ class PageModelExtractor {
             }
 
             fieldExtractor = new FieldExtractor(field, selector, source,
-                    extractBy.notNull(), extractBy.multi() || List.class.isAssignableFrom(field.getType()));
+                    extractBy.notNull(), List.class.isAssignableFrom(field.getType()));
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
                 fieldExtractor.setSetterMethod(setterMethod);

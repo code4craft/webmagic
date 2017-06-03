@@ -20,7 +20,7 @@ public class PageMapperTest {
 
     public static class GithubRepo {
 
-        @ExtractBy(type = ExtractBy.Type.JsonPath, value = "$.name")
+        @ExtractBy(type = ExtractBy.Type.JsonPath, value = "$.name",source = ExtractBy.Source.RawText)
         private String name;
 
         public String getName() {

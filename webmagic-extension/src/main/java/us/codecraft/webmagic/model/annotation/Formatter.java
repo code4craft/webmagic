@@ -16,6 +16,8 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 public @interface Formatter {
 
+    Class<ObjectFormatter> DEFAULT_FORMATTER = ObjectFormatter.class;
+
     /**
      * Set formatter params.
      *
@@ -36,6 +38,6 @@ public @interface Formatter {
      * If there are more than one formatter for a class, just specify the implement.
      * @return implement
      */
-    Class<? extends ObjectFormatter> formatter() default ObjectFormatter.class;
+    Class<? extends ObjectFormatter> formatter() default DEFAULT_FORMATTER;
 
 }
