@@ -128,7 +128,7 @@ class PageModelExtractor {
 
             FieldExtractor.Source source = null;
             switch (extractBy.source()){
-                case  RawText:
+                case RawText:
                     source = FieldExtractor.Source.RawText;
                     break;
                 case RawHtml:
@@ -144,10 +144,7 @@ class PageModelExtractor {
 
             fieldExtractor = new FieldExtractor(field, selector, source,
                     extractBy.notNull(), List.class.isAssignableFrom(field.getType()));
-            Method setterMethod = getSetterMethod(clazz, field);
-            if (setterMethod != null) {
-                fieldExtractor.setSetterMethod(setterMethod);
-            }
+            fieldExtractor.setSetterMethod(getSetterMethod(clazz, field));
         }
         return fieldExtractor;
     }

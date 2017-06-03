@@ -25,19 +25,14 @@ public class ExtractorUtils {
                 selector = new RegexSelector(value);
                 break;
             case XPath:
-                selector = getXpathSelector(value);
+                selector = new XpathSelector(value);
                 break;
             case JsonPath:
                 selector = new JsonPathSelector(value);
                 break;
             default:
-                selector = getXpathSelector(value);
+                selector = new XpathSelector(value);
         }
-        return selector;
-    }
-
-    private static Selector getXpathSelector(String value) {
-        Selector selector = new XpathSelector(value);
         return selector;
     }
 

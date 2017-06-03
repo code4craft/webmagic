@@ -4,6 +4,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
+import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.model.annotation.Formatter;
 import us.codecraft.webmagic.model.formatter.DateFormatter;
 
@@ -74,6 +75,20 @@ public class PageModelExtractorTest {
 
     }
 
+    public static class ModelJsonStr {
+
+        @ExtractBy(type = ExtractBy.Type.JsonPath, value = "$.name",source = ExtractBy.Source.RawText)
+        private String name;
+
+    }
+
+    public static class ModelUrl {
+
+        @ExtractByUrl("https://api\\.github\\.com/repos/\\w+/(\\w+)")
+        private String name;
+
+    }
+
     @Test
     public void testXpath() throws Exception {
         ModelDateStr modelDate = (ModelDateStr) PageModelExtractor.create(ModelDateStr.class).process(pageMocker.getMockPage());
@@ -114,5 +129,17 @@ public class PageModelExtractorTest {
     public void testExtractCustomList() throws Exception {
         ModelCustomList modelDate = (ModelCustomList) PageModelExtractor.create(ModelCustomList.class).process(pageMocker.getMockPage());
         assertThat(modelDate.dates).containsExactly(DateUtils.parseDate("20170601", "yyyyMMdd"), DateUtils.parseDate("20170602", "yyyyMMdd"), DateUtils.parseDate("20170603", "yyyyMMdd"), DateUtils.parseDate("20170604", "yyyyMMdd"));
+    }
+
+    @Test
+    public void testExtractJson() throws Exception {
+        ModelJsonStr modelDate = (ModelJsonStr) PageModelExtractor.create(ModelJsonStr.class).process(pageMocker.getMockJsonPage());
+        assertThat(modelDate.name).isEqualTo("webmagic");
+    }
+
+    @Test
+    public void testExtractByUrl() throws Exception {
+        ModelUrl modelDate = (ModelUrl) PageModelExtractor.create(ModelUrl.class).process(pageMocker.getMockJsonPage());
+        assertThat(modelDate.name).isEqualTo("webmagic");
     }
 }
