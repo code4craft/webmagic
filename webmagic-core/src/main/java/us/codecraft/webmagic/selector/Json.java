@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import us.codecraft.xsoup.XTokenQueue;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * parse json
@@ -52,6 +53,15 @@ public class Json extends PlainText {
     @Override
     public Selectable jsonPath(String jsonPath) {
         JsonPathSelector jsonPathSelector = new JsonPathSelector(jsonPath);
-        return selectList(jsonPathSelector,getSourceTexts());
+        return new Json(selectList(jsonPathSelector,getSourceTexts()).all());
+    }
+    
+    @Override
+    public List<Selectable> nodes(){
+        List<Selectable> nodes = new ArrayList<Selectable>(getSourceTexts().size());
+        for (String string : getSourceTexts()) {
+            nodes.add(new Json(string));
+        }
+        return nodes;
     }
 }
