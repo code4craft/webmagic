@@ -4,6 +4,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,9 @@ import java.util.Map;
  * @author code4crafter@gmail.com
  *         Date: 17/4/8
  */
-public class HttpRequestBody {
+public class HttpRequestBody implements Serializable {
+
+    private static final long serialVersionUID = 5659170945717023595L;
 
     public static abstract class ContentType {
 
