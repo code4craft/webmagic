@@ -410,7 +410,6 @@ public class Spider implements Runnable, Task {
     }
 
     private void onDownloadSuccess(Request request, Page page) {
-        onSuccess(request);
         if (site.getAcceptStatCode().contains(page.getStatusCode())){
             pageProcessor.process(page);
             extractAndAddRequests(page, spawnUrl);
@@ -431,7 +430,6 @@ public class Spider implements Runnable, Task {
             // for cycle retry
             doCycleRetry(request);
         }
-        onError(request);
     }
 
     private void doCycleRetry(Request request) {
