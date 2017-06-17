@@ -59,14 +59,19 @@ public class HttpUriRequestConverter {
 
     private HttpUriRequest convertHttpUriRequest(Request request, Site site, Proxy proxy) {
         RequestBuilder requestBuilder = selectRequestMethod(request).setUri(request.getUrl());
-        if (site.getHeaders() != null) {
-            for (Map.Entry<String, String> headerEntry : site.getHeaders().entrySet()) {
-                requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
-            }
-        }
 
         RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
+
+        // 提供设置 CircularRedirectsAllowed 的机会
+        requestConfigBuilder.setCircularRedirectsAllowed(request.getCircularRedirectsAllowed());
+
         if (site != null) {
+            if (site.getHeaders() != null) {
+                for (Map.Entry<String, String> headerEntry : site.getHeaders().entrySet()) {
+                    requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
+                }
+            }
+
             requestConfigBuilder.setConnectionRequestTimeout(site.getTimeOut())
                     .setSocketTimeout(site.getTimeOut())
                     .setConnectTimeout(site.getTimeOut())

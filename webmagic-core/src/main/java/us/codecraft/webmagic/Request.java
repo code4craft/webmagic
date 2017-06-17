@@ -45,6 +45,11 @@ public class Request implements Serializable {
      */
     private long priority;
 
+    /**
+     * 一些循环跳转的url需要这个选项
+     */
+    private boolean circularRedirectsAllowed = false;
+
     public Request() {
     }
 
@@ -162,6 +167,14 @@ public class Request implements Serializable {
         this.requestBody = requestBody;
     }
 
+    public boolean getCircularRedirectsAllowed() {
+        return circularRedirectsAllowed;
+    }
+
+    public void setCircularRedirectsAllowed(boolean circularRedirectsAllowed) {
+        this.circularRedirectsAllowed = circularRedirectsAllowed;
+    }
+
     @Override
     public String toString() {
         return "Request{" +
@@ -173,5 +186,4 @@ public class Request implements Serializable {
                 ", cookies="+ cookies+
                 '}';
     }
-
 }
