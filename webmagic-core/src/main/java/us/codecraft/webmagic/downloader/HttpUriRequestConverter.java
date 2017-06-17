@@ -2,6 +2,7 @@ package us.codecraft.webmagic.downloader;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthState;
+import org.apache.http.auth.ChallengeState;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.config.CookieSpecs;
@@ -41,7 +42,7 @@ public class HttpUriRequestConverter {
         HttpClientContext httpContext = new HttpClientContext();
         if (proxy != null && proxy.getUsername() != null) {
             AuthState authState = new AuthState();
-            authState.update(new BasicScheme(), new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
+            authState.update(new BasicScheme(ChallengeState.PROXY), new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
             httpContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, authState);
         }
         if (request.getCookies() != null && !request.getCookies().isEmpty()) {

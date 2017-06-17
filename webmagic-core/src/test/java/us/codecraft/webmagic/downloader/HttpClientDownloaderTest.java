@@ -10,7 +10,6 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
@@ -255,15 +254,21 @@ public class HttpClientDownloaderTest {
         });
     }
 
-    @Ignore("need proxy server")
     @Test
-    public void test_download_by_SimpleProxyProvider(){
-        HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
-        httpClientDownloader.setProxyProvider(SimpleProxyProvider.from(new Proxy("127.0.0.1", 1087)));
-        Request request = new Request();
-        request.setUrl("https://www.baidu.com");
-        Page page = httpClientDownloader.download(request, Site.me().toTask());
-        assertThat(page.isDownloadSuccess());
+    public void test_download_auth_by_SimpleProxyProvider() throws Exception {
+        HttpServer server = httpServer(13423);
+        server.get(eq(header("Proxy-Authorization"), "Basic dXNlcm5hbWU6cGFzc3dvcmQ=")).response("ok");
+        Runner.running(server, new Runnable() {
+            @Override
+            public void run() throws Exception {
+                HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+                httpClientDownloader.setProxyProvider(SimpleProxyProvider.from(new Proxy("127.0.0.1", 13423, "username", "password")));
+                Request request = new Request();
+                request.setUrl("http://www.baidu.com");
+                Page page = httpClientDownloader.download(request, Site.me().toTask());
+                assertThat(page.getRawText()).isEqualTo("ok");
+            }
+        });
     }
 
 }
