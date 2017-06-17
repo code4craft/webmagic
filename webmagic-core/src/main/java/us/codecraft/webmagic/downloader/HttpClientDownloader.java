@@ -76,7 +76,6 @@ public class HttpClientDownloader extends AbstractDownloader {
         if (task == null || task.getSite() == null) {
             throw new NullPointerException("task or site can not be null");
         }
-        logger.debug("downloading page {}", request.getUrl());
         CloseableHttpResponse httpResponse = null;
         CloseableHttpClient httpClient = getHttpClient(task.getSite());
         Proxy proxy = proxyProvider != null ? proxyProvider.getProxy(task) : null;
@@ -86,7 +85,7 @@ public class HttpClientDownloader extends AbstractDownloader {
             httpResponse = httpClient.execute(requestContext.getHttpUriRequest(), requestContext.getHttpClientContext());
             page = handleResponse(request, task.getSite().getCharset(), httpResponse, task);
             onSuccess(request);
-            logger.debug("downloading page success {}", page);
+            logger.info("downloading page success {}", request.getUrl());
             return page;
         } catch (IOException e) {
             logger.warn("download page {} error", request.getUrl(), e);

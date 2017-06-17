@@ -418,6 +418,8 @@ public class Spider implements Runnable, Task {
                     pipeline.process(page.getResultItems(), this);
                 }
             }
+        } else {
+            logger.info("page status code error, page {} , code: {}", request.getUrl(), page.getStatusCode());
         }
         sleep(site.getSleepTime());
         return;
