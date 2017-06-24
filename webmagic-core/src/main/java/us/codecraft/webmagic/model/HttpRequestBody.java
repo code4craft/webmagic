@@ -29,11 +29,14 @@ public class HttpRequestBody implements Serializable {
         public static final String MULTIPART = "multipart/form-data";
     }
 
-    private final byte[] body;
+    private byte[] body;
 
-    private final String contentType;
+    private String contentType;
 
-    private final String encoding;
+    private String encoding;
+
+    public HttpRequestBody() {
+    }
 
     public HttpRequestBody(byte[] body, String contentType, String encoding) {
         this.body = body;
@@ -47,6 +50,18 @@ public class HttpRequestBody implements Serializable {
 
     public String getEncoding() {
         return encoding;
+    }
+
+    public void setBody(byte[] body) {
+        this.body = body;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
     }
 
     public static HttpRequestBody json(String json, String encoding) throws UnsupportedEncodingException {
