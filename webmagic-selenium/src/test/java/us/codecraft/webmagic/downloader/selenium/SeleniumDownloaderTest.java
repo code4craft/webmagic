@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.downloader.selenium;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
@@ -12,6 +13,7 @@ import us.codecraft.webmagic.Task;
  *         Time: 下午2:46 <br>
  */
 public class SeleniumDownloaderTest {
+    @Ignore
     @Test
     public void test() {
         SeleniumDownloader seleniumDownloader = new SeleniumDownloader();
@@ -29,6 +31,7 @@ public class SeleniumDownloaderTest {
         System.out.println(page.getHtml().$("#waterfall").links().regex(".*pins.*").all());
     }
 
+    @Ignore
     @Test
     public void testBaiduWenku() {
         SeleniumDownloader seleniumDownloader = new SeleniumDownloader();

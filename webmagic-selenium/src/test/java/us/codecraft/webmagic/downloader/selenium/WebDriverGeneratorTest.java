@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import java.io.IOException;
 
 public class WebDriverGeneratorTest {
+    @Ignore
     @Test
     public void test() {
         WebDriverGenerator generator=new WebDriverGenerator();
