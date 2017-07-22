@@ -46,6 +46,8 @@ public class Page {
 
     private boolean downloadSuccess = true;
 
+    private byte[] bytes;
+
     private List<Request> targetRequests = new ArrayList<Request>();
     
     public Page() {
@@ -226,6 +228,14 @@ public class Page {
 
     public void setDownloadSuccess(boolean downloadSuccess) {
         this.downloadSuccess = downloadSuccess;
+    }
+
+    public byte[] getBytes() {
+        return bytes;
+    }
+
+    public void setBytes(byte[] bytes) {
+        this.bytes = bytes;
     }
 
     @Override

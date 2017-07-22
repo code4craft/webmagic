@@ -108,9 +108,13 @@ public class HttpClientDownloader extends AbstractDownloader {
     }
 
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
-        String content = getResponseContent(charset, httpResponse);
+        byte[] bytes = IOUtils.toByteArray(httpResponse.getEntity().getContent());
+        String contentType = httpResponse.getEntity().getContentType() == null ? "" : httpResponse.getEntity().getContentType().getValue();
         Page page = new Page();
-        page.setRawText(content);
+        page.setBytes(bytes);
+        if (!request.isBinarayContent()){
+            page.setRawText(getResponseContent(charset, contentType, bytes));
+        }
         page.setUrl(new PlainText(request.getUrl()));
         page.setRequest(request);
         page.setStatusCode(httpResponse.getStatusLine().getStatusCode());
@@ -121,22 +125,21 @@ public class HttpClientDownloader extends AbstractDownloader {
         return page;
     }
 
-    private String getResponseContent(String charset, HttpResponse httpResponse) throws IOException {
+    private String getResponseContent(String charset, String contentType, byte[] bytes) throws IOException {
         if (charset == null) {
-            byte[] contentBytes = IOUtils.toByteArray(httpResponse.getEntity().getContent());
-            String htmlCharset = getHtmlCharset(httpResponse, contentBytes);
+            String htmlCharset = getHtmlCharset(contentType, bytes);
             if (htmlCharset != null) {
-                return new String(contentBytes, htmlCharset);
+                return new String(bytes, htmlCharset);
             } else {
                 logger.warn("Charset autodetect failed, use {} as charset. Please specify charset in Site.setCharset()", Charset.defaultCharset());
-                return new String(contentBytes);
+                return new String(bytes);
             }
         } else {
-            return IOUtils.toString(httpResponse.getEntity().getContent(), charset);
+            return new String(bytes, charset);
         }
     }
 
-    private String getHtmlCharset(HttpResponse httpResponse, byte[] contentBytes) throws IOException {
-        return CharsetUtils.detectCharset(httpResponse.getEntity().getContentType() == null ? "" : httpResponse.getEntity().getContentType().getValue(), contentBytes);
+    private String getHtmlCharset(String contentType, byte[] contentBytes) throws IOException {
+        return CharsetUtils.detectCharset(contentType, contentBytes);
     }
 }

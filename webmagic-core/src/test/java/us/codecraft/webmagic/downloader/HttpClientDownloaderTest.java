@@ -271,4 +271,22 @@ public class HttpClientDownloaderTest {
         });
     }
 
+    @Test
+    public void test_download_binary_content() throws Exception {
+        HttpServer server = httpServer(13423);
+        server.response("binary");
+        Runner.running(server, new Runnable() {
+            @Override
+            public void run() throws Exception {
+                final HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+                Request request = new Request();
+                request.setBinarayContent(true);
+                request.setUrl("http://127.0.0.1:13423/");
+                Page page = httpClientDownloader.download(request, Site.me().toTask());
+                assertThat(page.getRawText()).isNull();
+                assertThat(page.getBytes()).isEqualTo("binary".getBytes());
+            }
+        });
+    }
+
 }
