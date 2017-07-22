@@ -108,7 +108,7 @@ public class UrlUtils {
         return urlList;
     }
 
-    private static final Pattern patternForCharset = Pattern.compile("charset\\s*=\\s*['\"]*([^\\s;'\"]*)");
+    private static final Pattern patternForCharset = Pattern.compile("charset\\s*=\\s*['\"]*([^\\s;'\"]*)", Pattern.CASE_INSENSITIVE);
 
     public static String getCharset(String contentType) {
         Matcher matcher = patternForCharset.matcher(contentType);
