@@ -64,24 +64,36 @@ public class HttpRequestBody implements Serializable {
         this.encoding = encoding;
     }
 
-    public static HttpRequestBody json(String json, String encoding) throws UnsupportedEncodingException {
-        return new HttpRequestBody(json.getBytes(encoding), ContentType.JSON, encoding);
+    public static HttpRequestBody json(String json, String encoding) {
+        try {
+            return new HttpRequestBody(json.getBytes(encoding), ContentType.JSON, encoding);
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalArgumentException("illegal encoding " + encoding, e);
+        }
     }
 
-    public static HttpRequestBody xml(String xml, String encoding) throws UnsupportedEncodingException {
-        return new HttpRequestBody(xml.getBytes(encoding), ContentType.XML, encoding);
+    public static HttpRequestBody xml(String xml, String encoding) {
+        try {
+            return new HttpRequestBody(xml.getBytes(encoding), ContentType.XML, encoding);
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalArgumentException("illegal encoding " + encoding, e);
+        }
     }
 
-    public static HttpRequestBody custom(byte[] body, String contentType, String encoding) throws UnsupportedEncodingException {
+    public static HttpRequestBody custom(byte[] body, String contentType, String encoding) {
         return new HttpRequestBody(body, contentType, encoding);
     }
 
-    public static HttpRequestBody form(Map<String,Object> params, String encoding) throws UnsupportedEncodingException {
+    public static HttpRequestBody form(Map<String,Object> params, String encoding){
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(params.size());
         for (Map.Entry<String, Object> entry : params.entrySet()) {
             nameValuePairs.add(new BasicNameValuePair(entry.getKey(), String.valueOf(entry.getValue())));
         }
-        return new HttpRequestBody(URLEncodedUtils.format(nameValuePairs, encoding).getBytes(encoding), ContentType.FORM, encoding);
+        try {
+            return new HttpRequestBody(URLEncodedUtils.format(nameValuePairs, encoding).getBytes(encoding), ContentType.FORM, encoding);
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalArgumentException("illegal encoding " + encoding, e);
+        }
     }
 
     public byte[] getBody() {
