@@ -16,12 +16,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class HttpUriRequestConverterTest {
 
-    @Test(expected = IllegalArgumentException.class)
-    public void test_illegal_uri() throws Exception {
-        HttpUriRequestConverter httpUriRequestConverter = new HttpUriRequestConverter();
-        httpUriRequestConverter.convert(new Request("http://bj.zhongkao.com/beikao/yimo/##"), Site.me(), null);
-    }
-
     @Test
     public void test_illegal_uri_correct() throws Exception {
         HttpUriRequestConverter httpUriRequestConverter = new HttpUriRequestConverter();
