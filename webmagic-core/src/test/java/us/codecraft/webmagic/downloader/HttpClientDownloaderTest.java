@@ -289,4 +289,37 @@ public class HttpClientDownloaderTest {
         });
     }
 
+    @Test
+    public void test_download_set_charset() throws Exception {
+        HttpServer server = httpServer(13423);
+        server.response(header("Content-Type","text/html; charset=utf-8")).response("hello world!");
+        Runner.running(server, new Runnable() {
+            @Override
+            public void run() throws Exception {
+                final HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+                Request request = new Request();
+                request.setUrl("http://127.0.0.1:13423/");
+                Page page = httpClientDownloader.download(request, Site.me().toTask());
+                assertThat(page.getCharset()).isEqualTo("utf-8");
+            }
+        });
+    }
+
+    @Test
+    public void test_download_set_request_charset() throws Exception {
+        HttpServer server = httpServer(13423);
+        server.response("hello world!");
+        Runner.running(server, new Runnable() {
+            @Override
+            public void run() throws Exception {
+                final HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+                Request request = new Request();
+                request.setCharset("utf-8");
+                request.setUrl("http://127.0.0.1:13423/");
+                Page page = httpClientDownloader.download(request, Site.me().setCharset("gbk").toTask());
+                assertThat(page.getCharset()).isEqualTo("utf-8");
+            }
+        });
+    }
+
 }

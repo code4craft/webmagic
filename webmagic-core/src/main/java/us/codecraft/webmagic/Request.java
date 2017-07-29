@@ -51,6 +51,8 @@ public class Request implements Serializable {
      */
     private boolean binaryContent = false;
 
+    private String charset;
+
     public Request() {
     }
 
@@ -174,6 +176,14 @@ public class Request implements Serializable {
 
     public void setBinaryContent(boolean binaryContent) {
         this.binaryContent = binaryContent;
+    }
+
+    public String getCharset() {
+        return charset;
+    }
+
+    public void setCharset(String charset) {
+        this.charset = charset;
     }
 
     @Override
