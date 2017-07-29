@@ -113,7 +113,11 @@ public class HttpClientDownloader extends AbstractDownloader {
         Page page = new Page();
         page.setBytes(bytes);
         if (!request.isBinaryContent()){
-            page.setRawText(getResponseContent(charset, contentType, bytes));
+            if (charset == null) {
+                charset = getHtmlCharset(contentType, bytes);
+            }
+            page.setCharset(charset);
+            page.setRawText(new String(bytes, charset));
         }
         page.setUrl(new PlainText(request.getUrl()));
         page.setRequest(request);
@@ -125,21 +129,12 @@ public class HttpClientDownloader extends AbstractDownloader {
         return page;
     }
 
-    private String getResponseContent(String charset, String contentType, byte[] bytes) throws IOException {
-        if (charset == null) {
-            String htmlCharset = getHtmlCharset(contentType, bytes);
-            if (htmlCharset != null) {
-                return new String(bytes, htmlCharset);
-            } else {
-                logger.warn("Charset autodetect failed, use {} as charset. Please specify charset in Site.setCharset()", Charset.defaultCharset());
-                return new String(bytes);
-            }
-        } else {
-            return new String(bytes, charset);
-        }
-    }
-
     private String getHtmlCharset(String contentType, byte[] contentBytes) throws IOException {
-        return CharsetUtils.detectCharset(contentType, contentBytes);
+        String charset = CharsetUtils.detectCharset(contentType, contentBytes);
+        if (charset == null) {
+            charset = Charset.defaultCharset().name();
+            logger.warn("Charset autodetect failed, use {} as charset. Please specify charset in Site.setCharset()", Charset.defaultCharset());
+        }
+        return charset;
     }
 }
