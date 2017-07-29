@@ -112,7 +112,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         String contentType = httpResponse.getEntity().getContentType() == null ? "" : httpResponse.getEntity().getContentType().getValue();
         Page page = new Page();
         page.setBytes(bytes);
-        if (!request.isBinarayContent()){
+        if (!request.isBinaryContent()){
             page.setRawText(getResponseContent(charset, contentType, bytes));
         }
         page.setUrl(new PlainText(request.getUrl()));

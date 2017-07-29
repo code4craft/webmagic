@@ -8,6 +8,7 @@ import us.codecraft.webmagic.utils.HttpConstant;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +50,8 @@ public class Page {
     private byte[] bytes;
 
     private List<Request> targetRequests = new ArrayList<Request>();
+
+    private String charset;
     
     public Page() {
     }
@@ -238,6 +241,14 @@ public class Page {
         this.bytes = bytes;
     }
 
+    public String getCharset() {
+        return charset;
+    }
+
+    public void setCharset(String charset) {
+        this.charset = charset;
+    }
+
     @Override
     public String toString() {
         return "Page{" +
@@ -249,8 +260,10 @@ public class Page {
                 ", url=" + url +
                 ", headers=" + headers +
                 ", statusCode=" + statusCode +
-                ", success=" + downloadSuccess +
+                ", downloadSuccess=" + downloadSuccess +
                 ", targetRequests=" + targetRequests +
+                ", charset='" + charset + '\'' +
+                ", bytes=" + Arrays.toString(bytes) +
                 '}';
     }
 }

@@ -280,7 +280,7 @@ public class HttpClientDownloaderTest {
             public void run() throws Exception {
                 final HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
                 Request request = new Request();
-                request.setBinarayContent(true);
+                request.setBinaryContent(true);
                 request.setUrl("http://127.0.0.1:13423/");
                 Page page = httpClientDownloader.download(request, Site.me().toTask());
                 assertThat(page.getRawText()).isNull();
