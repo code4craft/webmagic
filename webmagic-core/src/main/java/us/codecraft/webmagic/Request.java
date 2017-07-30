@@ -174,16 +174,18 @@ public class Request implements Serializable {
         return binaryContent;
     }
 
-    public void setBinaryContent(boolean binaryContent) {
+    public Request setBinaryContent(boolean binaryContent) {
         this.binaryContent = binaryContent;
+        return this;
     }
 
     public String getCharset() {
         return charset;
     }
 
-    public void setCharset(String charset) {
+    public Request setCharset(String charset) {
         this.charset = charset;
+        return this;
     }
 
     @Override
