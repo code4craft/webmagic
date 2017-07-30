@@ -6,7 +6,7 @@
         <version>7</version>
     </parent>
     <groupId>us.codecraft</groupId>
-    <version>0.7.2</version>
+    <version>0.7.3</version>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <properties>
@@ -233,7 +233,7 @@
                 <version>2.10.4</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
-                    <doctitle>WebMagic 0.7.2</doctitle>
+                    <doctitle>WebMagic 0.7.3</doctitle>
                     <locale>en_US</locale>
                 </configuration>
                 <executions>
