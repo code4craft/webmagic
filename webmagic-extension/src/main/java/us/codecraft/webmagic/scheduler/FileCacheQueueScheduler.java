@@ -1,13 +1,19 @@
 package us.codecraft.webmagic.scheduler;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
 import java.io.*;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
@@ -138,10 +144,19 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
             fileUrlReader = new BufferedReader(new FileReader(getFileName(fileUrlAllName)));
             int lineReaded = 0;
             while ((line = fileUrlReader.readLine()) != null) {
-                urls.add(line.trim());
+            	String[] items = line.split("###");
+                urls.add(items[0].trim());
                 lineReaded++;
                 if (lineReaded > cursor.get()) {
-                    queue.add(new Request(line));
+                	Request r = new Request(items[0].trim());
+                    if(items.length == 2){
+                        String extraStr =  items[1];
+                        JSONObject extras = JSON.parseObject(extraStr);
+                        for (Map.Entry<String, Object> entry : extras.entrySet()) {
+                            r.putExtra(entry.getKey(),entry.getValue());
+                        }
+                    }
+                    queue.add(r);
                 }
             }
         } finally {
@@ -183,7 +198,8 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
             init(task);
         }
         queue.add(request);
-        fileUrlWriter.println(request.getUrl());
+        Map<String,Object> extras = request.getExtras();
+		fileUrlWriter.println(MapUtils.isEmpty(extras)? request.getUrl() : request.getUrl()+"###"+ JSON.toJSONString(extras));
     }
 
     @Override
