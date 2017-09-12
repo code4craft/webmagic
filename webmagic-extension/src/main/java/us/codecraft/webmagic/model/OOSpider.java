@@ -53,10 +53,6 @@ public class OOSpider<T> extends Spider {
         this.modelPageProcessor = modelPageProcessor;
     }
 
-    public OOSpider(PageProcessor pageProcessor) {
-        super(pageProcessor);
-    }
-
     /**
      * create a spider
      *
