@@ -373,7 +373,9 @@ public class Spider implements Runnable, Task {
         for (Pipeline pipeline : pipelines) {
             destroyEach(pipeline);
         }
-        threadPool.shutdown();
+        if (executorService == null) {
+            threadPool.shutdown();
+        }
     }
 
     private void destroyEach(Object object) {
