@@ -7,3 +7,4 @@ out/
 .settings/
 bin/
 .myeclipse
+webmagic-core/module_webmagic-core.xml
