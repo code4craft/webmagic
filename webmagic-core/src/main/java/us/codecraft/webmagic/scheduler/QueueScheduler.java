@@ -26,7 +26,7 @@ public class QueueScheduler extends DuplicateRemovedScheduler implements Monitor
     }
 
     @Override
-    public synchronized Request poll(Task task) {
+    public Request poll(Task task) {
         return queue.poll();
     }
 

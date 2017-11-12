@@ -22,9 +22,9 @@ public class ObjectFormatters {
         try {
             formatterMap.put(objectFormatter.newInstance().clazz(), objectFormatter);
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

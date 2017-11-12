@@ -19,12 +19,12 @@ public class SpiderTest {
     @Ignore("long time")
     @Test
     public void testStartAndStop() throws InterruptedException {
-        Spider spider = Spider.create(new SimplePageProcessor("http://www.oschina.net/", "http://www.oschina.net/*")).addPipeline(new Pipeline() {
+        Spider spider = Spider.create(new SimplePageProcessor( "http://www.oschina.net/*")).addPipeline(new Pipeline() {
             @Override
             public void process(ResultItems resultItems, Task task) {
                 System.out.println(1);
             }
-        }).thread(1);
+        }).thread(1).addUrl("http://www.oschina.net/");
         spider.start();
         Thread.sleep(10000);
         spider.stop();

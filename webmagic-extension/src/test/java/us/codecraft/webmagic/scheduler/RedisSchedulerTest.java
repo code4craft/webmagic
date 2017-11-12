@@ -7,6 +7,8 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * @author code4crafter@gmail.com <br>
  */
@@ -37,7 +39,7 @@ public class RedisSchedulerTest {
         request.putExtra("1","2");
         redisScheduler.push(request, task);
         Request poll = redisScheduler.poll(task);
-        System.out.println(poll);
+        assertThat(poll).isEqualTo(request);
 
     }
 }

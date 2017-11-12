@@ -52,4 +52,5 @@ public class JsonPathSelectorTest {
         JSONObject object2=JSON.parseObject("{\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"category\":\"reference\",\"price\":8.95}");
         assertThat(object1).isEqualTo(object2);
     }
+
 }

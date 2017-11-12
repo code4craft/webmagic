@@ -1,4 +1,4 @@
-![logo](https://raw.github.com/code4craft/webmagic/master/assets/logo.jpg)
+![logo](http://webmagic.io/images/logo.jpeg)
 
 
 [![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
@@ -6,9 +6,8 @@
 
 官方网站[http://webmagic.io/](http://webmagic.io/)
 
->webmagic是一个开源的Java垂直爬虫框架，目标是简化爬虫的开发流程，让开发者专注于逻辑功能的开发。webmagic的核心非常简单，但是覆盖爬虫的整个流程，也是很好的学习爬虫开发的材料。作者曾经在前公司进行过一年的垂直爬虫的开发，webmagic就是为了解决爬虫开发的一些重复劳动而产生的框架。
+>webmagic是一个开源的Java垂直爬虫框架，目标是简化爬虫的开发流程，让开发者专注于逻辑功能的开发。webmagic的核心非常简单，但是覆盖爬虫的整个流程，也是很好的学习爬虫开发的材料。
 
->web爬虫是一种技术，webmagic致力于将这种技术的实现成本降低，但是出于对资源提供者的尊重，webmagic不会做反封锁的事情，包括：验证码破解、代理切换、自动登录等。
 
 webmagic的主要特色：
 
@@ -39,12 +38,12 @@ webmagic使用maven管理依赖，在项目中添加对应的依赖即可使用w
 <dependency>
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-core</artifactId>
-    <version>0.5.3</version>
+    <version>0.7.3</version>
 </dependency>
 <dependency>
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-extension</artifactId>
-    <version>0.5.3</version>
+    <version>0.7.3</version>
 </dependency>
 ```
         
@@ -162,36 +161,12 @@ public class OschinaBlog {
 
 webmagic-samples目录里有一些定制PageProcessor以抽取不同站点的例子。
 
-webmagic的使用可以参考：[oschina openapi 应用：博客搬家](http://my.oschina.net/oscfox/blog/194507)
+webmagic的使用可以参考：[oschina openapi 应用：博客搬家](https://git.oschina.net/yashin/MoveBlog)
 
 
 ### 协议
 
 webmagic遵循[Apache 2.0协议](http://opensource.org/licenses/Apache-2.0)
-
-### 贡献者:
-
-以下是为WebMagic提交过代码或者issue的朋友:
-
-* [ccliangbo](https://github.com/ccliangbo)
-* [yuany](https://github.com/yuany)
-* [yxssfxwzy](https://github.com/yxssfxwzy)
-* [linkerlin](https://github.com/linkerlin)
-* [d0ngw](https://github.com/d0ngw)
-* [xuchaoo](https://github.com/xuchaoo)
-* [supermicah](https://github.com/supermicah)
-* [SimpleExpress](https://github.com/SimpleExpress)
-* [aruanruan](https://github.com/aruanruan)
-* [l1z2g9](https://github.com/l1z2g9)
-* [zhegexiaohuozi](https://github.com/zhegexiaohuozi)
-* [ywooer](https://github.com/ywooer)
-* [yyw258520](https://github.com/yyw258520)
-* [perfecking](https://github.com/perfecking)
-* [lidongyang](http://my.oschina.net/lidongyang)
-* [seveniu](https://github.com/seveniu)
-* [sebastian1118](https://github.com/sebastian1118)
-* [codev777](https://github.com/codev777)
-* [fengwuze](https://github.com/fengwuze)
 
 ### 邮件组:
 
@@ -203,4 +178,10 @@ QQ:
 
 ### QQ群：
 
-373225642
+373225642(已满) 542327088
+
+### 相关项目：
+
+[Gather Platform](https://github.com/gsh199449/spider)
+
+Gather Platform 数据抓取平台是一套基于Webmagic内核的,具有Web任务配置和任务管理界面的数据采集与搜索平台。

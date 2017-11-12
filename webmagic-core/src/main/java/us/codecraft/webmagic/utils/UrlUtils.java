@@ -43,7 +43,7 @@ public class UrlUtils {
             if (url.startsWith("?"))
                 url = base.getPath() + url;
             URL abs = new URL(base, url);
-            return encodeIllegalCharacterInUrl(abs.toExternalForm());
+            return abs.toExternalForm();
         } catch (MalformedURLException e) {
             return "";
         }
@@ -53,10 +53,15 @@ public class UrlUtils {
      *
      * @param url url
      * @return new url
+     * @deprecated
      */
     public static String encodeIllegalCharacterInUrl(String url) {
-        //TODO more charator support
         return url.replace(" ", "%20");
+    }
+
+    public static String fixIllegalCharacterInUrl(String url) {
+        //TODO more charator support
+        return url.replace(" ", "%20").replaceAll("#+", "#");
     }
 
     public static String getHost(String url) {
@@ -80,7 +85,7 @@ public class UrlUtils {
         if (i > 0) {
             domain = StringUtils.substring(domain, 0, i);
         }
-        return domain;
+        return removePort(domain);
     }
 
     public static String removePort(String domain) {
@@ -90,41 +95,6 @@ public class UrlUtils {
         }else {
             return domain;
         }
-    }
-
-    /**
-     * allow blank space in quote
-     */
-    private static Pattern patternForHrefWithQuote = Pattern.compile("(<a[^<>]*href=)[\"']([^\"'<>]*)[\"']", Pattern.CASE_INSENSITIVE);
-
-    /**
-     * disallow blank space without quote
-     */
-    private static Pattern patternForHrefWithoutQuote = Pattern.compile("(<a[^<>]*href=)([^\"'<>\\s]+)", Pattern.CASE_INSENSITIVE);
-
-    public static String fixAllRelativeHrefs(String html, String url) {
-        html = replaceByPattern(html, url, patternForHrefWithQuote);
-        html = replaceByPattern(html, url, patternForHrefWithoutQuote);
-        return html;
-    }
-
-    public static String replaceByPattern(String html, String url, Pattern pattern) {
-        StringBuilder stringBuilder = new StringBuilder();
-        Matcher matcher = pattern.matcher(html);
-        int lastEnd = 0;
-        boolean modified = false;
-        while (matcher.find()) {
-            modified = true;
-            stringBuilder.append(StringUtils.substring(html, lastEnd, matcher.start()));
-            stringBuilder.append(matcher.group(1));
-            stringBuilder.append("\"").append(canonicalizeUrl(matcher.group(2), url)).append("\"");
-            lastEnd = matcher.end();
-        }
-        if (!modified) {
-            return html;
-        }
-        stringBuilder.append(StringUtils.substring(html, lastEnd));
-        return stringBuilder.toString();
     }
 
     public static List<Request> convertToRequests(Collection<String> urls) {
@@ -143,7 +113,7 @@ public class UrlUtils {
         return urlList;
     }
 
-    private static final Pattern patternForCharset = Pattern.compile("charset\\s*=\\s*['\"]*([^\\s;'\"]*)");
+    private static final Pattern patternForCharset = Pattern.compile("charset\\s*=\\s*['\"]*([^\\s;'\"]*)", Pattern.CASE_INSENSITIVE);
 
     public static String getCharset(String contentType) {
         Matcher matcher = patternForCharset.matcher(contentType);

@@ -4,6 +4,7 @@ import org.junit.Test;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.downloader.MockGithubDownloader;
+import us.codecraft.webmagic.example.GithubRepo;
 import us.codecraft.webmagic.pipeline.PageModelPipeline;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,4 +25,5 @@ public class GithubRepoTest {
             }
         }, GithubRepo.class).addUrl("https://github.com/code4craft/webmagic").setDownloader(new MockGithubDownloader()).test("https://github.com/code4craft/webmagic");
     }
+
 }

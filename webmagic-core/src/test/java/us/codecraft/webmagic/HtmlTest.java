@@ -30,7 +30,6 @@ public class HtmlTest {
 
 	@Test
 	public void testEnableJsoupHtmlEntityEscape() throws Exception {
-		Html.DISABLE_HTML_ENTITY_ESCAPE = false;
 		Html html = new Html("aaaaaaa&b");
 		assertThat(html.regex("(aaaaaaa&amp;b)").toString()).isEqualTo("aaaaaaa&amp;b");
 	}
@@ -47,5 +46,15 @@ public class HtmlTest {
 		assertThat(html.xpath("//a[1]/@href").get()).isEqualTo("/xx/xx");
 		Selectable selectable = html.xpath("//a[1]").nodes().get(0);
 		assertThat(selectable.xpath("/a/@href").get()).isEqualTo("/xx/xx");
+	}
+
+	@Test
+	public void testGetHrefsByJsoup(){
+		Html html = new Html("<html><a href='issues'>issues</a><img src='webmagic.jpg'/></html>","https://github.com/code4craft/webmagic/");
+		assertThat(html.xpath("//a[1]/@abs:href").get()).isEqualTo("https://github.com/code4craft/webmagic/issues");
+		assertThat(html.xpath("//img/@abs:src").get()).isEqualTo("https://github.com/code4craft/webmagic/webmagic.jpg");
+		html = new Html("<html><base href='https://github.com/code4craft/webmagic/'><a href='issues'>issues</a><img src='webmagic.jpg'/></base></html>");
+		assertThat(html.xpath("//a[1]/@abs:href").get()).isEqualTo("https://github.com/code4craft/webmagic/issues");
+		assertThat(html.xpath("//img/@abs:src").get()).isEqualTo("https://github.com/code4craft/webmagic/webmagic.jpg");
 	}
 }

@@ -1,7 +1,8 @@
 package us.codecraft.webmagic.samples;
 
-import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 import java.util.List;
@@ -22,6 +23,10 @@ public class NjuBBSProcessor implements PageProcessor {
 
     @Override
     public Site getSite() {
-        return Site.me().setDomain("bbs.nju.edu.cn").addStartUrl("http://bbs.nju.edu.cn/board?board=Pictures");
+        return Site.me().setDomain("bbs.nju.edu.cn");
+    }
+
+    public static void main(String[] args) {
+        Spider.create(new NjuBBSProcessor()).addUrl("http://bbs.nju.edu.cn/board?board=Pictures").run();
     }
 }

@@ -22,12 +22,12 @@ public class IteyeBlogProcessor implements PageProcessor {
     @Override
     public Site getSite() {
         if (site == null) {
-            site = Site.me().setDomain("yanghaoli.iteye.com").addStartUrl("http://yanghaoli.iteye.com/");
+            site = Site.me().setDomain("yanghaoli.iteye.com");
         }
         return site;
     }
 
     public static void main(String[] args) {
-        Spider.create(new IteyeBlogProcessor()).thread(5).run();
+        Spider.create(new IteyeBlogProcessor()).thread(5).addUrl("http://yanghaoli.iteye.com/").run();
     }
 }
