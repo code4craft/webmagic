@@ -2,6 +2,7 @@ package us.codecraft.webmagic.scheduler;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -60,7 +61,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         Jedis jedis = pool.getResource();
         try {
             jedis.rpush(getQueueKey(task), request.getUrl());
-            if (request.getExtras() != null) {
+            if (CheckForAdditionalInfo(request)) {
                 String field = DigestUtils.shaHex(request.getUrl());
                 String value = JSON.toJSONString(request);
                 jedis.hset((ITEM_PREFIX + task.getUUID()), field, value);
@@ -68,6 +69,33 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         } finally {
             pool.returnResource(jedis);
         }
+    }
+
+    private boolean CheckForAdditionalInfo(Request request) {
+        if (request == null) {
+            return false;
+        }
+
+        if (!request.getHeaders().isEmpty() || !request.getCookies().isEmpty()) {
+            return true;
+        }
+
+        if (StringUtils.isNotBlank(request.getCharset()) || StringUtils.isNotBlank(request.getMethod())) {
+            return true;
+        }
+
+        if (request.isBinaryContent() || request.getRequestBody() != null) {
+            return true;
+        }
+
+        if (request.getExtras() != null && !request.getExtras().isEmpty()) {
+            return true;
+        }
+        if (request.getPriority() != 0L) {
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -85,7 +113,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
                 Request o = JSON.parseObject(new String(bytes), Request.class);
                 return o;
             }
-                Request request = new Request(url);
+            Request request = new Request(url);
             return request;
         } finally {
             pool.returnResource(jedis);
@@ -100,8 +128,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         return QUEUE_PREFIX + task.getUUID();
     }
 
-    protected String getItemKey(Task task)
-    {
+    protected String getItemKey(Task task) {
         return ITEM_PREFIX + task.getUUID();
     }
 
