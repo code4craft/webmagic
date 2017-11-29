@@ -71,27 +71,27 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         }
     }
 
-    private boolean CheckForAdditionalInfo(Request request){
-        if (request==null){
+    private boolean CheckForAdditionalInfo(Request request) {
+        if (request == null) {
             return false;
         }
 
-        if (!request.getHeaders().isEmpty()||!request.getCookies().isEmpty()){
+        if (!request.getHeaders().isEmpty() || !request.getCookies().isEmpty()) {
             return true;
         }
 
-        if (StringUtils.isNotBlank(request.getCharset())||StringUtils.isNotBlank(request.getMethod())){
+        if (StringUtils.isNotBlank(request.getCharset()) || StringUtils.isNotBlank(request.getMethod())) {
             return true;
         }
 
-        if (request.isBinaryContent()||request.getRequestBody()!=null){
+        if (request.isBinaryContent() || request.getRequestBody() != null) {
             return true;
         }
 
-        if (request.getExtras()!=null&&!request.getExtras().isEmpty()){
+        if (request.getExtras() != null && !request.getExtras().isEmpty()) {
             return true;
         }
-        if (request.getPriority()!=0L){
+        if (request.getPriority() != 0L) {
             return true;
         }
 
@@ -113,7 +113,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
                 Request o = JSON.parseObject(new String(bytes), Request.class);
                 return o;
             }
-                Request request = new Request(url);
+            Request request = new Request(url);
             return request;
         } finally {
             pool.returnResource(jedis);
@@ -128,8 +128,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         return QUEUE_PREFIX + task.getUUID();
     }
 
-    protected String getItemKey(Task task)
-    {
+    protected String getItemKey(Task task) {
         return ITEM_PREFIX + task.getUUID();
     }
 
