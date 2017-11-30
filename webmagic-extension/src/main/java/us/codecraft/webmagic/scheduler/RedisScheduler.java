@@ -61,17 +61,17 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         Jedis jedis = pool.getResource();
         try {
             jedis.rpush(getQueueKey(task), request.getUrl());
-            if (CheckForAdditionalInfo(request)) {
+            if (checkForAdditionalInfo(request)) {
                 String field = DigestUtils.shaHex(request.getUrl());
                 String value = JSON.toJSONString(request);
                 jedis.hset((ITEM_PREFIX + task.getUUID()), field, value);
             }
         } finally {
-            pool.returnResource(jedis);
+            jedis.close();
         }
     }
 
-    private boolean CheckForAdditionalInfo(Request request) {
+    private boolean checkForAdditionalInfo(Request request) {
         if (request == null) {
             return false;
         }
