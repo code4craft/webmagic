@@ -1,6 +1,5 @@
 package us.codecraft.webmagic.downloader;
 
-import org.apache.http.annotation.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
@@ -16,7 +15,6 @@ import java.io.*;
  * @author dolphineor@gmail.com
  * @version 0.5.3
  */
-@ThreadSafe
 public class PhantomJSDownloader extends AbstractDownloader {
 
     private static Logger logger = LoggerFactory.getLogger(PhantomJSDownloader.class);
