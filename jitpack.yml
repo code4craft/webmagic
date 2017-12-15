@@ -1,0 +1,9 @@
+jdk:
+  - oraclejdk8
+before_install:
+#   - ./prepareEnvironment.sh
+install:
+   - echo "Running a custom install command"
+   - mvn clean install -DskipTests
+env:
+   MYVAR: "custom environment variable"
