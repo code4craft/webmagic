@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.downloader;
+package us.codecraft.webmagic.downloader.httpclient;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthState;

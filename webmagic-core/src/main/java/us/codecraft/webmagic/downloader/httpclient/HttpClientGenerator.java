@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.downloader;
+package us.codecraft.webmagic.downloader.httpclient;
 
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;

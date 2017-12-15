@@ -1,6 +1,4 @@
-package us.codecraft.webmagic.downloader;
-
-import java.net.URI;
+package us.codecraft.webmagic.downloader.httpclient;
 
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -13,6 +11,8 @@ import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.protocol.HttpContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.net.URI;
 
 /**
  *支持post 302跳转策略实现类

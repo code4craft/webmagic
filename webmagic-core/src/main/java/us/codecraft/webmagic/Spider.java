@@ -5,7 +5,7 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.downloader.Downloader;
-import us.codecraft.webmagic.downloader.HttpClientDownloader;
+import us.codecraft.webmagic.downloader.httpclient.HttpClientDownloader;
 import us.codecraft.webmagic.pipeline.CollectorPipeline;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.Pipeline;

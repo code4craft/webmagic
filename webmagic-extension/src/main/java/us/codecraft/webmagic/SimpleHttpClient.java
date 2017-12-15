@@ -1,6 +1,6 @@
 package us.codecraft.webmagic;
 
-import us.codecraft.webmagic.downloader.HttpClientDownloader;
+import us.codecraft.webmagic.downloader.httpclient.HttpClientDownloader;
 import us.codecraft.webmagic.model.PageMapper;
 import us.codecraft.webmagic.proxy.ProxyProvider;
 
