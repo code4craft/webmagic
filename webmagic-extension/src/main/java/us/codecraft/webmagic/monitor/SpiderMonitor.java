@@ -6,6 +6,7 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.SpiderListener;
 import us.codecraft.webmagic.utils.Experimental;
+import us.codecraft.webmagic.utils.UrlUtils;
 
 import javax.management.*;
 import java.lang.management.ManagementFactory;
@@ -42,8 +43,9 @@ public class SpiderMonitor {
     /**
      * Register spider for monitor.
      *
-     * @param spiders
-     * @return
+     * @param spiders spiders
+     * @return this
+     * @throws JMException JMException
      */
     public synchronized SpiderMonitor register(Spider... spiders) throws JMException {
         for (Spider spider : spiders) {
@@ -103,7 +105,8 @@ public class SpiderMonitor {
     }
 
     protected void registerMBean(SpiderStatusMXBean spiderStatus) throws MalformedObjectNameException, InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException {
-        ObjectName objName = new ObjectName(jmxServerName + ":name=" + spiderStatus.getName());
+//        ObjectName objName = new ObjectName(jmxServerName + ":name=" + spiderStatus.getName());
+        ObjectName objName = new ObjectName(jmxServerName + ":name=" + UrlUtils.removePort(spiderStatus.getName()));
         mbeanServer.registerMBean(spiderStatus, objName);
     }
 

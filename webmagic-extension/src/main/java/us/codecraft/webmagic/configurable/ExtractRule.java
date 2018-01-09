@@ -7,7 +7,6 @@ import static us.codecraft.webmagic.selector.Selectors.*;
 
 /**
  * @author code4crafter@gmail.com
- * @date 14-4-5
  */
 public class ExtractRule {
 

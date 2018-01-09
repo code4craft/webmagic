@@ -19,7 +19,7 @@ public class GithubRepoProcessor implements PageProcessor {
 
     @Override
     public Site getSite() {
-        return Site.me().addStartUrl("https://github.com/code4craft/webmagic");
+        return Site.me();
     }
 
     @Test

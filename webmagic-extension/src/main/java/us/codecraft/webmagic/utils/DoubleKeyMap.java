@@ -30,7 +30,8 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
     /**
      * init map with protoMapClass
      *
-     * @param protoMapClass
+     * @param map the origin map to contains the DoubleKeyMap
+     * @param protoMapClass protoMapClass
      */
     @SuppressWarnings("rawtypes")
     public DoubleKeyMap(Map<K1, Map<K2, V>> map, Class<? extends Map> protoMapClass) {
@@ -40,7 +41,7 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
     }
 
     /**
-     * @param key
+     * @param key key
      * @return map
      */
     public Map<K2, V> get(K1 key) {
@@ -48,8 +49,8 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
     }
 
     /**
-     * @param key1
-     * @param key2
+     * @param key1 key1
+     * @param key2 key2
      * @return value
      */
     public V get(K1 key1, K2 key2) {
@@ -61,8 +62,8 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
 
 
     /**
-     * @param key1
-     * @param submap
+     * @param key1 key1
+     * @param submap submap
      * @return value
      */
     public V put(K1 key1, Map<K2, V> submap) {
@@ -70,24 +71,25 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
     }
 
     /**
-     * @param key1
-     * @param key2
-     * @param value
+     * @param key1 key1
+     * @param key2 key2
+     * @param value value
      * @return value
      */
-    public V put(K1 key1, K2 key2, V value) {
+    public synchronized V put(K1 key1, K2 key2, V value) {
         if (map.get(key1) == null) {
+            //不加锁的话，多个线程有可能都会执行到这里
             map.put(key1, this.<K2, V>newMap());
         }
         return get(key1).put(key2, value);
     }
 
     /**
-     * @param key1
-     * @param key2
+     * @param key1 key1
+     * @param key2 key2
      * @return value
      */
-    public V remove(K1 key1, K2 key2) {
+    public synchronized V remove(K1 key1, K2 key2) {
         if (get(key1) == null) {
             return null;
         }
@@ -99,8 +101,8 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
     }
 
     /**
-     * @param key1
-     * @return
+     * @param key1 key1
+     * @return map
      */
     public Map<K2, V> remove(K1 key1) {
         Map<K2, V> remove = map.remove(key1);

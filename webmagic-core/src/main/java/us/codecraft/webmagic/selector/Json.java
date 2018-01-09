@@ -22,8 +22,8 @@ public class Json extends PlainText {
 
     /**
      * remove padding for JSONP
-     * @param padding
-     * @return
+     * @param padding padding
+     * @return json after padding removed
      */
     public Json removePadding(String padding) {
         String text = getFirstSourceText();

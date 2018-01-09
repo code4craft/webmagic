@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_webmagic-core" default="compile.module.webmagic-core">
+  <dirname property="module.webmagic-core.basedir" file="${ant.file.module_webmagic-core}"/>
+  
+  <property name="module.jdk.home.webmagic-core" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.webmagic-core" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.webmagic-core" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.webmagic-core" value="${compiler.args}"/>
+  
+  <property name="webmagic-core.output.dir" value="${module.webmagic-core.basedir}/target/classes"/>
+  <property name="webmagic-core.testoutput.dir" value="${module.webmagic-core.basedir}/target/test-classes"/>
+  
+  <path id="webmagic-core.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="webmagic-core.module.production.classpath">
+    <path refid="${module.jdk.classpath.webmagic-core}"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.2.4.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.2.4.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.6.classpath"/>
+    <path refid="library.maven:_com.google.guava:guava:13.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-lang3:3.1.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.2.1.classpath"/>
+    <path refid="library.maven:_net.sourceforge.htmlcleaner:htmlcleaner:2.4.classpath"/>
+    <path refid="library.maven:_org.jdom:jdom2:2.0.4.classpath"/>
+    <path refid="library.maven:_commons-io:commons-io:1.3.2.classpath"/>
+  </path>
+  
+  <path id="webmagic-core.runtime.production.module.classpath">
+    <pathelement location="${webmagic-core.output.dir}"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.2.4.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.2.4.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.6.classpath"/>
+    <path refid="library.maven:_com.google.guava:guava:13.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-lang3:3.1.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.2.1.classpath"/>
+    <path refid="library.maven:_net.sourceforge.htmlcleaner:htmlcleaner:2.4.classpath"/>
+    <path refid="library.maven:_org.jdom:jdom2:2.0.4.classpath"/>
+    <path refid="library.maven:_commons-io:commons-io:1.3.2.classpath"/>
+  </path>
+  
+  <path id="webmagic-core.module.classpath">
+    <path refid="${module.jdk.classpath.webmagic-core}"/>
+    <pathelement location="${webmagic-core.output.dir}"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.2.4.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.2.4.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.6.classpath"/>
+    <path refid="library.maven:_junit:junit:4.7.classpath"/>
+    <path refid="library.maven:_com.google.guava:guava:13.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-lang3:3.1.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.2.1.classpath"/>
+    <path refid="library.maven:_net.sourceforge.htmlcleaner:htmlcleaner:2.4.classpath"/>
+    <path refid="library.maven:_org.jdom:jdom2:2.0.4.classpath"/>
+    <path refid="library.maven:_commons-io:commons-io:1.3.2.classpath"/>
+  </path>
+  
+  <path id="webmagic-core.runtime.module.classpath">
+    <pathelement location="${webmagic-core.testoutput.dir}"/>
+    <pathelement location="${webmagic-core.output.dir}"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.2.4.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.2.4.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.1.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.6.classpath"/>
+    <path refid="library.maven:_junit:junit:4.7.classpath"/>
+    <path refid="library.maven:_com.google.guava:guava:13.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-lang3:3.1.classpath"/>
+    <path refid="library.maven:_log4j:log4j:1.2.17.classpath"/>
+    <path refid="library.maven:_commons-collections:commons-collections:3.2.1.classpath"/>
+    <path refid="library.maven:_net.sourceforge.htmlcleaner:htmlcleaner:2.4.classpath"/>
+    <path refid="library.maven:_org.jdom:jdom2:2.0.4.classpath"/>
+    <path refid="library.maven:_commons-io:commons-io:1.3.2.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.webmagic-core">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.webmagic-core">
+    <patternset refid="excluded.from.module.webmagic-core"/>
+  </patternset>
+  
+  <path id="webmagic-core.module.sourcepath">
+    <dirset dir="${module.webmagic-core.basedir}">
+      <include name="src/main/java"/>
+      <include name="src/main/resources"/>
+    </dirset>
+  </path>
+  
+  <path id="webmagic-core.module.test.sourcepath">
+    <dirset dir="${module.webmagic-core.basedir}">
+      <include name="src/test/java"/>
+      <include name="src/test/resources"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.webmagic-core" depends="compile.module.webmagic-core.production,compile.module.webmagic-core.tests" description="Compile module webmagic-core"/>
+  
+  <target name="compile.module.webmagic-core.production" depends="register.custom.compilers" description="Compile module webmagic-core; production classes">
+    <mkdir dir="${webmagic-core.output.dir}"/>
+    <javac2 destdir="${webmagic-core.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.webmagic-core}/javac">
+      <compilerarg line="${compiler.args.webmagic-core}"/>
+      <bootclasspath refid="webmagic-core.module.bootclasspath"/>
+      <classpath refid="webmagic-core.module.production.classpath"/>
+      <src refid="webmagic-core.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.webmagic-core"/>
+    </javac2>
+    
+    <copy todir="${webmagic-core.output.dir}">
+      <fileset dir="${module.webmagic-core.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.webmagic-core.basedir}/src/main/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.webmagic-core.tests" depends="register.custom.compilers,compile.module.webmagic-core.production" description="compile module webmagic-core; test classes" unless="skip.tests">
+    <mkdir dir="${webmagic-core.testoutput.dir}"/>
+    <javac2 destdir="${webmagic-core.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.webmagic-core}/javac">
+      <compilerarg line="${compiler.args.webmagic-core}"/>
+      <bootclasspath refid="webmagic-core.module.bootclasspath"/>
+      <classpath refid="webmagic-core.module.classpath"/>
+      <src refid="webmagic-core.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.webmagic-core"/>
+    </javac2>
+    
+    <copy todir="${webmagic-core.testoutput.dir}">
+      <fileset dir="${module.webmagic-core.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.webmagic-core.basedir}/src/test/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.webmagic-core" description="cleanup module">
+    <delete dir="${webmagic-core.output.dir}"/>
+    <delete dir="${webmagic-core.testoutput.dir}"/>
+  </target>
+</project>

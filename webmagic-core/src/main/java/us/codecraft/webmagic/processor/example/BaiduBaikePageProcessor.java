@@ -20,8 +20,8 @@ public class BaiduBaikePageProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        page.putField("name", page.getHtml().css("h1.title div.lemmaTitleH1","text").toString());
-        page.putField("description", page.getHtml().xpath("//div[@id='lemmaContent-0']//div[@class='para']/allText()"));
+        page.putField("name", page.getHtml().css("dl.lemmaWgt-lemmaTitle h1","text").toString());
+        page.putField("description", page.getHtml().xpath("//div[@class='lemma-summary']/allText()"));
     }
 
     @Override

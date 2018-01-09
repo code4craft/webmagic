@@ -17,8 +17,8 @@ public interface Pipeline {
     /**
      * Process extracted results.
      *
-     * @param resultItems
-     * @param task
+     * @param resultItems resultItems
+     * @param task task
      */
     public void process(ResultItems resultItems, Task task);
 }

@@ -19,10 +19,25 @@ public class Html extends HtmlNode {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
+	/**
+	 * Disable jsoup html entity escape. It can be set just before any Html instance is created.
+     * @deprecated
+	 */
+	public static boolean DISABLE_HTML_ENTITY_ESCAPE = false;
+
     /**
      * Store parsed document for better performance when only one text exist.
      */
     private Document document;
+
+    public Html(String text, String url) {
+        try {
+            this.document = Jsoup.parse(text, url);
+        } catch (Exception e) {
+            this.document = null;
+            logger.warn("parse document error ", e);
+        }
+    }
 
     public Html(String text) {
         try {
@@ -47,8 +62,8 @@ public class Html extends HtmlNode {
     }
 
     /**
-     * @param selector
-     * @return
+     * @param selector selector
+     * @return result
      */
     public String selectDocument(Selector selector) {
         if (selector instanceof ElementSelector) {

@@ -38,7 +38,7 @@ public class QuickStarter {
         key = readKey(key);
         System.out.println("The demo started and will last 20 seconds...");
         //Start spider
-        OOSpider.create(Site.me().addStartUrl(urlMap.get(key)), clazzMap.get(key)).pipeline(new MultiPagePipeline()).pipeline(new ConsolePipeline()).runAsync();
+        OOSpider.create(Site.me(), clazzMap.get(key)).addUrl(urlMap.get(key)).addPipeline(new MultiPagePipeline()).addPipeline(new ConsolePipeline()).runAsync();
 
         try {
             Thread.sleep(20000);
@@ -57,7 +57,7 @@ public class QuickStarter {
             System.out.println(classEntry.getKey()+"\t" + classEntry.getValue() + "\t" + urlMap.get(classEntry.getKey()));
         }
         while (key == null) {
-            key = new String(stdin.nextLine());
+            key = stdin.nextLine();
             if (clazzMap.get(key) == null) {
                 System.out.println("Invalid choice!");
                 key = null;

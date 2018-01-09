@@ -16,6 +16,8 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 public @interface Formatter {
 
+    Class<ObjectFormatter> DEFAULT_FORMATTER = ObjectFormatter.class;
+
     /**
      * Set formatter params.
      *
@@ -24,9 +26,9 @@ public @interface Formatter {
     String[] value() default "";
 
     /**
-     * Specific the class of field of class of elements in collection for field. <br/>
+     * Specific the class of field of class of elements in collection for field. <br>
      * It is not necessary to be set because we can detect the class by class of field,
-     * unless you use a collection as a field. <br/>
+     * unless you use a collection as a field. <br>
      *
      * @return the class of field
      */

@@ -25,7 +25,7 @@ import java.util.List;
  *      private String content;
  *
  *      {@literal @}ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
- *      private List<String> tags;
+ *      private List&lt;String&gt; tags;
  * }
  * </pre>
  * And start the spider by:
@@ -60,9 +60,9 @@ public class OOSpider<T> extends Spider {
     /**
      * create a spider
      *
-     * @param site
-     * @param pageModelPipeline
-     * @param pageModels
+     * @param site site
+     * @param pageModelPipeline pageModelPipeline
+     * @param pageModels pageModels
      */
     public OOSpider(Site site, PageModelPipeline pageModelPipeline, Class... pageModels) {
         this(ModelPageProcessor.create(site, pageModels));
@@ -94,6 +94,11 @@ public class OOSpider<T> extends Spider {
             modelPageProcessor.addPageModel(pageModel);
             modelPipeline.put(pageModel, pageModelPipeline);
         }
+        return this;
+    }
+
+    public OOSpider setIsExtractLinks(boolean isExtractLinks){
+        modelPageProcessor.setExtractLinks(isExtractLinks);
         return this;
     }
 

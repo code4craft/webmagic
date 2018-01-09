@@ -52,7 +52,8 @@ public @interface ExtractBy {
         /**
          * extract from the raw html
          */
-        RawHtml
+        RawHtml,
+        RawText
     }
 
     /**

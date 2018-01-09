@@ -6,7 +6,7 @@
         <version>7</version>
     </parent>
     <groupId>us.codecraft</groupId>
-    <version>0.5.2</version>
+    <version>0.7.3</version>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <properties>
@@ -38,7 +38,7 @@
         <connection>scm:git:git@github.com:code4craft/webmagic.git</connection>
         <developerConnection>scm:git:git@github.com:code4craft/webmagic.git</developerConnection>
         <url>git@github.com:code4craft/webmagic.git</url>
-      <tag>HEAD</tag>
+      <tag>webmagic-parent-0.6.1</tag>
   </scm>
     <licenses>
         <license>
@@ -54,7 +54,6 @@
         <module>webmagic-selenium</module>
         <module>webmagic-saxon</module>
         <module>webmagic-samples</module>
-        <!--<module>webmagic-avalon</module>-->
     </modules>
 
     <dependencyManagement>
@@ -66,14 +65,30 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>1.10.19</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>4.3.3</version>
+                <version>4.5.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>4.4.4</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>15.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jayway.jsonpath</groupId>
+                <artifactId>json-path</artifactId>
+                <version>2.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -88,17 +103,17 @@
             <dependency>
                 <groupId>us.codecraft</groupId>
                 <artifactId>xsoup</artifactId>
-                <version>0.2.4</version>
+                <version>0.3.1</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.1.37</version>
+                <version>1.2.28</version>
             </dependency>
             <dependency>
                 <groupId>com.github.dreamhead</groupId>
                 <artifactId>moco-core</artifactId>
-                <version>0.9.1</version>
+                <version>0.11.0</version>
                 <scope>test</scope>
                 <exclusions>
                     <exclusion>
@@ -116,6 +131,7 @@
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
                 <version>1.5.0</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -125,7 +141,7 @@
             <dependency>
                 <groupId>commons-collections</groupId>
                 <artifactId>commons-collections</artifactId>
-                <version>3.2.1</version>
+                <version>3.2.2</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -135,7 +151,7 @@
             <dependency>
                 <groupId>org.jsoup</groupId>
                 <artifactId>jsoup</artifactId>
-                <version>1.7.2</version>
+                <version>1.10.3</version>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
@@ -151,9 +167,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18</version>
                 <configuration>
-                    <forkMode>pertest</forkMode>
-                    <argLine>-Xms1024m -Xmx1024m -Xss1m </argLine>
+                    <forkCount>0</forkCount>
                 </configuration>
             </plugin>
             <plugin>
@@ -219,11 +235,20 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>2.10.4</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
+                    <doctitle>WebMagic 0.7.3</doctitle>
+                    <locale>en_US</locale>
                 </configuration>
                 <executions>
+                    <execution>
+                        <id>aggregate</id>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                        <phase>site</phase>
+                    </execution>
                     <execution>
                         <id>attach-javadocs</id>
                         <goals>
@@ -277,7 +302,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
+                        <version>1.6</version>
                         <executions>
                             <execution>
                                 <phase>verify</phase>

@@ -1,6 +1,5 @@
 package us.codecraft.webmagic.scheduler;
 
-import org.apache.http.annotation.ThreadSafe;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.utils.NumberUtils;
@@ -16,7 +15,6 @@ import java.util.concurrent.PriorityBlockingQueue;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.1
  */
-@ThreadSafe
 public class PriorityScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler {
 
     public static final int INITIAL_CAPACITY = 5;

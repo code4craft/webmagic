@@ -13,7 +13,7 @@ public interface Selectable {
     /**
      * select list with xpath
      *
-     * @param xpath
+     * @param xpath xpath
      * @return new Selectable after extract
      */
     public Selectable xpath(String xpath);
@@ -69,7 +69,7 @@ public interface Selectable {
     /**
      * select list with regex, default group is group 1
      *
-     * @param regex
+     * @param regex regex
      * @return new Selectable after extract
      */
     public Selectable regex(String regex);
@@ -77,8 +77,8 @@ public interface Selectable {
     /**
      * select list with regex
      *
-     * @param regex
-     * @param group
+     * @param regex regex
+     * @param group group
      * @return new Selectable after extract
      */
     public Selectable regex(String regex, int group);
@@ -86,8 +86,8 @@ public interface Selectable {
     /**
      * replace with regex
      *
-     * @param regex
-     * @param replacement
+     * @param regex regex
+     * @param replacement replacement
      * @return new Selectable after extract
      */
     public Selectable replace(String regex, String replacement);
@@ -123,30 +123,30 @@ public interface Selectable {
     /**
      * extract by JSON Path expression
      *
-     * @param jsonPath
-     * @return
+     * @param jsonPath jsonPath
+     * @return result
      */
     public Selectable jsonPath(String jsonPath);
 
     /**
      * extract by custom selector
      *
-     * @param selector
-     * @return
+     * @param selector selector
+     * @return result
      */
     public Selectable select(Selector selector);
 
     /**
      * extract by custom selector
      *
-     * @param selector
-     * @return
+     * @param selector selector
+     * @return result
      */
     public Selectable selectList(Selector selector);
 
     /**
      * get all nodes
-     * @return
+     * @return result
      */
     public List<Selectable> nodes();
 }

@@ -3,7 +3,7 @@ package us.codecraft.webmagic.monitor;
 import org.junit.Test;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.example.GithubRepoPageProcessor;
-import us.codecraft.webmagic.processor.example.OschinaBlogPageProcessor;
+import us.codecraft.webmagic.processor.example.ZhihuPageProcessor;
 
 /**
  * @author code4crafer@gmail.com
@@ -20,12 +20,12 @@ public class SpiderMonitorTest {
             }
         };
 
-        Spider oschinaSpider = Spider.create(new OschinaBlogPageProcessor())
+        Spider zhihuSpider = Spider.create(new ZhihuPageProcessor())
                 .addUrl("http://my.oschina.net/flashsword/blog").thread(2);
         Spider githubSpider = Spider.create(new GithubRepoPageProcessor())
                 .addUrl("https://github.com/code4craft");
 
-        spiderMonitor.register(oschinaSpider, githubSpider);
+        spiderMonitor.register(zhihuSpider, githubSpider);
 
     }
 }
