@@ -172,7 +172,7 @@ public class Spider implements Runnable, Task {
      *
      * @param scheduler scheduler
      * @return this
-     * @see #setScheduler(us.codecraft.webmagic.scheduler.Scheduler)
+     * @see #setScheduler(Scheduler)
      */
     @Deprecated
     public Spider scheduler(Scheduler scheduler) {
@@ -205,7 +205,7 @@ public class Spider implements Runnable, Task {
      *
      * @param pipeline pipeline
      * @return this
-     * @see #addPipeline(us.codecraft.webmagic.pipeline.Pipeline)
+     * @see #addPipeline(Pipeline)
      * @deprecated
      */
     public Spider pipeline(Pipeline pipeline) {
@@ -255,7 +255,7 @@ public class Spider implements Runnable, Task {
      *
      * @param downloader downloader
      * @return this
-     * @see #setDownloader(us.codecraft.webmagic.downloader.Downloader)
+     * @see #setDownloader(Downloader)
      * @deprecated
      */
     public Spider downloader(Downloader downloader) {
@@ -411,7 +411,15 @@ public class Spider implements Runnable, Task {
 
     private void onDownloadSuccess(Request request, Page page) {
         if (site.getAcceptStatCode().contains(page.getStatusCode())){
-            pageProcessor.process(page);
+
+            try {
+                //Object result = pageProcessor.getClass().getMethod(request.getCallback(), page.getClass()).invoke(pageProcessor, page);
+                pageProcessor.getClass().getMethod(request.getCallback(), page.getClass()).invoke(pageProcessor, page);
+            } catch (Throwable e) {
+                logger.error("page process error", e);
+                return;
+            }
+//            pageProcessor.process(page);
             extractAndAddRequests(page, spawnUrl);
             if (!page.getResultItems().isSkip()) {
                 for (Pipeline pipeline : pipelines) {

@@ -17,6 +17,8 @@ import java.util.Map;
 public class Request implements Serializable {
 
     private static final long serialVersionUID = 2062192774891352043L;
+    //利用反射控制解析方法调用
+    private String callback = "process";
 
     public static final String CYCLE_TRIED_TIMES = "_cycle_tried_times";
 
@@ -188,6 +190,14 @@ public class Request implements Serializable {
         return this;
     }
 
+    public String getCallback() {
+        return callback;
+    }
+
+    public void setCallback(String callback) {
+        this.callback = callback;
+    }
+
     @Override
     public String toString() {
         return "Request{" +
@@ -197,6 +207,7 @@ public class Request implements Serializable {
                 ", priority=" + priority +
                 ", headers=" + headers +
                 ", cookies="+ cookies+
+                ", callback=" + callback+
                 '}';
     }
 
