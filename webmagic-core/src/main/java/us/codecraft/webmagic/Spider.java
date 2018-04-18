@@ -172,7 +172,7 @@ public class Spider implements Runnable, Task {
      *
      * @param scheduler scheduler
      * @return this
-     * @see #setScheduler(Scheduler)
+     * @see #setScheduler(us.codecraft.webmagic.scheduler.Scheduler)
      */
     @Deprecated
     public Spider scheduler(Scheduler scheduler) {
@@ -205,7 +205,7 @@ public class Spider implements Runnable, Task {
      *
      * @param pipeline pipeline
      * @return this
-     * @see #addPipeline(Pipeline)
+     * @see #addPipeline(us.codecraft.webmagic.pipeline.Pipeline)
      * @deprecated
      */
     public Spider pipeline(Pipeline pipeline) {
@@ -255,7 +255,7 @@ public class Spider implements Runnable, Task {
      *
      * @param downloader downloader
      * @return this
-     * @see #setDownloader(Downloader)
+     * @see #setDownloader(us.codecraft.webmagic.downloader.Downloader)
      * @deprecated
      */
     public Spider downloader(Downloader downloader) {
