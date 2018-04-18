@@ -18,30 +18,8 @@ public class ModelPageProcessorTest {
 
     private PageMocker pageMocker = new PageMocker();
 
-    @TargetUrl("http://codecraft.us/foo")
-    public static class ModelFoo {
-
-        @ExtractBy(value = "//div/@foo", notNull = true)
-        private String foo;
-
-    }
-
-    @TargetUrl("http://codecraft.us/bar")
-    public static class ModelBar {
-
-        @ExtractBy(value = "//div/@bar", notNull = true)
-        private String bar;
-
-    }
-
-    @TargetUrl(value = "http://webmagic.io/foo/\\d+",sourceRegion = "//li[@class='bar']")
-    @HelpUrl(value = "http://webmagic.io/bar/\\d+",sourceRegion = "//li[@class='foo']")
-    public static class MockModel {
-
-    }
-
     @Test
-    public void testMultiModel_should_not_skip_when_match() throws Exception {
+    public void testMultiModel_should_not_skip_when_match() {
         Page page = new Page();
         page.setRawText("<div foo='foo'></div>");
         page.setRequest(new Request("http://codecraft.us/foo"));
@@ -68,5 +46,23 @@ public class ModelPageProcessorTest {
         assertThat(page.getTargetRequests()).isEmpty();
     }
 
+    @TargetUrl("http://codecraft.us/foo")
+    public static class ModelFoo {
 
+        @ExtractBy(value = "//div/@foo", notNull = true)
+        private String foo;
+    }
+
+    @TargetUrl("http://codecraft.us/bar")
+    public static class ModelBar {
+
+        @ExtractBy(value = "//div/@bar", notNull = true)
+        private String bar;
+    }
+
+    @TargetUrl(value = "http://webmagic.io/foo/\\d+", sourceRegion = "//li[@class='bar']")
+    @HelpUrl(value = "http://webmagic.io/bar/\\d+", sourceRegion = "//li[@class='foo']")
+    public static class MockModel {
+
+    }
 }

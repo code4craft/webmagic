@@ -1,13 +1,12 @@
 package us.codecraft.webmagic.selector;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * CSS selector. Based on Jsoup.
@@ -33,13 +32,17 @@ public class CssSelector extends BaseElementSelector {
     private String getValue(Element element) {
         if (attrName == null) {
             return element.outerHtml();
-        } else if ("innerHtml".equalsIgnoreCase(attrName)) {
+        }
+        else if ("innerHtml".equalsIgnoreCase(attrName)) {
             return element.html();
-        } else if ("text".equalsIgnoreCase(attrName)) {
+        }
+        else if ("text".equalsIgnoreCase(attrName)) {
             return getText(element);
-        } else if ("allText".equalsIgnoreCase(attrName)) {
+        }
+        else if ("allText".equalsIgnoreCase(attrName)) {
             return element.text();
-        } else {
+        }
+        else {
             return element.attr(attrName);
         }
     }

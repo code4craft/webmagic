@@ -1,18 +1,17 @@
 package us.codecraft.webmagic.model.samples;
 
+import java.io.IOException;
+import javax.management.JMException;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.model.OOSpider;
-import us.codecraft.webmagic.monitor.SpiderMonitor;
-import us.codecraft.webmagic.pipeline.PageModelPipeline;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.model.annotation.HelpUrl;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
-
-import javax.management.JMException;
-import java.io.IOException;
+import us.codecraft.webmagic.monitor.SpiderMonitor;
+import us.codecraft.webmagic.pipeline.PageModelPipeline;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -30,7 +29,7 @@ public class Kr36NewsModel {
     @ExtractByUrl
     private String url;
 
-    public static void main(String[] args) throws IOException, JMException {
+    public static void main(String[] args) throws JMException {
         //Just for benchmark
         Spider thread = OOSpider.create(Site.me().setSleepTime(0), new PageModelPipeline() {
             @Override

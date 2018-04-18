@@ -10,7 +10,7 @@ import us.codecraft.webmagic.model.annotation.TargetUrl;
  * @author code4crafter@gmail.com
  */
 @TargetUrl("http://meishi.qq.com/beijing/c/all[\\-p2]*")
-@ExtractBy(value = "//ul[@id=\"promos_list2\"]/li",multi = true)
+@ExtractBy(value = "//ul[@id=\"promos_list2\"]/li", multi = true)
 public class QQMeishi {
 
     @ExtractBy("//div[@class=info]/a[@class=title]/h4/text()")
@@ -22,5 +22,4 @@ public class QQMeishi {
     public static void main(String[] args) {
         OOSpider.create(Site.me(), new ConsolePageModelPipeline(), QQMeishi.class).addUrl("http://meishi.qq.com/beijing/c/all").thread(4).run();
     }
-
 }

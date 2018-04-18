@@ -3,7 +3,9 @@ package us.codecraft.webmagic.configurable;
 import us.codecraft.webmagic.selector.JsonPathSelector;
 import us.codecraft.webmagic.selector.Selector;
 
-import static us.codecraft.webmagic.selector.Selectors.*;
+import static us.codecraft.webmagic.selector.Selectors.$;
+import static us.codecraft.webmagic.selector.Selectors.regex;
+import static us.codecraft.webmagic.selector.Selectors.xpath;
 
 /**
  * @author code4crafter@gmail.com
@@ -75,12 +77,17 @@ public class ExtractRule {
         return selector;
     }
 
+    public void setSelector(Selector selector) {
+        this.selector = selector;
+    }
+
     private Selector compileSelector() {
         switch (expressionType) {
             case Css:
                 if (expressionParams.length >= 1) {
                     return $(expressionValue, expressionParams[0]);
-                } else {
+                }
+                else {
                     return $(expressionValue);
                 }
             case XPath:
@@ -88,7 +95,8 @@ public class ExtractRule {
             case Regex:
                 if (expressionParams.length >= 1) {
                     return regex(expressionValue, Integer.parseInt(expressionParams[0]));
-                } else {
+                }
+                else {
                     return regex(expressionValue);
                 }
             case JsonPath:
@@ -96,10 +104,6 @@ public class ExtractRule {
             default:
                 return xpath(expressionValue);
         }
-    }
-
-    public void setSelector(Selector selector) {
-        this.selector = selector;
     }
 
     public boolean isNotNull() {

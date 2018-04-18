@@ -22,11 +22,6 @@ public @interface ExtractBy {
     String value();
 
     /**
-     * types of extractor expressions
-     */
-    public static enum Type {XPath, Regex, Css, JsonPath}
-
-    /**
      * Extractor type, support XPath, CSS Selector and regex.
      *
      * @return extractor type
@@ -42,21 +37,6 @@ public @interface ExtractBy {
     boolean notNull() default false;
 
     /**
-     * types of source for extracting.
-     */
-    public static enum Source {
-        /**
-         * extract from the content extracted by class extractor
-         */
-        SelectedHtml,
-        /**
-         * extract from the raw html
-         */
-        RawHtml,
-        RawText
-    }
-
-    /**
      * The source for extracting. <br>
      * It works only if you already added 'ExtractBy' to Class. <br>
      *
@@ -67,11 +47,37 @@ public @interface ExtractBy {
     /**
      * Define whether the extractor return more than one result.
      * When set to 'true', the extractor return a list of string (so you should define the field as List). <br>
-     *
+     * <p>
      * Deprecated since 0.4.2. This option is determined automatically by the class of field.
-     * @deprecated since 0.4.2
+     *
      * @return whether the extractor return more than one result
+     *
+     * @deprecated since 0.4.2
      */
     boolean multi() default false;
 
+    /**
+     * types of extractor expressions
+     */
+    enum Type {
+        XPath,
+        Regex,
+        Css,
+        JsonPath
+    }
+
+    /**
+     * types of source for extracting.
+     */
+    enum Source {
+        /**
+         * extract from the content extracted by class extractor
+         */
+        SelectedHtml,
+        /**
+         * extract from the raw html
+         */
+        RawHtml,
+        RawText
+    }
 }

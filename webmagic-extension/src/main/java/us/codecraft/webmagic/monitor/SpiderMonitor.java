@@ -1,5 +1,18 @@
 package us.codecraft.webmagic.monitor;
 
+import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import javax.management.InstanceAlreadyExistsException;
+import javax.management.JMException;
+import javax.management.MBeanRegistrationException;
+import javax.management.MBeanServer;
+import javax.management.MalformedObjectNameException;
+import javax.management.NotCompliantMBeanException;
+import javax.management.ObjectName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Request;
@@ -7,14 +20,6 @@ import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.SpiderListener;
 import us.codecraft.webmagic.utils.Experimental;
 import us.codecraft.webmagic.utils.UrlUtils;
-
-import javax.management.*;
-import java.lang.management.ManagementFactory;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author code4crafer@gmail.com
@@ -40,11 +45,17 @@ public class SpiderMonitor {
         mbeanServer = ManagementFactory.getPlatformMBeanServer();
     }
 
+    public static SpiderMonitor instance() {
+        return INSTANCE;
+    }
+
     /**
      * Register spider for monitor.
      *
      * @param spiders spiders
+     *
      * @return this
+     *
      * @throws JMException JMException
      */
     public synchronized SpiderMonitor register(Spider... spiders) throws JMException {
@@ -54,7 +65,8 @@ public class SpiderMonitor {
                 List<SpiderListener> spiderListeners = new ArrayList<SpiderListener>();
                 spiderListeners.add(monitorSpiderListener);
                 spider.setSpiderListeners(spiderListeners);
-            } else {
+            }
+            else {
                 spider.getSpiderListeners().add(monitorSpiderListener);
             }
             SpiderStatusMXBean spiderStatusMBean = getSpiderStatusMBean(spider, monitorSpiderListener);
@@ -68,8 +80,11 @@ public class SpiderMonitor {
         return new SpiderStatus(spider, monitorSpiderListener);
     }
 
-    public static SpiderMonitor instance() {
-        return INSTANCE;
+    protected void registerMBean(
+        SpiderStatusMXBean spiderStatus) throws MalformedObjectNameException, InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException {
+        //        ObjectName objName = new ObjectName(jmxServerName + ":name=" + spiderStatus.getName());
+        ObjectName objName = new ObjectName(jmxServerName + ":name=" + UrlUtils.removePort(spiderStatus.getName()));
+        mbeanServer.registerMBean(spiderStatus, objName);
     }
 
     public class MonitorSpiderListener implements SpiderListener {
@@ -103,11 +118,4 @@ public class SpiderMonitor {
             return errorUrls;
         }
     }
-
-    protected void registerMBean(SpiderStatusMXBean spiderStatus) throws MalformedObjectNameException, InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException {
-//        ObjectName objName = new ObjectName(jmxServerName + ":name=" + spiderStatus.getName());
-        ObjectName objName = new ObjectName(jmxServerName + ":name=" + UrlUtils.removePort(spiderStatus.getName()));
-        mbeanServer.registerMBean(spiderStatus, objName);
-    }
-
 }

@@ -24,13 +24,14 @@ public interface PageProcessor {
      *
      * @param page page
      */
-    public void process(Page page);
+    void process(Page page);
 
     /**
      * get the site settings
      *
      * @return site
+     *
      * @see Site
      */
-    public Site getSite();
+    Site getSite();
 }

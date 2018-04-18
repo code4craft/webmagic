@@ -1,13 +1,12 @@
 package us.codecraft.webmagic.selector;
 
+import java.util.Collections;
+import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Selectable html.<br>
@@ -17,14 +16,13 @@ import java.util.List;
  */
 public class Html extends HtmlNode {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
-	/**
-	 * Disable jsoup html entity escape. It can be set just before any Html instance is created.
+    /**
+     * Disable jsoup html entity escape. It can be set just before any Html instance is created.
+     *
      * @deprecated
-	 */
-	public static boolean DISABLE_HTML_ENTITY_ESCAPE = false;
-
+     */
+    public static boolean DISABLE_HTML_ENTITY_ESCAPE = false;
+    private Logger logger = LoggerFactory.getLogger(getClass());
     /**
      * Store parsed document for better performance when only one text exist.
      */
@@ -33,7 +31,8 @@ public class Html extends HtmlNode {
     public Html(String text, String url) {
         try {
             this.document = Jsoup.parse(text, url);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             this.document = null;
             logger.warn("parse document error ", e);
         }
@@ -42,7 +41,8 @@ public class Html extends HtmlNode {
     public Html(String text) {
         try {
             this.document = Jsoup.parse(text);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             this.document = null;
             logger.warn("parse document error ", e);
         }
@@ -50,6 +50,10 @@ public class Html extends HtmlNode {
 
     public Html(Document document) {
         this.document = document;
+    }
+
+    public static Html create(String text) {
+        return new Html(text);
     }
 
     public Document getDocument() {
@@ -63,13 +67,15 @@ public class Html extends HtmlNode {
 
     /**
      * @param selector selector
+     *
      * @return result
      */
     public String selectDocument(Selector selector) {
         if (selector instanceof ElementSelector) {
             ElementSelector elementSelector = (ElementSelector) selector;
             return elementSelector.select(getDocument());
-        } else {
+        }
+        else {
             return selector.select(getFirstSourceText());
         }
     }
@@ -78,13 +84,9 @@ public class Html extends HtmlNode {
         if (selector instanceof ElementSelector) {
             ElementSelector elementSelector = (ElementSelector) selector;
             return elementSelector.selectList(getDocument());
-        } else {
+        }
+        else {
             return selector.selectList(getFirstSourceText());
         }
     }
-
-    public static Html create(String text) {
-        return new Html(text);
-    }
-
 }

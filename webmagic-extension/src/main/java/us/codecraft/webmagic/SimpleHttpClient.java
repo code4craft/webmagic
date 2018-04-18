@@ -6,7 +6,7 @@ import us.codecraft.webmagic.proxy.ProxyProvider;
 
 /**
  * @author code4crafter@gmail.com
- *         Date: 2017/5/27
+ * Date: 2017/5/27
  * @since 0.7.0
  */
 public class SimpleHttpClient {
@@ -24,7 +24,7 @@ public class SimpleHttpClient {
         this.httpClientDownloader = new HttpClientDownloader();
     }
 
-    public void setProxyProvider(ProxyProvider proxyProvider){
+    public void setProxyProvider(ProxyProvider proxyProvider) {
         this.httpClientDownloader.setProxyProvider(proxyProvider);
     }
 
@@ -47,5 +47,4 @@ public class SimpleHttpClient {
     public Page get(Request request) {
         return httpClientDownloader.download(request, site.toTask());
     }
-
 }

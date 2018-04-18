@@ -34,14 +34,12 @@ public class UrlUtilsTest {
     }
 
     @Test
-    public void testGetDomain(){
+    public void testGetDomain() {
         String url = "http://www.dianping.com/aa/";
-        Assert.assertEquals("www.dianping.com",UrlUtils.getDomain(url));
+        Assert.assertEquals("www.dianping.com", UrlUtils.getDomain(url));
         url = "www.dianping.com/aa/";
-        Assert.assertEquals("www.dianping.com",UrlUtils.getDomain(url));
+        Assert.assertEquals("www.dianping.com", UrlUtils.getDomain(url));
         url = "http://www.dianping.com";
-        Assert.assertEquals("www.dianping.com",UrlUtils.getDomain(url));
+        Assert.assertEquals("www.dianping.com", UrlUtils.getDomain(url));
     }
-
-
 }

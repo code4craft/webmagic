@@ -5,6 +5,5 @@ package us.codecraft.webmagic.monitor;
  */
 public interface CustomSpiderStatusMXBean extends SpiderStatusMXBean {
 
-    public String getSchedulerName();
-
+    String getSchedulerName();
 }

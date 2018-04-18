@@ -1,12 +1,13 @@
 package us.codecraft.webmagic.scheduler;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
@@ -16,7 +17,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
 /**
  * Store urls and cursor in files so that a Spider can resume the status when shutdown.<br>
@@ -24,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler,Closeable {
+public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler, Closeable {
 
     private String filePath = System.getProperty("java.io.tmpdir");
 
@@ -45,7 +50,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
     private BlockingQueue<Request> queue;
 
     private Set<String> urls;
-    
+
     private ScheduledExecutorService flushThreadPool;
 
     public FileCacheQueueScheduler(String filePath) {
@@ -75,31 +80,30 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
     }
 
     private void initDuplicateRemover() {
-        setDuplicateRemover(
-                new DuplicateRemover() {
-                    @Override
-                    public boolean isDuplicate(Request request, Task task) {
-                        if (!inited.get()) {
-                            init(task);
-                        }
-                        return !urls.add(request.getUrl());
-                    }
+        setDuplicateRemover(new DuplicateRemover() {
+            @Override
+            public boolean isDuplicate(Request request, Task task) {
+                if (!inited.get()) {
+                    init(task);
+                }
+                return !urls.add(request.getUrl());
+            }
 
-                    @Override
-                    public void resetDuplicateCheck(Task task) {
-                        urls.clear();
-                    }
+            @Override
+            public void resetDuplicateCheck(Task task) {
+                urls.clear();
+            }
 
-                    @Override
-                    public int getTotalRequestsCount(Task task) {
-                        return urls.size();
-                    }
-                });
+            @Override
+            public int getTotalRequestsCount(Task task) {
+                return urls.size();
+            }
+        });
     }
 
     private void initFlushThread() {
-    	flushThreadPool = Executors.newScheduledThreadPool(1);
-    	flushThreadPool.scheduleAtFixedRate(new Runnable() {
+        flushThreadPool = Executors.newScheduledThreadPool(1);
+        flushThreadPool.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 flush();
@@ -111,7 +115,8 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
         try {
             fileUrlWriter = new PrintWriter(new FileWriter(getFileName(fileUrlAllName), true));
             fileCursorWriter = new PrintWriter(new FileWriter(getFileName(fileCursor), false));
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException("init cache scheduler error", e);
         }
     }
@@ -123,10 +128,12 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
             readCursorFile();
             readUrlFile();
             // initDuplicateRemover();
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             //init
             logger.info("init cache file " + getFileName(fileUrlAllName));
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             logger.error("init file error", e);
         }
     }
@@ -144,7 +151,8 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
                     queue.add(new Request(line));
                 }
             }
-        } finally {
+        }
+        finally {
             if (fileUrlReader != null) {
                 IOUtils.closeQuietly(fileUrlReader);
             }
@@ -154,24 +162,25 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
     private void readCursorFile() throws IOException {
         BufferedReader fileCursorReader = null;
         try {
-        	fileCursorReader = new BufferedReader(new FileReader(getFileName(fileCursor)));
+            fileCursorReader = new BufferedReader(new FileReader(getFileName(fileCursor)));
             String line;
             //read the last number
             while ((line = fileCursorReader.readLine()) != null) {
                 cursor = new AtomicInteger(NumberUtils.toInt(line));
             }
-        } finally {
+        }
+        finally {
             if (fileCursorReader != null) {
                 IOUtils.closeQuietly(fileCursorReader);
             }
         }
     }
-    
-    public void close() throws IOException {
-		flushThreadPool.shutdown();	
-		fileUrlWriter.close();
-		fileCursorWriter.close();
-	}
+
+    public void close() {
+        flushThreadPool.shutdown();
+        fileUrlWriter.close();
+        fileCursorWriter.close();
+    }
 
     private String getFileName(String filename) {
         return filePath + task.getUUID() + filename;

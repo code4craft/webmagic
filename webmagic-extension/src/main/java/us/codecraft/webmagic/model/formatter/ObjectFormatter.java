@@ -10,5 +10,4 @@ public interface ObjectFormatter<T> {
     Class<T> clazz();
 
     void initParam(String[] extra);
-
 }

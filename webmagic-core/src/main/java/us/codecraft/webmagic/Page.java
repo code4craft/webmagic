@@ -1,16 +1,15 @@
 package us.codecraft.webmagic;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Json;
 import us.codecraft.webmagic.selector.Selectable;
 import us.codecraft.webmagic.utils.HttpConstant;
 import us.codecraft.webmagic.utils.UrlUtils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Object storing extracted result and urls to fetch.<br>
@@ -41,7 +40,7 @@ public class Page {
 
     private Selectable url;
 
-    private Map<String,List<String>> headers;
+    private Map<String, List<String>> headers;
 
     private int statusCode = HttpConstant.StatusCode.CODE_200;
 
@@ -52,11 +51,11 @@ public class Page {
     private List<Request> targetRequests = new ArrayList<Request>();
 
     private String charset;
-    
+
     public Page() {
     }
 
-    public static Page fail(){
+    public static Page fail() {
         Page page = new Page();
         page.setDownloadSuccess(false);
         return page;
@@ -65,7 +64,6 @@ public class Page {
     public Page setSkip(boolean skip) {
         resultItems.setSkip(skip);
         return this;
-
     }
 
     /**
@@ -91,9 +89,20 @@ public class Page {
     }
 
     /**
+     * @param html html
+     *
+     * @deprecated since 0.4.0
+     * The html is parse just when first time of calling {@link #getHtml()}, so use {@link #setRawText(String)} instead.
+     */
+    public void setHtml(Html html) {
+        this.html = html;
+    }
+
+    /**
      * get json content of page
      *
      * @return json
+     *
      * @since 0.5.0
      */
     public Json getJson() {
@@ -101,15 +110,6 @@ public class Page {
             json = new Json(rawText);
         }
         return json;
-    }
-
-    /**
-     * @param html html
-     * @deprecated since 0.4.0
-     * The html is parse just when first time of calling {@link #getHtml()}, so use {@link #setRawText(String)} instead.
-     */
-    public void setHtml(Html html) {
-        this.html = html;
     }
 
     public List<Request> getTargetRequests() {
@@ -251,19 +251,33 @@ public class Page {
 
     @Override
     public String toString() {
-        return "Page{" +
-                "request=" + request +
-                ", resultItems=" + resultItems +
-                ", html=" + html +
-                ", json=" + json +
-                ", rawText='" + rawText + '\'' +
-                ", url=" + url +
-                ", headers=" + headers +
-                ", statusCode=" + statusCode +
-                ", downloadSuccess=" + downloadSuccess +
-                ", targetRequests=" + targetRequests +
-                ", charset='" + charset + '\'' +
-                ", bytes=" + Arrays.toString(bytes) +
-                '}';
+        return "Page{"
+            + "request="
+            + request
+            + ", resultItems="
+            + resultItems
+            + ", html="
+            + html
+            + ", json="
+            + json
+            + ", rawText='"
+            + rawText
+            + '\''
+            + ", url="
+            + url
+            + ", headers="
+            + headers
+            + ", statusCode="
+            + statusCode
+            + ", downloadSuccess="
+            + downloadSuccess
+            + ", targetRequests="
+            + targetRequests
+            + ", charset='"
+            + charset
+            + '\''
+            + ", bytes="
+            + Arrays.toString(bytes)
+            + '}';
     }
 }

@@ -1,13 +1,12 @@
 package us.codecraft.webmagic.scheduler;
 
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.utils.NumberUtils;
-
 import java.util.Comparator;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
+import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.utils.NumberUtils;
 
 /**
  * Priority scheduler. Request with higher priority will poll earlier. <br>
@@ -21,27 +20,31 @@ public class PriorityScheduler extends DuplicateRemovedScheduler implements Moni
 
     private BlockingQueue<Request> noPriorityQueue = new LinkedBlockingQueue<Request>();
 
-    private PriorityBlockingQueue<Request> priorityQueuePlus = new PriorityBlockingQueue<Request>(INITIAL_CAPACITY, new Comparator<Request>() {
-        @Override
-        public int compare(Request o1, Request o2) {
-            return -NumberUtils.compareLong(o1.getPriority(), o2.getPriority());
-        }
-    });
+    private PriorityBlockingQueue<Request> priorityQueuePlus =
+        new PriorityBlockingQueue<Request>(INITIAL_CAPACITY, new Comparator<Request>() {
+            @Override
+            public int compare(Request o1, Request o2) {
+                return -NumberUtils.compareLong(o1.getPriority(), o2.getPriority());
+            }
+        });
 
-    private PriorityBlockingQueue<Request> priorityQueueMinus = new PriorityBlockingQueue<Request>(INITIAL_CAPACITY, new Comparator<Request>() {
-        @Override
-        public int compare(Request o1, Request o2) {
-            return -NumberUtils.compareLong(o1.getPriority(), o2.getPriority());
-        }
-    });
+    private PriorityBlockingQueue<Request> priorityQueueMinus =
+        new PriorityBlockingQueue<Request>(INITIAL_CAPACITY, new Comparator<Request>() {
+            @Override
+            public int compare(Request o1, Request o2) {
+                return -NumberUtils.compareLong(o1.getPriority(), o2.getPriority());
+            }
+        });
 
     @Override
     public void pushWhenNoDuplicate(Request request, Task task) {
         if (request.getPriority() == 0) {
             noPriorityQueue.add(request);
-        } else if (request.getPriority() > 0) {
+        }
+        else if (request.getPriority() > 0) {
             priorityQueuePlus.put(request);
-        } else {
+        }
+        else {
             priorityQueueMinus.put(request);
         }
     }

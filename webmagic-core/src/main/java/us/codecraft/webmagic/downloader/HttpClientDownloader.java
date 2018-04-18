@@ -1,5 +1,9 @@
 package us.codecraft.webmagic.downloader;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -17,12 +21,6 @@ import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.CharsetUtils;
 import us.codecraft.webmagic.utils.HttpClientUtils;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
-
-
 /**
  * The http downloader based on HttpClient.
  *
@@ -31,14 +29,12 @@ import java.util.Map;
  */
 public class HttpClientDownloader extends AbstractDownloader {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
     private final Map<String, CloseableHttpClient> httpClients = new HashMap<String, CloseableHttpClient>();
-
+    private Logger logger = LoggerFactory.getLogger(getClass());
     private HttpClientGenerator httpClientGenerator = new HttpClientGenerator();
 
     private HttpUriRequestConverter httpUriRequestConverter = new HttpUriRequestConverter();
-    
+
     private ProxyProvider proxyProvider;
 
     private boolean responseHeader = true;
@@ -80,16 +76,20 @@ public class HttpClientDownloader extends AbstractDownloader {
         HttpClientRequestContext requestContext = httpUriRequestConverter.convert(request, task.getSite(), proxy);
         Page page = Page.fail();
         try {
-            httpResponse = httpClient.execute(requestContext.getHttpUriRequest(), requestContext.getHttpClientContext());
-            page = handleResponse(request, request.getCharset() != null ? request.getCharset() : task.getSite().getCharset(), httpResponse, task);
+            httpResponse =
+                httpClient.execute(requestContext.getHttpUriRequest(), requestContext.getHttpClientContext());
+            page = handleResponse(request, request.getCharset() != null ? request.getCharset()
+                : task.getSite().getCharset(), httpResponse, task);
             onSuccess(request);
             logger.info("downloading page success {}", request.getUrl());
             return page;
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             logger.warn("download page {} error", request.getUrl(), e);
             onError(request);
             return page;
-        } finally {
+        }
+        finally {
             if (httpResponse != null) {
                 //ensure the connection is released back to pool
                 EntityUtils.consumeQuietly(httpResponse.getEntity());
@@ -105,12 +105,14 @@ public class HttpClientDownloader extends AbstractDownloader {
         httpClientGenerator.setPoolSize(thread);
     }
 
-    protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
+    protected Page handleResponse(Request request, String charset, HttpResponse httpResponse,
+        Task task) throws IOException {
         byte[] bytes = IOUtils.toByteArray(httpResponse.getEntity().getContent());
-        String contentType = httpResponse.getEntity().getContentType() == null ? "" : httpResponse.getEntity().getContentType().getValue();
+        String contentType = httpResponse.getEntity().getContentType() == null ? ""
+            : httpResponse.getEntity().getContentType().getValue();
         Page page = new Page();
         page.setBytes(bytes);
-        if (!request.isBinaryContent()){
+        if (!request.isBinaryContent()) {
             if (charset == null) {
                 charset = getHtmlCharset(contentType, bytes);
             }

@@ -1,13 +1,17 @@
 package us.codecraft.webmagic.pipeline;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import us.codecraft.webmagic.MultiPageModel;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.utils.Experimental;
 import us.codecraft.webmagic.utils.DoubleKeyMap;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import us.codecraft.webmagic.utils.Experimental;
 
 /**
  * A pipeline combines the result in more than one page together.<br>
@@ -20,9 +24,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Experimental
 public class MultiPagePipeline implements Pipeline {
 
-    private DoubleKeyMap<String, String, Boolean> pageMap = new DoubleKeyMap<String, String, Boolean>(ConcurrentHashMap.class);
+    private DoubleKeyMap<String, String, Boolean> pageMap =
+        new DoubleKeyMap<String, String, Boolean>(ConcurrentHashMap.class);
 
-    private DoubleKeyMap<String, String, MultiPageModel> objectMap = new DoubleKeyMap<String, String, MultiPageModel>(ConcurrentHashMap.class);
+    private DoubleKeyMap<String, String, MultiPageModel> objectMap =
+        new DoubleKeyMap<String, String, MultiPageModel>(ConcurrentHashMap.class);
 
     @Override
     public void process(ResultItems resultItems, Task task) {
@@ -76,7 +82,8 @@ public class MultiPagePipeline implements Pipeline {
                                 int i1 = Integer.parseInt(o1.getKey());
                                 int i2 = Integer.parseInt(o2.getKey());
                                 return i1 - i2;
-                            } catch (NumberFormatException e) {
+                            }
+                            catch (NumberFormatException e) {
                                 return o1.getKey().compareTo(o2.getKey());
                             }
                         }
@@ -90,7 +97,5 @@ public class MultiPagePipeline implements Pipeline {
                 }
             }
         }
-
     }
-
 }

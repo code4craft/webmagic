@@ -25,6 +25,7 @@ public class CountableThreadPool {
     private ReentrantLock reentrantLock = new ReentrantLock();
 
     private Condition condition = reentrantLock.newCondition();
+    private ExecutorService executorService;
 
     public CountableThreadPool(int threadNum) {
         this.threadNum = threadNum;
@@ -48,10 +49,7 @@ public class CountableThreadPool {
         return threadNum;
     }
 
-    private ExecutorService executorService;
-
     public void execute(final Runnable runnable) {
-
 
         if (threadAlive.get() >= threadNum) {
             try {
@@ -59,10 +57,12 @@ public class CountableThreadPool {
                 while (threadAlive.get() >= threadNum) {
                     try {
                         condition.await();
-                    } catch (InterruptedException e) {
+                    }
+                    catch (InterruptedException e) {
                     }
                 }
-            } finally {
+            }
+            finally {
                 reentrantLock.unlock();
             }
         }
@@ -72,12 +72,14 @@ public class CountableThreadPool {
             public void run() {
                 try {
                     runnable.run();
-                } finally {
+                }
+                finally {
                     try {
                         reentrantLock.lock();
                         threadAlive.decrementAndGet();
                         condition.signal();
-                    } finally {
+                    }
+                    finally {
                         reentrantLock.unlock();
                     }
                 }
@@ -92,6 +94,4 @@ public class CountableThreadPool {
     public void shutdown() {
         executorService.shutdown();
     }
-
-
 }

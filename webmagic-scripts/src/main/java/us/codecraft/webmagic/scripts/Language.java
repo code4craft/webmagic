@@ -5,11 +5,11 @@ package us.codecraft.webmagic.scripts;
  */
 public enum Language {
 
-    JavaScript("javascript","js/defines.js",""),
+    JavaScript("javascript", "js/defines.js", ""),
 
-    JRuby("jruby","ruby/defines.rb",""),
+    JRuby("jruby", "ruby/defines.rb", ""),
 
-    Jython("jython","python/defines.py","");
+    Jython("jython", "python/defines.py", "");
 
     private String engineName;
 

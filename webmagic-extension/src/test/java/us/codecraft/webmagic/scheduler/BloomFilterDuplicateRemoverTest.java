@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BloomFilterDuplicateRemoverTest {
 
     @Test
-    public void testRemove() throws Exception {
+    public void testRemove() {
         BloomFilterDuplicateRemover bloomFilterDuplicateRemover = new BloomFilterDuplicateRemover(10);
         boolean isDuplicate = bloomFilterDuplicateRemover.isDuplicate(new Request("a"), null);
         assertThat(isDuplicate).isFalse();
@@ -24,14 +24,13 @@ public class BloomFilterDuplicateRemoverTest {
         assertThat(isDuplicate).isFalse();
         isDuplicate = bloomFilterDuplicateRemover.isDuplicate(new Request("b"), null);
         assertThat(isDuplicate).isTrue();
-
     }
 
     @Ignore("long time")
     @Test
-    public void testMemory() throws Exception {
+    public void testMemory() {
         int times = 5000000;
-        DuplicateRemover duplicateRemover = new BloomFilterDuplicateRemover(times,0.005);
+        DuplicateRemover duplicateRemover = new BloomFilterDuplicateRemover(times, 0.005);
         long freeMemory = Runtime.getRuntime().freeMemory();
         long time = System.currentTimeMillis();
         for (int i = 0; i < times; i++) {
@@ -53,7 +52,7 @@ public class BloomFilterDuplicateRemoverTest {
 
     @Ignore("long time")
     @Test
-    public void testMissHit() throws Exception {
+    public void testMissHit() {
         int times = 5000000;
         DuplicateRemover duplicateRemover = new BloomFilterDuplicateRemover(times, 0.01);
         int right = 0;
@@ -63,7 +62,8 @@ public class BloomFilterDuplicateRemoverTest {
             boolean duplicate = duplicateRemover.isDuplicate(new Request(String.valueOf(i)), null);
             if (duplicate) {
                 wrong++;
-            } else {
+            }
+            else {
                 right++;
             }
             duplicate = duplicateRemover.isDuplicate(new Request(String.valueOf(i)), null);
@@ -74,6 +74,4 @@ public class BloomFilterDuplicateRemoverTest {
 
         System.out.println("Right count: " + right + " Wrong count: " + wrong + " Miss check: " + missCheck);
     }
-
-
 }

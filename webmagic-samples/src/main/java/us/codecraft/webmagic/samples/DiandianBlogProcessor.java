@@ -1,10 +1,9 @@
 package us.codecraft.webmagic.samples;
 
+import java.util.List;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
-
-import java.util.List;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -36,7 +35,7 @@ public class DiandianBlogProcessor implements PageProcessor {
         //site定义抽取配置，以及开始url等
         if (site == null) {
             site = Site.me().setDomain("progressdaily.diandian.com").
-                    setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
+                setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
         }
         return site;
     }

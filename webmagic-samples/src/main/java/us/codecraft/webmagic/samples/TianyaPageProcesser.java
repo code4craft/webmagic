@@ -1,10 +1,9 @@
 package us.codecraft.webmagic.samples;
 
-import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.processor.PageProcessor;
-
 import java.util.List;
+import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -16,7 +15,7 @@ public class TianyaPageProcesser implements PageProcessor {
         List<String> strings = page.getHtml().regex("<a[^<>]*href=[\"']{1}(/post-free.*?\\.shtml)[\"']{1}").all();
         page.addTargetRequests(strings);
         page.putField("title", page.getHtml().xpath("//div[@id='post_head']//span[@class='s_title']//b"));
-        page.putField("body",page.getHtml().smartContent());
+        page.putField("body", page.getHtml().smartContent());
     }
 
     @Override

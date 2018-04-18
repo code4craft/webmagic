@@ -16,9 +16,10 @@ public interface RequestMatcher {
      *
      * @return whether matches
      */
-    public boolean match(Request page);
+    boolean match(Request page);
 
-    public enum MatchOther {
-        YES, NO
+    enum MatchOther {
+        YES,
+        NO
     }
 }

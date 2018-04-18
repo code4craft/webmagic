@@ -1,11 +1,10 @@
 package us.codecraft.webmagic.handler;
 
+import java.util.ArrayList;
+import java.util.List;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.pipeline.Pipeline;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author code4crafer@gmail.com
@@ -19,7 +18,8 @@ public class CompositePipeline implements Pipeline {
         for (SubPipeline subPipeline : subPipelines) {
             if (subPipeline.match(resultItems.getRequest())) {
                 RequestMatcher.MatchOther matchOtherProcessorProcessor = subPipeline.processResult(resultItems, task);
-                if (matchOtherProcessorProcessor == null || matchOtherProcessorProcessor != RequestMatcher.MatchOther.YES) {
+                if (matchOtherProcessorProcessor == null
+                    || matchOtherProcessorProcessor != RequestMatcher.MatchOther.YES) {
                     return;
                 }
             }
@@ -38,5 +38,4 @@ public class CompositePipeline implements Pipeline {
         }
         return this;
     }
-
 }

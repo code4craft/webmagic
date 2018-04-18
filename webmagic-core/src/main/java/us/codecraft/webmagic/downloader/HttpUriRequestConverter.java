@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.downloader;
 
+import java.util.Map;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthState;
 import org.apache.http.auth.ChallengeState;
@@ -20,13 +21,10 @@ import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.utils.HttpConstant;
 import us.codecraft.webmagic.utils.UrlUtils;
 
-import java.util.Map;
-
 /**
  * @author code4crafter@gmail.com
- *         Date: 17/3/18
- *         Time: 11:28
- *
+ * Date: 17/3/18
+ * Time: 11:28
  * @since 0.7.0
  */
 public class HttpUriRequestConverter {
@@ -58,7 +56,8 @@ public class HttpUriRequestConverter {
     }
 
     private HttpUriRequest convertHttpUriRequest(Request request, Site site, Proxy proxy) {
-        RequestBuilder requestBuilder = selectRequestMethod(request).setUri(UrlUtils.fixIllegalCharacterInUrl(request.getUrl()));
+        RequestBuilder requestBuilder =
+            selectRequestMethod(request).setUri(UrlUtils.fixIllegalCharacterInUrl(request.getUrl()));
         if (site.getHeaders() != null) {
             for (Map.Entry<String, String> headerEntry : site.getHeaders().entrySet()) {
                 requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
@@ -67,10 +66,7 @@ public class HttpUriRequestConverter {
 
         RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
         if (site != null) {
-            requestConfigBuilder.setConnectionRequestTimeout(site.getTimeOut())
-                    .setSocketTimeout(site.getTimeOut())
-                    .setConnectTimeout(site.getTimeOut())
-                    .setCookieSpec(CookieSpecs.STANDARD);
+            requestConfigBuilder.setConnectionRequestTimeout(site.getTimeOut()).setSocketTimeout(site.getTimeOut()).setConnectTimeout(site.getTimeOut()).setCookieSpec(CookieSpecs.STANDARD);
         }
 
         if (proxy != null) {
@@ -91,15 +87,20 @@ public class HttpUriRequestConverter {
         if (method == null || method.equalsIgnoreCase(HttpConstant.Method.GET)) {
             //default get
             return RequestBuilder.get();
-        } else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
-            return addFormParams(RequestBuilder.post(),request);
-        } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
+        }
+        else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
+            return addFormParams(RequestBuilder.post(), request);
+        }
+        else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
             return RequestBuilder.head();
-        } else if (method.equalsIgnoreCase(HttpConstant.Method.PUT)) {
+        }
+        else if (method.equalsIgnoreCase(HttpConstant.Method.PUT)) {
             return addFormParams(RequestBuilder.put(), request);
-        } else if (method.equalsIgnoreCase(HttpConstant.Method.DELETE)) {
+        }
+        else if (method.equalsIgnoreCase(HttpConstant.Method.DELETE)) {
             return RequestBuilder.delete();
-        } else if (method.equalsIgnoreCase(HttpConstant.Method.TRACE)) {
+        }
+        else if (method.equalsIgnoreCase(HttpConstant.Method.TRACE)) {
             return RequestBuilder.trace();
         }
         throw new IllegalArgumentException("Illegal HTTP Method " + method);
@@ -113,5 +114,4 @@ public class HttpUriRequestConverter {
         }
         return requestBuilder;
     }
-
 }

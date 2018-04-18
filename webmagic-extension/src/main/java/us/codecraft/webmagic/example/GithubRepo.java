@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.example;
 
+import java.util.List;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.ConsolePageModelPipeline;
 import us.codecraft.webmagic.model.HasKey;
@@ -8,8 +9,6 @@ import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.model.annotation.HelpUrl;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
-
-import java.util.List;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -41,9 +40,7 @@ public class GithubRepo implements HasKey {
     private String url;
 
     public static void main(String[] args) {
-        OOSpider.create(Site.me().setSleepTime(100)
-                , new ConsolePageModelPipeline(), GithubRepo.class)
-                .addUrl("https://github.com/code4craft").thread(10).run();
+        OOSpider.create(Site.me().setSleepTime(100), new ConsolePageModelPipeline(), GithubRepo.class).addUrl("https://github.com/code4craft").thread(10).run();
     }
 
     @Override
@@ -81,14 +78,25 @@ public class GithubRepo implements HasKey {
 
     @Override
     public String toString() {
-        return "GithubRepo{" +
-                "name='" + name + '\'' +
-                ", author='" + author + '\'' +
-                ", readme='" + readme + '\'' +
-                ", language=" + language +
-                ", star=" + star +
-                ", fork=" + fork +
-                ", url='" + url + '\'' +
-                '}';
+        return "GithubRepo{"
+            + "name='"
+            + name
+            + '\''
+            + ", author='"
+            + author
+            + '\''
+            + ", readme='"
+            + readme
+            + '\''
+            + ", language="
+            + language
+            + ", star="
+            + star
+            + ", fork="
+            + fork
+            + ", url='"
+            + url
+            + '\''
+            + '}';
     }
 }

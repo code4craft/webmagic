@@ -1,8 +1,7 @@
 package us.codecraft.webmagic;
 
-import us.codecraft.webmagic.utils.Experimental;
-
 import java.util.Collection;
+import us.codecraft.webmagic.utils.Experimental;
 
 /**
  * Extract an object of more than one pages, such as news and articles.<br>
@@ -18,14 +17,14 @@ public interface MultiPageModel {
      *
      * @return page key
      */
-    public String getPageKey();
+    String getPageKey();
 
     /**
      * page is the identifier of a page in pages for one object.
      *
      * @return page
      */
-    public String getPage();
+    String getPage();
 
     /**
      * other pages to be extracted.<br>
@@ -33,14 +32,14 @@ public interface MultiPageModel {
      *
      * @return other pages
      */
-    public Collection<String> getOtherPages();
+    Collection<String> getOtherPages();
 
     /**
      * Combine multiPageModels to a whole object.
      *
      * @param multiPageModel multiPageModel
+     *
      * @return multiPageModel combined
      */
-    public MultiPageModel combine(MultiPageModel multiPageModel);
-
+    MultiPageModel combine(MultiPageModel multiPageModel);
 }

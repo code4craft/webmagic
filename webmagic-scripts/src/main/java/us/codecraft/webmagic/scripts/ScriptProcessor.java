@@ -1,5 +1,12 @@
 package us.codecraft.webmagic.scripts;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+import java.util.Map;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 import org.apache.commons.io.IOUtils;
 import org.jruby.RubyHash;
 import org.python.core.PyDictionary;
@@ -7,28 +14,16 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
-import java.util.Map;
-
 /**
  * @author code4crafter@gmail.com
  * @since 0.4.1
  */
 public class ScriptProcessor implements PageProcessor {
 
-    private ScriptEnginePool enginePool;
-
-    private String defines;
-
-    private String script;
-
     private final Language language;
-
+    private ScriptEnginePool enginePool;
+    private String defines;
+    private String script;
     private Site site = Site.me();
 
     public ScriptProcessor(Language language, String script, int threadNum) {
@@ -40,7 +35,8 @@ public class ScriptProcessor implements PageProcessor {
         InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(language.getDefineFile());
         try {
             defines = IOUtils.toString(resourceAsStream);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
         this.script = script;
@@ -57,13 +53,13 @@ public class ScriptProcessor implements PageProcessor {
                 switch (language) {
                     case JavaScript:
                         engine.eval(defines + "\n" + script, context);
-//                        NativeObject o = (NativeObject) engine.get("result");
-//                        if (o != null) {
-//                            for (Object o1 : o.getIds()) {
-//                                String key = String.valueOf(o1);
-//                                page.getResultItems().put(key, NativeObject.getProperty(o, key));
-//                            }
-//                        }
+                        //                        NativeObject o = (NativeObject) engine.get("result");
+                        //                        if (o != null) {
+                        //                            for (Object o1 : o.getIds()) {
+                        //                                String key = String.valueOf(o1);
+                        //                                page.getResultItems().put(key, NativeObject.getProperty(o, key));
+                        //                            }
+                        //                        }
                         break;
                     case JRuby:
                         RubyHash oRuby = (RubyHash) engine.eval(defines + "\n" + script, context);
@@ -83,18 +79,18 @@ public class ScriptProcessor implements PageProcessor {
                         }
                         break;
                 }
-            } catch (ScriptException e) {
+            }
+            catch (ScriptException e) {
                 e.printStackTrace();
             }
-        } finally {
+        }
+        finally {
             enginePool.release(engine);
         }
     }
-
 
     @Override
     public Site getSite() {
         return site;
     }
-
 }

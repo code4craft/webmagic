@@ -18,13 +18,10 @@ import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
  */
 public class RedisScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler, DuplicateRemover {
 
-    protected JedisPool pool;
-
     private static final String QUEUE_PREFIX = "queue_";
-
     private static final String SET_PREFIX = "set_";
-
     private static final String ITEM_PREFIX = "item_";
+    protected JedisPool pool;
 
     public RedisScheduler(String host) {
         this(new JedisPool(new JedisPoolConfig(), host));
@@ -40,7 +37,8 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         Jedis jedis = pool.getResource();
         try {
             jedis.del(getSetKey(task));
-        } finally {
+        }
+        finally {
             pool.returnResource(jedis);
         }
     }
@@ -50,10 +48,10 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         Jedis jedis = pool.getResource();
         try {
             return jedis.sadd(getSetKey(task), request.getUrl()) == 0;
-        } finally {
+        }
+        finally {
             pool.returnResource(jedis);
         }
-
     }
 
     @Override
@@ -66,7 +64,8 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
                 String value = JSON.toJSONString(request);
                 jedis.hset((ITEM_PREFIX + task.getUUID()), field, value);
             }
-        } finally {
+        }
+        finally {
             jedis.close();
         }
     }
@@ -91,11 +90,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         if (request.getExtras() != null && !request.getExtras().isEmpty()) {
             return true;
         }
-        if (request.getPriority() != 0L) {
-            return true;
-        }
-
-        return false;
+        return request.getPriority() != 0L;
     }
 
     @Override
@@ -115,7 +110,8 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
             }
             Request request = new Request(url);
             return request;
-        } finally {
+        }
+        finally {
             pool.returnResource(jedis);
         }
     }
@@ -138,7 +134,8 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         try {
             Long size = jedis.llen(getQueueKey(task));
             return size.intValue();
-        } finally {
+        }
+        finally {
             pool.returnResource(jedis);
         }
     }
@@ -149,7 +146,8 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         try {
             Long size = jedis.scard(getSetKey(task));
             return size.intValue();
-        } finally {
+        }
+        finally {
             pool.returnResource(jedis);
         }
     }

@@ -22,5 +22,4 @@ public abstract class ClassUtils {
         }
         return fields;
     }
-
 }

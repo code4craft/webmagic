@@ -12,13 +12,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author code4crafter@gmail.com
- *         Date: 16/1/19
- *         Time: 上午7:27
+ * Date: 16/1/19
+ * Time: 上午7:27
  */
 public class GithubRepoPageProcessorTest {
 
     @Test
-    public void test_github() throws Exception {
+    public void test_github() {
         Spider.create(new GithubRepoPageProcessor()).addPipeline(new Pipeline() {
             @Override
             public void process(ResultItems resultItems, Task task) {

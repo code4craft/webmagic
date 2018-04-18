@@ -1,12 +1,11 @@
 package us.codecraft.webmagic.selector;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Selector in regex.<br>
@@ -27,6 +26,21 @@ public class RegexSelector implements Selector {
         this.group = group;
     }
 
+    /**
+     * Create a RegexSelector. When there is no capture group, the value is set to 0 else set to 1.
+     *
+     * @param regexStr
+     */
+    public RegexSelector(String regexStr) {
+        this.compileRegex(regexStr);
+        if (regex.matcher("").groupCount() == 0) {
+            this.group = 0;
+        }
+        else {
+            this.group = 1;
+        }
+    }
+
     private void compileRegex(String regexStr) {
         if (StringUtils.isBlank(regexStr)) {
             throw new IllegalArgumentException("regex must not be empty");
@@ -34,21 +48,9 @@ public class RegexSelector implements Selector {
         try {
             this.regex = Pattern.compile(regexStr, Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
             this.regexStr = regexStr;
-        } catch (PatternSyntaxException e) {
-            throw new IllegalArgumentException("invalid regex "+regexStr, e);
         }
-    }
-
-    /**
-     * Create a RegexSelector. When there is no capture group, the value is set to 0 else set to 1.
-     * @param regexStr
-     */
-    public RegexSelector(String regexStr) {
-        this.compileRegex(regexStr);
-        if (regex.matcher("").groupCount() == 0) {
-            this.group = 0;
-        } else {
-            this.group = 1;
+        catch (PatternSyntaxException e) {
+            throw new IllegalArgumentException("invalid regex " + regexStr, e);
         }
     }
 
@@ -96,5 +98,4 @@ public class RegexSelector implements Selector {
     public String toString() {
         return regexStr;
     }
-
 }

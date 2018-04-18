@@ -1,12 +1,11 @@
 package us.codecraft.webmagic.monitor;
 
+import javax.management.JMException;
 import org.junit.Test;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
-
-import javax.management.JMException;
 
 /**
  * @author jerry_shenchao@163.com

@@ -1,23 +1,22 @@
 package us.codecraft.webmagic.utils;
 
-import us.codecraft.webmagic.Request;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import us.codecraft.webmagic.Request;
 
 /**
  * @author code4crafter@gmail.com
- *         Date: 2017/6/5
- *         Time: 下午4:58
+ * Date: 2017/6/5
+ * Time: 下午4:58
  */
 public abstract class RequestUtils {
 
     private static Pattern p4Range = Pattern.compile("\\[(\\d+)\\-(\\d+)\\]");
 
-    public static List<Request> from(String exp){
+    public static List<Request> from(String exp) {
         Matcher matcher = p4Range.matcher(exp);
         if (!matcher.find()) {
             return Collections.singletonList(new Request(exp));
@@ -33,5 +32,4 @@ public abstract class RequestUtils {
         }
         return requests;
     }
-
 }

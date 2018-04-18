@@ -2,18 +2,17 @@ package us.codecraft.webmagic.scheduler;
 
 /**
  * @author code4crafter@gmail.com
- *         Date: 16/12/18
- *         Time: 上午10:23
+ * Date: 16/12/18
+ * Time: 上午10:23
  */
 
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
+import java.nio.charset.Charset;
+import java.util.concurrent.atomic.AtomicInteger;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
-
-import java.nio.charset.Charset;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * BloomFilterDuplicateRemover for huge number of urls.
@@ -23,10 +22,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class BloomFilterDuplicateRemover implements DuplicateRemover {
 
+    private final BloomFilter<CharSequence> bloomFilter;
     private int expectedInsertions;
-
     private double fpp;
-
     private AtomicInteger counter;
 
     public BloomFilterDuplicateRemover(int expectedInsertions) {
@@ -48,8 +46,6 @@ public class BloomFilterDuplicateRemover implements DuplicateRemover {
         counter = new AtomicInteger(0);
         return BloomFilter.create(Funnels.stringFunnel(Charset.defaultCharset()), expectedInsertions, fpp);
     }
-
-    private final BloomFilter<CharSequence> bloomFilter;
 
     @Override
     public boolean isDuplicate(Request request, Task task) {

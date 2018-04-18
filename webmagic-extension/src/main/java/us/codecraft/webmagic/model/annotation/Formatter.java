@@ -1,10 +1,9 @@
 package us.codecraft.webmagic.model.annotation;
 
-import us.codecraft.webmagic.model.formatter.ObjectFormatter;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import us.codecraft.webmagic.model.formatter.ObjectFormatter;
 
 /**
  * Define how the result string is convert to an object for field.
@@ -36,8 +35,8 @@ public @interface Formatter {
 
     /**
      * If there are more than one formatter for a class, just specify the implement.
+     *
      * @return implement
      */
     Class<? extends ObjectFormatter> formatter() default ObjectFormatter.class;
-
 }

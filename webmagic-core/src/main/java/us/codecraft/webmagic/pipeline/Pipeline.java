@@ -8,11 +8,11 @@ import us.codecraft.webmagic.Task;
  * The interface Pipeline can be implemented to customize ways of persistent.
  *
  * @author code4crafter@gmail.com <br>
- * @since 0.1.0
  * @see ConsolePipeline
  * @see FilePipeline
+ * @since 0.1.0
  */
-public interface Pipeline {
+public interface Pipeline<T> {
 
     /**
      * Process extracted results.
@@ -20,5 +20,5 @@ public interface Pipeline {
      * @param resultItems resultItems
      * @param task task
      */
-    public void process(ResultItems resultItems, Task task);
+    void process(ResultItems<T> resultItems, Task task);
 }

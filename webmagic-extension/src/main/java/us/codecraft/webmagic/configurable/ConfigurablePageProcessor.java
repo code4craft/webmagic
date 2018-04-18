@@ -1,11 +1,10 @@
 package us.codecraft.webmagic.configurable;
 
+import java.util.List;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.utils.Experimental;
-
-import java.util.List;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -29,14 +28,17 @@ public class ConfigurablePageProcessor implements PageProcessor {
                 List<String> results = page.getHtml().selectDocumentForList(extractRule.getSelector());
                 if (extractRule.isNotNull() && results.size() == 0) {
                     page.setSkip(true);
-                } else {
+                }
+                else {
                     page.getResultItems().put(extractRule.getFieldName(), results);
                 }
-            } else {
+            }
+            else {
                 String result = page.getHtml().selectDocument(extractRule.getSelector());
                 if (extractRule.isNotNull() && result == null) {
                     page.setSkip(true);
-                } else {
+                }
+                else {
                     page.getResultItems().put(extractRule.getFieldName(), result);
                 }
             }
@@ -47,5 +49,4 @@ public class ConfigurablePageProcessor implements PageProcessor {
     public Site getSite() {
         return site;
     }
-
 }

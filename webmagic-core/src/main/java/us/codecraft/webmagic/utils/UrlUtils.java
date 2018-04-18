@@ -1,8 +1,5 @@
 package us.codecraft.webmagic.utils;
 
-import org.apache.commons.lang3.StringUtils;
-import us.codecraft.webmagic.Request;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -11,6 +8,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
+import us.codecraft.webmagic.Request;
 
 /**
  * url and html utils.
@@ -20,6 +19,10 @@ import java.util.regex.Pattern;
  */
 public class UrlUtils {
 
+    private static final Pattern patternForCharset =
+        Pattern.compile("charset\\s*=\\s*['\"]*([^\\s;'\"]*)", Pattern.CASE_INSENSITIVE);
+    private static Pattern patternForProtocal = Pattern.compile("[\\w]+://");
+
     /**
      * canonicalizeUrl
      * <br>
@@ -27,6 +30,7 @@ public class UrlUtils {
      *
      * @param url url
      * @param refer refer
+     *
      * @return canonicalizeUrl
      */
     public static String canonicalizeUrl(String url, String refer) {
@@ -34,25 +38,27 @@ public class UrlUtils {
         try {
             try {
                 base = new URL(refer);
-            } catch (MalformedURLException e) {
+            }
+            catch (MalformedURLException e) {
                 // the base is unsuitable, but the attribute may be abs on its own, so try that
                 URL abs = new URL(refer);
                 return abs.toExternalForm();
             }
             // workaround: java resolves '//path/file + ?foo' to '//path/?foo', not '//path/file?foo' as desired
-            if (url.startsWith("?"))
-                url = base.getPath() + url;
+            if (url.startsWith("?")) url = base.getPath() + url;
             URL abs = new URL(base, url);
             return abs.toExternalForm();
-        } catch (MalformedURLException e) {
+        }
+        catch (MalformedURLException e) {
             return "";
         }
     }
 
     /**
-     *
      * @param url url
+     *
      * @return new url
+     *
      * @deprecated
      */
     public static String encodeIllegalCharacterInUrl(String url) {
@@ -73,8 +79,6 @@ public class UrlUtils {
         return host;
     }
 
-    private static Pattern patternForProtocal = Pattern.compile("[\\w]+://");
-
     public static String removeProtocol(String url) {
         return patternForProtocal.matcher(url).replaceAll("");
     }
@@ -92,7 +96,8 @@ public class UrlUtils {
         int portIndex = domain.indexOf(":");
         if (portIndex != -1) {
             return domain.substring(0, portIndex);
-        }else {
+        }
+        else {
             return domain;
         }
     }
@@ -113,8 +118,6 @@ public class UrlUtils {
         return urlList;
     }
 
-    private static final Pattern patternForCharset = Pattern.compile("charset\\s*=\\s*['\"]*([^\\s;'\"]*)", Pattern.CASE_INSENSITIVE);
-
     public static String getCharset(String contentType) {
         Matcher matcher = patternForCharset.matcher(contentType);
         if (matcher.find()) {
@@ -125,5 +128,4 @@ public class UrlUtils {
         }
         return null;
     }
-
 }

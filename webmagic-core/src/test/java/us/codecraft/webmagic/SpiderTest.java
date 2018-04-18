@@ -1,5 +1,7 @@
 package us.codecraft.webmagic;
 
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Ignore;
 import org.junit.Test;
 import us.codecraft.webmagic.downloader.Downloader;
@@ -7,9 +9,6 @@ import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.processor.SimplePageProcessor;
 import us.codecraft.webmagic.scheduler.Scheduler;
-
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author code4crafter@gmail.com
@@ -19,7 +18,7 @@ public class SpiderTest {
     @Ignore("long time")
     @Test
     public void testStartAndStop() throws InterruptedException {
-        Spider spider = Spider.create(new SimplePageProcessor( "http://www.oschina.net/*")).addPipeline(new Pipeline() {
+        Spider spider = Spider.create(new SimplePageProcessor("http://www.oschina.net/*")).addPipeline(new Pipeline() {
             @Override
             public void process(ResultItems resultItems, Task task) {
                 System.out.println(1);
@@ -35,7 +34,7 @@ public class SpiderTest {
 
     @Ignore("long time")
     @Test
-    public void testWaitAndNotify() throws InterruptedException {
+    public void testWaitAndNotify() {
         for (int i = 0; i < 10000; i++) {
             System.out.println("round " + i);
             testRound();
@@ -82,7 +81,7 @@ public class SpiderTest {
                 if (count.incrementAndGet() > 1000) {
                     return null;
                 }
-                if (random.nextInt(100)>90){
+                if (random.nextInt(100) > 90) {
                     return null;
                 }
                 return new Request("test");

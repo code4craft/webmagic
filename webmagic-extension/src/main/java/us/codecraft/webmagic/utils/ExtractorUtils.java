@@ -1,10 +1,13 @@
 package us.codecraft.webmagic.utils;
 
-import us.codecraft.webmagic.model.annotation.ExtractBy;
-import us.codecraft.webmagic.selector.*;
-
 import java.util.ArrayList;
 import java.util.List;
+import us.codecraft.webmagic.model.annotation.ExtractBy;
+import us.codecraft.webmagic.selector.CssSelector;
+import us.codecraft.webmagic.selector.JsonPathSelector;
+import us.codecraft.webmagic.selector.RegexSelector;
+import us.codecraft.webmagic.selector.Selector;
+import us.codecraft.webmagic.selector.XpathSelector;
 
 /**
  * Tools for annotation converting. <br>

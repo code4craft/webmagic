@@ -24,7 +24,8 @@ public class ReplaceSelector implements Selector {
         this.replacement = replacement;
         try {
             regex = Pattern.compile(regexStr);
-        } catch (PatternSyntaxException e) {
+        }
+        catch (PatternSyntaxException e) {
             throw new IllegalArgumentException("invalid regex", e);
         }
     }
@@ -44,5 +45,4 @@ public class ReplaceSelector implements Selector {
     public String toString() {
         return regexStr + "_" + replacement;
     }
-
 }

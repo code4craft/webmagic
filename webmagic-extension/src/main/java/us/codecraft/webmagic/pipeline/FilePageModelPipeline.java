@@ -1,5 +1,8 @@
 package us.codecraft.webmagic.pipeline;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
@@ -7,10 +10,6 @@ import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.model.HasKey;
 import us.codecraft.webmagic.utils.FilePersistentBase;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * Store results objects (page models) to files in plain format.<br>
@@ -42,13 +41,15 @@ public class FilePageModelPipeline extends FilePersistentBase implements PageMod
             String filename;
             if (o instanceof HasKey) {
                 filename = path + ((HasKey) o).key() + ".html";
-            } else {
+            }
+            else {
                 filename = path + DigestUtils.md5Hex(ToStringBuilder.reflectionToString(o)) + ".html";
             }
             PrintWriter printWriter = new PrintWriter(new FileWriter(getFile(filename)));
             printWriter.write(ToStringBuilder.reflectionToString(o));
             printWriter.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             logger.warn("write file error", e);
         }
     }

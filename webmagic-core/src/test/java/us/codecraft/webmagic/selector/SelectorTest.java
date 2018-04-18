@@ -1,8 +1,7 @@
 package us.codecraft.webmagic.selector;
 
-import org.junit.Test;
-
 import java.util.List;
+import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,10 +10,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class SelectorTest {
 
-    private String html = "<div><a href='http://whatever.com/aaa'></a></div><div><a href='http://whatever.com/bbb'></a></div>";
+    private String html =
+        "<div><a href='http://whatever.com/aaa'></a></div><div><a href='http://whatever.com/bbb'></a></div>";
 
     @Test
-    public void testChain() throws Exception {
+    public void testChain() {
         Html selectable = new Html(html);
         List<String> linksWithoutChain = selectable.links().all();
         Selectable xpath = selectable.xpath("//div");
@@ -25,7 +25,7 @@ public class SelectorTest {
     }
 
     @Test
-    public void testNodes() throws Exception {
+    public void testNodes() {
         Html selectable = new Html(html);
         List<Selectable> links = selectable.xpath("//a").nodes();
         assertThat(links.get(0).links().get()).isEqualTo("http://whatever.com/aaa");

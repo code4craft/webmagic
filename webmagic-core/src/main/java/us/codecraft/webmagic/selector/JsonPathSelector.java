@@ -2,7 +2,6 @@ package us.codecraft.webmagic.selector;
 
 import com.alibaba.fastjson.JSON;
 import com.jayway.jsonpath.JsonPath;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +42,8 @@ public class JsonPathSelector implements Selector {
     private String toString(Object object) {
         if (object instanceof Map) {
             return JSON.toJSONString(object);
-        } else {
+        }
+        else {
             return String.valueOf(object);
         }
     }
@@ -60,7 +60,8 @@ public class JsonPathSelector implements Selector {
             for (Object item : items) {
                 list.add(toString(item));
             }
-        } else {
+        }
+        else {
             list.add(toString(object));
         }
         return list;

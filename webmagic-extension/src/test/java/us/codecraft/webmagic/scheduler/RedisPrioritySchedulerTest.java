@@ -12,21 +12,18 @@ import us.codecraft.webmagic.Task;
  * @author sai
  * Created by sai on 16-7-5.
  */
-public class RedisPrioritySchedulerTest
-{
+public class RedisPrioritySchedulerTest {
 
     private RedisPriorityScheduler scheduler;
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
         scheduler = new RedisPriorityScheduler("localhost");
     }
 
     @Ignore("environment depended")
     @Test
-    public void test()
-    {
+    public void test() {
         Task task = new Task() {
             @Override
             public String getUUID() {
@@ -42,8 +39,8 @@ public class RedisPrioritySchedulerTest
         scheduler.resetDuplicateCheck(task);
 
         Request request = new Request("https://www.google.com");
-        Request request1= new Request("https://www.facebook.com/");
-        Request request2= new Request("https://twitter.com");
+        Request request1 = new Request("https://www.facebook.com/");
+        Request request2 = new Request("https://twitter.com");
 
         request.setPriority(1).putExtra("name", "google");
         request1.setPriority(0).putExtra("name", "facebook");
@@ -53,9 +50,9 @@ public class RedisPrioritySchedulerTest
         scheduler.push(request1, task);
         scheduler.push(request2, task);
 
-        Request GRequest    = scheduler.poll(task);
-        Request FBRequest   = scheduler.poll(task);
-        Request TRequest    = scheduler.poll(task);
+        Request GRequest = scheduler.poll(task);
+        Request FBRequest = scheduler.poll(task);
+        Request TRequest = scheduler.poll(task);
 
         Assert.assertEquals(GRequest.getUrl(), request.getUrl());
         Assert.assertEquals(GRequest.getExtra("name"), request.getExtra("name"));
@@ -66,5 +63,4 @@ public class RedisPrioritySchedulerTest
         Assert.assertEquals(TRequest.getUrl(), request2.getUrl());
         Assert.assertEquals(TRequest.getExtra("name"), request.getExtra("name"));
     }
-
 }

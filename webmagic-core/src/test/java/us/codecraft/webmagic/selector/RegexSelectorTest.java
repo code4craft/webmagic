@@ -31,7 +31,6 @@ public class RegexSelectorTest {
         String select = regexSelector.select(source);
         Assertions.assertThat(select).isEqualTo("hello world");
 
-
         regex = "\\d{3}(?!\\d)";
         source = "123456asdf";
         regexSelector = new RegexSelector(regex);

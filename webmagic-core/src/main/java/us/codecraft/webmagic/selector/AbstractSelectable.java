@@ -1,9 +1,8 @@
 package us.codecraft.webmagic.selector;
 
-import org.apache.commons.collections.CollectionUtils;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.collections.CollectionUtils;
 
 /**
  * @author code4crafer@gmail.com
@@ -57,7 +56,8 @@ public abstract class AbstractSelectable implements Selectable {
     public String get() {
         if (CollectionUtils.isNotEmpty(all())) {
             return all().get(0);
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -86,7 +86,7 @@ public abstract class AbstractSelectable implements Selectable {
 
     @Override
     public Selectable replace(String regex, String replacement) {
-        ReplaceSelector replaceSelector = new ReplaceSelector(regex,replacement);
+        ReplaceSelector replaceSelector = new ReplaceSelector(regex, replacement);
         return select(replaceSelector, getSourceTexts());
     }
 

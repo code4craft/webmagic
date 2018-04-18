@@ -1,11 +1,9 @@
 package us.codecraft.webmagic.scheduler;
 
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Task;
-
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
+import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.Task;
 
 /**
  * Basic Scheduler implementation.<br>

@@ -1,5 +1,18 @@
 package us.codecraft.webmagic;
 
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
@@ -16,16 +29,6 @@ import us.codecraft.webmagic.scheduler.Scheduler;
 import us.codecraft.webmagic.thread.CountableThreadPool;
 import us.codecraft.webmagic.utils.UrlUtils;
 import us.codecraft.webmagic.utils.WMCollections;
-
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Entrance of a crawler.<br>
@@ -60,64 +63,31 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Spider implements Runnable, Task {
 
-    protected Downloader downloader;
-
-    protected List<Pipeline> pipelines = new ArrayList<Pipeline>();
-
-    protected PageProcessor pageProcessor;
-
-    protected List<Request> startRequests;
-
-    protected Site site;
-
-    protected String uuid;
-
-    protected Scheduler scheduler = new QueueScheduler();
-
-    protected Logger logger = LoggerFactory.getLogger(getClass());
-
-    protected CountableThreadPool threadPool;
-
-    protected ExecutorService executorService;
-
-    protected int threadNum = 1;
-
-    protected AtomicInteger stat = new AtomicInteger(STAT_INIT);
-
-    protected boolean exitWhenComplete = true;
-
     protected final static int STAT_INIT = 0;
-
     protected final static int STAT_RUNNING = 1;
-
     protected final static int STAT_STOPPED = 2;
-
-    protected boolean spawnUrl = true;
-
-    protected boolean destroyWhenExit = true;
-
-    private ReentrantLock newUrlLock = new ReentrantLock();
-
-    private Condition newUrlCondition = newUrlLock.newCondition();
-
-    private List<SpiderListener> spiderListeners;
-
     private final AtomicLong pageCount = new AtomicLong(0);
-
+    protected Downloader downloader;
+    protected List<Pipeline> pipelines = new ArrayList<Pipeline>();
+    protected PageProcessor pageProcessor;
+    protected List<Request> startRequests;
+    protected Site site;
+    protected String uuid;
+    protected Scheduler scheduler = new QueueScheduler();
+    protected Logger logger = LoggerFactory.getLogger(getClass());
+    protected CountableThreadPool threadPool;
+    protected ExecutorService executorService;
+    protected int threadNum = 1;
+    protected AtomicInteger stat = new AtomicInteger(STAT_INIT);
+    protected boolean exitWhenComplete = true;
+    protected boolean spawnUrl = true;
+    protected boolean destroyWhenExit = true;
+    private ReentrantLock newUrlLock = new ReentrantLock();
+    private Condition newUrlCondition = newUrlLock.newCondition();
+    private List<SpiderListener> spiderListeners;
     private Date startTime;
 
     private int emptySleepTime = 30000;
-
-    /**
-     * create a spider with pageProcessor.
-     *
-     * @param pageProcessor pageProcessor
-     * @return new spider
-     * @see PageProcessor
-     */
-    public static Spider create(PageProcessor pageProcessor) {
-        return new Spider(pageProcessor);
-    }
 
     /**
      * create a spider with pageProcessor.
@@ -130,10 +100,24 @@ public class Spider implements Runnable, Task {
     }
 
     /**
+     * create a spider with pageProcessor.
+     *
+     * @param pageProcessor pageProcessor
+     *
+     * @return new spider
+     *
+     * @see PageProcessor
+     */
+    public static Spider create(PageProcessor pageProcessor) {
+        return new Spider(pageProcessor);
+    }
+
+    /**
      * Set startUrls of Spider.<br>
      * Prior to startUrls of Site.
      *
      * @param startUrls startUrls
+     *
      * @return this
      */
     public Spider startUrls(List<String> startUrls) {
@@ -147,6 +131,7 @@ public class Spider implements Runnable, Task {
      * Prior to startUrls of Site.
      *
      * @param startRequests startRequests
+     *
      * @return this
      */
     public Spider startRequest(List<Request> startRequests) {
@@ -156,22 +141,12 @@ public class Spider implements Runnable, Task {
     }
 
     /**
-     * Set an uuid for spider.<br>
-     * Default uuid is domain of site.<br>
-     *
-     * @param uuid uuid
-     * @return this
-     */
-    public Spider setUUID(String uuid) {
-        this.uuid = uuid;
-        return this;
-    }
-
-    /**
      * set scheduler for Spider
      *
      * @param scheduler scheduler
+     *
      * @return this
+     *
      * @see #setScheduler(us.codecraft.webmagic.scheduler.Scheduler)
      */
     @Deprecated
@@ -180,31 +155,12 @@ public class Spider implements Runnable, Task {
     }
 
     /**
-     * set scheduler for Spider
-     *
-     * @param scheduler scheduler
-     * @return this
-     * @see Scheduler
-     * @since 0.2.1
-     */
-    public Spider setScheduler(Scheduler scheduler) {
-        checkIfRunning();
-        Scheduler oldScheduler = this.scheduler;
-        this.scheduler = scheduler;
-        if (oldScheduler != null) {
-            Request request;
-            while ((request = oldScheduler.poll(this)) != null) {
-                this.scheduler.push(request, this);
-            }
-        }
-        return this;
-    }
-
-    /**
      * add a pipeline for Spider
      *
      * @param pipeline pipeline
+     *
      * @return this
+     *
      * @see #addPipeline(us.codecraft.webmagic.pipeline.Pipeline)
      * @deprecated
      */
@@ -216,7 +172,9 @@ public class Spider implements Runnable, Task {
      * add a pipeline for Spider
      *
      * @param pipeline pipeline
+     *
      * @return this
+     *
      * @see Pipeline
      * @since 0.2.1
      */
@@ -230,7 +188,9 @@ public class Spider implements Runnable, Task {
      * set pipelines for Spider
      *
      * @param pipelines pipelines
+     *
      * @return this
+     *
      * @see Pipeline
      * @since 0.4.1
      */
@@ -254,7 +214,9 @@ public class Spider implements Runnable, Task {
      * set the downloader of spider
      *
      * @param downloader downloader
+     *
      * @return this
+     *
      * @see #setDownloader(us.codecraft.webmagic.downloader.Downloader)
      * @deprecated
      */
@@ -266,7 +228,9 @@ public class Spider implements Runnable, Task {
      * set the downloader of spider
      *
      * @param downloader downloader
+     *
      * @return this
+     *
      * @see Downloader
      */
     public Spider setDownloader(Downloader downloader) {
@@ -286,7 +250,8 @@ public class Spider implements Runnable, Task {
         if (threadPool == null || threadPool.isShutdown()) {
             if (executorService != null && !executorService.isShutdown()) {
                 threadPool = new CountableThreadPool(threadNum, executorService);
-            } else {
+            }
+            else {
                 threadPool = new CountableThreadPool(threadNum);
             }
         }
@@ -303,7 +268,7 @@ public class Spider implements Runnable, Task {
     public void run() {
         checkRunningStat();
         initComponent();
-        logger.info("Spider {} started!",getUUID());
+        logger.info("Spider {} started!", getUUID());
         while (!Thread.currentThread().isInterrupted() && stat.get() == STAT_RUNNING) {
             final Request request = scheduler.poll(this);
             if (request == null) {
@@ -312,17 +277,20 @@ public class Spider implements Runnable, Task {
                 }
                 // wait until new url added
                 waitNewUrl();
-            } else {
+            }
+            else {
                 threadPool.execute(new Runnable() {
                     @Override
                     public void run() {
                         try {
                             processRequest(request);
                             onSuccess(request);
-                        } catch (Exception e) {
+                        }
+                        catch (Exception e) {
                             onError(request);
                             logger.error("process request " + request + " error", e);
-                        } finally {
+                        }
+                        finally {
                             pageCount.incrementAndGet();
                             signalNewUrl();
                         }
@@ -380,7 +348,8 @@ public class Spider implements Runnable, Task {
         if (object instanceof Closeable) {
             try {
                 ((Closeable) object).close();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -402,15 +371,16 @@ public class Spider implements Runnable, Task {
 
     private void processRequest(Request request) {
         Page page = downloader.download(request, this);
-        if (page.isDownloadSuccess()){
+        if (page.isDownloadSuccess()) {
             onDownloadSuccess(request, page);
-        } else {
+        }
+        else {
             onDownloaderFail(request);
         }
     }
 
     private void onDownloadSuccess(Request request, Page page) {
-        if (site.getAcceptStatCode().contains(page.getStatusCode())){
+        if (site.getAcceptStatCode().contains(page.getStatusCode())) {
             pageProcessor.process(page);
             extractAndAddRequests(page, spawnUrl);
             if (!page.getResultItems().isSkip()) {
@@ -418,7 +388,8 @@ public class Spider implements Runnable, Task {
                     pipeline.process(page.getResultItems(), this);
                 }
             }
-        } else {
+        }
+        else {
             logger.info("page status code error, page {} , code: {}", request.getUrl(), page.getStatusCode());
         }
         sleep(site.getSleepTime());
@@ -428,7 +399,8 @@ public class Spider implements Runnable, Task {
     private void onDownloaderFail(Request request) {
         if (site.getCycleRetryTimes() == 0) {
             sleep(site.getSleepTime());
-        } else {
+        }
+        else {
             // for cycle retry
             doCycleRetry(request);
         }
@@ -438,7 +410,8 @@ public class Spider implements Runnable, Task {
         Object cycleTriedTimesObject = request.getExtra(Request.CYCLE_TRIED_TIMES);
         if (cycleTriedTimesObject == null) {
             addRequest(SerializationUtils.clone(request).setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, 1));
-        } else {
+        }
+        else {
             int cycleTriedTimes = (Integer) cycleTriedTimesObject;
             cycleTriedTimes++;
             if (cycleTriedTimes < site.getCycleRetryTimes()) {
@@ -451,8 +424,9 @@ public class Spider implements Runnable, Task {
     protected void sleep(int time) {
         try {
             Thread.sleep(time);
-        } catch (InterruptedException e) {
-            logger.error("Thread interrupted when sleep",e);
+        }
+        catch (InterruptedException e) {
+            logger.error("Thread interrupted when sleep", e);
         }
     }
 
@@ -487,6 +461,7 @@ public class Spider implements Runnable, Task {
      * Add urls to crawl. <br>
      *
      * @param urls urls
+     *
      * @return this
      */
     public Spider addUrl(String... urls) {
@@ -502,12 +477,13 @@ public class Spider implements Runnable, Task {
      *
      * @param urls urls
      * @param <T> type of process result
+     *
      * @return list downloaded
      */
     public <T> List<T> getAll(Collection<String> urls) {
         destroyWhenExit = false;
         spawnUrl = false;
-        if (startRequests!=null){
+        if (startRequests != null) {
             startRequests.clear();
         }
         for (Request request : UrlUtils.convertToRequests(urls)) {
@@ -530,7 +506,8 @@ public class Spider implements Runnable, Task {
         List<T> resultItemses = getAll(urls);
         if (resultItemses != null && resultItemses.size() > 0) {
             return resultItemses.get(0);
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -539,6 +516,7 @@ public class Spider implements Runnable, Task {
      * Add urls with information to crawl.<br>
      *
      * @param requests requests
+     *
      * @return this
      */
     public Spider addRequest(Request... requests) {
@@ -557,9 +535,11 @@ public class Spider implements Runnable, Task {
                 return;
             }
             newUrlCondition.await(emptySleepTime, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e) {
             logger.warn("waitNewUrl - interrupted, error {}", e);
-        } finally {
+        }
+        finally {
             newUrlLock.unlock();
         }
     }
@@ -568,7 +548,8 @@ public class Spider implements Runnable, Task {
         try {
             newUrlLock.lock();
             newUrlCondition.signalAll();
-        } finally {
+        }
+        finally {
             newUrlLock.unlock();
         }
     }
@@ -580,7 +561,8 @@ public class Spider implements Runnable, Task {
     public void stop() {
         if (stat.compareAndSet(STAT_RUNNING, STAT_STOPPED)) {
             logger.info("Spider " + getUUID() + " stop success!");
-        } else {
+        }
+        else {
             logger.info("Spider " + getUUID() + " stop fail!");
         }
     }
@@ -589,6 +571,7 @@ public class Spider implements Runnable, Task {
      * start with more than one threads
      *
      * @param threadNum threadNum
+     *
      * @return this
      */
     public Spider thread(int threadNum) {
@@ -605,6 +588,7 @@ public class Spider implements Runnable, Task {
      *
      * @param executorService executorService to run the spider
      * @param threadNum threadNum
+     *
      * @return this
      */
     public Spider thread(ExecutorService executorService, int threadNum) {
@@ -627,6 +611,7 @@ public class Spider implements Runnable, Task {
      * False: not exit until call stop() manually.<br>
      *
      * @param exitWhenComplete exitWhenComplete
+     *
      * @return this
      */
     public Spider setExitWhenComplete(boolean exitWhenComplete) {
@@ -639,9 +624,26 @@ public class Spider implements Runnable, Task {
     }
 
     /**
+     * Whether add urls extracted to download.<br>
+     * Add urls to download when it is true, and just download seed urls when it is false. <br>
+     * DO NOT set it unless you know what it means!
+     *
+     * @param spawnUrl spawnUrl
+     *
+     * @return this
+     *
+     * @since 0.4.0
+     */
+    public Spider setSpawnUrl(boolean spawnUrl) {
+        this.spawnUrl = spawnUrl;
+        return this;
+    }
+
+    /**
      * Get page count downloaded by spider.
      *
      * @return total downloaded page count
+     *
      * @since 0.4.1
      */
     public long getPageCount() {
@@ -652,6 +654,7 @@ public class Spider implements Runnable, Task {
      * Get running status by spider.
      *
      * @return running status
+     *
      * @see Status
      * @since 0.4.1
      */
@@ -659,35 +662,11 @@ public class Spider implements Runnable, Task {
         return Status.fromValue(stat.get());
     }
 
-
-    public enum Status {
-        Init(0), Running(1), Stopped(2);
-
-        private Status(int value) {
-            this.value = value;
-        }
-
-        private int value;
-
-        int getValue() {
-            return value;
-        }
-
-        public static Status fromValue(int value) {
-            for (Status status : Status.values()) {
-                if (status.getValue() == value) {
-                    return status;
-                }
-            }
-            //default value
-            return Init;
-        }
-    }
-
     /**
      * Get thread count which is running
      *
      * @return thread count which is running
+     *
      * @since 0.4.1
      */
     public int getThreadAlive() {
@@ -695,20 +674,6 @@ public class Spider implements Runnable, Task {
             return 0;
         }
         return threadPool.getThreadAlive();
-    }
-
-    /**
-     * Whether add urls extracted to download.<br>
-     * Add urls to download when it is true, and just download seed urls when it is false. <br>
-     * DO NOT set it unless you know what it means!
-     *
-     * @param spawnUrl spawnUrl
-     * @return this
-     * @since 0.4.0
-     */
-    public Spider setSpawnUrl(boolean spawnUrl) {
-        this.spawnUrl = spawnUrl;
-        return this;
     }
 
     @Override
@@ -721,6 +686,19 @@ public class Spider implements Runnable, Task {
         }
         uuid = UUID.randomUUID().toString();
         return uuid;
+    }
+
+    /**
+     * Set an uuid for spider.<br>
+     * Default uuid is domain of site.<br>
+     *
+     * @param uuid uuid
+     *
+     * @return this
+     */
+    public Spider setUUID(String uuid) {
+        this.uuid = uuid;
+        return this;
     }
 
     public Spider setExecutorService(ExecutorService executorService) {
@@ -752,11 +730,60 @@ public class Spider implements Runnable, Task {
     }
 
     /**
+     * set scheduler for Spider
+     *
+     * @param scheduler scheduler
+     *
+     * @return this
+     *
+     * @see Scheduler
+     * @since 0.2.1
+     */
+    public Spider setScheduler(Scheduler scheduler) {
+        checkIfRunning();
+        Scheduler oldScheduler = this.scheduler;
+        this.scheduler = scheduler;
+        if (oldScheduler != null) {
+            Request request;
+            while ((request = oldScheduler.poll(this)) != null) {
+                this.scheduler.push(request, this);
+            }
+        }
+        return this;
+    }
+
+    /**
      * Set wait time when no url is polled.<br><br>
      *
      * @param emptySleepTime In MILLISECONDS.
      */
     public void setEmptySleepTime(int emptySleepTime) {
         this.emptySleepTime = emptySleepTime;
+    }
+
+    public enum Status {
+        Init(0),
+        Running(1),
+        Stopped(2);
+
+        private int value;
+
+        Status(int value) {
+            this.value = value;
+        }
+
+        public static Status fromValue(int value) {
+            for (Status status : Status.values()) {
+                if (status.getValue() == value) {
+                    return status;
+                }
+            }
+            //default value
+            return Init;
+        }
+
+        int getValue() {
+            return value;
+        }
     }
 }

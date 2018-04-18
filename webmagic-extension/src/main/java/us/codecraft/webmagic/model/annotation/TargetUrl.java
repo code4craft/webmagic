@@ -18,8 +18,8 @@ public @interface TargetUrl {
     /**
      * The url patterns for class.<br>
      * Use regex expression with some changes: <br>
-     *      "." stand for literal character "." instead of "any character". <br>
-     *      "*" stand for any legal character for url in 0-n length ([^"'#]*) instead of "any length". <br>
+     * "." stand for literal character "." instead of "any character". <br>
+     * "*" stand for any legal character for url in 0-n length ([^"'#]*) instead of "any length". <br>
      *
      * @return the url patterns for class
      */
@@ -33,5 +33,4 @@ public @interface TargetUrl {
      * @return the region for url extracting
      */
     String sourceRegion() default "";
-
 }

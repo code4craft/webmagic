@@ -1,11 +1,10 @@
 package us.codecraft.webmagic.selector;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Links selector based on jsoup. Use absolute url. <br>
@@ -27,7 +26,8 @@ public class LinksSelector extends BaseElementSelector {
         for (Element element0 : elements) {
             if (!StringUtil.isBlank(element0.baseUri())) {
                 links.add(element0.attr("abs:href"));
-            } else {
+            }
+            else {
                 links.add(element0.attr("href"));
             }
         }

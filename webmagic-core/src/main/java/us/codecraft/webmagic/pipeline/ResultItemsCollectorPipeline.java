@@ -1,10 +1,9 @@
 package us.codecraft.webmagic.pipeline;
 
-import us.codecraft.webmagic.ResultItems;
-import us.codecraft.webmagic.Task;
-
 import java.util.ArrayList;
 import java.util.List;
+import us.codecraft.webmagic.ResultItems;
+import us.codecraft.webmagic.Task;
 
 /**
  * @author code4crafter@gmail.com

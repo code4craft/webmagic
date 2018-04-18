@@ -1,16 +1,5 @@
 package us.codecraft.webmagic.model;
 
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.model.annotation.*;
-import us.codecraft.webmagic.model.formatter.ObjectFormatter;
-import us.codecraft.webmagic.model.formatter.ObjectFormatterBuilder;
-import us.codecraft.webmagic.selector.*;
-import us.codecraft.webmagic.utils.ClassUtils;
-import us.codecraft.webmagic.utils.ExtractorUtils;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -18,6 +7,24 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.model.annotation.ComboExtract;
+import us.codecraft.webmagic.model.annotation.ExtractBy;
+import us.codecraft.webmagic.model.annotation.ExtractByUrl;
+import us.codecraft.webmagic.model.annotation.HelpUrl;
+import us.codecraft.webmagic.model.annotation.TargetUrl;
+import us.codecraft.webmagic.model.formatter.ObjectFormatter;
+import us.codecraft.webmagic.model.formatter.ObjectFormatterBuilder;
+import us.codecraft.webmagic.selector.AndSelector;
+import us.codecraft.webmagic.selector.OrSelector;
+import us.codecraft.webmagic.selector.RegexSelector;
+import us.codecraft.webmagic.selector.Selector;
+import us.codecraft.webmagic.selector.XpathSelector;
+import us.codecraft.webmagic.utils.ClassUtils;
+import us.codecraft.webmagic.utils.ExtractorUtils;
 
 import static us.codecraft.webmagic.model.annotation.ExtractBy.Source.RawText;
 
@@ -51,6 +58,18 @@ class PageModelExtractor {
         return pageModelExtractor;
     }
 
+    public static Method getSetterMethod(Class clazz, Field field) {
+        String name = "set" + StringUtils.capitalize(field.getName());
+        try {
+            Method declaredMethod = clazz.getDeclaredMethod(name, field.getType());
+            declaredMethod.setAccessible(true);
+            return declaredMethod;
+        }
+        catch (NoSuchMethodException e) {
+            return null;
+        }
+    }
+
     private void init(Class clazz) {
         this.clazz = clazz;
         initClassExtractors();
@@ -61,13 +80,15 @@ class PageModelExtractor {
             FieldExtractor fieldExtractorTmp = getAnnotationExtractCombo(clazz, field);
             if (fieldExtractor != null && fieldExtractorTmp != null) {
                 throw new IllegalStateException("Only one of 'ExtractBy ComboExtract ExtractByUrl' can be added to a field!");
-            } else if (fieldExtractor == null && fieldExtractorTmp != null) {
+            }
+            else if (fieldExtractor == null && fieldExtractorTmp != null) {
                 fieldExtractor = fieldExtractorTmp;
             }
             fieldExtractorTmp = getAnnotationExtractByUrl(clazz, field);
             if (fieldExtractor != null && fieldExtractorTmp != null) {
                 throw new IllegalStateException("Only one of 'ExtractBy ComboExtract ExtractByUrl' can be added to a field!");
-            } else if (fieldExtractor == null && fieldExtractorTmp != null) {
+            }
+            else if (fieldExtractor == null && fieldExtractorTmp != null) {
                 fieldExtractor = fieldExtractorTmp;
             }
             if (fieldExtractor != null) {
@@ -85,9 +106,10 @@ class PageModelExtractor {
             if (regexPattern.trim().equals("")) {
                 regexPattern = ".*";
             }
-            fieldExtractor = new FieldExtractor(field,
-                    new RegexSelector(regexPattern), FieldExtractor.Source.Url, extractByUrl.notNull(),
-                    extractByUrl.multi() || List.class.isAssignableFrom(field.getType()));
+            fieldExtractor =
+                new FieldExtractor(field, new RegexSelector(regexPattern), FieldExtractor.Source.Url, extractByUrl.notNull(),
+                                   extractByUrl.multi()
+                                       || List.class.isAssignableFrom(field.getType()));
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
                 fieldExtractor.setSetterMethod(setterMethod);
@@ -112,8 +134,10 @@ class PageModelExtractor {
                 default:
                     selector = new AndSelector(ExtractorUtils.getSelectors(extractBies));
             }
-            fieldExtractor = new FieldExtractor(field, selector, comboExtract.source() == ComboExtract.Source.RawHtml ? FieldExtractor.Source.RawHtml : FieldExtractor.Source.Html,
-                    comboExtract.notNull(), comboExtract.multi() || List.class.isAssignableFrom(field.getType()));
+            fieldExtractor = new FieldExtractor(field, selector, comboExtract.source() == ComboExtract.Source.RawHtml
+                ? FieldExtractor.Source.RawHtml
+                : FieldExtractor.Source.Html, comboExtract.notNull(), comboExtract.multi()
+                                                    || List.class.isAssignableFrom(field.getType()));
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
                 fieldExtractor.setSetterMethod(setterMethod);
@@ -128,11 +152,11 @@ class PageModelExtractor {
         if (extractBy != null) {
             Selector selector = ExtractorUtils.getSelector(extractBy);
             ExtractBy.Source source0 = extractBy.source();
-            if (extractBy.type()== ExtractBy.Type.JsonPath){
+            if (extractBy.type() == ExtractBy.Type.JsonPath) {
                 source0 = RawText;
             }
             FieldExtractor.Source source = null;
-            switch (source0){
+            switch (source0) {
                 case RawText:
                     source = FieldExtractor.Source.RawText;
                     break;
@@ -140,36 +164,25 @@ class PageModelExtractor {
                     source = FieldExtractor.Source.RawHtml;
                     break;
                 case SelectedHtml:
-                    source =FieldExtractor.Source.Html;
+                    source = FieldExtractor.Source.Html;
                     break;
                 default:
-                    source =FieldExtractor.Source.Html;
-
+                    source = FieldExtractor.Source.Html;
             }
 
-            fieldExtractor = new FieldExtractor(field, selector, source,
-                    extractBy.notNull(), List.class.isAssignableFrom(field.getType()));
+            fieldExtractor =
+                new FieldExtractor(field, selector, source, extractBy.notNull(), List.class.isAssignableFrom(field.getType()));
             fieldExtractor.setSetterMethod(getSetterMethod(clazz, field));
         }
         return fieldExtractor;
-    }
-
-    public static Method getSetterMethod(Class clazz, Field field) {
-        String name = "set" + StringUtils.capitalize(field.getName());
-        try {
-            Method declaredMethod = clazz.getDeclaredMethod(name, field.getType());
-            declaredMethod.setAccessible(true);
-            return declaredMethod;
-        } catch (NoSuchMethodException e) {
-            return null;
-        }
     }
 
     private void initClassExtractors() {
         Annotation annotation = clazz.getAnnotation(TargetUrl.class);
         if (annotation == null) {
             targetUrlPatterns.add(Pattern.compile(".*"));
-        } else {
+        }
+        else {
             TargetUrl targetUrl = (TargetUrl) annotation;
             String[] value = targetUrl.value();
             for (String s : value) {
@@ -193,7 +206,8 @@ class PageModelExtractor {
         annotation = clazz.getAnnotation(ExtractBy.class);
         if (annotation != null) {
             ExtractBy extractBy = (ExtractBy) annotation;
-            objectExtractor = new Extractor(new XpathSelector(extractBy.value()), Extractor.Source.Html, extractBy.notNull(), extractBy.multi());
+            objectExtractor =
+                new Extractor(new XpathSelector(extractBy.value()), Extractor.Source.Html, extractBy.notNull(), extractBy.multi());
         }
     }
 
@@ -209,7 +223,8 @@ class PageModelExtractor {
         }
         if (objectExtractor == null) {
             return processSingle(page, null, true);
-        } else {
+        }
+        else {
             if (objectExtractor.multi) {
                 List<Object> os = new ArrayList<Object>();
                 List<String> list = objectExtractor.getSelector().selectList(page.getRawText());
@@ -220,7 +235,8 @@ class PageModelExtractor {
                     }
                 }
                 return os;
-            } else {
+            }
+            else {
                 String select = objectExtractor.getSelector().select(page.getRawText());
                 Object o = processSingle(page, select, false);
                 return o;
@@ -242,7 +258,8 @@ class PageModelExtractor {
                         case Html:
                             if (isRaw) {
                                 value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
-                            } else {
+                            }
+                            else {
                                 value = fieldExtractor.getSelector().selectList(html);
                             }
                             break;
@@ -261,10 +278,12 @@ class PageModelExtractor {
                     if (fieldExtractor.getObjectFormatter() != null) {
                         List<Object> converted = convert(value, fieldExtractor.getObjectFormatter());
                         setField(o, fieldExtractor, converted);
-                    } else {
+                    }
+                    else {
                         setField(o, fieldExtractor, value);
                     }
-                } else {
+                }
+                else {
                     String value;
                     switch (fieldExtractor.getSource()) {
                         case RawHtml:
@@ -273,7 +292,8 @@ class PageModelExtractor {
                         case Html:
                             if (isRaw) {
                                 value = page.getHtml().selectDocument(fieldExtractor.getSelector());
-                            } else {
+                            }
+                            else {
                                 value = fieldExtractor.getSelector().select(html);
                             }
                             break;
@@ -295,7 +315,8 @@ class PageModelExtractor {
                             return null;
                         }
                         setField(o, fieldExtractor, converted);
-                    } else {
+                    }
+                    else {
                         setField(o, fieldExtractor, value);
                     }
                 }
@@ -303,11 +324,14 @@ class PageModelExtractor {
             if (AfterExtractor.class.isAssignableFrom(clazz)) {
                 ((AfterExtractor) o).afterProcess(page);
             }
-        } catch (InstantiationException e) {
+        }
+        catch (InstantiationException e) {
             logger.error("extract fail", e);
-        } catch (IllegalAccessException e) {
+        }
+        catch (IllegalAccessException e) {
             logger.error("extract fail", e);
-        } catch (InvocationTargetException e) {
+        }
+        catch (InvocationTargetException e) {
             logger.error("extract fail", e);
         }
         return o;
@@ -318,7 +342,8 @@ class PageModelExtractor {
             Object format = objectFormatter.format(value);
             logger.debug("String {} is converted to {}", value, format);
             return format;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             logger.error("convert " + value + " to " + objectFormatter.clazz() + " error!", e);
         }
         return null;
@@ -335,7 +360,8 @@ class PageModelExtractor {
         return objects;
     }
 
-    private void setField(Object o, FieldExtractor fieldExtractor, Object value) throws IllegalAccessException, InvocationTargetException {
+    private void setField(Object o, FieldExtractor fieldExtractor,
+        Object value) throws IllegalAccessException, InvocationTargetException {
         if (value == null) {
             return;
         }

@@ -15,16 +15,17 @@ public interface Selector {
      * If there are more than one result, only the first will be chosen.
      *
      * @param text text
+     *
      * @return result
      */
-    public String select(String text);
+    String select(String text);
 
     /**
      * Extract all results in text.<br>
      *
      * @param text text
+     *
      * @return results
      */
-    public List<String> selectList(String text);
-
+    List<String> selectList(String text);
 }

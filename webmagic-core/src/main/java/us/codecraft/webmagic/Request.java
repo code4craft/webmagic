@@ -1,11 +1,10 @@
 package us.codecraft.webmagic;
 
-import us.codecraft.webmagic.model.HttpRequestBody;
-import us.codecraft.webmagic.utils.Experimental;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import us.codecraft.webmagic.model.HttpRequestBody;
+import us.codecraft.webmagic.utils.Experimental;
 
 /**
  * Object contains url to crawl.<br>
@@ -16,10 +15,8 @@ import java.util.Map;
  */
 public class Request implements Serializable {
 
-    private static final long serialVersionUID = 2062192774891352043L;
-
     public static final String CYCLE_TRIED_TIMES = "_cycle_tried_times";
-
+    private static final long serialVersionUID = 2062192774891352043L;
     private String url;
 
     private String method;
@@ -41,13 +38,13 @@ public class Request implements Serializable {
     /**
      * Priority of the request.<br>
      * The bigger will be processed earlier. <br>
+     *
      * @see us.codecraft.webmagic.scheduler.PriorityScheduler
      */
     private long priority;
 
     /**
      * When it is set to TRUE, the downloader will not try to parse response body to text.
-     *
      */
     private boolean binaryContent = false;
 
@@ -67,10 +64,12 @@ public class Request implements Serializable {
     /**
      * Set the priority of request for sorting.<br>
      * Need a scheduler supporting priority.<br>
-     * @see us.codecraft.webmagic.scheduler.PriorityScheduler
      *
      * @param priority priority
+     *
      * @return this
+     *
+     * @see us.codecraft.webmagic.scheduler.PriorityScheduler
      */
     @Experimental
     public Request setPriority(long priority) {
@@ -97,6 +96,11 @@ public class Request implements Serializable {
         return url;
     }
 
+    public Request setUrl(String url) {
+        this.url = url;
+        return this;
+    }
+
     public Map<String, Object> getExtras() {
         return extras;
     }
@@ -106,14 +110,11 @@ public class Request implements Serializable {
         return this;
     }
 
-    public Request setUrl(String url) {
-        this.url = url;
-        return this;
-    }
-
     /**
      * The http method of the request. Get for default.
+     *
      * @return httpMethod
+     *
      * @see us.codecraft.webmagic.utils.HttpConstant.Method
      * @since 0.5.0
      */
@@ -190,14 +191,21 @@ public class Request implements Serializable {
 
     @Override
     public String toString() {
-        return "Request{" +
-                "url='" + url + '\'' +
-                ", method='" + method + '\'' +
-                ", extras=" + extras +
-                ", priority=" + priority +
-                ", headers=" + headers +
-                ", cookies="+ cookies+
-                '}';
+        return "Request{"
+            + "url='"
+            + url
+            + '\''
+            + ", method='"
+            + method
+            + '\''
+            + ", extras="
+            + extras
+            + ", priority="
+            + priority
+            + ", headers="
+            + headers
+            + ", cookies="
+            + cookies
+            + '}';
     }
-
 }

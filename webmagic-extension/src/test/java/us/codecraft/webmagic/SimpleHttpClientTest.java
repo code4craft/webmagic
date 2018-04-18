@@ -9,10 +9,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author code4crafter@gmail.com
- *         Date: 2017/6/3
- *         Time: 下午2:54
+ * Date: 2017/6/3
+ * Time: 下午2:54
  */
 public class SimpleHttpClientTest {
+
+    @Ignore
+    @Test
+    public void test() {
+        Weather weather =
+            new SimpleHttpClient(Site.me()).get("http://www.weather.com.cn/weather/101020100.shtml", Weather.class);
+        assertThat(weather).isNotNull();
+    }
 
     public static class Weather implements AfterExtractor {
 
@@ -70,20 +78,18 @@ public class SimpleHttpClientTest {
 
         @Override
         public String toString() {
-            return "Weather{" +
-                    "location='" + location + '\'' +
-                    ", lowTemperature=" + lowTemperature +
-                    ", highTemperature=" + highTemperature +
-                    ", desc='" + desc + '\'' +
-                    '}';
+            return "Weather{"
+                + "location='"
+                + location
+                + '\''
+                + ", lowTemperature="
+                + lowTemperature
+                + ", highTemperature="
+                + highTemperature
+                + ", desc='"
+                + desc
+                + '\''
+                + '}';
         }
     }
-
-    @Ignore
-    @Test
-    public void test() throws Exception {
-        Weather weather = new SimpleHttpClient(Site.me()).get("http://www.weather.com.cn/weather/101020100.shtml", Weather.class);
-        assertThat(weather).isNotNull();
-    }
-
 }

@@ -7,6 +7,7 @@ import us.codecraft.webmagic.pipeline.PageModelPipeline;
 /**
  * Print page model in console.<br>
  * Usually used in test.<br>
+ *
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */

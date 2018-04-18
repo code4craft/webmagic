@@ -13,6 +13,10 @@ public class GithubRepoPageProcessor implements PageProcessor {
 
     private Site site = Site.me().setRetryTimes(3).setSleepTime(0);
 
+    public static void main(String[] args) {
+        Spider.create(new GithubRepoPageProcessor()).addUrl("https://github.com/code4craft").thread(5).run();
+    }
+
     @Override
     public void process(Page page) {
         page.addTargetRequests(page.getHtml().links().regex("(https://github\\.com/\\w+/\\w+)").all());
@@ -24,7 +28,8 @@ public class GithubRepoPageProcessor implements PageProcessor {
         if (githubRepo.getName() == null) {
             //skip this page
             page.setSkip(true);
-        } else {
+        }
+        else {
             page.putField("repo", githubRepo);
         }
     }
@@ -32,9 +37,5 @@ public class GithubRepoPageProcessor implements PageProcessor {
     @Override
     public Site getSite() {
         return site;
-    }
-
-    public static void main(String[] args) {
-        Spider.create(new GithubRepoPageProcessor()).addUrl("https://github.com/code4craft").thread(5).run();
     }
 }

@@ -17,6 +17,7 @@ public abstract class AbstractDownloader implements Downloader {
      * A simple method to download a url.
      *
      * @param url url
+     *
      * @return html
      */
     public Html download(String url) {
@@ -28,11 +29,12 @@ public abstract class AbstractDownloader implements Downloader {
      *
      * @param url url
      * @param charset charset
+     *
      * @return html
      */
     public Html download(String url, String charset) {
         Page page = download(new Request(url), Site.me().setCharset(charset).toTask());
-        return (Html) page.getHtml();
+        return page.getHtml();
     }
 
     protected void onSuccess(Request request) {
@@ -40,5 +42,4 @@ public abstract class AbstractDownloader implements Downloader {
 
     protected void onError(Request request) {
     }
-
 }

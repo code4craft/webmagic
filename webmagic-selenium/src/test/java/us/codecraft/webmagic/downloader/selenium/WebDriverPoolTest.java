@@ -22,7 +22,8 @@ public class WebDriverPoolTest {
             try {
                 WebDriver webDriver = webDriverPool.get();
                 System.out.println(i);
-            } catch (InterruptedException e) {
+            }
+            catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }

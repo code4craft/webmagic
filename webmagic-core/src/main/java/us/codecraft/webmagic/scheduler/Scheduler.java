@@ -20,14 +20,14 @@ public interface Scheduler {
      * @param request request
      * @param task task
      */
-    public void push(Request request, Task task);
+    void push(Request request, Task task);
 
     /**
      * get an url to crawl
      *
      * @param task the task of spider
+     *
      * @return the url to crawl
      */
-    public Request poll(Task task);
-
+    Request poll(Task task);
 }

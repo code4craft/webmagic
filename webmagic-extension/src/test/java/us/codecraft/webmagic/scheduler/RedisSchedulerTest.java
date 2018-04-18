@@ -36,10 +36,9 @@ public class RedisSchedulerTest {
             }
         };
         Request request = new Request("http://www.ibm.com/developerworks/cn/java/j-javadev2-22/");
-        request.putExtra("1","2");
+        request.putExtra("1", "2");
         redisScheduler.push(request, task);
         Request poll = redisScheduler.poll(task);
         assertThat(poll).isEqualTo(request);
-
     }
 }

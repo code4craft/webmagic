@@ -6,8 +6,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author code4crafter@gmail.com
- *         Date: 2017/6/3
- *         Time: 下午3:23
+ * Date: 2017/6/3
+ * Time: 下午3:23
  */
 public class PageMapperTest {
 
@@ -19,5 +19,4 @@ public class PageMapperTest {
         GithubRepoApi githubRepo = pageMapper.get(pageMocker.getMockJsonPage());
         assertThat(githubRepo.getName()).isEqualTo("webmagic");
     }
-
 }

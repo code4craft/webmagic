@@ -1,9 +1,9 @@
 package us.codecraft.webmagic.scripts;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 
 /**
  * @author code4crafter@gmail.com
@@ -17,10 +17,10 @@ public class ScriptEnginePool {
 
     private final LinkedBlockingQueue<ScriptEngine> scriptEngines = new LinkedBlockingQueue<ScriptEngine>();
 
-    public ScriptEnginePool(Language language,int size) {
+    public ScriptEnginePool(Language language, int size) {
         this.size = size;
         this.availableCount = new AtomicInteger(size);
-        for (int i=0;i<size;i++){
+        for (int i = 0; i < size; i++) {
             ScriptEngineManager manager = new ScriptEngineManager();
             ScriptEngine engine = manager.getEngineByName(language.getEngineName());
             scriptEngines.add(engine);
@@ -32,9 +32,8 @@ public class ScriptEnginePool {
         return scriptEngines.poll();
     }
 
-    public void release(ScriptEngine scriptEngine){
+    public void release(ScriptEngine scriptEngine) {
         scriptEngines.add(scriptEngine);
         availableCount.incrementAndGet();
     }
-
 }

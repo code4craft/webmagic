@@ -1,15 +1,14 @@
 package us.codecraft.webmagic.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Selector;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * The extension to PageProcessor for page model extractor.
@@ -25,6 +24,10 @@ class ModelPageProcessor implements PageProcessor {
 
     private boolean extractLinks = true;
 
+    private ModelPageProcessor(Site site) {
+        this.site = site;
+    }
+
     public static ModelPageProcessor create(Site site, Class... clazzs) {
         ModelPageProcessor modelPageProcessor = new ModelPageProcessor(site);
         for (Class clazz : clazzs) {
@@ -33,15 +36,10 @@ class ModelPageProcessor implements PageProcessor {
         return modelPageProcessor;
     }
 
-
     public ModelPageProcessor addPageModel(Class clazz) {
         PageModelExtractor pageModelExtractor = PageModelExtractor.create(clazz);
         pageModelExtractorList.add(pageModelExtractor);
         return this;
-    }
-
-    private ModelPageProcessor(Site site) {
-        this.site = site;
     }
 
     @Override
@@ -67,7 +65,8 @@ class ModelPageProcessor implements PageProcessor {
         List<String> links;
         if (urlRegionSelector == null) {
             links = page.getHtml().links().all();
-        } else {
+        }
+        else {
             links = page.getHtml().selectList(urlRegionSelector).links().all();
         }
         for (String link : links) {

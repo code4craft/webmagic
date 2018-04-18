@@ -1,13 +1,12 @@
 package us.codecraft.webmagic.pipeline;
 
+import java.util.UUID;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
-
-import java.util.UUID;
 
 /**
  * Created by ywooer on 2014/5/6 0006.
@@ -36,6 +35,7 @@ public class FilePipelineTest {
             }
         };
     }
+
     @Test
     public void testProcess() {
         FilePipeline filePipeline = new FilePipeline();

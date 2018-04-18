@@ -1,11 +1,10 @@
 package us.codecraft.webmagic.handler;
 
+import java.util.ArrayList;
+import java.util.List;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author code4crafter@gmail.com
@@ -25,16 +24,12 @@ public class CompositePageProcessor implements PageProcessor {
         for (SubPageProcessor subPageProcessor : subPageProcessors) {
             if (subPageProcessor.match(page.getRequest())) {
                 SubPageProcessor.MatchOther matchOtherProcessorProcessor = subPageProcessor.processPage(page);
-                if (matchOtherProcessorProcessor == null || matchOtherProcessorProcessor != SubPageProcessor.MatchOther.YES) {
+                if (matchOtherProcessorProcessor == null
+                    || matchOtherProcessorProcessor != SubPageProcessor.MatchOther.YES) {
                     return;
                 }
             }
         }
-    }
-
-    public CompositePageProcessor setSite(Site site) {
-        this.site = site;
-        return this;
     }
 
     public CompositePageProcessor addSubPageProcessor(SubPageProcessor subPageProcessor) {
@@ -53,5 +48,10 @@ public class CompositePageProcessor implements PageProcessor {
     @Override
     public Site getSite() {
         return site;
+    }
+
+    public CompositePageProcessor setSite(Site site) {
+        this.site = site;
+        return this;
     }
 }

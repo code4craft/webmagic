@@ -30,12 +30,12 @@ public abstract class MultiKeyMapBase {
     protected <K, V2> Map<K, V2> newMap() {
         try {
             return (Map<K, V2>) protoMapClass.newInstance();
-        } catch (InstantiationException e) {
-            throw new IllegalArgumentException("wrong proto type map "
-                    + protoMapClass);
-        } catch (IllegalAccessException e) {
-            throw new IllegalArgumentException("wrong proto type map "
-                    + protoMapClass);
+        }
+        catch (InstantiationException e) {
+            throw new IllegalArgumentException("wrong proto type map " + protoMapClass);
+        }
+        catch (IllegalAccessException e) {
+            throw new IllegalArgumentException("wrong proto type map " + protoMapClass);
         }
     }
 }

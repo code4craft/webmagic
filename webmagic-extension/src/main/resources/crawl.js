@@ -6,12 +6,12 @@ page.settings.loadImages = false;
 page.settings.resourceTimeout = 5000;
 
 page.open(url, function (status) {
-    if (status != 'success') {
-        console.log("HTTP request failed!");
-    } else {
-        console.log(page.content);
-    }
+  if (status != 'success') {
+    console.log("HTTP request failed!");
+  } else {
+    console.log(page.content);
+  }
 
-    page.close();
-    phantom.exit();
+  page.close();
+  phantom.exit();
 });

@@ -1,14 +1,12 @@
 package us.codecraft.webmagic.example;
 
+import java.util.Date;
+import java.util.List;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.OOSpider;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
-import us.codecraft.webmagic.model.annotation.Formatter;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
 import us.codecraft.webmagic.pipeline.JsonFilePageModelPipeline;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -31,8 +29,7 @@ public class OschinaBlog {
 
     public static void main(String[] args) {
         //results will be saved to "/data/webmagic/" in json format
-        OOSpider.create(Site.me(), new JsonFilePageModelPipeline("/data/webmagic/"), OschinaBlog.class)
-                .addUrl("http://my.oschina.net/flashsword/blog").run();
+        OOSpider.create(Site.me(), new JsonFilePageModelPipeline("/data/webmagic/"), OschinaBlog.class).addUrl("http://my.oschina.net/flashsword/blog").run();
     }
 
     public String getTitle() {
@@ -50,5 +47,4 @@ public class OschinaBlog {
     public Date getDate() {
         return date;
     }
-
 }

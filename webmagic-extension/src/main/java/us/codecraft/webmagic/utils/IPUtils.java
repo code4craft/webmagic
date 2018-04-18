@@ -24,7 +24,8 @@ public abstract class IPUtils {
                 InetAddress address = inetAddresses.nextElement();
                 if (!address.isLoopbackAddress() && !Inet6Address.class.isInstance(address)) {
                     return address.getHostAddress();
-                } else if (!address.isLoopbackAddress()) {
+                }
+                else if (!address.isLoopbackAddress()) {
                     localAddress = address;
                 }
             }
@@ -32,5 +33,4 @@ public abstract class IPUtils {
 
         return localAddress.getHostAddress();
     }
-
 }

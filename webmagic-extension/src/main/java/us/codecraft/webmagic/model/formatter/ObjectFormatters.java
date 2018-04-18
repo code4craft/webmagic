@@ -9,7 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ObjectFormatters {
 
-    private static Map<Class, Class<? extends ObjectFormatter>> formatterMap = new ConcurrentHashMap<Class, Class<? extends ObjectFormatter>>();
+    private static Map<Class, Class<? extends ObjectFormatter>> formatterMap =
+        new ConcurrentHashMap<Class, Class<? extends ObjectFormatter>>();
 
     static {
         for (Class<? extends ObjectFormatter> basicTypeFormatter : BasicTypeFormatter.basicTypeFormatters) {
@@ -21,14 +22,16 @@ public class ObjectFormatters {
     public static void put(Class<? extends ObjectFormatter> objectFormatter) {
         try {
             formatterMap.put(objectFormatter.newInstance().clazz(), objectFormatter);
-        } catch (InstantiationException e) {
+        }
+        catch (InstantiationException e) {
             throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
+        }
+        catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static Class<? extends ObjectFormatter> get(Class<?> clazz){
+    public static Class<? extends ObjectFormatter> get(Class<?> clazz) {
         return formatterMap.get(clazz);
     }
 }

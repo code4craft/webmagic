@@ -1,16 +1,15 @@
 package us.codecraft.webmagic.model;
 
+import java.io.IOException;
 import org.apache.commons.io.IOUtils;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.selector.PlainText;
 
-import java.io.IOException;
-
 /**
  * @author code4crafter@gmail.com
- *         Date: 2017/6/3
- *         Time: 下午9:08
+ * Date: 2017/6/3
+ * Time: 下午9:08
  */
 public class PageMocker {
 

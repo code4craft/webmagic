@@ -1,5 +1,7 @@
 package us.codecraft.webmagic.utils;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -8,20 +10,17 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-
 /**
  * @author code4crafter@gmail.com
- *         Date: 17/3/11
- *         Time: 10:36
+ * Date: 17/3/11
+ * Time: 10:36
  * @since 0.6.2
  */
 public abstract class CharsetUtils {
 
     private static Logger logger = LoggerFactory.getLogger(CharsetUtils.class);
 
-    public static String detectCharset(String contentType, byte[] contentBytes) throws IOException {
+    public static String detectCharset(String contentType, byte[] contentBytes) {
         String charset;
         // charset
         // 1、encoding in http header Content-Type
@@ -57,5 +56,4 @@ public abstract class CharsetUtils {
         // 3、todo use tools as cpdetector for content decode
         return charset;
     }
-    
 }

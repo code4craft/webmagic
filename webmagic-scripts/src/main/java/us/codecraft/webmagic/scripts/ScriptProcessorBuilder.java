@@ -1,10 +1,9 @@
 package us.codecraft.webmagic.scripts;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
 
 /**
  * @author code4crafter@gmail.com
@@ -36,7 +35,8 @@ public class ScriptProcessorBuilder {
         try {
             InputStream resourceAsStream = new FileInputStream(fileName);
             this.script = IOUtils.toString(resourceAsStream);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             //wrap IOException because I prefer a runtime exception...
             throw new IllegalArgumentException(e);
         }
@@ -47,7 +47,8 @@ public class ScriptProcessorBuilder {
         try {
             InputStream resourceAsStream = ScriptProcessor.class.getClassLoader().getResourceAsStream(fileName);
             this.script = IOUtils.toString(resourceAsStream);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             //wrap IOException because I prefer a runtime exception...
             throw new IllegalArgumentException(e);
         }
@@ -64,8 +65,7 @@ public class ScriptProcessorBuilder {
         return this;
     }
 
-    public ScriptProcessor build(){
-        return new ScriptProcessor(language,script,threadNum);
+    public ScriptProcessor build() {
+        return new ScriptProcessor(language, script, threadNum);
     }
-
 }

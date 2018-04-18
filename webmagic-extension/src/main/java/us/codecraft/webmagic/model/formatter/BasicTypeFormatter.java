@@ -9,6 +9,37 @@ import java.util.List;
  */
 public abstract class BasicTypeFormatter<T> implements ObjectFormatter<T> {
 
+    public static final List<Class<? extends ObjectFormatter>> basicTypeFormatters =
+        Arrays.<Class<? extends ObjectFormatter>>asList(IntegerFormatter.class, LongFormatter.class, DoubleFormatter.class, FloatFormatter.class, ShortFormatter.class, CharactorFormatter.class, ByteFormatter.class, BooleanFormatter.class);
+
+    public static Class<?> detectBasicClass(Class<?> type) {
+        if (type.equals(Integer.TYPE) || type.equals(Integer.class)) {
+            return Integer.class;
+        }
+        else if (type.equals(Long.TYPE) || type.equals(Long.class)) {
+            return Long.class;
+        }
+        else if (type.equals(Double.TYPE) || type.equals(Double.class)) {
+            return Double.class;
+        }
+        else if (type.equals(Float.TYPE) || type.equals(Float.class)) {
+            return Float.class;
+        }
+        else if (type.equals(Short.TYPE) || type.equals(Short.class)) {
+            return Short.class;
+        }
+        else if (type.equals(Character.TYPE) || type.equals(Character.class)) {
+            return Character.class;
+        }
+        else if (type.equals(Byte.TYPE) || type.equals(Byte.class)) {
+            return Byte.class;
+        }
+        else if (type.equals(Boolean.TYPE) || type.equals(Boolean.class)) {
+            return Boolean.class;
+        }
+        return type;
+    }
+
     @Override
     public void initParam(String[] extra) {
 
@@ -25,34 +56,9 @@ public abstract class BasicTypeFormatter<T> implements ObjectFormatter<T> {
 
     protected abstract T formatTrimmed(String raw) throws Exception;
 
-    public static final List<Class<? extends ObjectFormatter>> basicTypeFormatters = Arrays.<Class<? extends ObjectFormatter>>asList(IntegerFormatter.class,
-            LongFormatter.class, DoubleFormatter.class, FloatFormatter.class, ShortFormatter.class,
-            CharactorFormatter.class, ByteFormatter.class, BooleanFormatter.class);
-
-    public static Class<?> detectBasicClass(Class<?> type) {
-        if (type.equals(Integer.TYPE) || type.equals(Integer.class)) {
-            return Integer.class;
-        } else if (type.equals(Long.TYPE) || type.equals(Long.class)) {
-            return Long.class;
-        } else if (type.equals(Double.TYPE) || type.equals(Double.class)) {
-            return Double.class;
-        } else if (type.equals(Float.TYPE) || type.equals(Float.class)) {
-            return Float.class;
-        } else if (type.equals(Short.TYPE) || type.equals(Short.class)) {
-            return Short.class;
-        } else if (type.equals(Character.TYPE) || type.equals(Character.class)) {
-            return Character.class;
-        } else if (type.equals(Byte.TYPE) || type.equals(Byte.class)) {
-            return Byte.class;
-        } else if (type.equals(Boolean.TYPE) || type.equals(Boolean.class)) {
-            return Boolean.class;
-        }
-        return type;
-    }
-
     public static class IntegerFormatter extends BasicTypeFormatter<Integer> {
         @Override
-        public Integer formatTrimmed(String raw) throws Exception {
+        public Integer formatTrimmed(String raw) {
             return Integer.parseInt(raw);
         }
 
@@ -64,7 +70,7 @@ public abstract class BasicTypeFormatter<T> implements ObjectFormatter<T> {
 
     public static class LongFormatter extends BasicTypeFormatter<Long> {
         @Override
-        public Long formatTrimmed(String raw) throws Exception {
+        public Long formatTrimmed(String raw) {
             return Long.parseLong(raw);
         }
 
@@ -76,7 +82,7 @@ public abstract class BasicTypeFormatter<T> implements ObjectFormatter<T> {
 
     public static class DoubleFormatter extends BasicTypeFormatter<Double> {
         @Override
-        public Double formatTrimmed(String raw) throws Exception {
+        public Double formatTrimmed(String raw) {
             return Double.parseDouble(raw);
         }
 
@@ -88,7 +94,7 @@ public abstract class BasicTypeFormatter<T> implements ObjectFormatter<T> {
 
     public static class FloatFormatter extends BasicTypeFormatter<Float> {
         @Override
-        public Float formatTrimmed(String raw) throws Exception {
+        public Float formatTrimmed(String raw) {
             return Float.parseFloat(raw);
         }
 
@@ -100,7 +106,7 @@ public abstract class BasicTypeFormatter<T> implements ObjectFormatter<T> {
 
     public static class ShortFormatter extends BasicTypeFormatter<Short> {
         @Override
-        public Short formatTrimmed(String raw) throws Exception {
+        public Short formatTrimmed(String raw) {
             return Short.parseShort(raw);
         }
 
@@ -112,7 +118,7 @@ public abstract class BasicTypeFormatter<T> implements ObjectFormatter<T> {
 
     public static class CharactorFormatter extends BasicTypeFormatter<Character> {
         @Override
-        public Character formatTrimmed(String raw) throws Exception {
+        public Character formatTrimmed(String raw) {
             return raw.charAt(0);
         }
 
@@ -124,7 +130,7 @@ public abstract class BasicTypeFormatter<T> implements ObjectFormatter<T> {
 
     public static class ByteFormatter extends BasicTypeFormatter<Byte> {
         @Override
-        public Byte formatTrimmed(String raw) throws Exception {
+        public Byte formatTrimmed(String raw) {
             return Byte.parseByte(raw, 10);
         }
 
@@ -136,7 +142,7 @@ public abstract class BasicTypeFormatter<T> implements ObjectFormatter<T> {
 
     public static class BooleanFormatter extends BasicTypeFormatter<Boolean> {
         @Override
-        public Boolean formatTrimmed(String raw) throws Exception {
+        public Boolean formatTrimmed(String raw) {
             return Boolean.parseBoolean(raw);
         }
 
@@ -145,6 +151,4 @@ public abstract class BasicTypeFormatter<T> implements ObjectFormatter<T> {
             return Boolean.class;
         }
     }
-
-
 }

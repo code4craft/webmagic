@@ -1,13 +1,12 @@
 package us.codecraft.webmagic.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.pipeline.CollectorPipeline;
 import us.codecraft.webmagic.pipeline.PageModelPipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The spider for page model extractor.<br>
@@ -76,17 +75,17 @@ public class OOSpider<T> extends Spider {
         }
     }
 
-    @Override
-    protected CollectorPipeline getCollectorPipeline() {
-        return new PageModelCollectorPipeline<T>(pageModelClasses.get(0));
-    }
-
     public static OOSpider create(Site site, Class... pageModels) {
         return new OOSpider(site, null, pageModels);
     }
 
     public static OOSpider create(Site site, PageModelPipeline pageModelPipeline, Class... pageModels) {
         return new OOSpider(site, pageModelPipeline, pageModels);
+    }
+
+    @Override
+    protected CollectorPipeline getCollectorPipeline() {
+        return new PageModelCollectorPipeline<T>(pageModelClasses.get(0));
     }
 
     public OOSpider addPageModel(PageModelPipeline pageModelPipeline, Class... pageModels) {
@@ -97,9 +96,8 @@ public class OOSpider<T> extends Spider {
         return this;
     }
 
-    public OOSpider setIsExtractLinks(boolean isExtractLinks){
+    public OOSpider setIsExtractLinks(boolean isExtractLinks) {
         modelPageProcessor.setExtractLinks(isExtractLinks);
         return this;
     }
-
 }

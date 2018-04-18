@@ -3,7 +3,11 @@ package us.codecraft.webmagic.selector;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static us.codecraft.webmagic.selector.Selectors.*;
+import static us.codecraft.webmagic.selector.Selectors.$;
+import static us.codecraft.webmagic.selector.Selectors.and;
+import static us.codecraft.webmagic.selector.Selectors.or;
+import static us.codecraft.webmagic.selector.Selectors.regex;
+import static us.codecraft.webmagic.selector.Selectors.xpath;
 
 /**
  * @author code4crafter@gmail.com <br>

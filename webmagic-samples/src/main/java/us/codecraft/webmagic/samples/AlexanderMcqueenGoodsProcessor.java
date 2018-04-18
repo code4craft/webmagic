@@ -11,12 +11,13 @@ import us.codecraft.webmagic.scheduler.PriorityScheduler;
  */
 public class AlexanderMcqueenGoodsProcessor implements PageProcessor {
 
+    public static final String URL_LIST = "http://www\\.alexandermcqueen\\.cn/.*";
+    public static final String URL_POST = "http://www\\.alexandermcqueen\\.cn/cn/\\w+/.*\\.html";
     private Site site = Site.me().setRetryTimes(3).setSleepTime(0);
 
-
-    public static final String URL_LIST = "http://www\\.alexandermcqueen\\.cn/.*";
-
-    public static final String URL_POST = "http://www\\.alexandermcqueen\\.cn/cn/\\w+/.*\\.html";
+    public static void main(String[] args) {
+        Spider.create(new AlexanderMcqueenGoodsProcessor()).setScheduler(new PriorityScheduler()).addUrl("http://www.alexandermcqueen.cn/sitemap.asp?tskay=E2F1A848").thread(5).run();
+    }
 
     @Override
     public void process(Page page) {
@@ -27,27 +28,23 @@ public class AlexanderMcqueenGoodsProcessor implements PageProcessor {
             }
             page.putField("currency", page.getHtml().xpath("//div[@id='description']//div[@class='itemBoxPrice']/span//span[@class='currency']/tidyText()"));
             page.putField("goodsPrice", page.getHtml().xpath("//div[@id='description']//div[@class='itemBoxPrice']/span//span[@class='priceValue']/tidyText()"));
-            page.putField("description", page.getHtml()
-                    .xpath("//div[@id='tabbedDescription']//div[@class='tabbedDescription']//ul[@id='tabs']//li[@id='tab_description']/div[@id='description_pane']/tidyText()"));
-            page.putField("material", page.getHtml()
-                    .xpath("//div[@id='tabbedDescription']" +
-                            "//div[@class='tabbedDescription']" +
-                            "//ul[@id='tabs']" +
-                            "//li[@id='tab_description']" +
-                            "//div[@class='productProperty']" +
-                            "//div[@class='productPropertyRow']/span[2]/tidyText()"));
-            page.putField("goodsCode", page.getHtml()
-                    .xpath("//div[@id='tabbedDescription']" +
-                            "//div[@class='tabbedDescription']" +
-                            "//ul[@id='tabs']" +
-                            "//li[@id='tab_description']" +
-                            "//div[@class='productProperty']" +
-                            "//div[@class='productPropertyRow']//span[@id='modelFabricColorContainer']/tidyText()"));
-            page.putField("goodsSize", page.getHtml()
-                    .xpath("//div[@id='sizesContainer']//div[@id='sizes']//ul[@class='SizeW']"));
-            page.putField("goodsColors", page.getHtml()
-                    .xpath("//div[@id='colors']/ul/html()"));
-        } else {
+            page.putField("description", page.getHtml().xpath("//div[@id='tabbedDescription']//div[@class='tabbedDescription']//ul[@id='tabs']//li[@id='tab_description']/div[@id='description_pane']/tidyText()"));
+            page.putField("material", page.getHtml().xpath("//div[@id='tabbedDescription']"
+                                                               + "//div[@class='tabbedDescription']"
+                                                               + "//ul[@id='tabs']"
+                                                               + "//li[@id='tab_description']"
+                                                               + "//div[@class='productProperty']"
+                                                               + "//div[@class='productPropertyRow']/span[2]/tidyText()"));
+            page.putField("goodsCode", page.getHtml().xpath("//div[@id='tabbedDescription']"
+                                                                + "//div[@class='tabbedDescription']"
+                                                                + "//ul[@id='tabs']"
+                                                                + "//li[@id='tab_description']"
+                                                                + "//div[@class='productProperty']"
+                                                                + "//div[@class='productPropertyRow']//span[@id='modelFabricColorContainer']/tidyText()"));
+            page.putField("goodsSize", page.getHtml().xpath("//div[@id='sizesContainer']//div[@id='sizes']//ul[@class='SizeW']"));
+            page.putField("goodsColors", page.getHtml().xpath("//div[@id='colors']/ul/html()"));
+        }
+        else {
             page.addTargetRequests(page.getHtml().links().regex(URL_POST).all(), 1000);
             page.addTargetRequests(page.getHtml().links().regex(URL_LIST).all(), 1);
         }
@@ -56,10 +53,5 @@ public class AlexanderMcqueenGoodsProcessor implements PageProcessor {
     @Override
     public Site getSite() {
         return site;
-    }
-
-    public static void main(String[] args) {
-        Spider.create(new AlexanderMcqueenGoodsProcessor()).setScheduler(new PriorityScheduler())
-                .addUrl("http://www.alexandermcqueen.cn/sitemap.asp?tskay=E2F1A848").thread(5).run();
     }
 }

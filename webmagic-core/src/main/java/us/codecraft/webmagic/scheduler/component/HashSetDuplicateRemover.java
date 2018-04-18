@@ -1,11 +1,10 @@
 package us.codecraft.webmagic.scheduler.component;
 
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Task;
-
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.Task;
 
 /**
  * @author code4crafer@gmail.com

@@ -12,11 +12,15 @@ public class IteyeBlogProcessor implements PageProcessor {
 
     private Site site;
 
+    public static void main(String[] args) {
+        Spider.create(new IteyeBlogProcessor()).thread(5).addUrl("http://yanghaoli.iteye.com/").run();
+    }
+
     @Override
     public void process(Page page) {
         page.addTargetRequests(page.getHtml().links().regex(".*yanghaoli\\.iteye\\.com/blog/\\d+").all());
-        page.putField("title",page.getHtml().xpath("//title").toString());
-        page.putField("content",page.getHtml().smartContent().toString());
+        page.putField("title", page.getHtml().xpath("//title").toString());
+        page.putField("content", page.getHtml().smartContent().toString());
     }
 
     @Override
@@ -25,9 +29,5 @@ public class IteyeBlogProcessor implements PageProcessor {
             site = Site.me().setDomain("yanghaoli.iteye.com");
         }
         return site;
-    }
-
-    public static void main(String[] args) {
-        Spider.create(new IteyeBlogProcessor()).thread(5).addUrl("http://yanghaoli.iteye.com/").run();
     }
 }

@@ -1,11 +1,10 @@
 package us.codecraft.webmagic.selector;
 
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 /**
  * @author code4crafer@gmail.com
@@ -46,7 +45,7 @@ public class HtmlNode extends AbstractSelectable {
     @Override
     public Selectable selectList(Selector selector) {
         if (selector instanceof BaseElementSelector) {
-           return selectElements((BaseElementSelector) selector);
+            return selectElements((BaseElementSelector) selector);
         }
         return selectList(selector, getSourceTexts());
     }
@@ -60,6 +59,7 @@ public class HtmlNode extends AbstractSelectable {
      * select elements
      *
      * @param elementSelector elementSelector
+     *
      * @return result
      */
     protected Selectable selectElements(BaseElementSelector elementSelector) {
@@ -72,7 +72,8 @@ public class HtmlNode extends AbstractSelectable {
                 resultElements.addAll(selectElements);
             }
             return new HtmlNode(resultElements);
-        } else {
+        }
+        else {
             // has attribute, consider as plaintext
             List<String> resultStrings = new ArrayList<String>();
             while (elementIterator.hasNext()) {
@@ -81,7 +82,6 @@ public class HtmlNode extends AbstractSelectable {
                 resultStrings.addAll(selectList);
             }
             return new PlainText(resultStrings);
-
         }
     }
 
@@ -90,6 +90,7 @@ public class HtmlNode extends AbstractSelectable {
      * See: https://github.com/code4craft/webmagic/issues/113
      *
      * @param elementIterator elementIterator
+     *
      * @return element element
      */
     private Element checkElementAndConvert(ListIterator<Element> elementIterator) {

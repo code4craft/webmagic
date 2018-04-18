@@ -11,7 +11,6 @@ public class CustomSpiderStatus extends SpiderStatus implements CustomSpiderStat
         super(spider, monitorSpiderListener);
     }
 
-
     @Override
     public String getSchedulerName() {
         return spider.getScheduler().getClass().getName();

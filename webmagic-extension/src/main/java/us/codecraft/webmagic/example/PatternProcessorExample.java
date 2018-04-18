@@ -1,7 +1,11 @@
 package us.codecraft.webmagic.example;
 
 import org.apache.log4j.Logger;
-import us.codecraft.webmagic.*;
+import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.ResultItems;
+import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.handler.CompositePageProcessor;
 import us.codecraft.webmagic.handler.CompositePipeline;
 import us.codecraft.webmagic.handler.PatternProcessor;
@@ -31,7 +35,7 @@ public class PatternProcessorExample {
             @Override
             public RequestMatcher.MatchOther processResult(ResultItems resultItems, Task task) {
                 log.info("Extracting from repo" + resultItems.getRequest());
-                System.out.println("Repo name: "+resultItems.get("reponame"));
+                System.out.println("Repo name: " + resultItems.get("reponame"));
                 return RequestMatcher.MatchOther.YES;
             }
         };
@@ -49,12 +53,13 @@ public class PatternProcessorExample {
 
             @Override
             public RequestMatcher.MatchOther processResult(ResultItems resultItems, Task task) {
-                System.out.println("User name: "+resultItems.get("username"));
+                System.out.println("User name: " + resultItems.get("username"));
                 return RequestMatcher.MatchOther.YES;
             }
         };
 
-        CompositePageProcessor pageProcessor = new CompositePageProcessor(Site.me().setDomain("github.com").setRetryTimes(3));
+        CompositePageProcessor pageProcessor =
+            new CompositePageProcessor(Site.me().setDomain("github.com").setRetryTimes(3));
         CompositePipeline pipeline = new CompositePipeline();
 
         pageProcessor.setSubPageProcessors(githubRepoProcessor, githubUserProcessor);
@@ -62,5 +67,4 @@ public class PatternProcessorExample {
 
         Spider.create(pageProcessor).addUrl("https://github.com/code4craft").thread(5).addPipeline(pipeline).runAsync();
     }
-
 }

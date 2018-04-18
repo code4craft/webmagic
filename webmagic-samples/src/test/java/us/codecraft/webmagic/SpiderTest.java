@@ -14,40 +14,35 @@ import us.codecraft.webmagic.scheduler.FileCacheQueueScheduler;
  */
 public class SpiderTest {
 
-
     @Ignore
     @Test
-    public void testSpider() throws InterruptedException {
+    public void testSpider() {
         Spider me = Spider.create(new HuxiuProcessor()).addPipeline(new FilePipeline());
         me.run();
     }
 
     @Ignore
     @Test
-    public void testGlobalSpider(){
-//        PageProcessor pageProcessor = new MeicanProcessor();
-//        Spider.me().pipeline(new FilePipeline()).scheduler(new FileCacheQueueScheduler(pageProcessor.getSite(),"/data/temp/webmagic/cache/")).
-//                processor(pageProcessor).run();
-        SimplePageProcessor pageProcessor2 = new SimplePageProcessor( "http://www.diaoyuweng.com/thread-*-1-1.html");
+    public void testGlobalSpider() {
+        //        PageProcessor pageProcessor = new MeicanProcessor();
+        //        Spider.me().pipeline(new FilePipeline()).scheduler(new FileCacheQueueScheduler(pageProcessor.getSite(),"/data/temp/webmagic/cache/")).
+        //                processor(pageProcessor).run();
+        SimplePageProcessor pageProcessor2 = new SimplePageProcessor("http://www.diaoyuweng.com/thread-*-1-1.html");
         System.out.println(pageProcessor2.getSite().getCharset());
         pageProcessor2.getSite().setSleepTime(500);
         Spider.create(pageProcessor2).addUrl("http://www.diaoyuweng.com/home.php?mod=space&uid=88304&do=thread&view=me&type=thread&from=space").addPipeline(new FilePipeline()).scheduler(new FileCacheQueueScheduler("/data/temp/webmagic/cache/")).
-                run();
-
-
+            run();
     }
 
     @Ignore
     @Test
-    public void test(){
+    public void test() {
         System.out.println(System.getProperty("java.io.tmpdir"));
     }
-
 
     @Ignore
     @Test
     public void languageSchema() {
-
 
         /**
          *

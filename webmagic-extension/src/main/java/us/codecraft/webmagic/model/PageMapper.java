@@ -1,8 +1,7 @@
 package us.codecraft.webmagic.model;
 
-import us.codecraft.webmagic.Page;
-
 import java.util.List;
+import us.codecraft.webmagic.Page;
 
 /**
  * @author code4crafer@gmail.com

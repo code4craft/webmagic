@@ -1,16 +1,15 @@
 package us.codecraft.webmagic.pipeline;
 
 import com.alibaba.fastjson.JSON;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.utils.FilePersistentBase;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * Store results to files in JSON format.<br>
@@ -37,10 +36,13 @@ public class JsonFilePipeline extends FilePersistentBase implements Pipeline {
     public void process(ResultItems resultItems, Task task) {
         String path = this.path + PATH_SEPERATOR + task.getUUID() + PATH_SEPERATOR;
         try {
-            PrintWriter printWriter = new PrintWriter(new FileWriter(getFile(path + DigestUtils.md5Hex(resultItems.getRequest().getUrl()) + ".json")));
+            PrintWriter printWriter = new PrintWriter(new FileWriter(getFile(path
+                                                                                 + DigestUtils.md5Hex(resultItems.getRequest().getUrl())
+                                                                                 + ".json")));
             printWriter.write(JSON.toJSONString(resultItems.getAll()));
             printWriter.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             logger.warn("write file error", e);
         }
     }

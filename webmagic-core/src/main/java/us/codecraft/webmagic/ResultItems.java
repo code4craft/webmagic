@@ -1,6 +1,5 @@
 package us.codecraft.webmagic;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -9,31 +8,31 @@ import java.util.Map;
  * It is contained in Page and will be processed in pipeline.
  *
  * @author code4crafter@gmail.com <br>
- * @since 0.1.0
  * @see Page
  * @see us.codecraft.webmagic.pipeline.Pipeline
+ * @since 0.1.0
  */
-public class ResultItems {
+public class ResultItems<T> {
 
-    private Map<String, Object> fields = new LinkedHashMap<String, Object>();
+    private Map<String, T> fields = new LinkedHashMap<String, T>();
 
     private Request request;
 
     private boolean skip;
 
-    public <T> T get(String key) {
+    public T get(String key) {
         Object o = fields.get(key);
         if (o == null) {
             return null;
         }
-        return (T) fields.get(key);
+        return fields.get(key);
     }
 
-    public Map<String, Object> getAll() {
+    public Map<String, T> getAll() {
         return fields;
     }
 
-    public <T> ResultItems put(String key, T value) {
+    public ResultItems put(String key, T value) {
         fields.put(key, value);
         return this;
     }
@@ -57,12 +56,12 @@ public class ResultItems {
         return skip;
     }
 
-
     /**
      * Set whether to skip the result.<br>
      * Result which is skipped will not be processed by Pipeline.
      *
      * @param skip whether to skip the result
+     *
      * @return this
      */
     public ResultItems setSkip(boolean skip) {
@@ -72,10 +71,6 @@ public class ResultItems {
 
     @Override
     public String toString() {
-        return "ResultItems{" +
-                "fields=" + fields +
-                ", request=" + request +
-                ", skip=" + skip +
-                '}';
+        return "ResultItems{" + "fields=" + fields + ", request=" + request + ", skip=" + skip + '}';
     }
 }

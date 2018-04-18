@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>webmagic-parent</artifactId>
         <groupId>us.codecraft</groupId>
-        <version>0.7.3</version>
+        <version>0.7.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>us.codecraft</groupId>
     <artifactId>webmagic-scripts</artifactId>
     <properties>
-        <kotlin.version>1.1.2-2</kotlin.version>
+        <kotlin.version>1.2.31</kotlin.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.jruby</groupId>
             <artifactId>jruby</artifactId>
-            <version>1.7.6</version>
+            <version>9.1.16.0</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>2.1.6</version>
+            <version>2.4.15</version>
         </dependency>
-        <dependency><groupId>org.python</groupId>
+        <dependency>
+            <groupId>org.python</groupId>
             <artifactId>jython</artifactId>
-            <version>2.5.3</version>
+            <version>2.7.0</version>
         </dependency>
         <dependency>
             <groupId>commons-cli</groupId>
             <artifactId>commons-cli</artifactId>
-            <version>1.2</version>
+            <version>1.4</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

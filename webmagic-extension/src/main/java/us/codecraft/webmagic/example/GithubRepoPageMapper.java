@@ -16,6 +16,10 @@ public class GithubRepoPageMapper implements PageProcessor {
 
     private PageMapper<GithubRepo> githubRepoPageMapper = new PageMapper<GithubRepo>(GithubRepo.class);
 
+    public static void main(String[] args) {
+        Spider.create(new GithubRepoPageMapper()).addUrl("https://github.com/code4craft").thread(5).run();
+    }
+
     @Override
     public void process(Page page) {
         page.addTargetRequests(page.getHtml().links().regex("(https://github\\.com/\\w+/\\w+)").all());
@@ -23,18 +27,14 @@ public class GithubRepoPageMapper implements PageProcessor {
         GithubRepo githubRepo = githubRepoPageMapper.get(page);
         if (githubRepo == null) {
             page.setSkip(true);
-        } else {
+        }
+        else {
             page.putField("repo", githubRepo);
         }
-
     }
 
     @Override
     public Site getSite() {
         return site;
-    }
-
-    public static void main(String[] args) {
-        Spider.create(new GithubRepoPageMapper()).addUrl("https://github.com/code4craft").thread(5).run();
     }
 }
