@@ -34,7 +34,7 @@ public class HtmlNode extends AbstractSelectable {
 
     @Override
     public Selectable links() {
-        return xpath("//a/@href");
+        return selectElements(new LinksSelector());
     }
 
     @Override
@@ -59,8 +59,8 @@ public class HtmlNode extends AbstractSelectable {
     /**
      * select elements
      *
-     * @param elementSelector
-     * @return
+     * @param elementSelector elementSelector
+     * @return result
      */
     protected Selectable selectElements(BaseElementSelector elementSelector) {
         ListIterator<Element> elementIterator = getElements().listIterator();
@@ -89,8 +89,8 @@ public class HtmlNode extends AbstractSelectable {
      * Only document can be select
      * See: https://github.com/code4craft/webmagic/issues/113
      *
-     * @param elementIterator
-     * @param element
+     * @param elementIterator elementIterator
+     * @return element element
      */
     private Element checkElementAndConvert(ListIterator<Element> elementIterator) {
         Element element = elementIterator.next();

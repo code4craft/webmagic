@@ -21,6 +21,6 @@ public class TianyaPageProcesser implements PageProcessor {
 
     @Override
     public Site getSite() {
-        return Site.me().setDomain("http://bbs.tianya.cn/").addStartUrl("http://bbs.tianya.cn/");  //To change body of implemented methods use File | Settings | File Templates.
+        return Site.me().setDomain("http://bbs.tianya.cn/");  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

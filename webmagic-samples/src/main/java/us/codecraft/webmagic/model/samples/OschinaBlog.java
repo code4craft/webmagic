@@ -26,7 +26,7 @@ public class OschinaBlog{
 
     public static void main(String[] args) {
         OOSpider.create(Site.me()
-                .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36").addStartUrl("http://my.oschina.net/flashsword/blog")
+                .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36")
                 .setSleepTime(0)
                 .setRetryTimes(3)
                 ,new PageModelPipeline() {
@@ -34,7 +34,7 @@ public class OschinaBlog{
             public void process(Object o, Task task) {
 
             }
-        }, OschinaBlog.class).thread(10).run();
+        }, OschinaBlog.class).thread(10).addUrl("http://my.oschina.net/flashsword/blog").run();
     }
 
     public String getTitle() {

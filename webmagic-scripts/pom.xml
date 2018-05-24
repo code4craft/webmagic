@@ -3,18 +3,32 @@
     <parent>
         <artifactId>webmagic-parent</artifactId>
         <groupId>us.codecraft</groupId>
-        <version>0.5.2</version>
+        <version>0.7.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-scripts</artifactId>
+    <properties>
+        <kotlin.version>1.1.2-2</kotlin.version>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.jruby</groupId>
             <artifactId>jruby</artifactId>
             <version>1.7.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>2.1.6</version>
         </dependency>
         <dependency><groupId>org.python</groupId>
             <artifactId>jython</artifactId>
@@ -43,6 +57,7 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -71,6 +86,25 @@
                         </manifest>
                     </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/src/main/kotlin</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

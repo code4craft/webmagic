@@ -23,6 +23,8 @@ class ModelPageProcessor implements PageProcessor {
 
     private Site site;
 
+    private boolean extractLinks = true;
+
     public static ModelPageProcessor create(Site site, Class... clazzs) {
         ModelPageProcessor modelPageProcessor = new ModelPageProcessor(site);
         for (Class clazz : clazzs) {
@@ -45,8 +47,10 @@ class ModelPageProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         for (PageModelExtractor pageModelExtractor : pageModelExtractorList) {
-            extractLinks(page, pageModelExtractor.getHelpUrlRegionSelector(), pageModelExtractor.getHelpUrlPatterns());
-            extractLinks(page, pageModelExtractor.getTargetUrlRegionSelector(), pageModelExtractor.getTargetUrlPatterns());
+            if (extractLinks) {
+                extractLinks(page, pageModelExtractor.getHelpUrlRegionSelector(), pageModelExtractor.getHelpUrlPatterns());
+                extractLinks(page, pageModelExtractor.getTargetUrlRegionSelector(), pageModelExtractor.getTargetUrlPatterns());
+            }
             Object process = pageModelExtractor.process(page);
             if (process == null || (process instanceof List && ((List) process).size() == 0)) {
                 continue;
@@ -70,7 +74,7 @@ class ModelPageProcessor implements PageProcessor {
             for (Pattern targetUrlPattern : urlPatterns) {
                 Matcher matcher = targetUrlPattern.matcher(link);
                 if (matcher.find()) {
-                    page.addTargetRequest(new Request(matcher.group(1)));
+                    page.addTargetRequest(new Request(matcher.group(0)));
                 }
             }
         }
@@ -82,5 +86,13 @@ class ModelPageProcessor implements PageProcessor {
     @Override
     public Site getSite() {
         return site;
+    }
+
+    public boolean isExtractLinks() {
+        return extractLinks;
+    }
+
+    public void setExtractLinks(boolean extractLinks) {
+        this.extractLinks = extractLinks;
     }
 }

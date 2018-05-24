@@ -5,9 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.model.annotation.*;
-import us.codecraft.webmagic.model.formatter.BasicTypeFormatter;
 import us.codecraft.webmagic.model.formatter.ObjectFormatter;
-import us.codecraft.webmagic.model.formatter.ObjectFormatters;
+import us.codecraft.webmagic.model.formatter.ObjectFormatterBuilder;
 import us.codecraft.webmagic.selector.*;
 import us.codecraft.webmagic.utils.ClassUtils;
 import us.codecraft.webmagic.utils.ExtractorUtils;
@@ -19,6 +18,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import static us.codecraft.webmagic.model.annotation.ExtractBy.Source.RawText;
 
 /**
  * The main internal logic of page model extractor.
@@ -70,63 +71,10 @@ class PageModelExtractor {
                 fieldExtractor = fieldExtractorTmp;
             }
             if (fieldExtractor != null) {
-                checkFormat(field, fieldExtractor);
+                fieldExtractor.setObjectFormatter(new ObjectFormatterBuilder().setField(field).build());
                 fieldExtractors.add(fieldExtractor);
             }
         }
-    }
-
-    private void checkFormat(Field field, FieldExtractor fieldExtractor) {
-        //check custom formatter
-        Formatter formatter = field.getAnnotation(Formatter.class);
-        if (formatter != null && !formatter.formatter().equals(ObjectFormatter.class)) {
-            if (formatter != null) {
-                if (!formatter.formatter().equals(ObjectFormatter.class)) {
-                    ObjectFormatter objectFormatter = initFormatter(formatter.formatter());
-                    objectFormatter.initParam(formatter.value());
-                    fieldExtractor.setObjectFormatter(objectFormatter);
-                    return;
-                }
-            }
-        }
-        if (!fieldExtractor.isMulti() && !String.class.isAssignableFrom(field.getType())) {
-            Class<?> fieldClazz = BasicTypeFormatter.detectBasicClass(field.getType());
-            ObjectFormatter objectFormatter = getObjectFormatter(field, fieldClazz, formatter);
-            if (objectFormatter == null) {
-                throw new IllegalStateException("Can't find formatter for field " + field.getName() + " of type " + fieldClazz);
-            } else {
-                fieldExtractor.setObjectFormatter(objectFormatter);
-            }
-        } else if (fieldExtractor.isMulti()) {
-            if (!List.class.isAssignableFrom(field.getType())) {
-                throw new IllegalStateException("Field " + field.getName() + " must be list");
-            }
-            if (formatter != null) {
-                if (!formatter.subClazz().equals(Void.class)) {
-                    ObjectFormatter objectFormatter = getObjectFormatter(field, formatter.subClazz(), formatter);
-                    if (objectFormatter == null) {
-                        throw new IllegalStateException("Can't find formatter for field " + field.getName() + " of type " + formatter.subClazz());
-                    } else {
-                        fieldExtractor.setObjectFormatter(objectFormatter);
-                    }
-                }
-            }
-        }
-    }
-
-    private ObjectFormatter getObjectFormatter(Field field, Class<?> fieldClazz, Formatter formatter) {
-        return initFormatter(ObjectFormatters.get(fieldClazz));
-    }
-
-    private ObjectFormatter initFormatter(Class<? extends ObjectFormatter> formatterClazz) {
-        try {
-            return formatterClazz.newInstance();
-        } catch (InstantiationException e) {
-            logger.error("init ObjectFormatter fail", e);
-        } catch (IllegalAccessException e) {
-            logger.error("init ObjectFormatter fail", e);
-        }
-        return null;
     }
 
     private FieldExtractor getAnnotationExtractByUrl(Class clazz, Field field) {
@@ -179,12 +127,29 @@ class PageModelExtractor {
         ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
         if (extractBy != null) {
             Selector selector = ExtractorUtils.getSelector(extractBy);
-            fieldExtractor = new FieldExtractor(field, selector, extractBy.source() == ExtractBy.Source.RawHtml ? FieldExtractor.Source.RawHtml : FieldExtractor.Source.Html,
-                    extractBy.notNull(), extractBy.multi() || List.class.isAssignableFrom(field.getType()));
-            Method setterMethod = getSetterMethod(clazz, field);
-            if (setterMethod != null) {
-                fieldExtractor.setSetterMethod(setterMethod);
+            ExtractBy.Source source0 = extractBy.source();
+            if (extractBy.type()== ExtractBy.Type.JsonPath){
+                source0 = RawText;
             }
+            FieldExtractor.Source source = null;
+            switch (source0){
+                case RawText:
+                    source = FieldExtractor.Source.RawText;
+                    break;
+                case RawHtml:
+                    source = FieldExtractor.Source.RawHtml;
+                    break;
+                case SelectedHtml:
+                    source =FieldExtractor.Source.Html;
+                    break;
+                default:
+                    source =FieldExtractor.Source.Html;
+
+            }
+
+            fieldExtractor = new FieldExtractor(field, selector, source,
+                    extractBy.notNull(), List.class.isAssignableFrom(field.getType()));
+            fieldExtractor.setSetterMethod(getSetterMethod(clazz, field));
         }
         return fieldExtractor;
     }
@@ -203,12 +168,12 @@ class PageModelExtractor {
     private void initClassExtractors() {
         Annotation annotation = clazz.getAnnotation(TargetUrl.class);
         if (annotation == null) {
-            targetUrlPatterns.add(Pattern.compile("(.*)"));
+            targetUrlPatterns.add(Pattern.compile(".*"));
         } else {
             TargetUrl targetUrl = (TargetUrl) annotation;
             String[] value = targetUrl.value();
             for (String s : value) {
-                targetUrlPatterns.add(Pattern.compile("(" + s.replace(".", "\\.").replace("*", "[^\"'#]*") + ")"));
+                targetUrlPatterns.add(Pattern.compile(s.replace(".", "\\.").replace("*", "[^\"'#]*")));
             }
             if (!targetUrl.sourceRegion().equals("")) {
                 targetUrlRegionSelector = new XpathSelector(targetUrl.sourceRegion());
@@ -219,7 +184,7 @@ class PageModelExtractor {
             HelpUrl helpUrl = (HelpUrl) annotation;
             String[] value = helpUrl.value();
             for (String s : value) {
-                helpUrlPatterns.add(Pattern.compile("(" + s.replace(".", "\\.").replace("*", "[^\"'#]*") + ")"));
+                helpUrlPatterns.add(Pattern.compile(s.replace(".", "\\.").replace("*", "[^\"'#]*")));
             }
             if (!helpUrl.sourceRegion().equals("")) {
                 helpUrlRegionSelector = new XpathSelector(helpUrl.sourceRegion());
@@ -284,6 +249,9 @@ class PageModelExtractor {
                         case Url:
                             value = fieldExtractor.getSelector().selectList(page.getUrl().toString());
                             break;
+                        case RawText:
+                            value = fieldExtractor.getSelector().selectList(page.getRawText());
+                            break;
                         default:
                             value = fieldExtractor.getSelector().selectList(html);
                     }
@@ -311,6 +279,9 @@ class PageModelExtractor {
                             break;
                         case Url:
                             value = fieldExtractor.getSelector().select(page.getUrl().toString());
+                            break;
+                        case RawText:
+                            value = fieldExtractor.getSelector().select(page.getRawText());
                             break;
                         default:
                             value = fieldExtractor.getSelector().select(html);

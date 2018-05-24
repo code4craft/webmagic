@@ -16,7 +16,7 @@ public abstract class AbstractDownloader implements Downloader {
     /**
      * A simple method to download a url.
      *
-     * @param url
+     * @param url url
      * @return html
      */
     public Html download(String url) {
@@ -26,7 +26,8 @@ public abstract class AbstractDownloader implements Downloader {
     /**
      * A simple method to download a url.
      *
-     * @param url
+     * @param url url
+     * @param charset charset
      * @return html
      */
     public Html download(String url, String charset) {
@@ -40,20 +41,4 @@ public abstract class AbstractDownloader implements Downloader {
     protected void onError(Request request) {
     }
 
-    protected Page addToCycleRetry(Request request, Site site) {
-        Page page = new Page();
-        Object cycleTriedTimesObject = request.getExtra(Request.CYCLE_TRIED_TIMES);
-        if (cycleTriedTimesObject == null) {
-            page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, 1));
-        } else {
-            int cycleTriedTimes = (Integer) cycleTriedTimesObject;
-            cycleTriedTimes++;
-            if (cycleTriedTimes >= site.getCycleRetryTimes()) {
-                return null;
-            }
-            page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, cycleTriedTimes));
-        }
-        page.setNeedCycleRetry(true);
-        return page;
-    }
 }
