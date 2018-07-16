@@ -22,7 +22,7 @@ import java.util.Map;
  * @since 0.1.0
  */
 @ThreadSafe
-public class FilePipeline extends FilePersistentBase implements Pipeline {
+public class    FilePipeline extends FilePersistentBase implements Pipeline {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 

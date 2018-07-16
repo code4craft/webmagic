@@ -32,6 +32,8 @@ public class GithubRepoPageProcessor implements PageProcessor {
     }
 
     public static void main(String[] args) {
-        Spider.create(new GithubRepoPageProcessor()).addUrl("https://github.com/code4craft").thread(5).run();
+        //https://blog.csdn.net/bbc2005/article/details/80890829
+       // System.setProperty("javax.net.debug", "all"); //打印网络连接握手信息
+        Spider.create(new GithubRepoPageProcessor()).addUrl("https://github.com/code4craft").thread(1).run();
     }
 }

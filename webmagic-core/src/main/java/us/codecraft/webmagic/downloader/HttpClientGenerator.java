@@ -14,6 +14,7 @@ import org.apache.http.impl.client.*;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.ssl.SSLContexts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Site;
@@ -123,7 +124,15 @@ public class HttpClientGenerator {
         connectionManager.setDefaultSocketConfig(socketConfig);
         httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(site.getRetryTimes(), true));
         generateCookie(httpClientBuilder, site);
-        return httpClientBuilder.build();
+        SSLContext ctx = null;
+        try {
+            ctx = SSLContexts.custom().useProtocol("TLSv1.2").build();
+        } catch (NoSuchAlgorithmException e) {
+            logger.warn("CloseableHttpClient getClient #NoSuchAlgorithmException,{}", e);
+        } catch (KeyManagementException e) {
+            logger.warn("CloseableHttpClient getClient #NoSuchAlgorithmException ,{} error", e);
+        }
+        return httpClientBuilder.create().setSSLContext(ctx).build();
     }
 
     private void generateCookie(HttpClientBuilder httpClientBuilder, Site site) {
