@@ -83,6 +83,11 @@ public abstract class AbstractSelectable implements Selectable {
         RegexSelector regexSelector = Selectors.regex(regex, group);
         return selectList(regexSelector, getSourceTexts());
     }
+    
+    @Override
+    public Selectable regex(RegexSelector selector) {
+        return selectList(selector, getSourceTexts());
+    }
 
     @Override
     public Selectable replace(String regex, String replacement) {
