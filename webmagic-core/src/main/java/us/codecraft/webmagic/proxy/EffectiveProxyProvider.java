@@ -35,12 +35,12 @@ public abstract class EffectiveProxyProvider implements ProxyProvider {
     }
 
     public EffectiveProxyProvider(ProxyPageValidator proxyPageValidator) {
-        addProxies();
+        validProxyQueue.addAll(addProxies());
         this.proxyPageValidator = proxyPageValidator;
     }
 
     public EffectiveProxyProvider(ProxyPageValidator proxyPageValidator, int expandPoolSize) {
-        addProxies();
+        validProxyQueue.addAll(addProxies());
         this.proxyPageValidator = proxyPageValidator;
         this.expandPoolSize = expandPoolSize;
     }
