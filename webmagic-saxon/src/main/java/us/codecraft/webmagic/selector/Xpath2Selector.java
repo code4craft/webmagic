@@ -11,6 +11,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -126,7 +127,9 @@ public class Xpath2Selector implements Selector {
                     return item.getTextContent();
                 } else {
                     StreamResult xmlOutput = new StreamResult(new StringWriter());
-                    Transformer transformer = TransformerFactory.newInstance().newTransformer();
+                    TransformerFactory tff = TransformerFactory.newInstance();
+                    tff.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+                    Transformer transformer = tff.newTransformer();
                     transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
                     transformer.transform(new DOMSource(item), xmlOutput);
                     return xmlOutput.getWriter().toString();
@@ -154,7 +157,9 @@ public class Xpath2Selector implements Selector {
             }
             if (result instanceof NodeList) {
                 NodeList nodeList = (NodeList) result;
-                Transformer transformer = TransformerFactory.newInstance().newTransformer();
+                TransformerFactory tff = TransformerFactory.newInstance();
+                tff.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+                Transformer transformer = tff.newTransformer();
                 StreamResult xmlOutput = new StreamResult();
                 transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
                 for (int i = 0; i < nodeList.getLength(); i++) {

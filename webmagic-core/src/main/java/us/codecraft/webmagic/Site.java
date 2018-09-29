@@ -98,9 +98,9 @@ public class Site {
     /**
      * get cookies
      *
-     * @return get cookies
+     * @return get defaultCookies
      */
-    public Map<String, String> getCookies() {
+    public Map<String, String> getDefaultCookies() {
         return defaultCookies;
     }
 
