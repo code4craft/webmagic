@@ -66,11 +66,11 @@ public class HttpClientGenerator {
 		X509TrustManager trustManager = new X509TrustManager() {
 
 
-			public void checkClientTrusted(X509Certificate[] chain, String authType) {
+			public void checkClientTrusted(X509Certificate[] chain, String authType) throws IllegalArgumentException {
 			}
 
 
-			public void checkServerTrusted(X509Certificate[] chain, String authType) {
+			public void checkServerTrusted(X509Certificate[] chain, String authType) throws IllegalArgumentException {
 			}
 
 

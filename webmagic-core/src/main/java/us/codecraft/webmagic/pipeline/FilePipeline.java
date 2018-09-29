@@ -36,7 +36,7 @@ public class FilePipeline extends FilePersistentBase implements Pipeline {
 
     @Override
     public void process(ResultItems resultItems, Task task) {
-        String path = this.path + PATH_SEPERATOR + task.getUUID() + PATH_SEPERATOR;
+        String path = this.path + PATH_SEPARATOR + task.getUUID() + PATH_SEPARATOR;
         try {
             PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(getFile(path + DigestUtils.md5Hex(resultItems.getRequest().getUrl()) + ".html")),"UTF-8"));
             printWriter.println("url:\t" + resultItems.getRequest().getUrl());

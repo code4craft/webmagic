@@ -37,7 +37,7 @@ public class FilePageModelPipeline extends FilePersistentBase implements PageMod
 
     @Override
     public void process(Object o, Task task) {
-        String path = this.path + PATH_SEPERATOR + task.getUUID() + PATH_SEPERATOR;
+        String path = this.path + PATH_SEPARATOR + task.getUUID() + PATH_SEPARATOR;
         try {
             String filename;
             if (o instanceof HasKey) {
