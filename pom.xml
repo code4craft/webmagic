@@ -6,14 +6,13 @@
         <version>7</version>
     </parent>
     <groupId>us.codecraft</groupId>
-    <version>0.7.3</version>
+    <version>0.7.5</version>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-version>4.0.0.RELEASE</spring-version>
-
     </properties>
     <artifactId>webmagic-parent</artifactId>
     <name>webmagic-parent</name>
@@ -62,12 +61,6 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.11</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-all</artifactId>
-                <version>1.10.19</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
