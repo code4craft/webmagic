@@ -203,7 +203,7 @@ public class Site {
 
     /**
      * Set the interval between the processing of two pages.<br>
-     * Time unit is micro seconds.<br>
+     * Time unit is milliseconds.<br>
      *
      * @param sleepTime sleepTime
      * @return this
@@ -215,7 +215,7 @@ public class Site {
 
     /**
      * Get the interval between the processing of two pages.<br>
-     * Time unit is micro seconds.<br>
+     * Time unit is milliseconds.<br>
      *
      * @return the interval between the processing of two pages,
      */
