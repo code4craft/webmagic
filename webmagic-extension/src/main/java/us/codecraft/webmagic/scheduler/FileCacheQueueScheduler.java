@@ -1,6 +1,8 @@
 package us.codecraft.webmagic.scheduler;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
@@ -141,7 +143,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
                 urls.add(line.trim());
                 lineReaded++;
                 if (lineReaded > cursor.get()) {
-                    queue.add(new Request(line));
+                    queue.add(deserializeRequest(line));
                 }
             }
         } finally {
@@ -183,7 +185,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
             init(task);
         }
         queue.add(request);
-        fileUrlWriter.println(request.getUrl());
+        fileUrlWriter.println(serializeRequest(request));
     }
 
     @Override
@@ -204,4 +206,22 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
     public int getTotalRequestsCount(Task task) {
         return getDuplicateRemover().getTotalRequestsCount(task);
     }
+
+    protected String serializeRequest(Request request) {
+        String line = String.format("%1$s\t%2$s", request.getUrl(),
+            Base64.encodeBase64String(SerializationUtils.serialize(request)));
+        return line;
+    }
+
+    protected Request deserializeRequest(String line) {
+        Request request;
+        String[] sections = line.split("\t");
+        if (sections.length >= 2) {
+            request = (Request) SerializationUtils.deserialize(Base64.decodeBase64(sections[1]));
+        } else {
+            request = new Request(sections[0]);
+        }
+        return request;
+    }
+
 }
