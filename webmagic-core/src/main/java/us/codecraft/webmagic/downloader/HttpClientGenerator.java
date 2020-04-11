@@ -50,7 +50,7 @@ public class HttpClientGenerator {
 
 	private SSLConnectionSocketFactory buildSSLConnectionSocketFactory() {
 		try {
-            return new SSLConnectionSocketFactory(createIgnoreVerifySSL(), new String[]{"SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"},
+            return new SSLConnectionSocketFactory(createIgnoreVerifySSL(), new String[]{"SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"},
                     null,
                     new DefaultHostnameVerifier()); // 优先绕过安全证书
 		} catch (KeyManagementException e) {
