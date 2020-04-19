@@ -78,14 +78,15 @@ public class Request implements Serializable {
         return this;
     }
 
-    public Object getExtra(String key) {
+    @SuppressWarnings("unchecked")
+    public <T> T getExtra(String key) {
         if (extras == null) {
             return null;
         }
-        return extras.get(key);
+        return (T) extras.get(key);
     }
 
-    public Request putExtra(String key, Object value) {
+    public <T> Request putExtra(String key, T value) {
         if (extras == null) {
             extras = new HashMap<String, Object>();
         }
