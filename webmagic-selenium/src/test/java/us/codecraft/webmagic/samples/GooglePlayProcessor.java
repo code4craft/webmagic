@@ -6,6 +6,9 @@ import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.selenium.SeleniumDownloader;
 import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
+import us.codecraft.webmagic.proxy.Proxy;
+import us.codecraft.webmagic.proxy.ProxyProvider;
+import us.codecraft.webmagic.proxy.SimpleProxyProvider;
 
 /**
  *
@@ -34,12 +37,14 @@ public class GooglePlayProcessor implements PageProcessor {
 	}
 
 	public static void main(String[] args) {
+		Proxy proxy=new Proxy("127.0.0.1",1080);//shadowsocks
+		ProxyProvider proxyProvider= SimpleProxyProvider.from(proxy);
 		Spider.create(new GooglePlayProcessor())
 				.thread(5)
 				.addPipeline(
 						new FilePipeline(
 								"/Users/Bingo/Documents/workspace/webmagic/webmagic-selenium/data/"))
-				.setDownloader(new SeleniumDownloader())
+				.setDownloader(new SeleniumDownloader().setProxyProvider(proxyProvider))
 				.addUrl("https://play.google.com/store/apps/details?id=com.tencent.mm")
 				.runAsync();
 	}
