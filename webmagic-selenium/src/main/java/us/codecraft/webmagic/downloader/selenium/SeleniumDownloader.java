@@ -1,10 +1,12 @@
 package us.codecraft.webmagic.downloader.selenium;
 
-import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
@@ -29,7 +31,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 
 	private volatile WebDriverPool webDriverPool;
 
-	private Logger logger = Logger.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private int sleepTime = 0;
 

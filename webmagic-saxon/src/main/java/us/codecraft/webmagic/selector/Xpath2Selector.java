@@ -2,11 +2,12 @@ package us.codecraft.webmagic.selector;
 
 import net.sf.saxon.lib.NamespaceConstant;
 import net.sf.saxon.xpath.XPathEvaluator;
-import org.apache.log4j.Logger;
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.DomSerializer;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -40,7 +41,7 @@ public class Xpath2Selector implements Selector {
 
     private XPathExpression xPathExpression;
 
-    private Logger logger = Logger.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     public Xpath2Selector(String xpathStr) {
         this.xpathStr = xpathStr;

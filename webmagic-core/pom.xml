@@ -48,6 +48,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
