@@ -65,15 +65,15 @@ public class HttpClientGenerator {
 		// 实现一个X509TrustManager接口，用于绕过验证，不用修改里面的方法
 		X509TrustManager trustManager = new X509TrustManager() {
 
-			@Override
-			public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+
+			public void checkClientTrusted(X509Certificate[] chain, String authType) throws IllegalArgumentException {
 			}
 
-			@Override
-			public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+
+			public void checkServerTrusted(X509Certificate[] chain, String authType) throws IllegalArgumentException {
 			}
 
-			@Override
+
 			public X509Certificate[] getAcceptedIssuers() {
 				return null;
 			}
@@ -135,7 +135,7 @@ public class HttpClientGenerator {
             return;
         }
         CookieStore cookieStore = new BasicCookieStore();
-        for (Map.Entry<String, String> cookieEntry : site.getCookies().entrySet()) {
+        for (Map.Entry<String, String> cookieEntry : site.getDefaultCookies().entrySet()) {
             BasicClientCookie cookie = new BasicClientCookie(cookieEntry.getKey(), cookieEntry.getValue());
             cookie.setDomain(site.getDomain());
             cookieStore.addCookie(cookie);

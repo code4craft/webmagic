@@ -22,10 +22,14 @@ public abstract class IPUtils {
             Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
             while (inetAddresses.hasMoreElements()) {
                 InetAddress address = inetAddresses.nextElement();
-                if (!address.isLoopbackAddress() && !Inet6Address.class.isInstance(address)) {
-                    return address.getHostAddress();
-                } else if (!address.isLoopbackAddress()) {
-                    localAddress = address;
+                if (address != null) {
+                    if (!address.isLoopbackAddress() && !Inet6Address.class.isInstance(address)) {
+                        return address.getHostAddress();
+                    } else if (!address.isLoopbackAddress()) {
+                        localAddress = address;
+                    }
+                }else{
+                    throw new NullPointerException("Address is null");
                 }
             }
         }

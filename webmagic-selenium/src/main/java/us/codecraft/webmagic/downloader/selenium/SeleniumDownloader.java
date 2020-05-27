@@ -89,8 +89,8 @@ public class SeleniumDownloader implements Downloader, Closeable {
 		}
 		WebDriver.Options manage = webDriver.manage();
 		Site site = task.getSite();
-		if (site.getCookies() != null) {
-			for (Map.Entry<String, String> cookieEntry : site.getCookies()
+		if (site.getDefaultCookies() != null) {
+			for (Map.Entry<String, String> cookieEntry : site.getDefaultCookies()
 					.entrySet()) {
 				Cookie cookie = new Cookie(cookieEntry.getKey(),
 						cookieEntry.getValue());

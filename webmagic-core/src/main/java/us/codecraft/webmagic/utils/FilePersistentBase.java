@@ -12,29 +12,22 @@ public class FilePersistentBase {
 
     protected String path;
 
-    public static String PATH_SEPERATOR = "/";
-
-    static {
-        String property = System.getProperties().getProperty("file.separator");
-        if (property != null) {
-            PATH_SEPERATOR = property;
-        }
-    }
+    protected static final String PATH_SEPARATOR = System.getProperties().getProperty("file.separator");
 
     public void setPath(String path) {
-        if (!path.endsWith(PATH_SEPERATOR)) {
-            path += PATH_SEPERATOR;
+        if (!path.endsWith(PATH_SEPARATOR)) {
+            path += PATH_SEPARATOR;
         }
         this.path = path;
     }
 
-    public File getFile(String fullName) {
+    protected File getFile(String fullName) {
         checkAndMakeParentDirecotry(fullName);
         return new File(fullName);
     }
 
-    public void checkAndMakeParentDirecotry(String fullName) {
-        int index = fullName.lastIndexOf(PATH_SEPERATOR);
+    private void checkAndMakeParentDirecotry(String fullName) {
+        int index = fullName.lastIndexOf(PATH_SEPARATOR);
         if (index > 0) {
             String path = fullName.substring(0, index);
             File file = new File(path);
