@@ -7,8 +7,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
         <spring-version>4.0.0.RELEASE</spring-version>
-
     </properties>
     <artifactId>webmagic-parent</artifactId>
     <name>webmagic-parent</name>
@@ -103,7 +103,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.28</version>
+                <version>1.2.56</version>
             </dependency>
             <dependency>
                 <groupId>com.github.dreamhead</groupId>
@@ -162,7 +162,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.18</version>
+                <version>3.0.0-M4</version>
                 <configuration>
                     <forkCount>0</forkCount>
                 </configuration>
@@ -170,11 +170,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.7.0</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                    <encoding>UTF-8</encoding>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
             <!--<plugin>-->
@@ -230,11 +229,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
+                <version>3.2.0</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                     <doctitle>WebMagic 0.7.3</doctitle>
                     <locale>en_US</locale>
+
+                    <!-- avoid the issue: https://bugs.openjdk.java.net/browse/JDK-8212233 -->
+                    <detectJavaApiLink>false</detectJavaApiLink>
+
                 </configuration>
                 <executions>
                     <execution>
