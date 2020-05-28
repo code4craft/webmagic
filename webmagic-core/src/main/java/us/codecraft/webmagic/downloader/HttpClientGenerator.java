@@ -65,7 +65,7 @@ public class HttpClientGenerator {
             } else {
                 supportedProtocols = new String[] { "SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2" };
             }
-            logger.info("supportedProtocols: {}", String.join(", ", supportedProtocols));
+            logger.debug("supportedProtocols: {}", String.join(", ", supportedProtocols));
             return new SSLConnectionSocketFactory(sslContext, supportedProtocols,
                     null,
                     new DefaultHostnameVerifier()); // 优先绕过安全证书
