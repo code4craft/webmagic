@@ -13,21 +13,16 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>3.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>us.codecraft</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>webmagic-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.detro</groupId>
 			<artifactId>phantomjsdriver</artifactId>
-			<version>1.2.0</version>
 		</dependency>
-
-
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
