@@ -1,14 +1,13 @@
 package us.codecraft.webmagic.scheduler;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.SerializationUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
@@ -18,6 +17,13 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+
+import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
 
 /**
@@ -208,20 +214,11 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
     }
 
     protected String serializeRequest(Request request) {
-        String line = String.format("%1$s\t%2$s", request.getUrl(),
-            Base64.encodeBase64String(SerializationUtils.serialize(request)));
-        return line;
+        return request.getUrl();
     }
 
     protected Request deserializeRequest(String line) {
-        Request request;
-        String[] sections = line.split("\t");
-        if (sections.length >= 2) {
-            request = (Request) SerializationUtils.deserialize(Base64.decodeBase64(sections[1]));
-        } else {
-            request = new Request(sections[0]);
-        }
-        return request;
+        return new Request(line);
     }
 
 }
