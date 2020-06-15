@@ -1,73 +1,73 @@
 package us.codecraft.webmagic.proxy;
 
-/**
- * 
- */
-
 public class Proxy {
 
-	private String host;
-	private int port;
-	private String username;
-	private String password;
+    private String host;
 
-	public Proxy(String host, int port) {
-		this.host = host;
-		this.port = port;
-	}
+    private int port;
 
-	public Proxy(String host, int port, String username, String password) {
-		this.host = host;
-		this.port = port;
-		this.username = username;
-		this.password = password;
-	}
+    private String username;
 
-	public String getHost() {
-		return host;
-	}
+    private String password;
 
-	public int getPort() {
-		return port;
-	}
+    public Proxy(String host, int port) {
+        this.host = host;
+        this.port = port;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public Proxy(String host, int port, String username, String password) {
+        this.host = host;
+        this.port = port;
+        this.username = username;
+        this.password = password;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getHost() {
+        return host;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+    public int getPort() {
+        return port;
+    }
 
-		Proxy proxy = (Proxy) o;
+    public String getUsername() {
+        return username;
+    }
 
-		if (port != proxy.port) return false;
-		if (host != null ? !host.equals(proxy.host) : proxy.host != null) return false;
-		if (username != null ? !username.equals(proxy.username) : proxy.username != null) return false;
-		return password != null ? password.equals(proxy.password) : proxy.password == null;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	@Override
-	public int hashCode() {
-		int result = host != null ? host.hashCode() : 0;
-		result = 31 * result + port;
-		result = 31 * result + (username != null ? username.hashCode() : 0);
-		result = 31 * result + (password != null ? password.hashCode() : 0);
-		return result;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-	@Override
-	public String toString() {
-		return "Proxy{" +
-				"host='" + host + '\'' +
-				", port=" + port +
-				", username='" + username + '\'' +
-				", password='" + password + '\'' +
-				'}';
-	}
+        Proxy proxy = (Proxy) o;
+
+        if (port != proxy.port) return false;
+        if (host != null ? !host.equals(proxy.host) : proxy.host != null) return false;
+        if (username != null ? !username.equals(proxy.username) : proxy.username != null) return false;
+        return password != null ? password.equals(proxy.password) : proxy.password == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = host != null ? host.hashCode() : 0;
+        result = 31 * result + port;
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Proxy{" +
+                "host='" + host + '\'' +
+                ", port=" + port +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
 }
