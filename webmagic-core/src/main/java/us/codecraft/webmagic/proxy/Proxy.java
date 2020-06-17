@@ -1,5 +1,13 @@
 package us.codecraft.webmagic.proxy;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.lang3.StringUtils;
+
 public class Proxy {
 
     private String scheme;
@@ -53,6 +61,28 @@ public class Proxy {
         return password;
     }
 
+    public URI toURI() throws URISyntaxException {
+        final StringBuilder userInfoBuffer = new StringBuilder();
+        if (username != null) {
+            userInfoBuffer.append(urlencode(username));
+        }
+        if (password != null) {
+            userInfoBuffer.append(":").append(urlencode(password));
+        }
+        final String userInfo = StringUtils.defaultIfEmpty(userInfoBuffer.toString(), null);
+        final URI uri = new URI(scheme, userInfo, host, port, null, null, null);
+        return uri;
+    }
+
+    private String urlencode(String s) {
+        String enc = StandardCharsets.UTF_8.name();
+        try {
+            return URLEncoder.encode(s, enc);
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,8 +109,11 @@ public class Proxy {
 
     @Override
     public String toString() {
-        return String.format("Proxy{scheme='%1$s', host='%2$s', port=%3$d, username='%4$s', password='%5$s'}",
-            scheme, host, port, username, password);
+        try {
+            return this.toURI().toString();
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
 }

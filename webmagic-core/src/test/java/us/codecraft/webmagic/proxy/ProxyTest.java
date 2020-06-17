@@ -1,10 +1,13 @@
 package us.codecraft.webmagic.proxy;
 
-import org.apache.http.HttpHost;
-import org.junit.BeforeClass;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.http.HttpHost;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * @author yxssfxwzy@sina.com May 30, 2014
@@ -40,6 +43,15 @@ public class ProxyTest {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Test
+	public void testToString() {
+		assertEquals("//127.0.0.1:8080", new Proxy("127.0.0.1", 8080).toString());
+		assertEquals("http://127.0.0.1:8080", new Proxy("127.0.0.1", 8080, "http").toString());
+		assertEquals("//username:password@127.0.0.1:8080", new Proxy("127.0.0.1", 8080, "username", "password").toString());
+		assertEquals("//username@127.0.0.1:8080", new Proxy("127.0.0.1", 8080, "username", null).toString());
+		assertEquals("//:password@127.0.0.1:8080", new Proxy("127.0.0.1", 8080, null, "password").toString());
 	}
 
 }
