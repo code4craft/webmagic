@@ -61,7 +61,7 @@ public class Proxy {
         return password;
     }
 
-    public URI toURI() throws URISyntaxException {
+    public URI toURI() {
         final StringBuilder userInfoBuffer = new StringBuilder();
         if (username != null) {
             userInfoBuffer.append(urlencode(username));
@@ -70,7 +70,12 @@ public class Proxy {
             userInfoBuffer.append(":").append(urlencode(password));
         }
         final String userInfo = StringUtils.defaultIfEmpty(userInfoBuffer.toString(), null);
-        final URI uri = new URI(scheme, userInfo, host, port, null, null, null);
+        URI uri;
+        try {
+            uri = new URI(scheme, userInfo, host, port, null, null, null);
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(e.getMessage(), e);
+        }
         return uri;
     }
 
@@ -109,11 +114,7 @@ public class Proxy {
 
     @Override
     public String toString() {
-        try {
-            return this.toURI().toString();
-        } catch (URISyntaxException e) {
-            throw new IllegalArgumentException(e);
-        }
+        return this.toURI().toString();
     }
 
 }
