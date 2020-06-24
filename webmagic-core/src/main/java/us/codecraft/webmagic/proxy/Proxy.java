@@ -20,6 +20,21 @@ public class Proxy {
 
     private String password;
 
+    public static Proxy create(final URI uri) {
+        Proxy proxy = new Proxy(uri.getHost(), uri.getPort(), uri.getScheme());
+        String userInfo = uri.getUserInfo();
+        if (userInfo != null) {
+            String[] up = userInfo.split(":");
+            if (up.length == 1) {
+                proxy.username = up[0].isEmpty() ? null : up[0];
+            } else {
+                proxy.username = up[0].isEmpty() ? null : up[0];
+                proxy.password = up[1].isEmpty() ? null : up[1];
+            }
+        }
+        return proxy;
+    }
+
     public Proxy(String host, int port) {
         this(host, port, null);
     }
