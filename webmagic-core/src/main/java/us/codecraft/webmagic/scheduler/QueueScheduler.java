@@ -1,6 +1,5 @@
 package us.codecraft.webmagic.scheduler;
 
-import org.apache.http.annotation.ThreadSafe;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 
@@ -15,7 +14,6 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @author code4crafter@gmail.com <br>
  * @since 0.1.0
  */
-@ThreadSafe
 public class QueueScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler {
 
     private BlockingQueue<Request> queue = new LinkedBlockingQueue<Request>();

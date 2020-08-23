@@ -74,7 +74,7 @@ public class HttpUriRequestConverter {
         }
 
         if (proxy != null) {
-            requestConfigBuilder.setProxy(new HttpHost(proxy.getHost(), proxy.getPort()));
+            requestConfigBuilder.setProxy(new HttpHost(proxy.getHost(), proxy.getPort(), proxy.getScheme()));
         }
         requestBuilder.setConfig(requestConfigBuilder.build());
         HttpUriRequest httpUriRequest = requestBuilder.build();

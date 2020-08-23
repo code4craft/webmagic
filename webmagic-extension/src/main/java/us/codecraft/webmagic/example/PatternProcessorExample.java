@@ -1,6 +1,8 @@
 package us.codecraft.webmagic.example;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import us.codecraft.webmagic.*;
 import us.codecraft.webmagic.handler.CompositePageProcessor;
 import us.codecraft.webmagic.handler.CompositePipeline;
@@ -15,7 +17,7 @@ import us.codecraft.webmagic.handler.RequestMatcher;
  */
 public class PatternProcessorExample {
 
-    private static Logger log = Logger.getLogger(PatternProcessorExample.class);
+    private static Logger log = LoggerFactory.getLogger(PatternProcessorExample.class);
 
     public static void main(String... args) {
 

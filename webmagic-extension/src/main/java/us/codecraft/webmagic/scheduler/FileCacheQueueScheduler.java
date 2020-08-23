@@ -1,12 +1,13 @@
 package us.codecraft.webmagic.scheduler;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
@@ -16,6 +17,13 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+
+import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
 
 /**
@@ -141,7 +149,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
                 urls.add(line.trim());
                 lineReaded++;
                 if (lineReaded > cursor.get()) {
-                    queue.add(new Request(line));
+                    queue.add(deserializeRequest(line));
                 }
             }
         } finally {
@@ -183,7 +191,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
             init(task);
         }
         queue.add(request);
-        fileUrlWriter.println(request.getUrl());
+        fileUrlWriter.println(serializeRequest(request));
     }
 
     @Override
@@ -204,4 +212,13 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
     public int getTotalRequestsCount(Task task) {
         return getDuplicateRemover().getTotalRequestsCount(task);
     }
+
+    protected String serializeRequest(Request request) {
+        return request.getUrl();
+    }
+
+    protected Request deserializeRequest(String line) {
+        return new Request(line);
+    }
+
 }

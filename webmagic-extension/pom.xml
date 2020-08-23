@@ -13,16 +13,14 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-            <version>2.9.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>15.0</version>
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>us.codecraft</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>webmagic-core</artifactId>
             <version>${project.version}</version>
         </dependency>
