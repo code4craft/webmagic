@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.pipeline;
 
+import net.jcip.annotations.ThreadSafe;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
