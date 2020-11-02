@@ -401,7 +401,11 @@ public class Spider implements Runnable, Task {
     }
 
     private void processRequest(Request request) {
-        Page page = downloader.download(request, this);
+        Downloader dl = request.getDownloader();
+        if(null == dl){
+            dl = downloader;
+        }
+        Page page = dl.download(request, this);
         if (page.isDownloadSuccess()){
             onDownloadSuccess(request, page);
         } else {
@@ -411,10 +415,18 @@ public class Spider implements Runnable, Task {
 
     private void onDownloadSuccess(Request request, Page page) {
         if (site.getAcceptStatCode().contains(page.getStatusCode())){
-            pageProcessor.process(page);
+            PageProcessor pp = request.getPageProcessor();
+            if(null == pp){
+                pp = pageProcessor;
+            }
+            pp.process(page);
             extractAndAddRequests(page, spawnUrl);
             if (!page.getResultItems().isSkip()) {
-                for (Pipeline pipeline : pipelines) {
+                List<Pipeline> ps = request.getPipelines();
+                if(ps.isEmpty()){
+                    ps.addAll(pipelines);
+                }
+                for (Pipeline pipeline : ps) {
                     pipeline.process(page.getResultItems(), this);
                 }
             }
@@ -468,7 +480,11 @@ public class Spider implements Runnable, Task {
         if (site.getDomain() == null && request != null && request.getUrl() != null) {
             site.setDomain(UrlUtils.getDomain(request.getUrl()));
         }
-        scheduler.push(request, this);
+        Scheduler sc = request.getScheduler();
+        if(null == sc){
+            sc = scheduler;
+        }
+        sc.push(request, this);
     }
 
     protected void checkIfRunning() {

@@ -1,6 +1,12 @@
 package us.codecraft.webmagic;
 
+import java.util.ArrayList;
+import java.util.List;
+import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.model.HttpRequestBody;
+import us.codecraft.webmagic.pipeline.Pipeline;
+import us.codecraft.webmagic.processor.PageProcessor;
+import us.codecraft.webmagic.scheduler.Scheduler;
 import us.codecraft.webmagic.utils.Experimental;
 
 import java.io.Serializable;
@@ -52,6 +58,14 @@ public class Request implements Serializable {
     private boolean binaryContent = false;
 
     private String charset;
+
+    private Downloader downloader;
+
+    private PageProcessor pageProcessor;
+
+    private Scheduler scheduler;
+
+    private List<Pipeline> pipelines = new ArrayList<Pipeline>();
 
     public Request() {
     }
@@ -187,6 +201,38 @@ public class Request implements Serializable {
     public Request setCharset(String charset) {
         this.charset = charset;
         return this;
+    }
+
+    public Downloader getDownloader() {
+        return downloader;
+    }
+
+    public void setDownloader(Downloader downloader) {
+        this.downloader = downloader;
+    }
+
+    public PageProcessor getPageProcessor() {
+        return pageProcessor;
+    }
+
+    public void setPageProcessor(PageProcessor pageProcessor) {
+        this.pageProcessor = pageProcessor;
+    }
+
+    public Scheduler getScheduler() {
+        return scheduler;
+    }
+
+    public void setScheduler(Scheduler scheduler) {
+        this.scheduler = scheduler;
+    }
+
+    public List<Pipeline> getPipelines() {
+        return pipelines;
+    }
+
+    public void addPipelines(Pipeline pipeline) {
+        this.pipelines.add(pipeline);
     }
 
     @Override
