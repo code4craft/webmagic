@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.selector;
 
 import com.alibaba.fastjson.JSON;
+import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 
 import java.util.ArrayList;
@@ -20,6 +21,14 @@ public class JsonPathSelector implements Selector {
 
     private JsonPath jsonPath;
 
+    private Configuration configuration = Configuration.defaultConfiguration();
+
+    public JsonPathSelector(String jsonPathStr, Configuration configuration) {
+        this.jsonPathStr = jsonPathStr;
+        this.configuration = configuration;
+        this.jsonPath = JsonPath.compile(this.jsonPathStr);
+    }
+
     public JsonPathSelector(String jsonPathStr) {
         this.jsonPathStr = jsonPathStr;
         this.jsonPath = JsonPath.compile(this.jsonPathStr);
@@ -27,7 +36,7 @@ public class JsonPathSelector implements Selector {
 
     @Override
     public String select(String text) {
-        Object object = jsonPath.read(text);
+        Object object = jsonPath.read(text, configuration);
         if (object == null) {
             return null;
         }
