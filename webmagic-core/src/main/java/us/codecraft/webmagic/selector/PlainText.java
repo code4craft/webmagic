@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.selector;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +52,7 @@ public class PlainText extends AbstractSelectable {
     public Selectable links() {
 		throw new UnsupportedOperationException("Links can not apply to plain text. Please check whether you use a previous xpath with attribute select (/@href etc).");
     }
+
 
     @Override
     public List<Selectable> nodes() {

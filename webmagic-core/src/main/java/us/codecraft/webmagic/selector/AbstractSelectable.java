@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.selector;
 
+import com.jayway.jsonpath.Configuration;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.ArrayList;
@@ -50,6 +51,11 @@ public abstract class AbstractSelectable implements Selectable {
 
     @Override
     public Selectable jsonPath(String jsonPath) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Selectable jsonPath(String jsonPath, Configuration configuration) {
         throw new UnsupportedOperationException();
     }
 
