@@ -1,5 +1,7 @@
 package us.codecraft.webmagic.selector;
 
+import com.jayway.jsonpath.Configuration;
+
 import java.util.List;
 
 /**
@@ -127,6 +129,8 @@ public interface Selectable {
      * @return result
      */
     public Selectable jsonPath(String jsonPath);
+
+    public Selectable jsonPath(String jsonPath, Configuration configuration);
 
     /**
      * extract by custom selector

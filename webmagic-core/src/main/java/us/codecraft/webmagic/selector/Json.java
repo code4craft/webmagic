@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.selector;
 
 import com.alibaba.fastjson.JSON;
+import com.jayway.jsonpath.Configuration;
 import us.codecraft.xsoup.XTokenQueue;
 
 import java.util.List;
@@ -53,5 +54,11 @@ public class Json extends PlainText {
     public Selectable jsonPath(String jsonPath) {
         JsonPathSelector jsonPathSelector = new JsonPathSelector(jsonPath);
         return selectList(jsonPathSelector,getSourceTexts());
+    }
+
+    @Override
+    public Selectable jsonPath(String jsonPath, Configuration configuration) {
+        JsonPathSelector jsonPathSelector = new JsonPathSelector(jsonPath, configuration);
+        return selectList(jsonPathSelector, getSourceTexts());
     }
 }
