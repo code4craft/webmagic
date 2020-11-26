@@ -60,7 +60,7 @@ public class JsonPathSelector implements Selector {
     @Override
     public List<String> selectList(String text) {
         List<String> list = new ArrayList<String>();
-        Object object = jsonPath.read(text);
+        Object object = jsonPath.read(text, configuration);
         if (object == null) {
             return list;
         }
