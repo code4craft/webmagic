@@ -24,6 +24,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -102,7 +103,7 @@ public class Spider implements Runnable, Task {
 
     private List<SpiderListener> spiderListeners;
 
-    private final AtomicLong pageCount = new AtomicLong(0);
+    private final LongAdder pageCount = new LongAdder();
 
     private Date startTime;
 
@@ -323,7 +324,7 @@ public class Spider implements Runnable, Task {
                             onError(request);
                             logger.error("process request " + request + " error", e);
                         } finally {
-                            pageCount.incrementAndGet();
+                            pageCount.increment();
                             signalNewUrl();
                         }
                     }
@@ -335,7 +336,7 @@ public class Spider implements Runnable, Task {
         if (destroyWhenExit) {
             close();
         }
-        logger.info("Spider {} closed! {} pages downloaded.", getUUID(), pageCount.get());
+        logger.info("Spider {} closed! {} pages downloaded.", getUUID(), pageCount.sumThenReset());
     }
 
     protected void onError(Request request) {
@@ -645,7 +646,7 @@ public class Spider implements Runnable, Task {
      * @since 0.4.1
      */
     public long getPageCount() {
-        return pageCount.get();
+        return pageCount.sum();
     }
 
     /**
