@@ -401,7 +401,12 @@ public class Spider implements Runnable, Task {
     }
 
     private void processRequest(Request request) {
-        Page page = downloader.download(request, this);
+        Page page;
+        if (null != request.getDownloader()){
+            page = request.getDownloader().download(request,this);
+        }else {
+            page = downloader.download(request, this);
+        }
         if (page.isDownloadSuccess()){
             onDownloadSuccess(request, page);
         } else {
