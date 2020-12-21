@@ -32,24 +32,21 @@ import java.util.function.Predicate;
  */
 public class HttpClientDownloader extends AbstractDownloader {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
     private final Map<String, CloseableHttpClient> httpClients = new HashMap<String, CloseableHttpClient>();
-
-    private HttpClientGenerator httpClientGenerator = new HttpClientGenerator();
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final HttpClientGenerator httpClientGenerator = new HttpClientGenerator();
 
     private HttpUriRequestConverter httpUriRequestConverter = new HttpUriRequestConverter();
-    
+
     private ProxyProvider proxyProvider;
 
-    private boolean responseHeader = true;
+    private final boolean responseHeader = true;
 
-    private volatile boolean refreshProxyOnError = false;
 
-    private Predicate<Throwable> throwablePredicate = t->false;
+    private Predicate<Throwable> refreshProxyOnError = t -> false;
 
-    public void setThrowablePredicate(Predicate<Throwable> predicate){
-        this.throwablePredicate = predicate;
+    public void setRefreshProxyOnError(Predicate<Throwable> proxyOnError) {
+        this.refreshProxyOnError = refreshProxyOnError;
     }
 
     public void setHttpUriRequestConverter(HttpUriRequestConverter httpUriRequestConverter) {
@@ -96,8 +93,8 @@ public class HttpClientDownloader extends AbstractDownloader {
             return page;
         } catch (IOException e) {
             logger.warn("download page {} error", request.getUrl(), e);
-            onError(request,e,proxyProvider);
-            if(proxyProvider != null && refreshProxyOnError && throwablePredicate.test(e)){
+            onError(request, e, proxyProvider);
+            if (proxyProvider != null  && refreshProxyOnError.test(e)) {
                 proxyProvider.refreshProxy(task);
             }
             return page;
@@ -122,7 +119,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         String contentType = httpResponse.getEntity().getContentType() == null ? "" : httpResponse.getEntity().getContentType().getValue();
         Page page = new Page();
         page.setBytes(bytes);
-        if (!request.isBinaryContent()){
+        if (!request.isBinaryContent()) {
             if (charset == null) {
                 charset = getHtmlCharset(contentType, bytes);
             }
