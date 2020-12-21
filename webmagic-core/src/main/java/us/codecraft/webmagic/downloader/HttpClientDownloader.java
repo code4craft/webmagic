@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 
@@ -32,7 +33,7 @@ import java.util.function.Predicate;
  */
 public class HttpClientDownloader extends AbstractDownloader {
 
-    private final Map<String, CloseableHttpClient> httpClients = new HashMap<String, CloseableHttpClient>();
+    private final Map<String, CloseableHttpClient> httpClients = new ConcurrentHashMap<>();
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final HttpClientGenerator httpClientGenerator = new HttpClientGenerator();
 
@@ -45,6 +46,13 @@ public class HttpClientDownloader extends AbstractDownloader {
 
     private Predicate<Throwable> refreshProxyOnError = t -> false;
 
+
+    private Predicate<Throwable> refreshClientOnError = t -> false;
+
+
+    public void setRefreshClientOnError(Predicate<Throwable> clientOnError){
+        this.refreshClientOnError = clientOnError;
+    }
     public void setRefreshProxyOnError(Predicate<Throwable> proxyOnError) {
         this.refreshProxyOnError = refreshProxyOnError;
     }
@@ -62,17 +70,8 @@ public class HttpClientDownloader extends AbstractDownloader {
             return httpClientGenerator.getClient(null);
         }
         String domain = site.getDomain();
-        CloseableHttpClient httpClient = httpClients.get(domain);
-        if (httpClient == null) {
-            synchronized (this) {
-                httpClient = httpClients.get(domain);
-                if (httpClient == null) {
-                    httpClient = httpClientGenerator.getClient(site);
-                    httpClients.put(domain, httpClient);
-                }
-            }
-        }
-        return httpClient;
+        return httpClients.computeIfAbsent(domain,k->httpClientGenerator.getClient(site));
+
     }
 
     @Override
@@ -96,6 +95,9 @@ public class HttpClientDownloader extends AbstractDownloader {
             onError(request, e, proxyProvider);
             if (proxyProvider != null  && refreshProxyOnError.test(e)) {
                 proxyProvider.refreshProxy(task);
+            }
+            if(refreshClientOnError.test(e)) {
+                httpClients.remove(task.getSite().getDomain());
             }
             return page;
         } finally {
