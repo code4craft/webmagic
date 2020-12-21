@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 
 /**
@@ -42,6 +43,14 @@ public class HttpClientDownloader extends AbstractDownloader {
     private ProxyProvider proxyProvider;
 
     private boolean responseHeader = true;
+
+    private volatile boolean refreshProxyOnError = false;
+
+    private Predicate<Throwable> throwablePredicate = t->false;
+
+    public void setThrowablePredicate(Predicate<Throwable> predicate){
+        this.throwablePredicate = predicate;
+    }
 
     public void setHttpUriRequestConverter(HttpUriRequestConverter httpUriRequestConverter) {
         this.httpUriRequestConverter = httpUriRequestConverter;
@@ -88,6 +97,9 @@ public class HttpClientDownloader extends AbstractDownloader {
         } catch (IOException e) {
             logger.warn("download page {} error", request.getUrl(), e);
             onError(request,e,proxyProvider);
+            if(proxyProvider != null && refreshProxyOnError && throwablePredicate.test(e)){
+                proxyProvider.refreshProxy(task);
+            }
             return page;
         } finally {
             if (httpResponse != null) {
