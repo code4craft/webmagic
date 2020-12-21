@@ -30,6 +30,11 @@ public class SimpleProxyProvider implements ProxyProvider {
         this.pointer = pointer;
     }
 
+    @Override
+    public void refreshProxy(Task task) {
+
+    }
+
     public static SimpleProxyProvider from(Proxy... proxies) {
         List<Proxy> proxiesTemp = new ArrayList<Proxy>(proxies.length);
         for (Proxy proxy : proxies) {

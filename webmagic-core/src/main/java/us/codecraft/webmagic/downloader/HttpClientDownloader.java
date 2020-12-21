@@ -87,7 +87,7 @@ public class HttpClientDownloader extends AbstractDownloader {
             return page;
         } catch (IOException e) {
             logger.warn("download page {} error", request.getUrl(), e);
-            onError(request);
+            onError(request,e,proxyProvider);
             return page;
         } finally {
             if (httpResponse != null) {
