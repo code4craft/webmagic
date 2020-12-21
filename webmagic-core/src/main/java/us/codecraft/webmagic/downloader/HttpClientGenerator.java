@@ -1,13 +1,17 @@
 package us.codecraft.webmagic.downloader;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Map;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLContextSpi;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -24,6 +28,7 @@ import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.DefaultHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
@@ -32,6 +37,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.ssl.SSLContexts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +75,7 @@ public class HttpClientGenerator {
             return new SSLConnectionSocketFactory(sslContext, supportedProtocols,
                     null,
                     new DefaultHostnameVerifier()); // 优先绕过安全证书
-        } catch (KeyManagementException e) {
+        } catch (KeyManagementException | CertificateException | KeyStoreException | IOException e) {
             logger.error("ssl connection fail", e);
         } catch (NoSuchAlgorithmException e) {
             logger.error("ssl connection fail", e);
@@ -77,8 +83,8 @@ public class HttpClientGenerator {
         return SSLConnectionSocketFactory.getSocketFactory();
 	}
 
-    private SSLContext createIgnoreVerifySSL() throws NoSuchAlgorithmException, KeyManagementException {
-        // 实现一个X509TrustManager接口，用于绕过验证，不用修改里面的方法
+    private SSLContext createIgnoreVerifySSL() throws NoSuchAlgorithmException, KeyManagementException, CertificateException, KeyStoreException, IOException {
+// 实现一个X509TrustManager接口，用于绕过验证，不用修改里面的方法
         X509TrustManager trustManager = new X509TrustManager() {
 
             @Override
@@ -96,10 +102,10 @@ public class HttpClientGenerator {
 
         };
 
-        SSLContext sc = SSLContext.getInstance("TLS");
+        SSLContext sc = SSLContext.getInstance("SSLv3");
         sc.init(null, new TrustManager[] { trustManager }, null);
         return sc;
-	}
+    }
 
     public HttpClientGenerator setPoolSize(int poolSize) {
         connectionManager.setMaxTotal(poolSize);

@@ -111,6 +111,17 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
     }
 
+
+    @Override
+    public void refreshComponent(Task task) {
+        if (proxyProvider != null ) {
+            proxyProvider.refreshProxy(task);
+        }
+
+            httpClients.remove(task.getSite().getDomain());
+
+    }
+
     @Override
     public void setThread(int thread) {
         httpClientGenerator.setPoolSize(thread);

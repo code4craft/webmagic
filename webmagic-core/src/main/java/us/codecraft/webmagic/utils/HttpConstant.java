@@ -28,6 +28,7 @@ public abstract class HttpConstant {
     public static abstract class StatusCode {
 
         public static final int CODE_200 = 200;
+        public static final int FORBIDDEN = 403;
 
     }
 
