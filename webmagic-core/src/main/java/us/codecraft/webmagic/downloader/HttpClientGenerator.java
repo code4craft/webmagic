@@ -143,6 +143,7 @@ public class HttpClientGenerator {
         SocketConfig.Builder socketConfigBuilder = SocketConfig.custom();
         socketConfigBuilder.setSoKeepAlive(true).setTcpNoDelay(true);
         socketConfigBuilder.setSoTimeout(site.getTimeOut());
+
         SocketConfig socketConfig = socketConfigBuilder.build();
         httpClientBuilder.setDefaultSocketConfig(socketConfig);
         connectionManager.setDefaultSocketConfig(socketConfig);
