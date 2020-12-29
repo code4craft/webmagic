@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.proxy;
 
+import lombok.Getter;
 import org.apache.http.annotation.Contract;
 import org.apache.http.annotation.ThreadingBehavior;
 
@@ -13,6 +14,7 @@ import java.time.temporal.ChronoUnit;
  */
 @Contract(threading = ThreadingBehavior.IMMUTABLE_CONDITIONAL)
 public class ExpirableProxy extends Proxy {
+    @Getter
     private final int ttl;
     private final LocalDateTime expireTime;
 

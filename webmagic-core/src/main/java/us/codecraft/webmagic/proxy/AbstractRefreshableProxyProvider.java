@@ -3,12 +3,9 @@ package us.codecraft.webmagic.proxy;
 import lombok.extern.slf4j.Slf4j;
 import us.codecraft.webmagic.Task;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Comparator;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.atomic.LongAdder;
 
 /**
  * @author yaoqiang
@@ -17,26 +14,18 @@ import java.util.concurrent.atomic.LongAdder;
 @Slf4j
 public abstract class AbstractRefreshableProxyProvider implements RefreshableProxyProvider {
 
-    private final LongAdder totalGet = new LongAdder();
-
-    private final LongAdder canUse = new LongAdder();
 
     private final AtomicReference<FutureTask<Proxy>> usedProxyCache = new AtomicReference<>();
 
     private final PriorityBlockingQueue<ExpirableProxy> ipQueue = new PriorityBlockingQueue<>(1000, Comparator.comparing(ExpirableProxy::getExpireTime));
 
-    private final int maxHostNum;
-
-    public AbstractRefreshableProxyProvider(int maxHostNum) {
-        this.maxHostNum = maxHostNum;
-    }
 
     protected void doPut(ExpirableProxy expirableProxy) {
-        synchronized (ipQueue) {
-            if (ipQueue.size() <= maxHostNum) {
-                ipQueue.put(expirableProxy);
-            }
-        }
+        ipQueue.put(expirableProxy);
+    }
+
+    protected int hostSize() {
+        return ipQueue.size();
     }
 
     @Override
@@ -127,7 +116,6 @@ public abstract class AbstractRefreshableProxyProvider implements RefreshablePro
         do {
             proxy = ipQueue.take();
         } while (proxy.isExpire());
-        log.info("切换到proxy：ip:{}，port:{}，ip可用率:{}", proxy.getHost(), proxy.getPort(), BigDecimal.valueOf(canUse.sum()).divide(BigDecimal.valueOf(totalGet.sum()), 2, RoundingMode.HALF_DOWN).doubleValue());
         return proxy;
     }
 
