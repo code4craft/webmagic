@@ -13,6 +13,8 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.proxy.ProxyProvider;
+import us.codecraft.webmagic.proxy.RefreshableProxyProvider;
+import us.codecraft.webmagic.proxy.ReturnableProxyProvider;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.CharsetUtils;
 import us.codecraft.webmagic.utils.HttpClientUtils;
@@ -21,6 +23,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 
 /**
@@ -31,17 +35,29 @@ import java.util.Map;
  */
 public class HttpClientDownloader extends AbstractDownloader {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
-    private final Map<String, CloseableHttpClient> httpClients = new HashMap<String, CloseableHttpClient>();
-
-    private HttpClientGenerator httpClientGenerator = new HttpClientGenerator();
+    private final Map<String, CloseableHttpClient> httpClients = new ConcurrentHashMap<>();
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final HttpClientGenerator httpClientGenerator = new HttpClientGenerator();
 
     private HttpUriRequestConverter httpUriRequestConverter = new HttpUriRequestConverter();
-    
+
     private ProxyProvider proxyProvider;
 
-    private boolean responseHeader = true;
+    private final boolean responseHeader = true;
+
+
+    private Predicate<Throwable> refreshProxyOnError = t -> false;
+
+
+    private Predicate<Throwable> refreshClientOnError = t -> false;
+
+
+    public void setRefreshClientOnError(Predicate<Throwable> clientOnError){
+        this.refreshClientOnError = clientOnError;
+    }
+    public void setRefreshProxyOnError(Predicate<Throwable> proxyOnError) {
+        this.refreshProxyOnError = proxyOnError;
+    }
 
     public void setHttpUriRequestConverter(HttpUriRequestConverter httpUriRequestConverter) {
         this.httpUriRequestConverter = httpUriRequestConverter;
@@ -56,17 +72,8 @@ public class HttpClientDownloader extends AbstractDownloader {
             return httpClientGenerator.getClient(null);
         }
         String domain = site.getDomain();
-        CloseableHttpClient httpClient = httpClients.get(domain);
-        if (httpClient == null) {
-            synchronized (this) {
-                httpClient = httpClients.get(domain);
-                if (httpClient == null) {
-                    httpClient = httpClientGenerator.getClient(site);
-                    httpClients.put(domain, httpClient);
-                }
-            }
-        }
-        return httpClient;
+        return httpClients.computeIfAbsent(domain,k->httpClientGenerator.getClient(site));
+
     }
 
     @Override
@@ -87,17 +94,35 @@ public class HttpClientDownloader extends AbstractDownloader {
             return page;
         } catch (IOException e) {
             logger.warn("download page {} error", request.getUrl(), e);
-            onError(request);
+            onError(request, e, proxyProvider);
+            if (proxyProvider != null && proxy != null && proxyProvider instanceof RefreshableProxyProvider && refreshProxyOnError.test(e)) {
+                ((RefreshableProxyProvider)proxyProvider).refreshProxy(task,proxy);
+            }
+            if(refreshClientOnError.test(e)) {
+                httpClients.remove(task.getSite().getDomain());
+            }
             return page;
         } finally {
             if (httpResponse != null) {
                 //ensure the connection is released back to pool
                 EntityUtils.consumeQuietly(httpResponse.getEntity());
             }
-            if (proxyProvider != null && proxy != null) {
-                proxyProvider.returnProxy(proxy, page, task);
+            if (proxyProvider != null && proxy != null && proxyProvider instanceof ReturnableProxyProvider) {
+                ((ReturnableProxyProvider) proxyProvider).returnProxy(proxy, page, task);
+
             }
         }
+    }
+
+
+    @Override
+    public void refreshComponent(Task task) {
+        if (proxyProvider != null && proxyProvider instanceof RefreshableProxyProvider) {
+            ((RefreshableProxyProvider) proxyProvider).refreshProxy(task, ((RefreshableProxyProvider) proxyProvider).getCurrentProxy(task));
+        }
+
+            httpClients.remove(task.getSite().getDomain());
+
     }
 
     @Override
@@ -110,7 +135,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         String contentType = httpResponse.getEntity().getContentType() == null ? "" : httpResponse.getEntity().getContentType().getValue();
         Page page = new Page();
         page.setBytes(bytes);
-        if (!request.isBinaryContent()){
+        if (!request.isBinaryContent()) {
             if (charset == null) {
                 charset = getHtmlCharset(contentType, bytes);
             }

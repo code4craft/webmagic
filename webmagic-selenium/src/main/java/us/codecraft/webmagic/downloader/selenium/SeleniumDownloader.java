@@ -59,6 +59,11 @@ public class SeleniumDownloader implements Downloader, Closeable {
 		// "/Users/Bingo/Downloads/phantomjs-1.9.7-macosx/bin/phantomjs");
 	}
 
+	@Override
+	public void refreshComponent(Task task) {
+
+	}
+
 	/**
 	 * set sleep time to wait until load success
 	 *

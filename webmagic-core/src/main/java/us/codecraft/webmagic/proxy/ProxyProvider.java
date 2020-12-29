@@ -1,6 +1,5 @@
 package us.codecraft.webmagic.proxy;
 
-import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Task;
 
 /**
@@ -10,14 +9,6 @@ import us.codecraft.webmagic.Task;
  */
 public interface ProxyProvider {
 
-    /**
-     *
-     * Return proxy to Provider when complete a download.
-     * @param proxy the proxy config contains host,port and identify info
-     * @param page the download result
-     * @param task the download task
-     */
-    void returnProxy(Proxy proxy, Page page, Task task);
 
     /**
      * Get a proxy for task by some strategy.

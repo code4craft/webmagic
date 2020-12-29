@@ -42,7 +42,12 @@ public class PhantomJSDownloader extends AbstractDownloader {
         this.initPhantomjsCrawlPath();
         PhantomJSDownloader.phantomJsCommand = phantomJsCommand;
     }
-    
+
+    @Override
+    public void refreshComponent(Task task) {
+
+    }
+
     /**
      * 新增构造函数，支持crawl.js路径自定义，因为当其他项目依赖此jar包时，runtime.exec()执行phantomjs命令时无使用法jar包中的crawl.js
      * <pre>

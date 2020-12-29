@@ -9,6 +9,10 @@ import us.codecraft.webmagic.selector.PlainText;
  * @author code4crafter@gmail.com
  */
 public class MockGithubDownloader implements Downloader{
+    @Override
+    public void refreshComponent(Task task) {
+
+    }
 
     private String html = "\n" +
             "\n" +

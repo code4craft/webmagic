@@ -3,6 +3,7 @@ package us.codecraft.webmagic.downloader;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.proxy.ProxyProvider;
 import us.codecraft.webmagic.selector.Html;
 
 /**
@@ -38,7 +39,7 @@ public abstract class AbstractDownloader implements Downloader {
     protected void onSuccess(Request request) {
     }
 
-    protected void onError(Request request) {
+    protected void onError(Request request, Throwable throwable, ProxyProvider proxyProvider) {
     }
 
 }
