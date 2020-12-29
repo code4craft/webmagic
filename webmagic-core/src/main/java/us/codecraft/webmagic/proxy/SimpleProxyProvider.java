@@ -1,6 +1,5 @@
 package us.codecraft.webmagic.proxy;
 
-import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Task;
 
 import java.util.ArrayList;
@@ -30,15 +29,6 @@ public class SimpleProxyProvider implements ProxyProvider {
         this.pointer = pointer;
     }
 
-    @Override
-    public Proxy getCurrentProxy(Task task) {
-        return null;
-    }
-
-    @Override
-    public void refreshProxy(Task task,Proxy proxy) {
-
-    }
 
     public static SimpleProxyProvider from(Proxy... proxies) {
         List<Proxy> proxiesTemp = new ArrayList<Proxy>(proxies.length);
@@ -46,11 +36,6 @@ public class SimpleProxyProvider implements ProxyProvider {
             proxiesTemp.add(proxy);
         }
         return new SimpleProxyProvider(Collections.unmodifiableList(proxiesTemp));
-    }
-
-    @Override
-    public void returnProxy(Proxy proxy, Page page, Task task) {
-        //Donothing
     }
 
     @Override

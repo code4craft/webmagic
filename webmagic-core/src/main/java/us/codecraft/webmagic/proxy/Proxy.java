@@ -6,33 +6,30 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+import jdk.nashorn.internal.ir.annotations.Immutable;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.annotation.Contract;
+import org.apache.http.annotation.ThreadingBehavior;
 
+@Contract(threading = ThreadingBehavior.IMMUTABLE)
 public class Proxy {
 
-    private String scheme;
+    private final String scheme;
 
-    private String host;
+    private final String host;
 
-    private int port;
+    private final int port;
 
-    private String username;
+    private final String username;
 
-    private String password;
+    private final String password;
 
-    public static Proxy create(final URI uri) {
-        Proxy proxy = new Proxy(uri.getHost(), uri.getPort(), uri.getScheme());
-        String userInfo = uri.getUserInfo();
-        if (userInfo != null) {
-            String[] up = userInfo.split(":");
-            if (up.length == 1) {
-                proxy.username = up[0].isEmpty() ? null : up[0];
-            } else {
-                proxy.username = up[0].isEmpty() ? null : up[0];
-                proxy.password = up[1].isEmpty() ? null : up[1];
-            }
-        }
-        return proxy;
+    public Proxy(String host, int port, String scheme, String username, String password) {
+        this.scheme = scheme;
+        this.host = host;
+        this.port = port;
+        this.username = username;
+        this.password = password;
     }
 
     public Proxy(String host, int port) {
@@ -40,33 +37,38 @@ public class Proxy {
     }
 
     public Proxy(String host, int port, String scheme) {
-        this.host = host;
-        this.port = port;
-        this.scheme = scheme;
+        this(host, port, scheme, null, null);
     }
 
     public Proxy(String host, int port, String username, String password) {
-        this.host = host;
-        this.port = port;
-        this.username = username;
-        this.password = password;
+        this(host, port, null, username, password);
     }
 
-    public String getScheme() {
-        return scheme;
+    public static Proxy create(final URI uri) {
+        String userInfo = uri.getUserInfo();
+        String username = null;
+        String password = null;
+        if (userInfo != null) {
+            String[] up = userInfo.split(":");
+            if (up.length == 1) {
+                username = up[0].isEmpty() ? null : up[0];
+            } else {
+                username = up[0].isEmpty() ? null : up[0];
+                password = up[1].isEmpty() ? null : up[1];
+            }
+        }
+        return new Proxy(uri.getHost(), uri.getPort(), uri.getScheme(), username, password);
     }
 
-    public void setScheme(String scheme) {
-        this.scheme = scheme;
-    }
-
-	public String getHost() {
+    public String getHost() {
         return host;
     }
 
     public int getPort() {
         return port;
     }
+
+    public String getScheme(){return scheme;}
 
     public String getUsername() {
         return username;
