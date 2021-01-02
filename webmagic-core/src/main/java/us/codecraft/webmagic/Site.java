@@ -1,13 +1,9 @@
 package us.codecraft.webmagic;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
+import com.sun.org.apache.regexp.internal.RE;
 import us.codecraft.webmagic.utils.HttpConstant;
+
+import java.util.*;
 
 /**
  * Object contains setting for crawler.<br>

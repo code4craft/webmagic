@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+import jdk.nashorn.internal.ir.annotations.Immutable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.annotation.Contract;
 import org.apache.http.annotation.ThreadingBehavior;
