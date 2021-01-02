@@ -31,12 +31,7 @@ public class SimpleProxyProvider implements ProxyProvider {
     }
 
     @Override
-    public Proxy getCurrentProxy(Task task) {
-        return null;
-    }
-
-    @Override
-    public void refreshProxy(Task task,Proxy proxy) {
+    public void refreshProxy(Task task) {
 
     }
 

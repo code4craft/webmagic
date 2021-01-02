@@ -54,7 +54,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         this.refreshClientOnError = clientOnError;
     }
     public void setRefreshProxyOnError(Predicate<Throwable> proxyOnError) {
-        this.refreshProxyOnError = proxyOnError;
+        this.refreshProxyOnError = refreshProxyOnError;
     }
 
     public void setHttpUriRequestConverter(HttpUriRequestConverter httpUriRequestConverter) {
@@ -94,7 +94,7 @@ public class HttpClientDownloader extends AbstractDownloader {
             logger.warn("download page {} error", request.getUrl(), e);
             onError(request, e, proxyProvider);
             if (proxyProvider != null  && refreshProxyOnError.test(e)) {
-                proxyProvider.refreshProxy(task,proxy);
+                proxyProvider.refreshProxy(task);
             }
             if(refreshClientOnError.test(e)) {
                 httpClients.remove(task.getSite().getDomain());
@@ -115,7 +115,7 @@ public class HttpClientDownloader extends AbstractDownloader {
     @Override
     public void refreshComponent(Task task) {
         if (proxyProvider != null ) {
-            proxyProvider.refreshProxy(task,proxyProvider.getCurrentProxy(task));
+            proxyProvider.refreshProxy(task);
         }
 
             httpClients.remove(task.getSite().getDomain());

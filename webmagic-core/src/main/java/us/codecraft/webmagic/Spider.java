@@ -426,7 +426,7 @@ public class Spider implements Runnable, Task {
             }
         } else if(site.getRefreshCode().contains(page.getStatusCode())) {
             logger.info("page status code error, page {} , code: {}, start refresh downloader", request.getUrl(), page.getStatusCode());
-            failHandler(request);
+            downloader.refreshComponent(this);
         }else {
             logger.info("page status code error, page {} , code: {}", request.getUrl(), page.getStatusCode());
         }
@@ -435,11 +435,6 @@ public class Spider implements Runnable, Task {
     }
 
     private void onDownloaderFail(Request request) {
-       failHandler(request);
-    }
-
-    private void failHandler(Request request){
-        downloader.refreshComponent(this);
         if (site.getCycleRetryTimes() == 0) {
             sleep(site.getSleepTime());
         } else {
