@@ -13,8 +13,6 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.proxy.ProxyProvider;
-import us.codecraft.webmagic.proxy.RefreshableProxyProvider;
-import us.codecraft.webmagic.proxy.ReturnableProxyProvider;
 import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.CharsetUtils;
 import us.codecraft.webmagic.utils.HttpClientUtils;
@@ -95,8 +93,8 @@ public class HttpClientDownloader extends AbstractDownloader {
         } catch (IOException e) {
             logger.warn("download page {} error", request.getUrl(), e);
             onError(request, e, proxyProvider);
-            if (proxyProvider != null && proxy != null && proxyProvider instanceof RefreshableProxyProvider && refreshProxyOnError.test(e)) {
-                ((RefreshableProxyProvider)proxyProvider).refreshProxy(task,proxy);
+            if (proxyProvider != null  && refreshProxyOnError.test(e)) {
+                proxyProvider.refreshProxy(task,proxy);
             }
             if(refreshClientOnError.test(e)) {
                 httpClients.remove(task.getSite().getDomain());
@@ -107,9 +105,8 @@ public class HttpClientDownloader extends AbstractDownloader {
                 //ensure the connection is released back to pool
                 EntityUtils.consumeQuietly(httpResponse.getEntity());
             }
-            if (proxyProvider != null && proxy != null && proxyProvider instanceof ReturnableProxyProvider) {
-                ((ReturnableProxyProvider) proxyProvider).returnProxy(proxy, page, task);
-
+            if (proxyProvider != null && proxy != null) {
+                proxyProvider.returnProxy(proxy, page, task);
             }
         }
     }
@@ -117,8 +114,8 @@ public class HttpClientDownloader extends AbstractDownloader {
 
     @Override
     public void refreshComponent(Task task) {
-        if (proxyProvider != null && proxyProvider instanceof RefreshableProxyProvider) {
-            ((RefreshableProxyProvider) proxyProvider).refreshProxy(task, ((RefreshableProxyProvider) proxyProvider).getCurrentProxy(task));
+        if (proxyProvider != null ) {
+            proxyProvider.refreshProxy(task,proxyProvider.getCurrentProxy(task));
         }
 
             httpClients.remove(task.getSite().getDomain());
