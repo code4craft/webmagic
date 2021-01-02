@@ -2,8 +2,8 @@ package us.codecraft.webmagic.downloader;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 import org.apache.commons.io.IOUtils;
@@ -24,7 +24,6 @@ import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.CharsetUtils;
 import us.codecraft.webmagic.utils.HttpClientUtils;
 
-
 /**
  * The http downloader based on HttpClient.
  *
@@ -33,7 +32,7 @@ import us.codecraft.webmagic.utils.HttpClientUtils;
  */
 public class HttpClientDownloader extends AbstractDownloader {
 
-    private final Map<String, CloseableHttpClient> httpClients = new ConcurrentHashMap<>();
+    private final Map<String, CloseableHttpClient> httpClients = new HashMap<String, CloseableHttpClient>();
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final HttpClientGenerator httpClientGenerator = new HttpClientGenerator();
 
@@ -46,13 +45,6 @@ public class HttpClientDownloader extends AbstractDownloader {
 
     private Predicate<Throwable> refreshProxyOnError = t -> false;
 
-
-    private Predicate<Throwable> refreshClientOnError = t -> false;
-
-
-    public void setRefreshClientOnError(Predicate<Throwable> clientOnError){
-        this.refreshClientOnError = clientOnError;
-    }
     public void setRefreshProxyOnError(Predicate<Throwable> proxyOnError) {
         this.refreshProxyOnError = refreshProxyOnError;
     }
@@ -70,8 +62,17 @@ public class HttpClientDownloader extends AbstractDownloader {
             return httpClientGenerator.getClient(null);
         }
         String domain = site.getDomain();
-        return httpClients.computeIfAbsent(domain,k->httpClientGenerator.getClient(site));
-
+        CloseableHttpClient httpClient = httpClients.get(domain);
+        if (httpClient == null) {
+            synchronized (this) {
+                httpClient = httpClients.get(domain);
+                if (httpClient == null) {
+                    httpClient = httpClientGenerator.getClient(site);
+                    httpClients.put(domain, httpClient);
+                }
+            }
+        }
+        return httpClient;
     }
 
     @Override
