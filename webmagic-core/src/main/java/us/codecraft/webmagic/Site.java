@@ -40,11 +40,7 @@ public class Site {
 
     private static final Set<Integer> DEFAULT_STATUS_CODE_SET = new HashSet<Integer>();
 
-    private static final Set<Integer> DEFAULT_REFRESH_CODE_SET = new HashSet<>();
-
-    private Set<Integer> refreshCode = DEFAULT_REFRESH_CODE_SET;
     private Set<Integer> acceptStatCode = DEFAULT_STATUS_CODE_SET;
-
 
     private Map<String, String> headers = new HashMap<String, String>();
 
@@ -53,7 +49,6 @@ public class Site {
     private boolean disableCookieManagement = false;
 
     static {
-        DEFAULT_REFRESH_CODE_SET.add(HttpConstant.StatusCode.FORBIDDEN);
         DEFAULT_STATUS_CODE_SET.add(HttpConstant.StatusCode.CODE_200);
     }
 
@@ -200,15 +195,6 @@ public class Site {
     public Site setAcceptStatCode(Set<Integer> acceptStatCode) {
         this.acceptStatCode = acceptStatCode;
         return this;
-    }
-
-    public Site setRefreshCode(Set<Integer> refreshCode){
-        this.refreshCode = refreshCode;
-        return this;
-    }
-    public Set<Integer> getRefreshCode(){
-        return refreshCode;
-
     }
 
     /**

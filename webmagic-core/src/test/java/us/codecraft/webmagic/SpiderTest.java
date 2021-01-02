@@ -58,11 +58,6 @@ public class SpiderTest {
             }
         }).setDownloader(new Downloader() {
             @Override
-            public void refreshComponent(Task task) {
-
-            }
-
-            @Override
             public Page download(Request request, Task task) {
                 return new Page().setRawText("");
             }

@@ -18,18 +18,14 @@ public interface Downloader {
      * Downloads web pages and store in Page object.
      *
      * @param request request
-     * @param task    task
+     * @param task task
      * @return page
      */
-    Page download(Request request, Task task);
+    public Page download(Request request, Task task);
 
     /**
      * Tell the downloader how many threads the spider used.
-     *
      * @param threadNum number of threads
      */
-    void setThread(int threadNum);
-
-
-    void refreshComponent(Task task);
+    public void setThread(int threadNum);
 }

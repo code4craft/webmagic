@@ -424,10 +424,7 @@ public class Spider implements Runnable, Task {
                     pipeline.process(page.getResultItems(), this);
                 }
             }
-        } else if(site.getRefreshCode().contains(page.getStatusCode())) {
-            logger.info("page status code error, page {} , code: {}, start refresh downloader", request.getUrl(), page.getStatusCode());
-            downloader.refreshComponent(this);
-        }else {
+        } else {
             logger.info("page status code error, page {} , code: {}", request.getUrl(), page.getStatusCode());
         }
         sleep(site.getSleepTime());

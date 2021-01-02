@@ -29,11 +29,6 @@ public class MockGithubDownloader implements Downloader {
     }
 
     @Override
-    public void refreshComponent(Task task) {
-
-    }
-
-    @Override
     public void setThread(int threadNum) {
     }
 }
