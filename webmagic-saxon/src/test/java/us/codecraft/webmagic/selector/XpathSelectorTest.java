@@ -8,6 +8,7 @@ import org.jsoup.nodes.Document;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+
 import us.codecraft.xsoup.XPathEvaluator;
 import us.codecraft.xsoup.Xsoup;
 
@@ -1368,7 +1369,7 @@ public class XpathSelectorTest {
         String text = "<h1>眉山：扎实推进农业农村工作 促农持续增收<br>\n" +
                 "<span>2013-07-31 23:29:45&nbsp;&nbsp;&nbsp;来源：<a href=\"http://www.mshw.net\" target=\"_blank\" style=\"color:#AAA\">眉山网</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;责任编辑：张斯炜</span></h1>";
         XpathSelector xpathSelector = new XpathSelector("//h1/text()");
-        System.out.println(xpathSelector.select(text));
+        Assert.assertEquals("眉山：扎实推进农业农村工作 促农持续增收 ", xpathSelector.select(text));
     }
 
     @Test
