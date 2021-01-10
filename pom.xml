@@ -33,7 +33,7 @@
         <connection>scm:git:git@github.com:code4craft/webmagic.git</connection>
         <developerConnection>scm:git:git@github.com:code4craft/webmagic.git</developerConnection>
         <url>git@github.com:code4craft/webmagic.git</url>
-      <tag>webmagic-parent-0.6.1</tag>
+        <tag>WebMagic-${project.version}</tag>
     </scm>
     <licenses>
         <license>
