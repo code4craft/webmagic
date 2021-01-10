@@ -1,5 +1,7 @@
 package us.codecraft.webmagic.selector;
 
+import java.util.List;
+
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 import org.htmlcleaner.XPatherException;
@@ -1368,15 +1370,19 @@ public class XpathSelectorTest {
     public void testXPath2() {
         String text = "<h1>眉山：扎实推进农业农村工作 促农持续增收<br>\n" +
                 "<span>2013-07-31 23:29:45&nbsp;&nbsp;&nbsp;来源：<a href=\"http://www.mshw.net\" target=\"_blank\" style=\"color:#AAA\">眉山网</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;责任编辑：张斯炜</span></h1>";
-        XpathSelector xpathSelector = new XpathSelector("//h1/text()");
-        Assert.assertEquals("眉山：扎实推进农业农村工作 促农持续增收 ", xpathSelector.select(text));
+        Xpath2Selector xpathSelector = new Xpath2Selector("//h1/text()");
+        Assert.assertEquals("眉山：扎实推进农业农村工作 促农持续增收", xpathSelector.select(text));
     }
 
     @Test
     public void testXpath2Selector() {
         Xpath2Selector xpath2Selector = new Xpath2Selector("//a/@href");
         String select = xpath2Selector.select(html);
-        Assert.assertNotNull(select);
+        Assert.assertEquals("http://www.oschina.net/", select);
+
+        List<String> selectList = xpath2Selector.selectList(html);
+        Assert.assertEquals(113, selectList.size());
+        Assert.assertEquals("http://www.oschina.net/", selectList.get(0));
     }
 
     @Ignore("take long time")
