@@ -84,8 +84,13 @@ public class SpiderStatus implements SpiderStatusMXBean {
 
     @Override
     public int getPagePerSecond() {
-        int runSeconds = (int) (System.currentTimeMillis() - getStartTime().getTime()) / 1000;
-        return getSuccessPageCount() / runSeconds;
+        if (getStartTime() != null) {
+            int runSeconds = (int) (System.currentTimeMillis() - getStartTime().getTime()) / 1000;
+            if (runSeconds != 0) {
+                return getSuccessPageCount() / runSeconds;
+            }
+        }
+        return -1;
     }
 
 }
