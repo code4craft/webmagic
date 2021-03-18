@@ -458,6 +458,8 @@ public class Spider implements Runnable, Task {
             Thread.sleep(time);
         } catch (InterruptedException e) {
             logger.error("Thread interrupted when sleep",e);
+            //restore interrupted thread
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -564,6 +566,7 @@ public class Spider implements Runnable, Task {
             newUrlCondition.await(emptySleepTime, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             logger.warn("waitNewUrl - interrupted, error {}", e);
+            Thread.currentThread().interrupt();
         } finally {
             newUrlLock.unlock();
         }
