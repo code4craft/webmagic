@@ -208,7 +208,8 @@ public class Spider implements Runnable, Task {
      * @see #addPipeline(us.codecraft.webmagic.pipeline.Pipeline)
      * @deprecated
      */
-    public Spider pipeline(Pipeline pipeline) {
+    @Deprecated
+	public Spider pipeline(Pipeline pipeline) {
         return addPipeline(pipeline);
     }
 
@@ -258,7 +259,8 @@ public class Spider implements Runnable, Task {
      * @see #setDownloader(us.codecraft.webmagic.downloader.Downloader)
      * @deprecated
      */
-    public Spider downloader(Downloader downloader) {
+    @Deprecated
+	public Spider downloader(Downloader downloader) {
         return setDownloader(downloader);
     }
 
