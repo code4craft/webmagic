@@ -29,11 +29,11 @@ public class JsonFilePageModelPipeline extends FilePersistentBase implements Pag
      * new JsonFilePageModelPipeline with default path "/data/webmagic/"
      */
     public JsonFilePageModelPipeline() {
-        setPath("/data/webmagic/");
+        super();
     }
 
     public JsonFilePageModelPipeline(String path) {
-        setPath(path);
+        super(path);
     }
 
     @Override
