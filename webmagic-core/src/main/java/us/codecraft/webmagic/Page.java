@@ -49,12 +49,10 @@ public class Page {
 
     private byte[] bytes;
 
-    private List<Request> targetRequests = new ArrayList<Request>();
+    private List<Request> targetRequests = new ArrayList<>();
 
     private String charset;
     
-    public Page() {
-    }
 
     public static Page fail(){
         Page page = new Page();
@@ -105,9 +103,9 @@ public class Page {
 
     /**
      * @param html html
-     * @deprecated since 0.4.0
      * The html is parse just when first time of calling {@link #getHtml()}, so use {@link #setRawText(String)} instead.
      */
+
     public void setHtml(Html html) {
         this.html = html;
     }
