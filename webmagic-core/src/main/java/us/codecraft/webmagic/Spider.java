@@ -678,7 +678,7 @@ public class Spider implements Runnable, Task {
 
 
     public enum Status {
-        Init(0), Running(1), Stopped(2);
+        INIT(0), RUNNING(1), STOPPED(2);
 
         private Status(int value) {
             this.value = value;
@@ -697,7 +697,7 @@ public class Spider implements Runnable, Task {
                 }
             }
             //default value
-            return Init;
+            return INIT;
         }
     }
 
