@@ -15,7 +15,9 @@ import java.util.List;
  */
 @Experimental
 public class SmartContentSelector implements Selector {
-
+	/***
+	 * Empty/ default constructor for SmartContentSelector
+	 */
     public SmartContentSelector() {
     }
 
@@ -33,7 +35,7 @@ public class SmartContentSelector implements Selector {
         int start;
         int end;
         StringBuilder text = new StringBuilder();
-        ArrayList<Integer> indexDistribution = new ArrayList<Integer>();
+        ArrayList<Integer> indexDistribution = new ArrayList<>();
 
         lines = Arrays.asList(html.split("\n"));
 
@@ -47,39 +49,42 @@ public class SmartContentSelector implements Selector {
         }
 
         start = -1; end = -1;
-        boolean boolstart = false, boolend = false;
+        boolean boolstart = false;
+        boolean boolend = false;
         text.setLength(0);
-
-        for (int i = 0; i < indexDistribution.size() - 1; i++) {
-            if (indexDistribution.get(i) > threshold && ! boolstart) {
-                if (indexDistribution.get(i+1).intValue() != 0
+       
+        int i=0;
+        while (i < indexDistribution.size() - 1) {
+            
+        	if ((indexDistribution.get(i) > threshold && ! boolstart) 
+                && (indexDistribution.get(i+1).intValue() != 0
                         || indexDistribution.get(i+2).intValue() != 0
-                        || indexDistribution.get(i+3).intValue() != 0) {
+                        || indexDistribution.get(i+3).intValue() != 0) ){
                     boolstart = true;
                     start = i;
-                    continue;
+                    i++;
                 }
-            }
-            if (boolstart) {
-                if (indexDistribution.get(i).intValue() == 0
-                        || indexDistribution.get(i+1).intValue() == 0) {
+            
+            if ((boolstart) && (indexDistribution.get(i).intValue() == 0
+                        || indexDistribution.get(i+1).intValue() == 0) ){
                     end = i;
                     boolend = true;
                 }
-            }
+            
+            
             StringBuilder tmp = new StringBuilder();
             if (boolend) {
-                //System.out.println(start+1 + "\t\t" + end+1);
                 for (int ii = start; ii <= end; ii++) {
-                    if (lines.get(ii).length() < 5) continue;
+                    if (lines.get(ii).length() < 5) i++;
                     tmp.append(lines.get(ii) + "\n");
                 }
                 String str = tmp.toString();
-                //System.out.println(str);
-                if (str.contains("Copyright")   ) continue;
+                
+                if (str.contains("Copyright")) i++;
                 text.append(str);
                 boolstart = boolend = false;
             }
+            i++;
         }
         return text.toString();
     }
