@@ -17,6 +17,8 @@ import java.util.Map;
 public class HttpRequestBody implements Serializable {
 
     private static final long serialVersionUID = 5659170945717023595L;
+    
+    private static final String ENCODING_ERROR ="illegal encoding "; 
 
     public static abstract class ContentType {
 
@@ -68,7 +70,7 @@ public class HttpRequestBody implements Serializable {
         try {
             return new HttpRequestBody(json.getBytes(encoding), ContentType.JSON, encoding);
         } catch (UnsupportedEncodingException e) {
-            throw new IllegalArgumentException("illegal encoding " + encoding, e);
+            throw new IllegalArgumentException(ENCODING_ERROR+ encoding, e);
         }
     }
 
@@ -76,7 +78,7 @@ public class HttpRequestBody implements Serializable {
         try {
             return new HttpRequestBody(xml.getBytes(encoding), ContentType.XML, encoding);
         } catch (UnsupportedEncodingException e) {
-            throw new IllegalArgumentException("illegal encoding " + encoding, e);
+            throw new IllegalArgumentException(ENCODING_ERROR + encoding, e);
         }
     }
 
@@ -92,7 +94,7 @@ public class HttpRequestBody implements Serializable {
         try {
             return new HttpRequestBody(URLEncodedUtils.format(nameValuePairs, encoding).getBytes(encoding), ContentType.FORM, encoding);
         } catch (UnsupportedEncodingException e) {
-            throw new IllegalArgumentException("illegal encoding " + encoding, e);
+            throw new IllegalArgumentException(ENCODING_ERROR + encoding, e);
         }
     }
 

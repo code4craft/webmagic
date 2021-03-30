@@ -20,6 +20,7 @@ public class PhantomJSDownloader extends AbstractDownloader {
     private static Logger logger = LoggerFactory.getLogger(PhantomJSDownloader.class);
     private static String crawlJsPath;
     private static String phantomJsCommand = "phantomjs"; // default
+    private static final String HTTP_REQUEST_ERROR = "HTTP request failed";
 
     private int retryNum;
     private int threadNum;
@@ -91,14 +92,14 @@ public class PhantomJSDownloader extends AbstractDownloader {
             logger.info("downloading page: " + request.getUrl());
         }
         String content = getPage(request);
-        if (content.contains("HTTP request failed")) {
+        if (content.contains(HTTP_REQUEST_ERROR)) {
             for (int i = 1; i <= getRetryNum(); i++) {
                 content = getPage(request);
-                if (!content.contains("HTTP request failed")) {
+                if (!content.contains(HTTP_REQUEST_ERROR)) {
                     break;
                 }
             }
-            if (content.contains("HTTP request failed")) {
+            if (content.contains(HTTP_REQUEST_ERROR)) {
                 //when failed
                 Page page = new Page();
                 page.setRequest(request);
