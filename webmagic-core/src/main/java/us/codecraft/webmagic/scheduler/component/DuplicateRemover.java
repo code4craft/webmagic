@@ -4,7 +4,7 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 
 /**
- * Remove duplicate requests.
+ * Remove duplicate requests.</br>
  * @author code4crafer@gmail.com
  * @since 0.5.1
  */
