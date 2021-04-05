@@ -27,11 +27,13 @@ class FieldExtractor extends Extractor {
     Field getField() {
         return field;
     }
-
+    
+    @Override
     Selector getSelector() {
         return selector;
     }
-
+    
+    @Override
     Source getSource() {
         return source;
     }
@@ -44,6 +46,7 @@ class FieldExtractor extends Extractor {
         return setterMethod;
     }
 
+    @Override
     boolean isNotNull() {
         return notNull;
     }
