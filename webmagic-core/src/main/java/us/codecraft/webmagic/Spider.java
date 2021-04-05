@@ -545,7 +545,7 @@ public class Spider implements Runnable, Task {
     public <T> T get(String url) {
         List<String> urls = WMCollections.newArrayList(url);
         List<T> resultItemses = getAll(urls);
-        if (resultItemses != null && resultItemses.size() > 0) {
+        if (resultItemses != null && !resultItemses.isEmpty()) {
             return resultItemses.get(0);
         } else {
             return null;
