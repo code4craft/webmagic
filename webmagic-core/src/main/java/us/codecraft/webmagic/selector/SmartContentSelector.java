@@ -51,22 +51,21 @@ public class SmartContentSelector implements Selector {
         text.setLength(0);
 
         for (int i = 0; i < indexDistribution.size() - 1; i++) {
-            if (indexDistribution.get(i) > threshold && ! boolstart) {
-                if (indexDistribution.get(i+1).intValue() != 0
-                        || indexDistribution.get(i+2).intValue() != 0
-                        || indexDistribution.get(i+3).intValue() != 0) {
+            if (indexDistribution.get(i) > threshold && ! boolstart
+            	&& !isAnyIndexDistributionZero(indexDistribution,i+1,i+2,i+3)){
                     boolstart = true;
                     start = i;
                     continue;
                 }
-            }
-            if (boolstart) {
-                if (indexDistribution.get(i).intValue() == 0
-                        || indexDistribution.get(i+1).intValue() == 0) {
+            
+            if (boolstart && isAnyIndexDistributionZero (indexDistribution,i,i+1,0)) {
+               
                     end = i;
                     boolend = true;
-                }
+                
             }
+            
+          		
             StringBuilder tmp = new StringBuilder();
             if (boolend) {
                 //System.out.println(start+1 + "\t\t" + end+1);
@@ -83,9 +82,25 @@ public class SmartContentSelector implements Selector {
         }
         return text.toString();
     }
-
+    
+   
     @Override
     public List<String> selectList(String text) {
         throw new UnsupportedOperationException();
     }
+    
+    private static boolean isAnyIndexDistributionZero( ArrayList <Integer> indexDistribution, int index, int successorIndex, int afterSuccessorIndex) {
+        
+    	
+    	if (afterSuccessorIndex != 0) {
+    		return (indexDistribution.get(index).intValue() == 0
+                    && indexDistribution.get(successorIndex).intValue() == 0
+                    && indexDistribution.get(afterSuccessorIndex).intValue() == 0 );
+    	}else {
+    		return (indexDistribution.get(index).intValue() == 0
+                    || indexDistribution.get(successorIndex).intValue() == 0);
+    	}
+    	
+    }        
+
 }
