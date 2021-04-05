@@ -7,7 +7,7 @@ public abstract class PatternProcessor extends PatternRequestMatcher implements 
     /**
      * @param pattern url pattern to handle
      */
-    public PatternProcessor(String pattern) {
+    protected PatternProcessor(String pattern) {
         super(pattern);
     }
 }

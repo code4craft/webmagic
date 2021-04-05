@@ -25,7 +25,7 @@ public abstract class PatternRequestMatcher implements RequestMatcher {
     /**
      * @param pattern url pattern to handle
      */
-    public PatternRequestMatcher(String pattern) {
+    protected PatternRequestMatcher(String pattern) {
         this.pattern = pattern;
         this.patternCompiled = Pattern.compile(pattern);
     }

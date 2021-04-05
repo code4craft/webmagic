@@ -18,11 +18,11 @@ public abstract class MultiKeyMapBase {
     @SuppressWarnings("rawtypes")
     private Class<? extends Map> protoMapClass = DEFAULT_CLAZZ;
 
-    public MultiKeyMapBase() {
+    protected MultiKeyMapBase() {
     }
 
     @SuppressWarnings("rawtypes")
-    public MultiKeyMapBase(Class<? extends Map> protoMapClass) {
+    protected MultiKeyMapBase(Class<? extends Map> protoMapClass) {
         this.protoMapClass = protoMapClass;
     }
 
