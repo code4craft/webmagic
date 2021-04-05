@@ -69,9 +69,7 @@ public class HttpClientGenerator {
             return new SSLConnectionSocketFactory(sslContext, supportedProtocols,
                     null,
                     new DefaultHostnameVerifier()); // 优先绕过安全证书
-        } catch (KeyManagementException e) {
-            logger.error("ssl connection fail", e);
-        } catch (NoSuchAlgorithmException e) {
+        } catch (KeyManagementException | NoSuchAlgorithmException e) {
             logger.error("ssl connection fail", e);
         }
         return SSLConnectionSocketFactory.getSocketFactory();
