@@ -20,7 +20,7 @@ public class HttpRequestBody implements Serializable {
     
     private static final String ENCODING_ERROR ="illegal encoding "; 
 
-    public static abstract class ContentType {
+    public abstract static class ContentType {
 
         public static final String JSON = "application/json";
 

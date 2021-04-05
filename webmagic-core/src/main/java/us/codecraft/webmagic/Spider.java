@@ -86,11 +86,11 @@ public class Spider implements Runnable, Task {
 
     protected boolean exitWhenComplete = true;
 
-    protected final static int STAT_INIT = 0;
+    protected static final int STAT_INIT = 0;
 
-    protected final static int STAT_RUNNING = 1;
+    protected static final int STAT_RUNNING = 1;
 
-    protected final static int STAT_STOPPED = 2;
+    protected static final int STAT_STOPPED = 2;
 
     protected boolean spawnUrl = true;
 
