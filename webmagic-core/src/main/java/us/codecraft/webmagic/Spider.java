@@ -62,7 +62,7 @@ public class Spider implements Runnable, Task {
 
     protected Downloader downloader;
 
-    protected List<Pipeline> pipelines = new ArrayList<Pipeline>();
+    protected List<Pipeline> pipelines = new ArrayList<>();
 
     protected PageProcessor pageProcessor;
 
@@ -86,11 +86,11 @@ public class Spider implements Runnable, Task {
 
     protected boolean exitWhenComplete = true;
 
-    protected final static int STAT_INIT = 0;
+    protected static final  int STAT_INIT = 0;
 
-    protected final static int STAT_RUNNING = 1;
+    protected static final int STAT_RUNNING = 1;
 
-    protected final static int STAT_STOPPED = 2;
+    protected static final int STAT_STOPPED = 2;
 
     protected boolean spawnUrl = true;
 
@@ -248,7 +248,7 @@ public class Spider implements Runnable, Task {
      * @return this
      */
     public Spider clearPipeline() {
-        pipelines = new ArrayList<Pipeline>();
+        pipelines = new ArrayList<>();
         return this;
     }
 
@@ -439,7 +439,6 @@ public class Spider implements Runnable, Task {
             logger.info("page status code error, page {} , code: {}", request.getUrl(), page.getStatusCode());
         }
         sleep(site.getSleepTime());
-        return;
     }
 
     private void onDownloaderFail(Request request) {
@@ -545,7 +544,7 @@ public class Spider implements Runnable, Task {
     public <T> T get(String url) {
         List<String> urls = WMCollections.newArrayList(url);
         List<T> resultItemses = getAll(urls);
-        if (resultItemses != null && resultItemses.size() > 0) {
+        if (resultItemses != null && !(resultItemses.isEmpty())) {
             return resultItemses.get(0);
         } else {
             return null;
@@ -678,7 +677,7 @@ public class Spider implements Runnable, Task {
 
 
     public enum Status {
-        Init(0), Running(1), Stopped(2);
+        INIT(0), RUNNING(1), STOPPED(2);
 
         private Status(int value) {
             this.value = value;
@@ -697,7 +696,7 @@ public class Spider implements Runnable, Task {
                 }
             }
             //default value
-            return Init;
+            return INIT;
         }
     }
 

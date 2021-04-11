@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class ResultItems {
 
-    private Map<String, Object> fields = new LinkedHashMap<String, Object>();
+    private Map<String, Object> fields = new LinkedHashMap<>();
 
     private Request request;
 
