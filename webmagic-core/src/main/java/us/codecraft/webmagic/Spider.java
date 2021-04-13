@@ -572,8 +572,9 @@ public class Spider implements Runnable, Task {
             if (threadPool.getThreadAlive() == 0 && exitWhenComplete) {
                 return;
             }
-            if(!newUrlCondition.await(emptySleepTime, TimeUnit.MILLISECONDS)){
-                throw new InterruptedException("the waiting time detectably elapsed before return from a method");
+            
+            if( ! newUrlCondition.await(emptySleepTime, TimeUnit.MILLISECONDS)  ){
+                throw new InterruptedException();
             } 
 
         } catch (InterruptedException e) {
