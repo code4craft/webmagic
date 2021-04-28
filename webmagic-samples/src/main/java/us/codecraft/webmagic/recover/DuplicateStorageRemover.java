@@ -15,10 +15,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author ：linweisen
- * @date ：Created in 2021/4/9 14:46
- * @description：${description}
- * @modified By：
- * @version: 1.0
  */
 public class DuplicateStorageRemover implements DuplicateRemover {
 

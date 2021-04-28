@@ -15,10 +15,6 @@ import java.io.IOException;
 
 /**
  * @author ：linweisen
- * @date ：Created in 2021/4/9 14:38
- * @description：${description}
- * @modified By：
- * @version: 1.0
  */
 public class MmapQueueScheduler extends DuplicateRemovedScheduler {
 
