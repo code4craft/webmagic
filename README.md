@@ -4,6 +4,7 @@
 
 
 [![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
+[![Maintainability](https://cloud.quality-gate.com/dashboard/api/badge?projectName=code4craft_webmagic&branchName=master)](https://cloud.quality-gate.com/dashboard/branches/68353#overview)
 
 >A scalable crawler framework. It covers the whole lifecycle of crawler: downloading, url management, content extraction and persistent. It can simplify the development of a  specific crawler.
 
