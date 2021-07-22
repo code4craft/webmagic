@@ -324,6 +324,11 @@
             <plugin>
                 <groupId>com.amashchenko.maven.plugin</groupId>
                 <artifactId>gitflow-maven-plugin</artifactId>
+                <configuration>
+                    <gitFlowConfig>
+                        <versionTagPrefix>WebMagic-</versionTagPrefix>
+                    </gitFlowConfig>
+                </configuration>
             </plugin>
         </plugins>
         <pluginManagement>
