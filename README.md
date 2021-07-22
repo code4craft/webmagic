@@ -3,6 +3,8 @@
 [Readme in Chinese](https://github.com/code4craft/webmagic/tree/master/README-zh.md)
 
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/us.codecraft/webmagic-parent/badge.svg?subject=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/us.codecraft/webmagic-parent/)
+[![License](https://img.shields.io/badge/License-Apache%20License%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
 
 >A scalable crawler framework. It covers the whole lifecycle of crawler: downloading, url management, content extraction and persistent. It can simplify the development of a  specific crawler.
@@ -23,12 +25,12 @@ Add dependencies to your pom.xml:
 <dependency>
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-core</artifactId>
-    <version>0.7.4</version>
+    <version>0.7.5</version>
 </dependency>
 <dependency>
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-extension</artifactId>
-    <version>0.7.4</version>
+    <version>0.7.5</version>
 </dependency>
 ```
         

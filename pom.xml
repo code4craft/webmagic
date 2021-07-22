@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <groupId>us.codecraft</groupId>
-    <version>0.7.4</version>
+    <version>0.7.5</version>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <properties>
@@ -275,7 +275,7 @@
                 <version>3.2.0</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
-                    <doctitle>WebMagic 0.7.4</doctitle>
+                    <doctitle>WebMagic ${project.version}</doctitle>
                     <locale>en_US</locale>
 
                     <!-- avoid the issue: https://bugs.openjdk.java.net/browse/JDK-8212233 -->

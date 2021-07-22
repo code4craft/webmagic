@@ -1,8 +1,9 @@
 ![logo](http://webmagic.io/images/logo.jpeg)
 
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/us.codecraft/webmagic-parent/badge.svg?subject=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/us.codecraft/webmagic-parent/)
+[![License](https://img.shields.io/badge/License-Apache%20License%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
-
 
 官方网站[http://webmagic.io/](http://webmagic.io/)
 
@@ -38,12 +39,12 @@ webmagic使用maven管理依赖，在项目中添加对应的依赖即可使用w
 <dependency>
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-core</artifactId>
-    <version>0.7.4</version>
+    <version>0.7.5</version>
 </dependency>
 <dependency>
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-extension</artifactId>
-    <version>0.7.4</version>
+    <version>0.7.5</version>
 </dependency>
 ```
         
