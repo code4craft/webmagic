@@ -12,7 +12,7 @@ import java.util.Enumeration;
  */
 public abstract class IPUtils {
 
-    public static String getFirstNoLoopbackIPAddresses() throws SocketException {
+    public static String getFirstNoLoopbackIPAddresses() throws SocketException, NullPointerException{
 
         Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
 

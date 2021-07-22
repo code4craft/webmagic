@@ -11,6 +11,14 @@ import java.io.File;
 public class FilePersistentBase {
 
     protected String path;
+    
+    public FilePersistentBase() {
+    	  setPath("/data/webmagic/");
+    }
+    
+    public FilePersistentBase(String path) {
+    	setPath(path);
+    }
 
     public static String PATH_SEPERATOR = "/";
 
