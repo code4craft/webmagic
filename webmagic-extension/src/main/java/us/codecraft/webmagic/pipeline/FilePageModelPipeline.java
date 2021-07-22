@@ -28,11 +28,11 @@ public class FilePageModelPipeline extends FilePersistentBase implements PageMod
      * new JsonFilePageModelPipeline with default path "/data/webmagic/"
      */
     public FilePageModelPipeline() {
-        setPath("/data/webmagic/");
+      super();
     }
 
     public FilePageModelPipeline(String path) {
-        setPath(path);
+        super(path);
     }
 
     @Override
