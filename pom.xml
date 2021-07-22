@@ -275,7 +275,7 @@
                 <version>3.2.0</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
-                    <doctitle>WebMagic 0.7.4</doctitle>
+                    <doctitle>WebMagic ${project.version}</doctitle>
                     <locale>en_US</locale>
 
                     <!-- avoid the issue: https://bugs.openjdk.java.net/browse/JDK-8212233 -->
