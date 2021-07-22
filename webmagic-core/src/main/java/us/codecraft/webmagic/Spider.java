@@ -208,7 +208,8 @@ public class Spider implements Runnable, Task {
      * @see #addPipeline(us.codecraft.webmagic.pipeline.Pipeline)
      * @deprecated
      */
-    public Spider pipeline(Pipeline pipeline) {
+    @Deprecated
+	public Spider pipeline(Pipeline pipeline) {
         return addPipeline(pipeline);
     }
 
@@ -258,7 +259,8 @@ public class Spider implements Runnable, Task {
      * @see #setDownloader(us.codecraft.webmagic.downloader.Downloader)
      * @deprecated
      */
-    public Spider downloader(Downloader downloader) {
+    @Deprecated
+	public Spider downloader(Downloader downloader) {
         return setDownloader(downloader);
     }
 
@@ -320,7 +322,7 @@ public class Spider implements Runnable, Task {
                             processRequest(request);
                             onSuccess(request);
                         } catch (Exception e) {
-                            onError(request);
+                            onError(request, e);
                             logger.error("process request " + request + " error", e);
                         } finally {
                             pageCount.incrementAndGet();
@@ -338,10 +340,19 @@ public class Spider implements Runnable, Task {
         logger.info("Spider {} closed! {} pages downloaded.", getUUID(), pageCount.get());
     }
 
+    /**
+     * @deprecated Use {@link #onError(Request, Exception)} instead.
+     */
+    @Deprecated
     protected void onError(Request request) {
+    }
+
+    protected void onError(Request request, Exception e) {
+        this.onError(request);
+
         if (CollectionUtils.isNotEmpty(spiderListeners)) {
             for (SpiderListener spiderListener : spiderListeners) {
-                spiderListener.onError(request);
+                spiderListener.onError(request, e);
             }
         }
     }

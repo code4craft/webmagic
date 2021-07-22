@@ -3,7 +3,7 @@
     <parent>
         <artifactId>webmagic-parent</artifactId>
         <groupId>us.codecraft</groupId>
-        <version>0.7.4</version>
+        <version>0.7.5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -21,10 +21,6 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
             <version>${kotlin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
         </dependency>
         <dependency>
             <groupId>org.python</groupId>

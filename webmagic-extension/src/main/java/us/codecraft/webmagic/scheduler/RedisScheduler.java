@@ -1,8 +1,10 @@
 package us.codecraft.webmagic.scheduler;
 
-import com.alibaba.fastjson.JSON;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import com.alibaba.fastjson.JSON;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -37,21 +39,15 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
 
     @Override
     public void resetDuplicateCheck(Task task) {
-        Jedis jedis = pool.getResource();
-        try {
+        try (Jedis jedis = pool.getResource()) {
             jedis.del(getSetKey(task));
-        } finally {
-            pool.returnResource(jedis);
         }
     }
 
     @Override
     public boolean isDuplicate(Request request, Task task) {
-        Jedis jedis = pool.getResource();
-        try {
+		try (Jedis jedis = pool.getResource()) {
             return jedis.sadd(getSetKey(task), request.getUrl()) == 0;
-        } finally {
-            pool.returnResource(jedis);
         }
 
     }
@@ -62,7 +58,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         try {
             jedis.rpush(getQueueKey(task), request.getUrl());
             if (checkForAdditionalInfo(request)) {
-                String field = DigestUtils.shaHex(request.getUrl());
+                String field = DigestUtils.sha1Hex(request.getUrl());
                 String value = JSON.toJSONString(request);
                 jedis.hset((ITEM_PREFIX + task.getUUID()), field, value);
             }
@@ -100,14 +96,13 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
 
     @Override
     public synchronized Request poll(Task task) {
-        Jedis jedis = pool.getResource();
-        try {
+		try (Jedis jedis = pool.getResource()) {
             String url = jedis.lpop(getQueueKey(task));
             if (url == null) {
                 return null;
             }
             String key = ITEM_PREFIX + task.getUUID();
-            String field = DigestUtils.shaHex(url);
+            String field = DigestUtils.sha1Hex(url);
             byte[] bytes = jedis.hget(key.getBytes(), field.getBytes());
             if (bytes != null) {
                 Request o = JSON.parseObject(new String(bytes), Request.class);
@@ -115,8 +110,6 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
             }
             Request request = new Request(url);
             return request;
-        } finally {
-            pool.returnResource(jedis);
         }
     }
 
@@ -134,23 +127,17 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
 
     @Override
     public int getLeftRequestsCount(Task task) {
-        Jedis jedis = pool.getResource();
-        try {
+        try (Jedis jedis = pool.getResource()) {
             Long size = jedis.llen(getQueueKey(task));
             return size.intValue();
-        } finally {
-            pool.returnResource(jedis);
         }
     }
 
     @Override
     public int getTotalRequestsCount(Task task) {
-        Jedis jedis = pool.getResource();
-        try {
+        try (Jedis jedis = pool.getResource()) {
             Long size = jedis.scard(getSetKey(task));
             return size.intValue();
-        } finally {
-            pool.returnResource(jedis);
         }
     }
 }

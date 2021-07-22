@@ -68,6 +68,10 @@ public class SpiderMonitor {
         return new SpiderStatus(spider, monitorSpiderListener);
     }
 
+    protected List<SpiderStatusMXBean> getSpiderStatuses() {
+        return this.spiderStatuses;
+    }
+
     public static SpiderMonitor instance() {
         return INSTANCE;
     }
