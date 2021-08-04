@@ -313,10 +313,10 @@ public class Spider implements Runnable, Task {
                 if (threadPool.getThreadAlive() == 0) {
                     //no alive thread anymore , try again
                     poll = scheduler.poll(this);
-                    if(poll==null) {
+                    if (poll == null) {
                         if (exitWhenComplete) {
                             break;
-                        }else{
+                        } else {
                             // wait
                             try {
                                 Thread.sleep(emptySleepTime);
@@ -326,9 +326,9 @@ public class Spider implements Runnable, Task {
                             }
                         }
                     }
-                }else {
+                } else {
                     // wait until new url added，
-                    if(waitNewUrl())
+                    if (waitNewUrl())
                         //if interrupted
                         break;
                     continue;
@@ -343,7 +343,7 @@ public class Spider implements Runnable, Task {
                         processRequest(request);
                         onSuccess(request);
                     } catch (Exception e) {
-                        onError(request,e);
+                        onError(request, e);
                         logger.error("process request " + request + " error", e);
                     } finally {
                         pageCount.incrementAndGet();
