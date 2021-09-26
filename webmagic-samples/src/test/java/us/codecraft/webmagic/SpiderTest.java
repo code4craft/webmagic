@@ -1,12 +1,5 @@
 package us.codecraft.webmagic;
 
-import org.junit.Ignore;
-import org.junit.Test;
-import us.codecraft.webmagic.pipeline.FilePipeline;
-import us.codecraft.webmagic.processor.SimplePageProcessor;
-import us.codecraft.webmagic.samples.HuxiuProcessor;
-import us.codecraft.webmagic.scheduler.FileCacheQueueScheduler;
-
 /**
  * @author code4crafter@gmail.com <br>
  * Date: 13-4-20
