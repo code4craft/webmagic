@@ -4,13 +4,16 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 
 /**
- * Interface to be implemented to customize a crawler.<br>
- * <br>
+ * Interface to be implemented to customize a crawler.
+ *
+ * <p>
  * In PageProcessor, you can customize:
- * <br>
- * start urls and other settings in {@link Site}<br>
- * how the urls to fetch are detected               <br>
- * how the data are extracted and stored             <br>
+ * </p>
+ * <ul>
+ * <li>start URLs and other settings in {@link Site}</li>
+ * <li>how the URLs to fetch are detected</li>
+ * <li>how the data are extracted and stored</li>
+ * </ul>
  *
  * @author code4crafter@gmail.com <br>
  * @see Site
@@ -20,17 +23,20 @@ import us.codecraft.webmagic.Site;
 public interface PageProcessor {
 
     /**
-     * process the page, extract urls to fetch, extract the data and store
+     * Processes the page, extract URLs to fetch, extract the data and store.
      *
      * @param page page
      */
-    public void process(Page page);
+    void process(Page page);
 
     /**
-     * get the site settings
+     * Returns the site settings.
      *
      * @return site
      * @see Site
      */
-    public Site getSite();
+    default Site getSite() {
+        return Site.me();
+    }
+
 }
