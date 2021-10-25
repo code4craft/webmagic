@@ -1,6 +1,8 @@
 package us.codecraft.webmagic.utils;
 
 /**
+ * Numbers comparison utilility for schedule priority
+ * 
  * @author yihua.huang@dianping.com
  */
 public abstract class NumberUtils {

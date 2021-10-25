@@ -86,11 +86,11 @@ public class Spider implements Runnable, Task {
 
     protected boolean exitWhenComplete = true;
 
-    protected final static int STAT_INIT = 0;
+    protected static final int STAT_INIT = 0;
 
-    protected final static int STAT_RUNNING = 1;
+    protected static final int STAT_RUNNING = 1;
 
-    protected final static int STAT_STOPPED = 2;
+    protected static final int STAT_STOPPED = 2;
 
     protected boolean spawnUrl = true;
 
@@ -171,6 +171,7 @@ public class Spider implements Runnable, Task {
      * set scheduler for Spider
      *
      * @param scheduler scheduler
+     * @deprecated since 0.4.0
      * @return this
      * @see #setScheduler(us.codecraft.webmagic.scheduler.Scheduler)
      */
@@ -563,9 +564,9 @@ public class Spider implements Runnable, Task {
 
     public <T> T get(String url) {
         List<String> urls = WMCollections.newArrayList(url);
-        List<T> resultItemses = getAll(urls);
-        if (resultItemses != null && resultItemses.size() > 0) {
-            return resultItemses.get(0);
+        List<T> singleResultItems = getAll(urls);
+        if (singleResultItems != null && !singleResultItems.isEmpty()) {
+            return singleResultItems.get(0);
         } else {
             return null;
         }
@@ -705,7 +706,7 @@ public class Spider implements Runnable, Task {
 
 
     public enum Status {
-        Init(0), Running(1), Stopped(2);
+        INIT(0), RUNNING(1), STOPPED(2);
 
         private Status(int value) {
             this.value = value;
@@ -724,7 +725,7 @@ public class Spider implements Runnable, Task {
                 }
             }
             //default value
-            return Init;
+            return INIT;
         }
     }
 

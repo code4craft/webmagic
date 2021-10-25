@@ -91,7 +91,7 @@ public abstract class AbstractSelectable implements Selectable {
     }
 
     public String getFirstSourceText() {
-        if (getSourceTexts() != null && getSourceTexts().size() > 0) {
+        if (getSourceTexts() != null && !getSourceTexts().isEmpty()) {
             return getSourceTexts().get(0);
         }
         return null;
@@ -104,6 +104,6 @@ public abstract class AbstractSelectable implements Selectable {
 
     @Override
     public boolean match() {
-        return getSourceTexts() != null && getSourceTexts().size() > 0;
+        return getSourceTexts() != null && !getSourceTexts().isEmpty();
     }
 }

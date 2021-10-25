@@ -108,6 +108,7 @@ public class Page {
      * @deprecated since 0.4.0
      * The html is parse just when first time of calling {@link #getHtml()}, so use {@link #setRawText(String)} instead.
      */
+    @Deprecated
     public void setHtml(Html html) {
         this.html = html;
     }

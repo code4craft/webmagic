@@ -40,9 +40,9 @@ public class BaiduBaike{
         list.add(String.format(urlTemplate,"太阳能"));
         list.add(String.format(urlTemplate,"地热发电"));
         list.add(String.format(urlTemplate,"地热发电"));
-        List<BaiduBaike> resultItemses = ooSpider.<BaiduBaike>getAll(list);
-        for (BaiduBaike resultItemse : resultItemses) {
-            System.out.println(resultItemse);
+        List<BaiduBaike> multiResultItems = ooSpider.<BaiduBaike>getAll(list);
+        for (BaiduBaike singleResultItems : multiResultItems) {
+            System.out.println(singleResultItems);
         }
         ooSpider.close();
     }

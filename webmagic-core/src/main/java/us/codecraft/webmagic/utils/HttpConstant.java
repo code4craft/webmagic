@@ -7,7 +7,7 @@ package us.codecraft.webmagic.utils;
  */
 public abstract class HttpConstant {
 
-    public static abstract class Method {
+    public abstract static class Method {
 
         public static final String GET = "GET";
 
@@ -25,13 +25,13 @@ public abstract class HttpConstant {
 
     }
 
-    public static abstract class StatusCode {
+    public abstract static class StatusCode {
 
         public static final int CODE_200 = 200;
 
     }
 
-    public static abstract class Header {
+    public abstract static class Header {
 
         public static final String REFERER = "Referer";
 

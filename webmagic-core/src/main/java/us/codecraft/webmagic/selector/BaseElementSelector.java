@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Base selector for html elements.
+ * 
  * @author code4crafter@gmail.com
  * @since 0.3.0
  */
