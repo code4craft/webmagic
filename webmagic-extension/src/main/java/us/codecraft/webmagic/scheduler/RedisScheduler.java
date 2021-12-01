@@ -67,7 +67,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         }
     }
 
-    private boolean checkForAdditionalInfo(Request request) {
+    protected boolean checkForAdditionalInfo(Request request) {
         if (request == null) {
             return false;
         }
