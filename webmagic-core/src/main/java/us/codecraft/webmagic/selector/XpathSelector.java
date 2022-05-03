@@ -1,11 +1,11 @@
 package us.codecraft.webmagic.selector;
 
-import org.apache.commons.collections.CollectionUtils;
+
+import java.util.List;
+import org.apache.commons.collections4.CollectionUtils;
 import org.jsoup.nodes.Element;
 import us.codecraft.xsoup.XPathEvaluator;
 import us.codecraft.xsoup.Xsoup;
-
-import java.util.List;
 
 /**
  * XPath selector based on Xsoup.<br>

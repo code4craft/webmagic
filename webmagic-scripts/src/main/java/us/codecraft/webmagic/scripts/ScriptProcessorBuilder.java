@@ -1,10 +1,12 @@
 package us.codecraft.webmagic.scripts;
 
-import org.apache.commons.io.IOUtils;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import org.apache.commons.io.IOUtils;
+
 
 /**
  * @author code4crafter@gmail.com
@@ -35,7 +37,7 @@ public class ScriptProcessorBuilder {
     public ScriptProcessorBuilder scriptFromFile(String fileName) {
         try {
             InputStream resourceAsStream = new FileInputStream(fileName);
-            this.script = IOUtils.toString(resourceAsStream);
+            this.script = IOUtils.toString(resourceAsStream, Charset.defaultCharset());
         } catch (IOException e) {
             //wrap IOException because I prefer a runtime exception...
             throw new IllegalArgumentException(e);
@@ -46,7 +48,7 @@ public class ScriptProcessorBuilder {
     public ScriptProcessorBuilder scriptFromClassPathFile(String fileName) {
         try {
             InputStream resourceAsStream = ScriptProcessor.class.getClassLoader().getResourceAsStream(fileName);
-            this.script = IOUtils.toString(resourceAsStream);
+            this.script = IOUtils.toString(resourceAsStream, Charset.defaultCharset());
         } catch (IOException e) {
             //wrap IOException because I prefer a runtime exception...
             throw new IllegalArgumentException(e);
