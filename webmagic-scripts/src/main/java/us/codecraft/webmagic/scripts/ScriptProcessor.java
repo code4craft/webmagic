@@ -1,19 +1,20 @@
 package us.codecraft.webmagic.scripts;
 
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.Iterator;
+import java.util.Map;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 import org.apache.commons.io.IOUtils;
 import org.jruby.RubyHash;
 import org.python.core.PyDictionary;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
-
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * @author code4crafter@gmail.com
@@ -39,7 +40,7 @@ public class ScriptProcessor implements PageProcessor {
         enginePool = new ScriptEnginePool(language, threadNum);
         InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(language.getDefineFile());
         try {
-            defines = IOUtils.toString(resourceAsStream);
+            defines = IOUtils.toString(resourceAsStream, Charset.defaultCharset());
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }

@@ -1,9 +1,10 @@
 package us.codecraft.webmagic.downloader;
 
-import com.github.dreamhead.moco.HttpServer;
-import com.github.dreamhead.moco.Runnable;
-import com.github.dreamhead.moco.Runner;
-import org.apache.commons.collections.map.HashedMap;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
+import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -11,6 +12,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
+import com.github.dreamhead.moco.HttpServer;
+import com.github.dreamhead.moco.Runnable;
+import com.github.dreamhead.moco.Runner;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
@@ -21,12 +25,19 @@ import us.codecraft.webmagic.proxy.SimpleProxyProvider;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.utils.CharsetUtils;
 import us.codecraft.webmagic.utils.HttpConstant;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Map;
-
-import static com.github.dreamhead.moco.Moco.*;
+import static com.github.dreamhead.moco.Moco.and;
+import static com.github.dreamhead.moco.Moco.by;
+import static com.github.dreamhead.moco.Moco.cookie;
+import static com.github.dreamhead.moco.Moco.eq;
+import static com.github.dreamhead.moco.Moco.form;
+import static com.github.dreamhead.moco.Moco.header;
+import static com.github.dreamhead.moco.Moco.httpServer;
+import static com.github.dreamhead.moco.Moco.method;
+import static com.github.dreamhead.moco.Moco.not;
+import static com.github.dreamhead.moco.Moco.query;
+import static com.github.dreamhead.moco.Moco.text;
+import static com.github.dreamhead.moco.Moco.uri;
+import static com.github.dreamhead.moco.Moco.with;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
