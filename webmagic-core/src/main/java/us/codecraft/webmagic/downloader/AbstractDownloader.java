@@ -26,7 +26,7 @@ public abstract class AbstractDownloader implements Downloader {
     /**
      * A simple method to download a url.
      *
-     * @param url url
+     * @param url     url
      * @param charset charset
      * @return html
      */
@@ -38,7 +38,7 @@ public abstract class AbstractDownloader implements Downloader {
     protected void onSuccess(Request request) {
     }
 
-    protected void onError(Request request) {
+    protected void onError(Request request, Throwable e) {
     }
 
 }
