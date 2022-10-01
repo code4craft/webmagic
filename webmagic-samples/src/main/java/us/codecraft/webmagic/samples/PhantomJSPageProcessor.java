@@ -36,7 +36,7 @@ public class PhantomJSPageProcessor implements PageProcessor {
     }
 
     public static void main(String[] args) throws Exception {
-        PhantomJSDownloader phantomDownloader = new PhantomJSDownloader().setRetryNum(3);
+        PhantomJSDownloader phantomDownloader = new PhantomJSDownloader();
 
         CollectorPipeline<ResultItems> collectorPipeline = new ResultItemsCollectorPipeline();
 
