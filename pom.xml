@@ -9,31 +9,31 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <assertj.version>3.18.1</assertj.version>
-        <commons-cli.version>1.4</commons-cli.version>
+        <assertj.version>3.23.1</assertj.version>
+        <commons-cli.version>1.5.0</commons-cli.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-io.version>2.11.0</commons-io.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
-        <fastjson.version>1.2.75</fastjson.version>
-        <groovy-all.version>3.0.10</groovy-all.version>
+        <fastjson.version>2.0.14.graal</fastjson.version>
+        <groovy-all.version>3.0.13</groovy-all.version>
         <guava.version>31.1-jre</guava.version>
         <htmlcleaner.version>2.26</htmlcleaner.version>
         <httpclient.version>4.5.13</httpclient.version>
-        <httpcore.version>4.4.14</httpcore.version>
+        <httpcore.version>4.4.15</httpcore.version>
         <jedis.version>3.7.1</jedis.version>
-        <jruby.version>9.2.14.0</jruby.version>
-        <json-path.version>2.6.0</json-path.version>
+        <jruby.version>9.3.8.0</jruby.version>
+        <json-path.version>2.7.0</json-path.version>
         <junit.version>4.13.2</junit.version>
-        <jython.version>2.7.2</jython.version>
+        <jython.version>2.7.3</jython.version>
         <log4j.version>1.2.17</log4j.version>
-        <mockito-all.version>1.10.19</mockito-all.version>
-        <moco.version>1.1.0</moco.version>
+        <mockito-all.version>2.0.2-beta</mockito-all.version>
+        <moco.version>1.3.0</moco.version>
         <phantomjsdriver.version>1.2.0</phantomjsdriver.version>
-        <saxon-he.version>10.3</saxon-he.version>
+        <saxon-he.version>11.4</saxon-he.version>
         <selenium-java.version>3.141.59</selenium-java.version>
-        <slf4j.version>1.7.36</slf4j.version>
+        <slf4j.version>2.0.3</slf4j.version>
         <spring-version>4.0.0.RELEASE</spring-version>
-        <xsoup.version>0.3.2</xsoup.version>
+        <xsoup.version>0.3.5</xsoup.version>
     </properties>
     <artifactId>webmagic-parent</artifactId>
     <name>webmagic-parent</name>
@@ -222,7 +222,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.0.0-M3</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>enforce-maven</id>
@@ -296,7 +296,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.4.1</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                     <doctitle>WebMagic ${project.version}</doctitle>
@@ -325,7 +325,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>3.0.0-M1</version>
+                <version>3.0.0-M6</version>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -360,77 +360,77 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.2.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
+                    <version>3.10.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <version>3.0.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <version>3.0.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jxr-plugin</artifactId>
-                    <version>3.1.1</version>
+                    <version>3.3.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-pmd-plugin</artifactId>
-                    <version>3.14.0</version>
+                    <version>3.19.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.9.1</version>
+                    <version>4.0.0-M3</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M5</version>
+                    <version>3.0.0-M7</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-report-plugin</artifactId>
-                    <version>3.0.0-M5</version>
+                    <version>3.0.0-M7</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>taglist-maven-plugin</artifactId>
-                    <version>2.4</version>
+                    <version>3.0.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.7</version>
+                    <version>0.8.8</version>
                 </plugin>
                 <plugin>
                     <groupId>com.amashchenko.maven.plugin</groupId>
                     <artifactId>gitflow-maven-plugin</artifactId>
-                    <version>1.15.0</version>
+                    <version>1.18.0</version>
                 </plugin>
                 <plugin>
                     <groupId>com.github.spotbugs</groupId>
                     <artifactId>spotbugs-maven-plugin</artifactId>
-                    <version>4.2.3</version>
+                    <version>4.7.2.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -477,7 +477,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>2.2.1</version>
+                        <version>3.2.1</version>
                         <executions>
                             <execution>
                                 <phase>package</phase>
@@ -491,7 +491,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.9.1</version>
+                        <version>3.4.1</version>
                         <executions>
                             <execution>
                                 <phase>package</phase>
@@ -505,7 +505,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <phase>verify</phase>
@@ -518,7 +518,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.8</version>
+                        <version>1.6.13</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>sonatype-nexus-staging</serverId>
