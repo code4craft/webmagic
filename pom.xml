@@ -100,7 +100,7 @@
             <dependency>
                 <groupId>us.codecraft</groupId>
                 <artifactId>xsoup</artifactId>
-                <version>0.3.4</version>
+                <version>0.3.6</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
