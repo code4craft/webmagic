@@ -49,7 +49,7 @@ public class GithubRepo implements HasKey {
 
     @Override
     public String key() {
-        return author+":"+name;
+        return author+"_"+name;
     }
 
     public String getName() {
