@@ -38,6 +38,11 @@ public abstract class AbstractDownloader implements Downloader {
     protected void onSuccess(Request request) {
     }
 
+    @Deprecated
+    protected void onError(Request request) {
+        this.onError(request, null);
+    }
+
     protected void onError(Request request, Throwable e) {
     }
 
