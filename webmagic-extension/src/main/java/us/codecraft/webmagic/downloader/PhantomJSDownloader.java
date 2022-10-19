@@ -98,9 +98,9 @@ public class PhantomJSDownloader extends AbstractDownloader {
                 page.setRequest(request);
                 page.setStatusCode(200);
             }
-            onSuccess(request);
+            onSuccess(request, task);
         } catch (Exception e) {
-            onError(request, e);
+            onError(request, task, e);
             logger.warn("download page {} error", request.getUrl(), e);
         }
         return page;

@@ -111,10 +111,10 @@ public class SeleniumDownloader extends AbstractDownloader implements Closeable 
             page.setHtml(new Html(content, request.getUrl()));
             page.setUrl(new PlainText(request.getUrl()));
             page.setRequest(request);
-            onSuccess(request);
+            onSuccess(request, task);
         } catch (Exception e) {
             logger.warn("download page {} error", request.getUrl(), e);
-            onError(request, e);
+            onError(request, task, e);
         } finally {
             if (webDriver != null) {
                 webDriverPool.returnToPool(webDriver);

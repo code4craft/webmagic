@@ -82,12 +82,12 @@ public class HttpClientDownloader extends AbstractDownloader {
         try {
             httpResponse = httpClient.execute(requestContext.getHttpUriRequest(), requestContext.getHttpClientContext());
             page = handleResponse(request, request.getCharset() != null ? request.getCharset() : task.getSite().getCharset(), httpResponse, task);
-            onSuccess(request);
+            onSuccess(request, task);
             logger.info("downloading page success {}", request.getUrl());
             return page;
         } catch (IOException e) {
             logger.warn("download page {} error", request.getUrl(), e);
-            onError(request, e);
+            onError(request, task, e);
             return page;
         } finally {
             if (httpResponse != null) {

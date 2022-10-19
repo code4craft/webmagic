@@ -3,6 +3,7 @@ package us.codecraft.webmagic.downloader;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.selector.Html;
 
 /**
@@ -35,15 +36,26 @@ public abstract class AbstractDownloader implements Downloader {
         return (Html) page.getHtml();
     }
 
+    @Deprecated
     protected void onSuccess(Request request) {
+    }
+
+    /**
+     * @since 0.7.6
+     */
+    protected void onSuccess(Request request, Task task) {
+        this.onSuccess(request);
     }
 
     @Deprecated
     protected void onError(Request request) {
-        this.onError(request, null);
     }
 
-    protected void onError(Request request, Throwable e) {
+    /**
+     * @since 0.7.6
+     */
+    protected void onError(Request request, Task task, Throwable e) {
+        this.onError(request);
     }
 
 }
