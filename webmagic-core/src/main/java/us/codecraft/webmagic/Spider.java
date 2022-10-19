@@ -326,6 +326,7 @@ public class Spider implements Runnable, Task {
                                 Thread.sleep(emptySleepTime);
                                 continue;
                             } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
                                 break;
                             }
                         }
@@ -493,6 +494,7 @@ public class Spider implements Runnable, Task {
             Thread.sleep(time);
         } catch (InterruptedException e) {
             logger.error("Thread interrupted when sleep",e);
+            Thread.currentThread().interrupt();
         }
     }
 
