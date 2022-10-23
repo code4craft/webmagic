@@ -1,11 +1,11 @@
 package us.codecraft.webmagic.selector;
 
-import com.alibaba.fastjson.JSON;
-import com.jayway.jsonpath.JsonPath;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import com.alibaba.fastjson.JSON;
+import com.jayway.jsonpath.JsonPath;
 
 /**
  * JsonPath selector.<br>
@@ -16,13 +16,18 @@ import java.util.Map;
  */
 public class JsonPathSelector implements Selector {
 
-    private String jsonPathStr;
+    private final String jsonPathStr;
 
-    private JsonPath jsonPath;
+    private final JsonPath jsonPath;
 
     public JsonPathSelector(String jsonPathStr) {
         this.jsonPathStr = jsonPathStr;
         this.jsonPath = JsonPath.compile(this.jsonPathStr);
+    }
+
+    @SuppressWarnings("unused")
+    public String getJsonPathStr() {
+        return jsonPathStr;
     }
 
     @Override
@@ -32,8 +37,8 @@ public class JsonPathSelector implements Selector {
             return null;
         }
         if (object instanceof List) {
-            List list = (List) object;
-            if (list != null && list.size() > 0) {
+            List<?> list = (List<?>) object;
+            if (list.size() > 0) {
                 return toString(list.iterator().next());
             }
         }
@@ -49,8 +54,9 @@ public class JsonPathSelector implements Selector {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<String> selectList(String text) {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         Object object = jsonPath.read(text);
         if (object == null) {
             return list;

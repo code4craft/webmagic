@@ -1,13 +1,15 @@
 package us.codecraft.webmagic.downloader;
 
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import org.apache.commons.io.IOUtils;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.selector.PlainText;
 
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author code4crafter@gmail.com
@@ -19,7 +21,7 @@ public class MockGithubDownloader implements Downloader {
         Page page = new Page();
         InputStream resourceAsStream = this.getClass().getResourceAsStream("/html/mock-github.html");
         try {
-            page.setRawText(IOUtils.toString(resourceAsStream));
+            page.setRawText(IOUtils.toString(resourceAsStream, Charset.defaultCharset()));
         } catch (IOException e) {
             e.printStackTrace();
         }

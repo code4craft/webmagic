@@ -1,13 +1,13 @@
 package us.codecraft.webmagic.samples;
 
-import org.apache.commons.collections.CollectionUtils;
+
+import java.util.List;
+import org.apache.commons.collections4.CollectionUtils;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.JsonPathSelector;
-
-import java.util.List;
 
 /**
  * @author code4crafter@gmail.com

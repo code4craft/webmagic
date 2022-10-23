@@ -3,6 +3,7 @@ package us.codecraft.webmagic.downloader;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.selector.Html;
 
 /**
@@ -26,7 +27,7 @@ public abstract class AbstractDownloader implements Downloader {
     /**
      * A simple method to download a url.
      *
-     * @param url url
+     * @param url     url
      * @param charset charset
      * @return html
      */
@@ -35,10 +36,26 @@ public abstract class AbstractDownloader implements Downloader {
         return (Html) page.getHtml();
     }
 
+    @Deprecated
     protected void onSuccess(Request request) {
     }
 
+    /**
+     * @since 0.7.6
+     */
+    protected void onSuccess(Request request, Task task) {
+        this.onSuccess(request);
+    }
+
+    @Deprecated
     protected void onError(Request request) {
+    }
+
+    /**
+     * @since 0.7.6
+     */
+    protected void onError(Request request, Task task, Throwable e) {
+        this.onError(request);
     }
 
 }

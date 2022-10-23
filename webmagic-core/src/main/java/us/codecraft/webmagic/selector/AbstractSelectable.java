@@ -1,9 +1,9 @@
 package us.codecraft.webmagic.selector;
 
-import org.apache.commons.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.collections4.CollectionUtils;
 
 /**
  * @author code4crafer@gmail.com

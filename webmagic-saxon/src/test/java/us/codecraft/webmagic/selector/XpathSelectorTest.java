@@ -1376,7 +1376,7 @@ public class XpathSelectorTest {
 
     @Test
     public void testXpath2Selector() {
-        Xpath2Selector xpath2Selector = new Xpath2Selector("//a/@href");
+        Xpath2Selector xpath2Selector = new Xpath2Selector("//xhtml:a/@href");
         String select = xpath2Selector.select(html);
         Assert.assertEquals("http://www.oschina.net/", select);
 

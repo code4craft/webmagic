@@ -75,6 +75,7 @@ public class Xpath2Selector implements Selector {
         private XPath2NamespaceContext() {
             put("fn", NamespaceConstant.FN);
             put("xslt", NamespaceConstant.XSLT);
+            put("xhtml", NamespaceConstant.XHTML);
         }
 
         @Override

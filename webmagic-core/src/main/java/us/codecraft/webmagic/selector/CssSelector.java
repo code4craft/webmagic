@@ -1,13 +1,13 @@
 package us.codecraft.webmagic.selector;
 
-import org.apache.commons.collections.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.collections4.CollectionUtils;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * CSS selector. Based on Jsoup.
