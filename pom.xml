@@ -124,7 +124,7 @@
             <dependency>
                 <groupId>us.codecraft</groupId>
                 <artifactId>xsoup</artifactId>
-                <version>${xsoup.version}</version>
+                <version>0.3.6</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
