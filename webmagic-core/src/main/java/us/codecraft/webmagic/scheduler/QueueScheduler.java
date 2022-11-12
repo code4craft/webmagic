@@ -16,11 +16,30 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class QueueScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler {
 
-    private BlockingQueue<Request> queue = new LinkedBlockingQueue<Request>();
+    private final BlockingQueue<Request> queue;
+
+    public QueueScheduler() {
+        this.queue = new LinkedBlockingQueue<>();
+    }
+
+    /**
+     * Creates a {@code QueueScheduler} with the given (fixed) capacity.
+     *
+     * @param capacity the capacity of this queue,
+     * see {@link LinkedBlockingQueue#LinkedBlockingQueue(int)}
+     * @since 0.8.0
+     */
+    public QueueScheduler(int capacity) {
+        this.queue = new LinkedBlockingQueue<>(capacity);
+    }
 
     @Override
     public void pushWhenNoDuplicate(Request request, Task task) {
-        queue.add(request);
+        try {
+            queue.put(request);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     @Override
