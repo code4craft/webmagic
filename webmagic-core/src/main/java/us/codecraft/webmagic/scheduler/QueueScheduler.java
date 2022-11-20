@@ -1,11 +1,10 @@
 package us.codecraft.webmagic.scheduler;
 
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Task;
-
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.Task;
 
 /**
  * Basic Scheduler implementation.<br>
@@ -35,6 +34,8 @@ public class QueueScheduler extends DuplicateRemovedScheduler implements Monitor
 
     @Override
     public void pushWhenNoDuplicate(Request request, Task task) {
+        logger.trace("Remaining capacity: {}", this.queue.remainingCapacity());
+
         try {
             queue.put(request);
         } catch (InterruptedException e) {
