@@ -63,6 +63,7 @@ class WebDriverPool {
 	 * @throws IOException
 	 */
 	public void configure() throws IOException {
+		
 		// Read config file
 		sConfig = new Properties();
 		String configFile = DEFAULT_CONFIG_FILE;

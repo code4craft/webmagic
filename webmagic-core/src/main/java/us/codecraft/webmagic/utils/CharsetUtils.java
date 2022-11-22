@@ -19,6 +19,7 @@ import java.nio.charset.Charset;
  */
 public abstract class CharsetUtils {
 
+    private static final String CHR = "charset";
     private static Logger logger = LoggerFactory.getLogger(CharsetUtils.class);
 
     public static String detectCharset(String contentType, byte[] contentBytes) throws IOException {
@@ -40,9 +41,9 @@ public abstract class CharsetUtils {
             for (Element link : links) {
                 // 2.1、html4.01 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
                 String metaContent = link.attr("content");
-                String metaCharset = link.attr("charset");
-                if (metaContent.indexOf("charset") != -1) {
-                    metaContent = metaContent.substring(metaContent.indexOf("charset"), metaContent.length());
+                String metaCharset = link.attr(CHR);
+                if (metaContent.indexOf(CHR) != -1) {
+                    metaContent = metaContent.substring(metaContent.indexOf(CHR), metaContent.length());
                     charset = metaContent.split("=")[1];
                     break;
                 }

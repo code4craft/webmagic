@@ -33,7 +33,7 @@ public class HttpClientDownloader extends AbstractDownloader {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final Map<String, CloseableHttpClient> httpClients = new HashMap<String, CloseableHttpClient>();
+    private final Map<String, CloseableHttpClient> httpClients = new HashMap<>();
 
     private HttpClientGenerator httpClientGenerator = new HttpClientGenerator();
 

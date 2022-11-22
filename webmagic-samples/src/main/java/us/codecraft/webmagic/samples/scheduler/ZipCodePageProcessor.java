@@ -19,6 +19,7 @@ import static us.codecraft.webmagic.selector.Selectors.xpath;
  */
 public class ZipCodePageProcessor implements PageProcessor {
 
+
     private Site site = Site.me().setCharset("gb2312")
             .setSleepTime(100);
 
