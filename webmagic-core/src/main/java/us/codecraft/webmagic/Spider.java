@@ -333,9 +333,10 @@ public class Spider implements Runnable, Task {
                     }
                 } else {
                     // wait until new url added，
-                    if (waitNewUrl())
-                        //if interrupted
+                    if (waitNewUrl()) {
+						//if interrupted
                         break;
+					}
                     continue;
                 }
             }
@@ -805,11 +806,13 @@ public class Spider implements Runnable, Task {
      * Set wait time when no url is polled.<br><br>
      *
      * @param emptySleepTime In MILLISECONDS.
+     * @return this
      */
-    public void setEmptySleepTime(long emptySleepTime) {
+    public Spider setEmptySleepTime(long emptySleepTime) {
         if(emptySleepTime<=0){
             throw new IllegalArgumentException("emptySleepTime should be more than zero!");
         }
         this.emptySleepTime = emptySleepTime;
+        return this;
     }
 }
