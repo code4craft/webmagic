@@ -4,11 +4,16 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 
 /**
  * Basic Scheduler implementation.<br>
  * Store urls to fetch in LinkedBlockingQueue and remove duplicate urls by HashMap.
+ *
+ * Note: if you use this {@link QueueScheduler}
+ * with {@link Site#getCycleRetryTimes()} enabled, you may encountered dead-lock
+ * when the queue is full.
  *
  * @author code4crafter@gmail.com <br>
  * @since 0.1.0
