@@ -14,14 +14,14 @@
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-io.version>2.11.0</commons-io.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
-        <fastjson.version>2.0.14.graal</fastjson.version>
+        <fastjson.version>2.0.19.graal</fastjson.version>
         <groovy-all.version>3.0.13</groovy-all.version>
         <guava.version>31.1-jre</guava.version>
         <htmlcleaner.version>2.26</htmlcleaner.version>
         <httpclient.version>4.5.13</httpclient.version>
         <httpcore.version>4.4.15</httpcore.version>
         <jedis.version>3.7.1</jedis.version>
-        <jruby.version>9.3.8.0</jruby.version>
+        <jruby.version>9.3.9.0</jruby.version>
         <json-path.version>2.7.0</json-path.version>
         <junit.version>4.13.2</junit.version>
         <jython.version>2.7.3</jython.version>
@@ -31,7 +31,7 @@
         <phantomjsdriver.version>1.2.0</phantomjsdriver.version>
         <saxon-he.version>11.4</saxon-he.version>
         <selenium-java.version>3.141.59</selenium-java.version>
-        <slf4j.version>2.0.3</slf4j.version>
+        <slf4j.version>2.0.4</slf4j.version>
         <spring-version>4.0.0.RELEASE</spring-version>
         <xsoup.version>0.3.5</xsoup.version>
     </properties>
