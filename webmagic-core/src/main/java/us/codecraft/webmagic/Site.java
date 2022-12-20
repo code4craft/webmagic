@@ -28,6 +28,8 @@ public class Site {
 
     private String charset;
 
+    private String defaultCharset;
+
     private int sleepTime = 5000;
 
     private int retryTimes = 0;
@@ -166,6 +168,30 @@ public class Site {
      */
     public String getCharset() {
         return charset;
+    }
+
+    /**
+     * Set default charset of page.
+     *
+     * When charset detect failed, use this default charset.
+     *
+     * @param defaultCharset the default charset
+     * @return this
+     * @since 0.9.0
+     */
+    public Site setDefaultCharset(String defaultCharset) {
+        this.defaultCharset = defaultCharset;
+        return this;
+    }
+
+    /**
+     * The default charset if charset detected failed.
+     *
+     * @return the defulat charset
+     * @since 0.9.0
+     */
+    public String getDefaultCharset() {
+        return defaultCharset;
     }
 
     public int getTimeOut() {
