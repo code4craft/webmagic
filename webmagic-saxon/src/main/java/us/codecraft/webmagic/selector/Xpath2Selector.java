@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.namespace.NamespaceContext;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -29,13 +30,14 @@ import org.w3c.dom.NodeList;
 
 import net.sf.saxon.lib.NamespaceConstant;
 import net.sf.saxon.xpath.XPathEvaluator;
+import us.codecraft.webmagic.utils.BaseSelectorUtils;
 
 /**
  * 支持xpath2.0的选择器。包装了HtmlCleaner和Saxon HE。<br>
  *
  * @author code4crafter@gmail.com <br>
- *         Date: 13-4-21
- *         Time: 上午9:39
+ * Date: 13-4-21
+ * Time: 上午9:39
  */
 public class Xpath2Selector implements Selector {
 
@@ -111,14 +113,11 @@ public class Xpath2Selector implements Selector {
     @Override
     public String select(String text) {
         try {
-            HtmlCleaner htmlCleaner = new HtmlCleaner();
-            TagNode tagNode = htmlCleaner.clean(text);
-            Document document = new DomSerializer(new CleanerProperties()).createDOM(tagNode);
             Object result;
             try {
-                result = xPathExpression.evaluate(document, XPathConstants.NODESET);
+                result = xPathExpression.evaluate(parse(text), XPathConstants.NODESET);
             } catch (XPathExpressionException e) {
-                result = xPathExpression.evaluate(document, XPathConstants.STRING);
+                result = xPathExpression.evaluate(parse(text), XPathConstants.STRING);
             }
             if (result instanceof NodeList) {
                 NodeList nodeList = (NodeList) result;
@@ -147,14 +146,11 @@ public class Xpath2Selector implements Selector {
     public List<String> selectList(String text) {
         List<String> results = new ArrayList<String>();
         try {
-            HtmlCleaner htmlCleaner = new HtmlCleaner();
-            TagNode tagNode = htmlCleaner.clean(text);
-            Document document = new DomSerializer(new CleanerProperties()).createDOM(tagNode);
             Object result;
             try {
-                result = xPathExpression.evaluate(document, XPathConstants.NODESET);
+                result = xPathExpression.evaluate(parse(text), XPathConstants.NODESET);
             } catch (XPathExpressionException e) {
-                result = xPathExpression.evaluate(document, XPathConstants.STRING);
+                result = xPathExpression.evaluate(parse(text), XPathConstants.STRING);
             }
             if (result instanceof NodeList) {
                 NodeList nodeList = (NodeList) result;
@@ -178,5 +174,13 @@ public class Xpath2Selector implements Selector {
             logger.error("select text error! " + xpathStr, e);
         }
         return results;
+    }
+
+    private Document parse(String text) throws ParserConfigurationException {
+        // HtmlCleaner could not parse <tr></tr> or <td></td> tag directly
+        text = BaseSelectorUtils.preParse(text);
+        HtmlCleaner htmlCleaner = new HtmlCleaner();
+        TagNode tagNode = htmlCleaner.clean(text);
+        return new DomSerializer(new CleanerProperties()).createDOM(tagNode);
     }
 }

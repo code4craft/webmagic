@@ -11,6 +11,9 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.xsoup.XPathEvaluator;
 import us.codecraft.xsoup.Xsoup;
 
@@ -1383,6 +1386,22 @@ public class XpathSelectorTest {
         List<String> selectList = xpath2Selector.selectList(html);
         Assert.assertEquals(113, selectList.size());
         Assert.assertEquals("http://www.oschina.net/", selectList.get(0));
+    }
+
+    @Ignore("test parse <table> <tr> <td> tag")
+    @Test
+    public void htmlCleanerParseTest() {
+        Spider.create(new RuoxiaPageProcessor()).addUrl("http://www.ruoxia.com/top/dianji/month").thread(1).run();
+    }
+    class RuoxiaPageProcessor implements PageProcessor {
+        @Override
+        public void process(Page page) {
+            List<Selectable> nodes = page.getHtml().xpath("//div[@class=\"bd\"]//tbody/tr").nodes();
+            for (Selectable node:nodes) {
+                String name = node.xpath("//td[3]/div/a[1]/text()").get();
+                System.out.println(name);
+            }
+        }
     }
 
     @Ignore("take long time")
