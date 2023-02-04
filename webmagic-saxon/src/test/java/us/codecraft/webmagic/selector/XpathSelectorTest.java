@@ -11,6 +11,9 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.xsoup.XPathEvaluator;
 import us.codecraft.xsoup.Xsoup;
 
@@ -1385,35 +1388,52 @@ public class XpathSelectorTest {
         Assert.assertEquals("http://www.oschina.net/", selectList.get(0));
     }
 
+    @Ignore("test parse <table> <tr> <td> tag")
+    @Test
+    public void htmlCleanerParseTest() {
+        Spider.create(new RuoxiaPageProcessor()).addUrl("http://www.ruoxia.com/top/dianji/month").thread(1).run();
+    }
+
+    class RuoxiaPageProcessor implements PageProcessor {
+        @Override
+        public void process(Page page) {
+            List<String> items = new Xpath2Selector("//div[@class=\"bd\"]//tbody/tr").selectList(page.getRawText());
+            for (String item : items) {
+                String name = new Xpath2Selector("//td[3]/div/a[1]/text()").select(item);
+                System.out.println(name);
+            }
+        }
+    }
+
     @Ignore("take long time")
     @Test
     public void performanceTest() {
         Xpath2Selector xpath2Selector = new Xpath2Selector("//a");
-        long time =System.currentTimeMillis();
+        long time = System.currentTimeMillis();
         for (int i = 0; i < 1000; i++) {
             xpath2Selector.selectList(html);
         }
-        System.out.println(System.currentTimeMillis()-time);
+        System.out.println(System.currentTimeMillis() - time);
 
         XpathSelector xpathSelector = new XpathSelector("//a");
-        time =System.currentTimeMillis();
+        time = System.currentTimeMillis();
         for (int i = 0; i < 1000; i++) {
             xpathSelector.selectList(html);
         }
-        System.out.println(System.currentTimeMillis()-time);
+        System.out.println(System.currentTimeMillis() - time);
 
-        time =System.currentTimeMillis();
+        time = System.currentTimeMillis();
         for (int i = 0; i < 1000; i++) {
             xpath2Selector.selectList(html);
         }
         System.out.println(System.currentTimeMillis() - time);
 
         CssSelector cssSelector = new CssSelector("a");
-        time =System.currentTimeMillis();
+        time = System.currentTimeMillis();
         for (int i = 0; i < 1000; i++) {
             cssSelector.selectList(html);
         }
-        System.out.println("css "+(System.currentTimeMillis()-time));
+        System.out.println("css " + (System.currentTimeMillis() - time));
     }
 
     @Ignore("take long time")
@@ -1425,54 +1445,54 @@ public class XpathSelectorTest {
         TagNode tagNode = htmlCleaner.clean(html);
         Document document = Jsoup.parse(html);
 
-        long time =System.currentTimeMillis();
+        long time = System.currentTimeMillis();
         for (int i = 0; i < 2000; i++) {
             htmlCleaner.clean(html);
         }
-        System.out.println(System.currentTimeMillis()-time);
+        System.out.println(System.currentTimeMillis() - time);
 
-        time =System.currentTimeMillis();
+        time = System.currentTimeMillis();
         for (int i = 0; i < 2000; i++) {
             tagNode.evaluateXPath("//a");
         }
-        System.out.println(System.currentTimeMillis()-time);
+        System.out.println(System.currentTimeMillis() - time);
 
         System.out.println("=============");
 
-        time =System.currentTimeMillis();
+        time = System.currentTimeMillis();
         for (int i = 0; i < 2000; i++) {
             Jsoup.parse(html);
         }
-        System.out.println(System.currentTimeMillis()-time);
+        System.out.println(System.currentTimeMillis() - time);
 
-        time =System.currentTimeMillis();
+        time = System.currentTimeMillis();
         for (int i = 0; i < 2000; i++) {
             document.select("a");
         }
-        System.out.println(System.currentTimeMillis()-time);
+        System.out.println(System.currentTimeMillis() - time);
 
         System.out.println("=============");
 
-        time =System.currentTimeMillis();
+        time = System.currentTimeMillis();
         for (int i = 0; i < 2000; i++) {
             htmlCleaner.clean(html);
         }
-        System.out.println(System.currentTimeMillis()-time);
+        System.out.println(System.currentTimeMillis() - time);
 
-        time =System.currentTimeMillis();
+        time = System.currentTimeMillis();
         for (int i = 0; i < 2000; i++) {
             tagNode.evaluateXPath("//a");
         }
-        System.out.println(System.currentTimeMillis()-time);
+        System.out.println(System.currentTimeMillis() - time);
 
         System.out.println("=============");
 
         XPathEvaluator compile = Xsoup.compile("//a");
-        time =System.currentTimeMillis();
+        time = System.currentTimeMillis();
         for (int i = 0; i < 2000; i++) {
             compile.evaluate(document);
         }
-        System.out.println(System.currentTimeMillis()-time);
+        System.out.println(System.currentTimeMillis() - time);
 
     }
 

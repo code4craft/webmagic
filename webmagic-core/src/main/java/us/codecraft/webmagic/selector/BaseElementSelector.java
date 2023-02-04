@@ -3,6 +3,7 @@ package us.codecraft.webmagic.selector;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import us.codecraft.webmagic.utils.BaseSelectorUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,16 +14,9 @@ import java.util.List;
  */
 public abstract class BaseElementSelector implements Selector, ElementSelector {
     private Document parse(String text) {
-        if (text == null) {
-            return null;
-        }
-
         // Jsoup could not parse <tr></tr> or <td></td> tag directly
         // https://stackoverflow.com/questions/63607740/jsoup-couldnt-parse-tr-tag
-        if ((text.startsWith("<tr>") && text.endsWith("</tr>"))
-                || (text.startsWith("<td>") && text.endsWith("</td>"))) {
-            text = "<table>" + text + "</table>";
-        }
+        text = BaseSelectorUtils.preParse(text);
         return Jsoup.parse(text);
     }
 
