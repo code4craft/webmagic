@@ -1513,7 +1513,7 @@ public class XpathSelectorTest {
 
     @Test
     public void testUtilAPI() throws TransformerException {
-        Node item = new Xpath2Selector("//div[@class=\"bd\"]//tbody/tr[11]/td[3]/div/a[1]/text()").selectNode(rank);
+        Node item = Xpath2Selector.newInstance("//div[@class=\"bd\"]//tbody/tr[11]/td[3]/div/a[1]/text()").selectNode(rank);
         // testAPI: nodeToString(Node) -> nodesToStrings(List<Node>)
         String name = JaxpSelectorUtils.nodeToString(item);
         Assert.assertEquals("深宫安容传", name);

@@ -49,6 +49,10 @@ public class Xpath2Selector implements Selector, NodeSelector {
         }
     }
 
+    public static Xpath2Selector newInstance(String xpathStr) {
+        return new Xpath2Selector(xpathStr);
+    }
+
     enum XPath2NamespaceContext implements NamespaceContext {
 
         INSTANCE;
