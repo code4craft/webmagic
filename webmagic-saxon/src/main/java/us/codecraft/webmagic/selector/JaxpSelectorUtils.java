@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @author hooy
  */
-public class JaxpSelectorUtils {
+public final class JaxpSelectorUtils {
 
     private JaxpSelectorUtils() {
         throw new RuntimeException("The util class cannot be instanced");
