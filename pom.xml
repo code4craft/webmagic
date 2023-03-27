@@ -22,7 +22,7 @@
         <httpcore.version>4.4.15</httpcore.version>
         <jedis.version>3.7.1</jedis.version>
         <jruby.version>9.3.9.0</jruby.version>
-        <json-path.version>2.7.0</json-path.version>
+        <json-path.version>2.8.0</json-path.version>
         <junit.version>4.13.2</junit.version>
         <jython.version>2.7.3</jython.version>
         <log4j.version>1.2.17</log4j.version>
