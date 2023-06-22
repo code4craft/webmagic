@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <groupId>us.codecraft</groupId>
-    <version>0.8.1-SNAPSHOT</version>
+    <version>0.9.0</version>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <properties>
@@ -16,13 +16,13 @@
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <fastjson.version>2.0.19.graal</fastjson.version>
         <groovy-all.version>3.0.13</groovy-all.version>
-        <guava.version>31.1-jre</guava.version>
+        <guava.version>32.0.0-jre</guava.version>
         <htmlcleaner.version>2.26</htmlcleaner.version>
         <httpclient.version>4.5.13</httpclient.version>
         <httpcore.version>4.4.15</httpcore.version>
         <jedis.version>3.7.1</jedis.version>
         <jruby.version>9.3.9.0</jruby.version>
-        <json-path.version>2.7.0</json-path.version>
+        <json-path.version>2.8.0</json-path.version>
         <junit.version>4.13.2</junit.version>
         <jython.version>2.7.3</jython.version>
         <log4j.version>1.2.17</log4j.version>
