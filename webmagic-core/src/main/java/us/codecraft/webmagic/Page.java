@@ -20,7 +20,7 @@ import java.util.Map;
  * {@link #getHtml()}  get content of current page                 <br>
  * {@link #putField(String, Object)}  save extracted result            <br>
  * {@link #getResultItems()} get extract results to be used in {@link us.codecraft.webmagic.pipeline.Pipeline}<br>
- * {@link #addTargetRequests(java.util.List)} {@link #addTargetRequest(String)} add urls to fetch                 <br>
+ * {@link #addTargetRequests(Iterable)} {@link #addTargetRequest(String)} add urls to fetch                 <br>
  *
  * @author code4crafter@gmail.com <br>
  * @see us.codecraft.webmagic.downloader.Downloader
@@ -52,7 +52,7 @@ public class Page {
     private List<Request> targetRequests = new ArrayList<Request>();
 
     private String charset;
-    
+
     public Page() {
     }
 
@@ -108,7 +108,8 @@ public class Page {
      * @deprecated since 0.4.0
      * The html is parse just when first time of calling {@link #getHtml()}, so use {@link #setRawText(String)} instead.
      */
-    public void setHtml(Html html) {
+    @Deprecated
+	public void setHtml(Html html) {
         this.html = html;
     }
 
@@ -121,7 +122,7 @@ public class Page {
      *
      * @param requests requests
      */
-    public void addTargetRequests(List<String> requests) {
+    public void addTargetRequests(Iterable<String> requests) {
         for (String s : requests) {
             if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
                 continue;
@@ -137,7 +138,7 @@ public class Page {
      * @param requests requests
      * @param priority priority
      */
-    public void addTargetRequests(List<String> requests, long priority) {
+    public void addTargetRequests(Iterable<String> requests, long priority) {
         for (String s : requests) {
             if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
                 continue;

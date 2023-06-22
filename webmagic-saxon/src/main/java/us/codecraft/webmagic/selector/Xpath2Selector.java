@@ -1,18 +1,10 @@
 package us.codecraft.webmagic.selector;
 
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.namespace.NamespaceContext;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
@@ -29,21 +21,24 @@ import org.w3c.dom.NodeList;
 
 import net.sf.saxon.lib.NamespaceConstant;
 import net.sf.saxon.xpath.XPathEvaluator;
+import us.codecraft.webmagic.utils.BaseSelectorUtils;
+
+import static us.codecraft.webmagic.selector.JaxpSelectorUtils.*;
 
 /**
  * 支持xpath2.0的选择器。包装了HtmlCleaner和Saxon HE。<br>
  *
- * @author code4crafter@gmail.com <br>
- *         Date: 13-4-21
- *         Time: 上午9:39
+ * @author code4crafter@gmail.com, hooy <br>
+ * Date: 13-4-21
+ * Time: 上午9:39
  */
-public class Xpath2Selector implements Selector {
+public class Xpath2Selector implements Selector, NodeSelector {
 
-    private String xpathStr;
+    private final String xpathStr;
 
     private XPathExpression xPathExpression;
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public Xpath2Selector(String xpathStr) {
         this.xpathStr = xpathStr;
@@ -54,25 +49,25 @@ public class Xpath2Selector implements Selector {
         }
     }
 
+    public static Xpath2Selector newInstance(String xpathStr) {
+        return new Xpath2Selector(xpathStr);
+    }
+
     enum XPath2NamespaceContext implements NamespaceContext {
 
         INSTANCE;
 
-        private final Map<String, String> prefix2NamespaceMap = new ConcurrentHashMap<String, String>();
+        private final Map<String, String> prefix2NamespaceMap = new ConcurrentHashMap<>();
 
-        private final Map<String, List<String>> namespace2PrefixMap = new ConcurrentHashMap<String, List<String>>();
+        private final Map<String, List<String>> namespace2PrefixMap = new ConcurrentHashMap<>();
 
         private void put(String prefix, String namespaceURI) {
             prefix2NamespaceMap.put(prefix, namespaceURI);
-            List<String> prefixes = namespace2PrefixMap.get(namespaceURI);
-            if (prefixes == null) {
-                prefixes = new ArrayList<String>();
-                namespace2PrefixMap.put(namespaceURI, prefixes);
-            }
+            List<String> prefixes = namespace2PrefixMap.computeIfAbsent(namespaceURI, k -> new ArrayList<>());
             prefixes.add(prefix);
         }
 
-        private XPath2NamespaceContext() {
+        XPath2NamespaceContext() {
             put("fn", NamespaceConstant.FN);
             put("xslt", NamespaceConstant.XSLT);
             put("xhtml", NamespaceConstant.XHTML);
@@ -111,32 +106,18 @@ public class Xpath2Selector implements Selector {
     @Override
     public String select(String text) {
         try {
-            HtmlCleaner htmlCleaner = new HtmlCleaner();
-            TagNode tagNode = htmlCleaner.clean(text);
-            Document document = new DomSerializer(new CleanerProperties()).createDOM(tagNode);
-            Object result;
-            try {
-                result = xPathExpression.evaluate(document, XPathConstants.NODESET);
-            } catch (XPathExpressionException e) {
-                result = xPathExpression.evaluate(document, XPathConstants.STRING);
-            }
-            if (result instanceof NodeList) {
-                NodeList nodeList = (NodeList) result;
-                if (nodeList.getLength() == 0) {
-                    return null;
-                }
-                Node item = nodeList.item(0);
-                if (item.getNodeType() == Node.ATTRIBUTE_NODE || item.getNodeType() == Node.TEXT_NODE) {
-                    return item.getTextContent();
-                } else {
-                    StreamResult xmlOutput = new StreamResult(new StringWriter());
-                    Transformer transformer = TransformerFactory.newInstance().newTransformer();
-                    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-                    transformer.transform(new DOMSource(item), xmlOutput);
-                    return xmlOutput.getWriter().toString();
-                }
-            }
-            return result.toString();
+            Document doc = parse(text);
+            return select(doc);
+        } catch (Exception e) {
+            logger.error("select text error! " + xpathStr, e);
+        }
+        return null;
+    }
+
+    @Override
+    public String select(Node node) {
+        try {
+            return (String) xPathExpression.evaluate(node, XPathConstants.STRING);
         } catch (Exception e) {
             logger.error("select text error! " + xpathStr, e);
         }
@@ -145,38 +126,72 @@ public class Xpath2Selector implements Selector {
 
     @Override
     public List<String> selectList(String text) {
-        List<String> results = new ArrayList<String>();
         try {
-            HtmlCleaner htmlCleaner = new HtmlCleaner();
-            TagNode tagNode = htmlCleaner.clean(text);
-            Document document = new DomSerializer(new CleanerProperties()).createDOM(tagNode);
-            Object result;
-            try {
-                result = xPathExpression.evaluate(document, XPathConstants.NODESET);
-            } catch (XPathExpressionException e) {
-                result = xPathExpression.evaluate(document, XPathConstants.STRING);
-            }
-            if (result instanceof NodeList) {
-                NodeList nodeList = (NodeList) result;
-                Transformer transformer = TransformerFactory.newInstance().newTransformer();
-                StreamResult xmlOutput = new StreamResult();
-                transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-                for (int i = 0; i < nodeList.getLength(); i++) {
-                    Node item = nodeList.item(i);
-                    if (item.getNodeType() == Node.ATTRIBUTE_NODE || item.getNodeType() == Node.TEXT_NODE) {
-                        results.add(item.getTextContent());
-                    } else {
-                        xmlOutput.setWriter(new StringWriter());
-                        transformer.transform(new DOMSource(item), xmlOutput);
-                        results.add(xmlOutput.getWriter().toString());
-                    }
-                }
-            } else {
-                results.add(result.toString());
-            }
+            Document doc = parse(text);
+            return selectList(doc);
         } catch (Exception e) {
             logger.error("select text error! " + xpathStr, e);
         }
-        return results;
+        return null;
     }
+
+    @Override
+    public List<String> selectList(Node node) {
+        try {
+            NodeList result = (NodeList) xPathExpression.evaluate(node, XPathConstants.NODESET);
+            List<Node> nodes = NodeListToArrayList(result);
+            return nodesToStrings(nodes);
+        } catch (Exception e) {
+            logger.error("select text error! " + xpathStr, e);
+        }
+        return null;
+    }
+
+    public Node selectNode(String text) {
+        try {
+            Document doc = parse(text);
+            return selectNode(doc);
+        } catch (Exception e) {
+            logger.error("select text error! " + xpathStr, e);
+        }
+        return null;
+    }
+
+    public Node selectNode(Node node) {
+        try {
+            return (Node) xPathExpression.evaluate(node, XPathConstants.NODE);
+        } catch (Exception e) {
+            logger.error("select text error! " + xpathStr, e);
+        }
+        return null;
+    }
+
+    public List<Node> selectNodes(String text) {
+        try {
+            Document doc = parse(text);
+            return selectNodes(doc);
+        } catch (Exception e) {
+            logger.error("select text error! " + xpathStr, e);
+        }
+        return null;
+    }
+
+    public List<Node> selectNodes(Node node) {
+        try {
+            NodeList result = (NodeList) xPathExpression.evaluate(node, XPathConstants.NODESET);
+            return NodeListToArrayList(result);
+        } catch (Exception e) {
+            logger.error("select text error! " + xpathStr, e);
+        }
+        return null;
+    }
+
+    protected static Document parse(String text) throws ParserConfigurationException {
+        // HtmlCleaner could not parse <tr></tr> or <td></td> tag directly
+        text = BaseSelectorUtils.preParse(text);
+        HtmlCleaner htmlCleaner = new HtmlCleaner();
+        TagNode tagNode = htmlCleaner.clean(text);
+        return new DomSerializer(new CleanerProperties()).createDOM(tagNode);
+    }
+
 }

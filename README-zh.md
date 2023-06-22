@@ -39,12 +39,12 @@ webmagic使用maven管理依赖，在项目中添加对应的依赖即可使用w
 <dependency>
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-core</artifactId>
-    <version>0.7.5</version>
+    <version>${webmagic.version}</version>
 </dependency>
 <dependency>
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-extension</artifactId>
-    <version>0.7.5</version>
+    <version>${webmagic.version}</version>
 </dependency>
 ```
         

@@ -25,12 +25,12 @@ Add dependencies to your pom.xml:
 <dependency>
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-core</artifactId>
-    <version>0.7.5</version>
+    <version>${webmagic.version}</version>
 </dependency>
 <dependency>
     <groupId>us.codecraft</groupId>
     <artifactId>webmagic-extension</artifactId>
-    <version>0.7.5</version>
+    <version>${webmagic.version}</version>
 </dependency>
 ```
         

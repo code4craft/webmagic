@@ -1,6 +1,9 @@
 package us.codecraft.webmagic.proxy;
 
 import org.junit.Test;
+import org.mockito.Mockito;
+
+import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 
@@ -20,11 +23,12 @@ public class SimpleProxyProviderTest {
         Proxy originProxy1 = new Proxy("127.0.0.1", 1087);
         Proxy originProxy2 = new Proxy("127.0.0.1", 1088);
         SimpleProxyProvider proxyProvider = SimpleProxyProvider.from(originProxy1, originProxy2);
-        Proxy proxy = proxyProvider.getProxy(TASK);
+        Request request = Mockito.mock(Request.class);
+        Proxy proxy = proxyProvider.getProxy(request, TASK);
         assertThat(proxy).isEqualTo(originProxy1);
-        proxy = proxyProvider.getProxy(TASK);
+        proxy = proxyProvider.getProxy(request, TASK);
         assertThat(proxy).isEqualTo(originProxy2);
-        proxy = proxyProvider.getProxy(TASK);
+        proxy = proxyProvider.getProxy(request, TASK);
         assertThat(proxy).isEqualTo(originProxy1);
     }
 }
