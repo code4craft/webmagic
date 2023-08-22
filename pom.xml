@@ -17,7 +17,7 @@
         <fastjson.version>2.0.19.graal</fastjson.version>
         <groovy-all.version>3.0.13</groovy-all.version>
         <guava.version>32.0.0-jre</guava.version>
-        <htmlcleaner.version>2.26</htmlcleaner.version>
+        <htmlcleaner.version>2.29</htmlcleaner.version>
         <httpclient.version>4.5.13</httpclient.version>
         <httpcore.version>4.4.15</httpcore.version>
         <jedis.version>3.7.1</jedis.version>
