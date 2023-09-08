@@ -59,6 +59,7 @@ public class Page {
     public static Page fail(){
         Page page = new Page();
         page.setDownloadSuccess(false);
+        page.setStatusCode(1000);
         return page;
     }
 
