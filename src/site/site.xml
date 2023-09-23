@@ -5,7 +5,7 @@
     <skin>
         <groupId>org.apache.maven.skins</groupId>
         <artifactId>maven-fluido-skin</artifactId>
-        <version>1.9</version>
+        <version>1.11.1</version>
     </skin>
     <body>
         <menu ref="parent" inherit="top" />
