@@ -118,9 +118,9 @@ The architecture of webmagic (refered to [Scrapy](http://scrapy.org/))
 
 There are more examples in `webmagic-samples` package.
 
-### Lisence:
+### License:
 
-Lisenced under [Apache 2.0 lisence](http://opensource.org/licenses/Apache-2.0)
+Licensed under [Apache 2.0 license](http://opensource.org/licenses/Apache-2.0)
 
 ### Thanks:
 
