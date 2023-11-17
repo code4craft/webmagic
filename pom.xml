@@ -30,7 +30,7 @@
         <moco.version>1.3.0</moco.version>
         <phantomjsdriver.version>1.2.0</phantomjsdriver.version>
         <saxon-he.version>11.4</saxon-he.version>
-        <selenium-java.version>3.141.59</selenium-java.version>
+        <selenium-java.version>4.14.1</selenium-java.version>
         <slf4j.version>2.0.4</slf4j.version>
         <spring-version>4.0.0.RELEASE</spring-version>
         <xsoup.version>0.3.5</xsoup.version>
