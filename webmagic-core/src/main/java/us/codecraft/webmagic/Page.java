@@ -56,8 +56,27 @@ public class Page {
     public Page() {
     }
 
-    public static Page fail(){
+    /**
+     * Returns a {@link Page} with {@link #downloadSuccess} is {@code false}.
+     *
+     * @return the page.
+     * @deprecated Use {@link #fail(Request)} instead.
+     */
+    @Deprecated
+    public static Page fail() {
+        return fail(null);
+    }
+
+    /**
+     * Returns a {@link Page} with {@link #downloadSuccess} is {@code false},
+     * and {@link #request} is specified.
+     *
+     * @return the page.
+     * @since 0.10.0
+     */
+    public static Page fail(Request request){
         Page page = new Page();
+        page.setRequest(request);
         page.setDownloadSuccess(false);
         return page;
     }
