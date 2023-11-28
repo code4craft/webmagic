@@ -168,17 +168,24 @@ public class Page {
      * @param priority Priority for the URL
      */
     private void addRequestIfValid(String url, long priority) {
-        if (StringUtils.isBlank(url) || url.equals("#") || url.startsWith("javascript:")) {
-            return;
+        boolean isBlankUrl = StringUtils.isBlank(url);
+        boolean isHashSymbol = url.equals("#");
+        boolean isJavaScript = url.startsWith("javascript:");
+
+        if (isBlankUrl || isHashSymbol || isJavaScript) {
+            return; // Invalid URL, so no further processing is needed.
         }
 
         String canonicalizedUrl = UrlUtils.canonicalizeUrl(url, this.url.toString());
-        Request req = new Request(canonicalizedUrl);
-        if(priority > 0) {
-            req.setPriority(priority);
+        Request request = new Request(canonicalizedUrl);
+
+        if (priority > 0) {
+            request.setPriority(priority);
         }
-        targetRequests.add(req);
+
+        targetRequests.add(request);
     }
+
 
     /**
      * add url to fetch
