@@ -49,15 +49,34 @@ public class Page {
 
     private byte[] bytes;
 
-    private List<Request> targetRequests = new ArrayList<Request>();
+    private List<Request> targetRequests = new ArrayList<>();
 
     private String charset;
 
     public Page() {
     }
 
-    public static Page fail(){
+    /**
+     * Returns a {@link Page} with {@link #downloadSuccess} is {@code false}.
+     *
+     * @return the page.
+     * @deprecated Use {@link #fail(Request)} instead.
+     */
+    @Deprecated
+    public static Page fail() {
+        return fail(null);
+    }
+
+    /**
+     * Returns a {@link Page} with {@link #downloadSuccess} is {@code false},
+     * and {@link #request} is specified.
+     *
+     * @return the page.
+     * @since 0.10.0
+     */
+    public static Page fail(Request request){
         Page page = new Page();
+        page.setRequest(request);
         page.setDownloadSuccess(false);
         return page;
     }
@@ -123,13 +142,7 @@ public class Page {
      * @param requests requests
      */
     public void addTargetRequests(Iterable<String> requests) {
-        for (String s : requests) {
-            if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
-                continue;
-            }
-            s = UrlUtils.canonicalizeUrl(s, url.toString());
-            targetRequests.add(new Request(s));
-        }
+    	addTargetRequests(requests, 0); // Default priority is 0
     }
 
     /**
@@ -139,13 +152,32 @@ public class Page {
      * @param priority priority
      */
     public void addTargetRequests(Iterable<String> requests, long priority) {
-        for (String s : requests) {
-            if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
-                continue;
-            }
-            s = UrlUtils.canonicalizeUrl(s, url.toString());
-            targetRequests.add(new Request(s).setPriority(priority));
+    	if(requests == null) {
+    		return;
+    	}
+    	
+        for (String req : requests) {
+        	addRequestIfValid(req, priority);
         }
+    }
+    
+    /**
+     * Helper method to add a request if it's valid.
+     *
+     * @param url      URL to add
+     * @param priority Priority for the URL
+     */
+    private void addRequestIfValid(String url, long priority) {
+        if (StringUtils.isBlank(url) || url.equals("#") || url.startsWith("javascript:")) {
+            return;
+        }
+
+        String canonicalizedUrl = UrlUtils.canonicalizeUrl(url, this.url.toString());
+        Request req = new Request(canonicalizedUrl);
+        if(priority > 0) {
+            req.setPriority(priority);
+        }
+        targetRequests.add(req);
     }
 
     /**

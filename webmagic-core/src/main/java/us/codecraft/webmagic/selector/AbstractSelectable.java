@@ -3,6 +3,7 @@ package us.codecraft.webmagic.selector;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.collections4.CollectionUtils;
 
 /**
@@ -55,11 +56,12 @@ public abstract class AbstractSelectable implements Selectable {
 
     @Override
     public String get() {
-        if (CollectionUtils.isNotEmpty(all())) {
-            return all().get(0);
-        } else {
-            return null;
-        }
+    	List<String> sourceTexts = all();
+        if (CollectionUtils.isNotEmpty(sourceTexts)) {
+            return sourceTexts.get(0);
+        } 
+        return null;
+        
     }
 
     @Override
@@ -91,8 +93,9 @@ public abstract class AbstractSelectable implements Selectable {
     }
 
     public String getFirstSourceText() {
-        if (getSourceTexts() != null && getSourceTexts().size() > 0) {
-            return getSourceTexts().get(0);
+    	List<String> sourceTexts = getSourceTexts();
+        if (CollectionUtils.isNotEmpty(sourceTexts)) {
+            return sourceTexts.get(0);
         }
         return null;
     }
@@ -104,6 +107,6 @@ public abstract class AbstractSelectable implements Selectable {
 
     @Override
     public boolean match() {
-        return getSourceTexts() != null && getSourceTexts().size() > 0;
+        return CollectionUtils.isNotEmpty(getSourceTexts());
     }
 }
