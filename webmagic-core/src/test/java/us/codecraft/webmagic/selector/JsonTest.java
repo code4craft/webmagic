@@ -14,6 +14,8 @@ public class JsonTest {
 
     private String textWithBrackerInContent = "callback({\"name\":\"json)\"})";
 
+    private String textChained = "callback({\"provinces\": [{cities: [{\"name\": \"shanghai\"}]}]})";
+
     @Test
     public void testRemovePadding() throws Exception {
         String name = new Json(text).removePadding("callback").jsonPath("$.name").get();
@@ -24,5 +26,12 @@ public class JsonTest {
     public void testRemovePaddingForQuotes() throws Exception {
         String name = new Json(textWithBrackerInContent).removePadding("callback").jsonPath("$.name").get();
         assertThat(name).isEqualTo("json)");
+    }
+
+    @Test
+    public void testChainCall() throws Exception {
+        String shanghai = new Json(textChained).removePadding("callback").jsonPath("$.provinces").nodes().get(0)
+                                                    .jsonPath("$.cities").nodes().get(0).jsonPath("$.name").get();
+        assertThat(shanghai).isEqualTo("shanghai");
     }
 }
