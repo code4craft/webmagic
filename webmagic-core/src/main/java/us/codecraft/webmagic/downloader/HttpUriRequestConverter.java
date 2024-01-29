@@ -20,6 +20,7 @@ import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.utils.HttpConstant;
 import us.codecraft.webmagic.utils.UrlUtils;
 
+import java.net.InetSocketAddress;
 import java.util.Map;
 
 /**
@@ -44,6 +45,10 @@ public class HttpUriRequestConverter {
             AuthState authState = new AuthState();
             authState.update(new BasicScheme(ChallengeState.PROXY), new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
             httpContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, authState);
+        }
+        if(proxy != null && proxy.getScheme() != null && proxy.getScheme().contains("socks")) {
+        	InetSocketAddress socksaddr = new InetSocketAddress(proxy.getHost(), proxy.getPort());
+    		httpContext.setAttribute("socks.address", socksaddr);
         }
         if (request.getCookies() != null && !request.getCookies().isEmpty()) {
             CookieStore cookieStore = new BasicCookieStore();
@@ -74,7 +79,9 @@ public class HttpUriRequestConverter {
         }
 
         if (proxy != null) {
-            requestConfigBuilder.setProxy(new HttpHost(proxy.getHost(), proxy.getPort(), proxy.getScheme()));
+        	if(proxy.getScheme() == null || (proxy.getScheme() != null && !proxy.getScheme().contains("http")) ) {
+        		requestConfigBuilder.setProxy(new HttpHost(proxy.getHost(), proxy.getPort(), proxy.getScheme()));
+        	}
         }
         requestBuilder.setConfig(requestConfigBuilder.build());
         HttpUriRequest httpUriRequest = requestBuilder.build();

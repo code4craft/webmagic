@@ -1,5 +1,16 @@
 package us.codecraft.webmagic.downloader;
 
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Map;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.http.HttpException;
@@ -12,23 +23,22 @@ import org.apache.http.config.SocketConfig;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.*;
+import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.protocol.HttpContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.codecraft.webmagic.Site;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.Map;
+import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.socks.ConnectionSocksFactory;
+import us.codecraft.webmagic.socks.FakeDnsResolver;
+import us.codecraft.webmagic.socks.SSLConnectionSocksFactory;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -46,6 +56,16 @@ public class HttpClientGenerator {
                 .register("https", buildSSLConnectionSocketFactory())
                 .build();
         connectionManager = new PoolingHttpClientConnectionManager(reg);
+        connectionManager.setDefaultMaxPerRoute(100);
+    }
+    
+    @SuppressWarnings("deprecation")
+	public HttpClientGenerator(String scheme) {
+        Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory>create()
+				.register("http", new ConnectionSocksFactory())
+				.register("https", new SSLConnectionSocksFactory(SSLContexts.createSystemDefault()))
+				.build();
+    	connectionManager = new PoolingHttpClientConnectionManager(reg, new FakeDnsResolver());
         connectionManager.setDefaultMaxPerRoute(100);
     }
 

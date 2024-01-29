@@ -50,6 +50,10 @@ public class HttpClientDownloader extends AbstractDownloader {
 
     public void setProxyProvider(ProxyProvider proxyProvider) {
         this.proxyProvider = proxyProvider;
+        Proxy proxy = proxyProvider != null ? proxyProvider.getProxy(null, null) : null;
+        if(proxy != null && proxy.getScheme() != null && proxy.getScheme().contains("socks")) {
+        	this.httpClientGenerator = new HttpClientGenerator("socks");
+        }
     }
 
     private CloseableHttpClient getHttpClient(Site site) {
