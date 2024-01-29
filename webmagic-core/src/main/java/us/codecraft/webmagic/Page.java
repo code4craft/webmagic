@@ -71,6 +71,7 @@ public class Page {
      * Returns a {@link Page} with {@link #downloadSuccess} is {@code false},
      * and {@link #request} is specified.
      *
+     * @param request the {@link Request}.
      * @return the page.
      * @since 0.10.0
      */
