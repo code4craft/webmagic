@@ -19,6 +19,7 @@ public class SeleniumDownloaderTest {
 	@Ignore("need chrome driver")
 	@Test
 	public void test() {
+		System.getProperties().put("selenuim_config", "config.ini");
 		SeleniumDownloader seleniumDownloader = new SeleniumDownloader(chromeDriverPath);
 		long time1 = System.currentTimeMillis();
 		for (int i = 0; i < 100; i++) {
