@@ -2,7 +2,9 @@ package us.codecraft.webmagic.downloader.selenium;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -73,7 +75,7 @@ class WebDriverPool {
 
 		// Prepare capabilities
 		sCaps = new DesiredCapabilities();
-		sCaps.setJavascriptEnabled(true);
+		sCaps.setCapability("javascriptEnabled", true);
 		sCaps.setCapability("takesScreenshot", false);
 
 		String driver = sConfig.getProperty("driver", DRIVER_PHANTOMJS);
@@ -134,9 +136,13 @@ class WebDriverPool {
 			sCaps.setBrowserName("phantomjs");
 			mDriver = new RemoteWebDriver(new URL(driver), sCaps);
 		} else if (driver.equals(DRIVER_FIREFOX)) {
-			mDriver = new FirefoxDriver(sCaps);
+			FirefoxOptions options = new FirefoxOptions();
+			options.merge(sCaps);
+			mDriver = new FirefoxDriver(options);
 		} else if (driver.equals(DRIVER_CHROME)) {
-			mDriver = new ChromeDriver(sCaps);
+			ChromeOptions options=new ChromeOptions();
+			options.merge(sCaps);
+			mDriver = new ChromeDriver(options);
 		} else if (driver.equals(DRIVER_PHANTOMJS)) {
 			mDriver = new PhantomJSDriver(sCaps);
 		}
