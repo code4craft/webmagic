@@ -40,6 +40,7 @@ import static com.github.dreamhead.moco.Moco.uri;
 import static com.github.dreamhead.moco.Moco.with;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -331,6 +332,14 @@ public class HttpClientDownloaderTest {
                 assertThat(page.getCharset()).isEqualTo("utf-8");
             }
         });
+    }
+
+    @Test
+    public void test_no_task_download(){
+        Request request = new Request();
+        request.setUrl("http://127.0.0.1:13423/");
+        HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+         assertThrows(NullPointerException.class, () -> httpClientDownloader.download(request,null));       
     }
 
 
