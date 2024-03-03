@@ -84,7 +84,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
             return true;
         }
 
-        if (request.getExtras() != null && !request.getExtras().isEmpty()) {
+        if (!request.getExtras().isEmpty()) {
             return true;
         }
         if (request.getPriority() != 0L) {
