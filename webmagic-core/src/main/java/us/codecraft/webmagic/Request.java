@@ -1,12 +1,13 @@
 package us.codecraft.webmagic;
 
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.model.HttpRequestBody;
 import us.codecraft.webmagic.utils.Experimental;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Object contains url to crawl.<br>
@@ -35,7 +36,7 @@ public class Request implements Serializable {
     /**
      * Store additional information in extras.
      */
-    private Map<String, Object> extras;
+    private Map<String, Object> extras = new HashMap<>();
 
     /**
      * cookies for current url, if not set use Site's cookies
@@ -93,9 +94,6 @@ public class Request implements Serializable {
     }
 
     public <T> Request putExtra(String key, T value) {
-        if (extras == null) {
-            extras = new HashMap<String, Object>();
-        }
         extras.put(key, value);
         return this;
     }
@@ -105,11 +103,11 @@ public class Request implements Serializable {
     }
 
     public Map<String, Object> getExtras() {
-        return extras;
+        return Collections.unmodifiableMap(extras);
     }
 
     public Request setExtras(Map<String, Object> extras) {
-        this.extras = extras;
+        this.extras.putAll(extras);
         return this;
     }
 
