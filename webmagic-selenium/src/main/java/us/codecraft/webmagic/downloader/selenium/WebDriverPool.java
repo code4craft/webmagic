@@ -1,17 +1,5 @@
 package us.codecraft.webmagic.downloader.selenium;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriverService;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -23,6 +11,18 @@ import java.util.Properties;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -60,7 +60,7 @@ class WebDriverPool {
 	 * Configure the GhostDriver, and initialize a WebDriver instance. This part
 	 * of code comes from GhostDriver.
 	 * https://github.com/detro/ghostdriver/tree/master/test/java/src/test/java/ghostdriver
-	 * 
+	 *
 	 * @author bob.li.0718@gmail.com
 	 * @throws IOException
 	 */
@@ -75,7 +75,6 @@ class WebDriverPool {
 
 		// Prepare capabilities
 		sCaps = new DesiredCapabilities();
-		sCaps.setCapability("javascriptEnabled", true);
 		sCaps.setCapability("takesScreenshot", false);
 
 		String driver = sConfig.getProperty("driver", DRIVER_PHANTOMJS);
@@ -136,13 +135,9 @@ class WebDriverPool {
 			sCaps.setBrowserName("phantomjs");
 			mDriver = new RemoteWebDriver(new URL(driver), sCaps);
 		} else if (driver.equals(DRIVER_FIREFOX)) {
-			FirefoxOptions options = new FirefoxOptions();
-			options.merge(sCaps);
-			mDriver = new FirefoxDriver(options);
+			mDriver = new FirefoxDriver(new FirefoxOptions(sCaps));
 		} else if (driver.equals(DRIVER_CHROME)) {
-			ChromeOptions options=new ChromeOptions();
-			options.merge(sCaps);
-			mDriver = new ChromeDriver(options);
+			mDriver = new ChromeDriver(new ChromeOptions().merge(sCaps));
 		} else if (driver.equals(DRIVER_PHANTOMJS)) {
 			mDriver = new PhantomJSDriver(sCaps);
 		}
@@ -150,7 +145,7 @@ class WebDriverPool {
 
 	/**
 	 * check whether input is a valid URL
-	 * 
+	 *
 	 * @author bob.li.0718@gmail.com
 	 * @param urlString urlString
 	 * @return true means yes, otherwise no.
@@ -184,7 +179,7 @@ class WebDriverPool {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 * @throws InterruptedException
 	 */

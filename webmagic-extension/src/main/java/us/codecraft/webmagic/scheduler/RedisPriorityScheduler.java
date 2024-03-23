@@ -102,7 +102,7 @@ public class RedisPriorityScheduler extends RedisScheduler {
     }
 
     private void setExtrasInItem(Jedis jedis,Request request, Task task) {
-        if (request.getExtras() != null) {
+        if (!request.getExtras().isEmpty()) {
             String field = DigestUtils.sha1Hex(request.getUrl());
             String value = JSON.toJSONString(request);
             jedis.hset(getItemKey(task), field, value);

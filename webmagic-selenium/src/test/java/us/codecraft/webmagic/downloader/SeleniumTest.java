@@ -1,5 +1,9 @@
 package us.codecraft.webmagic.downloader;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -8,10 +12,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -33,9 +33,7 @@ public class SeleniumTest {
         DesiredCapabilities caps = new DesiredCapabilities();
         caps.setCapability("chrome.prefs", preferences);
         caps.setCapability("chrome.switches", Arrays.asList("--user-data-dir=/Users/yihua/temp/chrome"));
-        ChromeOptions options=new ChromeOptions();
-        options.merge(caps);
-        WebDriver webDriver = new ChromeDriver(options);
+        WebDriver webDriver = new ChromeDriver(new ChromeOptions().merge(caps));
         webDriver.get("http://huaban.com/");
         WebElement webElement = webDriver.findElement(By.xpath("/html"));
         System.out.println(webElement.getAttribute("outerHTML"));
