@@ -234,63 +234,23 @@ class PageModelExtractor {
             o = clazz.newInstance();
             for (FieldExtractor fieldExtractor : fieldExtractors) {
                 if (fieldExtractor.isMulti()) {
-                    List<String> value;
-                    switch (fieldExtractor.getSource()) {
-                        case RawHtml:
-                            value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
-                            break;
-                        case Html:
-                            if (isRaw) {
-                                value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
-                            } else {
-                                value = fieldExtractor.getSelector().selectList(html);
-                            }
-                            break;
-                        case Url:
-                            value = fieldExtractor.getSelector().selectList(page.getUrl().toString());
-                            break;
-                        case RawText:
-                            value = fieldExtractor.getSelector().selectList(page.getRawText());
-                            break;
-                        default:
-                            value = fieldExtractor.getSelector().selectList(html);
-                    }
+                    List<String> value=getMultiValueFromSource(page, fieldExtractor, html, isRaw);
                     if ((value == null || value.size() == 0) && fieldExtractor.isNotNull()) {
                         return null;
                     }
                     if (fieldExtractor.getObjectFormatter() != null) {
-                        List<Object> converted = convert(value, fieldExtractor.getObjectFormatter());
+                        List<Object> converted = convertMultiValue(value, fieldExtractor.getObjectFormatter());
                         setField(o, fieldExtractor, converted);
                     } else {
                         setField(o, fieldExtractor, value);
                     }
                 } else {
-                    String value;
-                    switch (fieldExtractor.getSource()) {
-                        case RawHtml:
-                            value = page.getHtml().selectDocument(fieldExtractor.getSelector());
-                            break;
-                        case Html:
-                            if (isRaw) {
-                                value = page.getHtml().selectDocument(fieldExtractor.getSelector());
-                            } else {
-                                value = fieldExtractor.getSelector().select(html);
-                            }
-                            break;
-                        case Url:
-                            value = fieldExtractor.getSelector().select(page.getUrl().toString());
-                            break;
-                        case RawText:
-                            value = fieldExtractor.getSelector().select(page.getRawText());
-                            break;
-                        default:
-                            value = fieldExtractor.getSelector().select(html);
-                    }
+                    String value=getSingleValueFromSource(page, fieldExtractor, html, isRaw);
                     if (value == null && fieldExtractor.isNotNull()) {
                         return null;
                     }
                     if (fieldExtractor.getObjectFormatter() != null) {
-                        Object converted = convert(value, fieldExtractor.getObjectFormatter());
+                        Object converted = convertSingleValue(value, fieldExtractor.getObjectFormatter());
                         if (converted == null && fieldExtractor.isNotNull()) {
                             return null;
                         }
@@ -313,7 +273,57 @@ class PageModelExtractor {
         return o;
     }
 
-    private Object convert(String value, ObjectFormatter objectFormatter) {
+    private List<String> getMultiValueFromSource(Page page, FieldExtractor fieldExtractor, String html, boolean isRaw) {
+        List<String> value;
+        switch (fieldExtractor.getSource()) {
+            case RawHtml:
+                value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
+                break;
+            case Html:
+                if (isRaw) {
+                    value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
+                } else {
+                    value = fieldExtractor.getSelector().selectList(html);
+                }
+                break;
+            case Url:
+                value = fieldExtractor.getSelector().selectList(page.getUrl().toString());
+                break;
+            case RawText:
+                value = fieldExtractor.getSelector().selectList(page.getRawText());
+                break;
+            default:
+                value = fieldExtractor.getSelector().selectList(html);
+        }
+        return value;
+    }
+
+    private String getSingleValueFromSource(Page page, FieldExtractor fieldExtractor, String html, boolean isRaw) {
+        String value;
+        switch (fieldExtractor.getSource()) {
+            case RawHtml:
+                value = page.getHtml().selectDocument(fieldExtractor.getSelector());
+                break;
+            case Html:
+                if (isRaw) {
+                    value = page.getHtml().selectDocument(fieldExtractor.getSelector());
+                } else {
+                    value = fieldExtractor.getSelector().select(html);
+                }
+                break;
+            case Url:
+                value = fieldExtractor.getSelector().select(page.getUrl().toString());
+                break;
+            case RawText:
+                value = fieldExtractor.getSelector().select(page.getRawText());
+                break;
+            default:
+                value = fieldExtractor.getSelector().select(html);
+        }
+        return value;
+    }
+
+    private Object convertSingleValue(String value, ObjectFormatter objectFormatter) {
         try {
             Object format = objectFormatter.format(value);
             logger.debug("String {} is converted to {}", value, format);
@@ -324,10 +334,10 @@ class PageModelExtractor {
         return null;
     }
 
-    private List<Object> convert(List<String> values, ObjectFormatter objectFormatter) {
+    private List<Object> convertMultiValue(List<String> values, ObjectFormatter objectFormatter) {
         List<Object> objects = new ArrayList<Object>();
         for (String value : values) {
-            Object converted = convert(value, objectFormatter);
+            Object converted = convertSingleValue(value, objectFormatter);
             if (converted != null) {
                 objects.add(converted);
             }
