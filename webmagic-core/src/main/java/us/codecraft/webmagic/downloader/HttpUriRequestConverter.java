@@ -42,7 +42,9 @@ public class HttpUriRequestConverter {
         HttpClientContext httpContext = new HttpClientContext();
         if (proxy != null && proxy.getUsername() != null) {
             AuthState authState = new AuthState();
-            authState.update(new BasicScheme(ChallengeState.PROXY), new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
+            BasicScheme proxyAuthScheme = new BasicScheme(ChallengeState.PROXY);
+            UsernamePasswordCredentials proxyCredentials = new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword());
+            authState.update(proxyAuthScheme, proxyCredentials);
             httpContext.setAttribute(HttpClientContext.PROXY_AUTH_STATE, authState);
         }
         if (request.getCookies() != null && !request.getCookies().isEmpty()) {
