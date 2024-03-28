@@ -76,26 +76,27 @@ public class ExtractRule {
     }
 
     private Selector compileSelector() {
+        SelectorFactory factory;
         switch (expressionType) {
             case Css:
-                if (expressionParams.length >= 1) {
-                    return $(expressionValue, expressionParams[0]);
-                } else {
-                    return $(expressionValue);
-                }
+                factory = new CssSelectorFactory();
+                break;
             case XPath:
-                return xpath(expressionValue);
+                factory = new XPathSelectorFactory();
+                break;
             case Regex:
-                if (expressionParams.length >= 1) {
-                    return regex(expressionValue, Integer.parseInt(expressionParams[0]));
-                } else {
-                    return regex(expressionValue);
-                }
+                factory = new RegexSelectorFactory();
+                break;
             case JsonPath:
-                return new JsonPathSelector(expressionValue);
+                factory = new JsonPathSelectorFactory();
+                break;
             default:
-                return xpath(expressionValue);
+                factory = new XPathSelectorFactory(); // Default to XPath
         }
+
+        SelectorCompiler selectorCompiler = new SelectorCompiler(factory);
+        Selector compiledSelector = selectorCompiler.compileSelector(expressionValue, expressionParams);
+        return compiledSelector;
     }
 
     public void setSelector(Selector selector) {

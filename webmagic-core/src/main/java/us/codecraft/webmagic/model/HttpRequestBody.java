@@ -64,7 +64,7 @@ public class HttpRequestBody implements Serializable {
         this.encoding = encoding;
     }
 
-    public static HttpRequestBody json(String json, String encoding) {
+    public static HttpRequestBody createJsonRequestBody(String json, String encoding) {
         try {
             return new HttpRequestBody(json.getBytes(encoding), ContentType.JSON, encoding);
         } catch (UnsupportedEncodingException e) {
