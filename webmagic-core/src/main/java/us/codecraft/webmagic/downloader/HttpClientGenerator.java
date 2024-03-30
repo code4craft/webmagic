@@ -40,14 +40,13 @@ public class HttpClientGenerator {
 
     private PoolingHttpClientConnectionManager connectionManager;
 
-    private static final int DEFAULT_MAX_PER_ROUTE = 100;
     public HttpClientGenerator() {
         Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory>create()
                 .register("http", PlainConnectionSocketFactory.INSTANCE)
                 .register("https", buildSSLConnectionSocketFactory())
                 .build();
         connectionManager = new PoolingHttpClientConnectionManager(reg);
-        connectionManager.setDefaultMaxPerRoute(DEFAULT_MAX_PER_ROUTE);
+        connectionManager.setDefaultMaxPerRoute(100);
     }
 
     private SSLConnectionSocketFactory buildSSLConnectionSocketFactory() {
