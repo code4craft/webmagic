@@ -51,14 +51,6 @@ public interface Selectable {
      * @return new Selectable after extract
      */
     public Selectable css(String selector, String attrName);
-
-    /**
-     * select smart content with ReadAbility algorithm
-     *
-     * @return content
-     */
-    public Selectable smartContent();
-
     /**
      * select all links
      *
