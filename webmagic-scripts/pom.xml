@@ -14,6 +14,14 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.jruby</groupId>
             <artifactId>jruby</artifactId>
         </dependency>
@@ -39,10 +47,6 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>webmagic-core</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>

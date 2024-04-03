@@ -1,8 +1,10 @@
 package us.codecraft.webmagic.scripts;
 
 import org.apache.commons.cli.*;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.Logger;
+import org.slf4j.LoggerFactory;
+
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.Task;
@@ -166,7 +168,7 @@ public class ScriptConsole {
     }
 
     private static void configLogger(String value) {
-        Logger rootLogger = Logger.getRootLogger();
+        Logger rootLogger = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
         if ("debug".equalsIgnoreCase(value)) {
             rootLogger.setLevel(Level.DEBUG);
         } else if ("info".equalsIgnoreCase(value)) {
