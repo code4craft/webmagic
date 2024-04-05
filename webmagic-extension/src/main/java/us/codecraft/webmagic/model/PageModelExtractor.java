@@ -3,17 +3,21 @@ package us.codecraft.webmagic.model;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import lombok.Getter;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.model.annotation.*;
-import us.codecraft.webmagic.model.formatter.ObjectFormatter;
+import us.codecraft.webmagic.model.fields.PageField;
 import us.codecraft.webmagic.model.formatter.ObjectFormatterBuilder;
+import us.codecraft.webmagic.model.selections.MultipleSelection;
+import us.codecraft.webmagic.model.selections.Selection;
+import us.codecraft.webmagic.model.selections.SingleSelection;
 import us.codecraft.webmagic.selector.*;
 import us.codecraft.webmagic.utils.ClassUtils;
 import us.codecraft.webmagic.utils.ExtractorUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +33,19 @@ import static us.codecraft.webmagic.model.annotation.ExtractBy.Source.RawText;
  */
 class PageModelExtractor {
 
+    @Getter
     private List<Pattern> targetUrlPatterns = new ArrayList<Pattern>();
 
+    @Getter
     private Selector targetUrlRegionSelector;
 
+    @Getter
     private List<Pattern> helpUrlPatterns = new ArrayList<Pattern>();
 
+    @Getter
     private Selector helpUrlRegionSelector;
 
+    @Getter
     private Class clazz;
 
     private List<FieldExtractor> fieldExtractors;
@@ -233,145 +242,16 @@ class PageModelExtractor {
         try {
             o = clazz.newInstance();
             for (FieldExtractor fieldExtractor : fieldExtractors) {
-                if (fieldExtractor.isMulti()) {
-                    List<String> value=getMultiValueFromSource(page, fieldExtractor, html, isRaw);
-                    if ((value == null || value.size() == 0) && fieldExtractor.isNotNull()) {
-                        return null;
-                    }
-                    if (fieldExtractor.getObjectFormatter() != null) {
-                        List<Object> converted = convertMultiValue(value, fieldExtractor.getObjectFormatter());
-                        setField(o, fieldExtractor, converted);
-                    } else {
-                        setField(o, fieldExtractor, value);
-                    }
-                } else {
-                    String value=getSingleValueFromSource(page, fieldExtractor, html, isRaw);
-                    if (value == null && fieldExtractor.isNotNull()) {
-                        return null;
-                    }
-                    if (fieldExtractor.getObjectFormatter() != null) {
-                        Object converted = convertSingleValue(value, fieldExtractor.getObjectFormatter());
-                        if (converted == null && fieldExtractor.isNotNull()) {
-                            return null;
-                        }
-                        setField(o, fieldExtractor, converted);
-                    } else {
-                        setField(o, fieldExtractor, value);
-                    }
-                }
+                Selection selection = fieldExtractor.isMulti() ? new MultipleSelection() : new SingleSelection();
+                PageField field = selection.extractField(page, html, isRaw, fieldExtractor);
+                if (!field.operation(o, fieldExtractor, logger))
+                    return null;
             }
-            if (AfterExtractor.class.isAssignableFrom(clazz)) {
+            if (AfterExtractor.class.isAssignableFrom(clazz))
                 ((AfterExtractor) o).afterProcess(page);
-            }
-        } catch (InstantiationException e) {
-            logger.error("extract fail", e);
-        } catch (IllegalAccessException e) {
-            logger.error("extract fail", e);
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             logger.error("extract fail", e);
         }
         return o;
-    }
-
-    private List<String> getMultiValueFromSource(Page page, FieldExtractor fieldExtractor, String html, boolean isRaw) {
-        List<String> value;
-        switch (fieldExtractor.getSource()) {
-            case RawHtml:
-                value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
-                break;
-            case Html:
-                if (isRaw) {
-                    value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
-                } else {
-                    value = fieldExtractor.getSelector().selectList(html);
-                }
-                break;
-            case Url:
-                value = fieldExtractor.getSelector().selectList(page.getUrl().toString());
-                break;
-            case RawText:
-                value = fieldExtractor.getSelector().selectList(page.getRawText());
-                break;
-            default:
-                value = fieldExtractor.getSelector().selectList(html);
-        }
-        return value;
-    }
-
-    private String getSingleValueFromSource(Page page, FieldExtractor fieldExtractor, String html, boolean isRaw) {
-        String value;
-        switch (fieldExtractor.getSource()) {
-            case RawHtml:
-                value = page.getHtml().selectDocument(fieldExtractor.getSelector());
-                break;
-            case Html:
-                if (isRaw) {
-                    value = page.getHtml().selectDocument(fieldExtractor.getSelector());
-                } else {
-                    value = fieldExtractor.getSelector().select(html);
-                }
-                break;
-            case Url:
-                value = fieldExtractor.getSelector().select(page.getUrl().toString());
-                break;
-            case RawText:
-                value = fieldExtractor.getSelector().select(page.getRawText());
-                break;
-            default:
-                value = fieldExtractor.getSelector().select(html);
-        }
-        return value;
-    }
-
-    private Object convertSingleValue(String value, ObjectFormatter objectFormatter) {
-        try {
-            Object format = objectFormatter.format(value);
-            logger.debug("String {} is converted to {}", value, format);
-            return format;
-        } catch (Exception e) {
-            logger.error("convert " + value + " to " + objectFormatter.clazz() + " error!", e);
-        }
-        return null;
-    }
-
-    private List<Object> convertMultiValue(List<String> values, ObjectFormatter objectFormatter) {
-        List<Object> objects = new ArrayList<Object>();
-        for (String value : values) {
-            Object converted = convertSingleValue(value, objectFormatter);
-            if (converted != null) {
-                objects.add(converted);
-            }
-        }
-        return objects;
-    }
-
-    private void setField(Object o, FieldExtractor fieldExtractor, Object value) throws IllegalAccessException, InvocationTargetException {
-        if (value == null) {
-            return;
-        }
-        if (fieldExtractor.getSetterMethod() != null) {
-            fieldExtractor.getSetterMethod().invoke(o, value);
-        }
-        fieldExtractor.getField().set(o, value);
-    }
-
-    Class getClazz() {
-        return clazz;
-    }
-
-    List<Pattern> getTargetUrlPatterns() {
-        return targetUrlPatterns;
-    }
-
-    List<Pattern> getHelpUrlPatterns() {
-        return helpUrlPatterns;
-    }
-
-    Selector getTargetUrlRegionSelector() {
-        return targetUrlRegionSelector;
-    }
-
-    Selector getHelpUrlRegionSelector() {
-        return helpUrlRegionSelector;
     }
 }
