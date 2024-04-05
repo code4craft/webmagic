@@ -9,9 +9,9 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.model.annotation.*;
 import us.codecraft.webmagic.model.fields.PageField;
 import us.codecraft.webmagic.model.formatter.ObjectFormatterBuilder;
-import us.codecraft.webmagic.model.selections.MultipleSelection;
-import us.codecraft.webmagic.model.selections.Selection;
-import us.codecraft.webmagic.model.selections.SingleSelection;
+import us.codecraft.webmagic.model.sources.Source;
+import us.codecraft.webmagic.model.sources.SourceTextExtractor;
+import us.codecraft.webmagic.model.sources.Source.*;
 import us.codecraft.webmagic.selector.*;
 import us.codecraft.webmagic.utils.ClassUtils;
 import us.codecraft.webmagic.utils.ExtractorUtils;
@@ -95,7 +95,7 @@ class PageModelExtractor {
                 regexPattern = ".*";
             }
             fieldExtractor = new FieldExtractor(field,
-                    new RegexSelector(regexPattern), FieldExtractor.Source.Url, extractByUrl.notNull(),
+                    new RegexSelector(regexPattern), new Url(), extractByUrl.notNull(),
                     extractByUrl.multi() || List.class.isAssignableFrom(field.getType()));
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
@@ -121,7 +121,7 @@ class PageModelExtractor {
                 default:
                     selector = new AndSelector(ExtractorUtils.getSelectors(extractBies));
             }
-            fieldExtractor = new FieldExtractor(field, selector, comboExtract.source() == ComboExtract.Source.RawHtml ? FieldExtractor.Source.RawHtml : FieldExtractor.Source.Html,
+            fieldExtractor = new FieldExtractor(field, selector, comboExtract.source() == ComboExtract.Source.RawHtml ? new RawHtml() : new SelectedHtml(),
                     comboExtract.notNull(), comboExtract.multi() || List.class.isAssignableFrom(field.getType()));
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
@@ -136,26 +136,23 @@ class PageModelExtractor {
         ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
         if (extractBy != null) {
             Selector selector = ExtractorUtils.getSelector(extractBy);
-            ExtractBy.Source source0 = extractBy.source();
-            if (extractBy.type()== ExtractBy.Type.JsonPath){
-                source0 = RawText;
-            }
-            FieldExtractor.Source source = null;
-            switch (source0){
+            ExtractBy.Source extractSource = extractBy.source();
+            if (extractBy.type()== ExtractBy.Type.JsonPath)
+                extractSource = RawText;
+            Source source = null;
+            switch (extractSource) {
                 case RawText:
-                    source = FieldExtractor.Source.RawText;
+                    source = new RawText();
                     break;
                 case RawHtml:
-                    source = FieldExtractor.Source.RawHtml;
+                    source = new RawHtml();
                     break;
                 case SelectedHtml:
-                    source =FieldExtractor.Source.Html;
+                    source = new SelectedHtml();
                     break;
                 default:
-                    source =FieldExtractor.Source.Html;
-
+                    source = new SelectedHtml();
             }
-
             fieldExtractor = new FieldExtractor(field, selector, source,
                     extractBy.notNull(), List.class.isAssignableFrom(field.getType()));
             fieldExtractor.setSetterMethod(getSetterMethod(clazz, field));
@@ -202,7 +199,7 @@ class PageModelExtractor {
         annotation = clazz.getAnnotation(ExtractBy.class);
         if (annotation != null) {
             ExtractBy extractBy = (ExtractBy) annotation;
-            objectExtractor = new Extractor(new XpathSelector(extractBy.value()), Extractor.Source.Html, extractBy.notNull(), extractBy.multi());
+            objectExtractor = new Extractor(new XpathSelector(extractBy.value()), new SelectedHtml(), extractBy.notNull(), extractBy.multi());
         }
     }
 
@@ -242,8 +239,7 @@ class PageModelExtractor {
         try {
             o = clazz.newInstance();
             for (FieldExtractor fieldExtractor : fieldExtractors) {
-                Selection selection = fieldExtractor.isMulti() ? new MultipleSelection() : new SingleSelection();
-                PageField field = selection.extractField(page, html, isRaw, fieldExtractor);
+                PageField field = SourceTextExtractor.getText(page, html, isRaw, fieldExtractor);
                 if (!field.operation(o, fieldExtractor, logger))
                     return null;
             }
