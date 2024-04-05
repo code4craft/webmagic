@@ -2,6 +2,7 @@ package us.codecraft.webmagic.model;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import us.codecraft.webmagic.model.sources.Source;
 import us.codecraft.webmagic.selector.Selector;
 
@@ -21,7 +22,7 @@ public class Extractor {
     protected final boolean notNull;
 
     protected final boolean multi;
-
+  
     public Extractor(Selector selector, Source source, boolean notNull, boolean multi) {
         this.selector = selector;
         this.source = source;
