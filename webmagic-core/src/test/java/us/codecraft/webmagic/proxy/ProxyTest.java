@@ -15,12 +15,12 @@ import org.junit.jupiter.api.Test;
  * @author yxssfxwzy@sina.com May 30, 2014
  *
  */
-public class ProxyTest {
+class ProxyTest {
 
     private static List<String[]> httpProxyList = new ArrayList<String[]>();
 
     @BeforeAll
-    public static void before() {
+    static void before() {
         // String[] source = { "0.0.0.1:0", "0.0.0.2:0", "0.0.0.3:0",
         // "0.0.0.4:0" };
         String[] source = { "::0.0.0.1:0", "::0.0.0.2:0", "::0.0.0.3:0", "::0.0.0.4:0" };
