@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -111,7 +112,8 @@ public class HttpClientDownloader extends AbstractDownloader {
     }
 
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
-        byte[] bytes = IOUtils.toByteArray(httpResponse.getEntity().getContent());
+        HttpEntity entity = httpResponse.getEntity();
+        byte[] bytes = entity != null ? IOUtils.toByteArray(entity.getContent()) : new byte[0];;
         String contentType = httpResponse.getEntity().getContentType() == null ? "" : httpResponse.getEntity().getContentType().getValue();
         Page page = new Page();
         page.setBytes(bytes);
