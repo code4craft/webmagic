@@ -12,8 +12,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
@@ -32,8 +30,6 @@ import us.codecraft.webmagic.utils.HttpClientUtils;
  * @since 0.1.0
  */
 public class HttpClientDownloader extends AbstractDownloader {
-
-    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private final Map<String, CloseableHttpClient> httpClients = new HashMap<String, CloseableHttpClient>();
 
@@ -84,16 +80,10 @@ public class HttpClientDownloader extends AbstractDownloader {
         try {
             httpResponse = httpClient.execute(requestContext.getHttpUriRequest(), requestContext.getHttpClientContext());
             page = handleResponse(request, request.getCharset() != null ? request.getCharset() : task.getSite().getCharset(), httpResponse, task);
-
             onSuccess(page, task);
-            logger.info("Download page success: {}", request.getUrl());
-
             return page;
         } catch (IOException e) {
-
             onError(page, task, e);
-            logger.info("Download page error: {}", request.getUrl(), e);
-
             return page;
         } finally {
             if (httpResponse != null) {
@@ -138,7 +128,6 @@ public class HttpClientDownloader extends AbstractDownloader {
         String charset = CharsetUtils.detectCharset(contentType, contentBytes);
         if (charset == null) {
             charset = Optional.ofNullable(task.getSite().getDefaultCharset()).orElseGet(Charset.defaultCharset()::name);
-            logger.info("Charset autodetect failed, use {} as charset.", task.getSite().getDefaultCharset());
         }
         return charset;
     }
