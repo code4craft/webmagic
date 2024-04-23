@@ -103,8 +103,8 @@ public class HttpClientDownloader extends AbstractDownloader {
 
     protected Page handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
         HttpEntity entity = httpResponse.getEntity();
-        byte[] bytes = entity != null ? IOUtils.toByteArray(entity.getContent()) : new byte[0];;
-        String contentType = httpResponse.getEntity().getContentType() == null ? "" : httpResponse.getEntity().getContentType().getValue();
+        byte[] bytes = entity != null ? IOUtils.toByteArray(entity.getContent()) : new byte[0];
+        String contentType = entity != null && entity.getContentType() != null ? entity.getContentType().getValue() : null;
         Page page = new Page();
         page.setBytes(bytes);
         if (!request.isBinaryContent()) {
