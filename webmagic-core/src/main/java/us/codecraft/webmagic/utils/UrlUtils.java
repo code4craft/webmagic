@@ -116,6 +116,10 @@ public class UrlUtils {
     private static final Pattern patternForCharset = Pattern.compile("charset\\s*=\\s*['\"]*([^\\s;'\"]*)", Pattern.CASE_INSENSITIVE);
 
     public static String getCharset(String contentType) {
+        if (contentType == null) {
+            return null;
+        }
+
         Matcher matcher = patternForCharset.matcher(contentType);
         if (matcher.find()) {
             String charset = matcher.group(1);
