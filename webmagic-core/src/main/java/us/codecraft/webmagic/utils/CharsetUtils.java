@@ -21,6 +21,10 @@ public abstract class CharsetUtils {
 
     private static Logger logger = LoggerFactory.getLogger(CharsetUtils.class);
 
+    private CharsetUtils() {
+        throw new AssertionError("No us.codecraft.webmagic.utils.CharsetUtils instances for you!");
+    }
+
     public static String detectCharset(String contentType, byte[] contentBytes) throws IOException {
         String charset;
         // charset
