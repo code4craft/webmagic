@@ -1,5 +1,6 @@
 forked from code4craft/webmagic
 调整了Spider中一点点逻辑，使得整个Spider拉取间隔为site.sleepTime，返回的错误码不对的情况也按下载失败重试处理。
+
 ![logo](http://webmagic.io/images/logo.jpeg)
 
 [Readme in Chinese](https://github.com/code4craft/webmagic/tree/master/README-zh.md)
