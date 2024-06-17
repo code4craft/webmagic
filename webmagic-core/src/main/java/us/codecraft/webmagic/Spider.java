@@ -456,6 +456,11 @@ public class Spider implements Runnable, Task {
             }
         } else {
             logger.info("page status code error, page {} , code: {}", request.getUrl(), page.getStatusCode());
+            if (site.getCycleRetryTimes() != 0) {
+                sleep(site.getRetrySleepTime());
+                // for cycle retry
+                doCycleRetry(request);
+            }
         }
         sleep(site.getSleepTime());
         return;
@@ -465,6 +470,7 @@ public class Spider implements Runnable, Task {
         if (site.getCycleRetryTimes() == 0) {
             sleep(site.getSleepTime());
         } else {
+            sleep(site.getRetrySleepTime());
             // for cycle retry
             doCycleRetry(request);
         }
@@ -477,11 +483,10 @@ public class Spider implements Runnable, Task {
         } else {
             int cycleTriedTimes = (Integer) cycleTriedTimesObject;
             cycleTriedTimes++;
-            if (cycleTriedTimes < site.getCycleRetryTimes()) {
+            if (site.getCycleRetryTimes() < 0 || cycleTriedTimes < site.getCycleRetryTimes()) {
                 addRequest(SerializationUtils.clone(request).setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, cycleTriedTimes));
             }
         }
-        sleep(site.getRetrySleepTime());
     }
 
     protected void sleep(int time) {
