@@ -85,7 +85,7 @@ public class Spider implements Runnable, Task {
 
     protected AtomicInteger stat = new AtomicInteger(STAT_INIT);
 
-    protected boolean exitWhenComplete = true;
+    protected volatile boolean exitWhenComplete = true;
 
     protected final static int STAT_INIT = 0;
 
@@ -596,6 +596,13 @@ public class Spider implements Runnable, Task {
         } else {
             logger.info("Spider " + getUUID() + " stop fail!");
         }
+    }
+
+    /**
+     * Stop when all tasks in the queue are completed and all worker threads are also completed
+     */
+    public void stopWhenComplete(){
+        this.exitWhenComplete = true;
     }
 
     /**
