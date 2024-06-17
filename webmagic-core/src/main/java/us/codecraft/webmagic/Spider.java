@@ -85,7 +85,7 @@ public class Spider implements Runnable, Task {
 
     protected AtomicInteger stat = new AtomicInteger(STAT_INIT);
 
-    protected boolean exitWhenComplete = true;
+    protected volatile boolean exitWhenComplete = true;
 
     protected final static int STAT_INIT = 0;
 
@@ -304,8 +304,12 @@ public class Spider implements Runnable, Task {
         checkRunningStat();
         initComponent();
         logger.info("Spider {} started!", getUUID());
+        long preTime = 0;
         // interrupt won't be necessarily detected
         while (!Thread.currentThread().isInterrupted() && stat.get() == STAT_RUNNING) {
+            if(preTime == 0){
+                preTime = System.currentTimeMillis();
+            }
             Request poll = scheduler.poll(this);
             if (poll == null) {
                 if (threadPool.getThreadAlive() == 0) {
@@ -333,6 +337,12 @@ public class Spider implements Runnable, Task {
                     }
                     continue;
                 }
+            }
+            long aftTime = System.currentTimeMillis();
+            long pollTime = aftTime-preTime;
+            preTime = 0;
+            if(pollTime < site.getSleepTime()){
+                sleep((int)(site.getSleepTime() - pollTime));
             }
             final Request request = poll;
             //this may swallow the interruption
@@ -456,15 +466,17 @@ public class Spider implements Runnable, Task {
             }
         } else {
             logger.info("page status code error, page {} , code: {}", request.getUrl(), page.getStatusCode());
+            if (site.getCycleRetryTimes() != 0) {
+                sleep(site.getRetrySleepTime());
+                // for cycle retry
+                doCycleRetry(request);
+            }
         }
-        sleep(site.getSleepTime());
-        return;
     }
 
     private void onDownloaderFail(Request request) {
-        if (site.getCycleRetryTimes() == 0) {
-            sleep(site.getSleepTime());
-        } else {
+        if (site.getCycleRetryTimes() != 0) {
+            sleep(site.getRetrySleepTime());
             // for cycle retry
             doCycleRetry(request);
         }
@@ -477,11 +489,10 @@ public class Spider implements Runnable, Task {
         } else {
             int cycleTriedTimes = (Integer) cycleTriedTimesObject;
             cycleTriedTimes++;
-            if (cycleTriedTimes < site.getCycleRetryTimes()) {
+            if (site.getCycleRetryTimes() < 0 || cycleTriedTimes < site.getCycleRetryTimes()) {
                 addRequest(SerializationUtils.clone(request).setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, cycleTriedTimes));
             }
         }
-        sleep(site.getRetrySleepTime());
     }
 
     protected void sleep(int time) {
@@ -506,10 +517,15 @@ public class Spider implements Runnable, Task {
             site.setDomain(UrlUtils.getDomain(request.getUrl()));
         }
         scheduler.push(request, this);
+        scheduler.signalNewUrl();
+    }
+
+    public boolean isRunning() {
+        return stat.get() == STAT_RUNNING;
     }
 
     protected void checkIfRunning() {
-        if (stat.get() == STAT_RUNNING) {
+        if (isRunning()) {
             throw new IllegalStateException("Spider is already running!");
         }
     }
@@ -530,7 +546,6 @@ public class Spider implements Runnable, Task {
         for (String url : urls) {
             addRequest(new Request(url));
         }
-        scheduler.signalNewUrl();
         return this;
     }
 
@@ -582,7 +597,6 @@ public class Spider implements Runnable, Task {
         for (Request request : requests) {
             addRequest(request);
         }
-        scheduler.signalNewUrl();
         return this;
     }
 
@@ -596,6 +610,13 @@ public class Spider implements Runnable, Task {
         } else {
             logger.info("Spider " + getUUID() + " stop fail!");
         }
+    }
+
+    /**
+     * Stop when all tasks in the queue are completed and all worker threads are also completed
+     */
+    public void stopWhenComplete(){
+        this.exitWhenComplete = true;
     }
 
     /**
