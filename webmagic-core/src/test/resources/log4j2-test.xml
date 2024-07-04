@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="stdout" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yy-MM-dd HH:mm:ss,SSS} %-5p %c(%F:%L) ## %m%n" />
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.apache" level="warn" additivity="false">
+            <AppenderRef ref="stdout" />
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="stdout" />
+        </Root>
+    </Loggers>
+</Configuration>

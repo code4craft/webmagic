@@ -1,5 +1,9 @@
 package us.codecraft.webmagic.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import us.codecraft.webmagic.model.sources.Source;
 import us.codecraft.webmagic.selector.Selector;
 
 /**
@@ -7,18 +11,18 @@ import us.codecraft.webmagic.selector.Selector;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-class Extractor {
+public class Extractor {
 
+    @Getter @Setter
     protected Selector selector;
 
+    @Getter
     protected final Source source;
 
     protected final boolean notNull;
 
     protected final boolean multi;
-
-    static enum Source {Html, Url, RawHtml, RawText}
-
+  
     public Extractor(Selector selector, Source source, boolean notNull, boolean multi) {
         this.selector = selector;
         this.source = source;
@@ -26,23 +30,11 @@ class Extractor {
         this.multi = multi;
     }
 
-    Selector getSelector() {
-        return selector;
-    }
-
-    Source getSource() {
-        return source;
-    }
-
-    boolean isNotNull() {
+    public boolean isNotNull() {
         return notNull;
     }
 
-    boolean isMulti() {
+    public boolean isMulti() {
         return multi;
-    }
-
-    void setSelector(Selector selector) {
-        this.selector = selector;
     }
 }

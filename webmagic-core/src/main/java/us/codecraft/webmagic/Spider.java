@@ -9,11 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
@@ -75,9 +72,9 @@ public class Spider implements Runnable, Task {
     protected Site site;
 
     protected String uuid;
-
-    protected Scheduler scheduler = new QueueScheduler();
-
+    
+    protected SpiderScheduler scheduler;
+    
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     protected CountableThreadPool threadPool;
@@ -88,7 +85,7 @@ public class Spider implements Runnable, Task {
 
     protected AtomicInteger stat = new AtomicInteger(STAT_INIT);
 
-    protected boolean exitWhenComplete = true;
+    protected volatile boolean exitWhenComplete = true;
 
     protected final static int STAT_INIT = 0;
 
@@ -99,10 +96,6 @@ public class Spider implements Runnable, Task {
     protected boolean spawnUrl = true;
 
     protected boolean destroyWhenExit = true;
-
-    private ReentrantLock newUrlLock = new ReentrantLock();
-
-    private Condition newUrlCondition = newUrlLock.newCondition();
 
     private List<SpiderListener> spiderListeners;
 
@@ -131,6 +124,7 @@ public class Spider implements Runnable, Task {
     public Spider(PageProcessor pageProcessor) {
         this.pageProcessor = pageProcessor;
         this.site = pageProcessor.getSite();
+        this.scheduler = new SpiderScheduler(new QueueScheduler());
     }
 
     /**
@@ -186,15 +180,15 @@ public class Spider implements Runnable, Task {
     /**
      * set scheduler for Spider
      *
-     * @param scheduler scheduler
+     * @param updateScheduler scheduler
      * @return this
      * @see Scheduler
      * @since 0.2.1
      */
-    public Spider setScheduler(Scheduler scheduler) {
+    public Spider setScheduler(Scheduler updateScheduler) {
         checkIfRunning();
-        Scheduler oldScheduler = this.scheduler;
-        this.scheduler = scheduler;
+        SpiderScheduler oldScheduler = this.scheduler;
+        scheduler.setScheduler(updateScheduler);
         if (oldScheduler != null) {
             Request request;
             while ((request = oldScheduler.poll(this)) != null) {
@@ -213,7 +207,7 @@ public class Spider implements Runnable, Task {
      * @deprecated
      */
     @Deprecated
-	public Spider pipeline(Pipeline pipeline) {
+    public Spider pipeline(Pipeline pipeline) {
         return addPipeline(pipeline);
     }
 
@@ -264,7 +258,7 @@ public class Spider implements Runnable, Task {
      * @deprecated
      */
     @Deprecated
-	public Spider downloader(Downloader downloader) {
+    public Spider downloader(Downloader downloader) {
         return setDownloader(downloader);
     }
 
@@ -333,10 +327,10 @@ public class Spider implements Runnable, Task {
                     }
                 } else {
                     // wait until new url added，
-                    if (waitNewUrl()) {
-						//if interrupted
+                    if (scheduler.waitNewUrl(threadPool, emptySleepTime)) {
+                        // if interrupted
                         break;
-					}
+                    }
                     continue;
                 }
             }
@@ -353,7 +347,7 @@ public class Spider implements Runnable, Task {
                         logger.error("process request " + request + " error", e);
                     } finally {
                         pageCount.incrementAndGet();
-                        signalNewUrl();
+                        scheduler.signalNewUrl();
                     }
                 }
             });
@@ -536,7 +530,7 @@ public class Spider implements Runnable, Task {
         for (String url : urls) {
             addRequest(new Request(url));
         }
-        signalNewUrl();
+        scheduler.signalNewUrl();
         return this;
     }
 
@@ -588,40 +582,8 @@ public class Spider implements Runnable, Task {
         for (Request request : requests) {
             addRequest(request);
         }
-        signalNewUrl();
+        scheduler.signalNewUrl();
         return this;
-    }
-
-    /**
-     *
-     * @return isInterrupted
-     */
-    private boolean waitNewUrl() {
-        // now there may not be any thread live
-        newUrlLock.lock();
-        try {
-            //double check，unnecessary, unless very fast concurrent
-            if (threadPool.getThreadAlive() == 0) {
-                return false;
-            }
-            //wait for amount of time
-            newUrlCondition.await(emptySleepTime, TimeUnit.MILLISECONDS);
-            return false;
-        } catch (InterruptedException e) {
-            // logger.warn("waitNewUrl - interrupted, error {}", e);
-            return true;
-        } finally {
-            newUrlLock.unlock();
-        }
-    }
-
-    private void signalNewUrl() {
-        try {
-            newUrlLock.lock();
-            newUrlCondition.signalAll();
-        } finally {
-            newUrlLock.unlock();
-        }
     }
 
     public void start() {
@@ -634,6 +596,13 @@ public class Spider implements Runnable, Task {
         } else {
             logger.info("Spider " + getUUID() + " stop fail!");
         }
+    }
+
+    /**
+     * Stop when all tasks in the queue are completed and all worker threads are also completed
+     */
+    public void stopWhenComplete(){
+        this.exitWhenComplete = true;
     }
 
     /**
@@ -799,7 +768,7 @@ public class Spider implements Runnable, Task {
     }
 
     public Scheduler getScheduler() {
-        return scheduler;
+        return scheduler.getScheduler();
     }
 
     /**

@@ -1,5 +1,7 @@
 package us.codecraft.webmagic.utils;
 
+import static org.junit.Assert.assertNull;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -43,5 +45,9 @@ public class UrlUtilsTest {
         Assert.assertEquals("www.dianping.com",UrlUtils.getDomain(url));
     }
 
+    @Test
+    public void testGetCharset() {
+        assertNull(UrlUtils.getCharset(null));
+    }
 
 }

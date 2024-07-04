@@ -3,17 +3,21 @@ package us.codecraft.webmagic.model;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import lombok.Getter;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.model.annotation.*;
-import us.codecraft.webmagic.model.formatter.ObjectFormatter;
+import us.codecraft.webmagic.model.fields.PageField;
 import us.codecraft.webmagic.model.formatter.ObjectFormatterBuilder;
+import us.codecraft.webmagic.model.sources.Source;
+import us.codecraft.webmagic.model.sources.SourceTextExtractor;
+import us.codecraft.webmagic.model.sources.Source.*;
 import us.codecraft.webmagic.selector.*;
 import us.codecraft.webmagic.utils.ClassUtils;
 import us.codecraft.webmagic.utils.ExtractorUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +33,19 @@ import static us.codecraft.webmagic.model.annotation.ExtractBy.Source.RawText;
  */
 class PageModelExtractor {
 
+    @Getter
     private List<Pattern> targetUrlPatterns = new ArrayList<Pattern>();
 
+    @Getter
     private Selector targetUrlRegionSelector;
 
+    @Getter
     private List<Pattern> helpUrlPatterns = new ArrayList<Pattern>();
 
+    @Getter
     private Selector helpUrlRegionSelector;
 
+    @Getter
     private Class clazz;
 
     private List<FieldExtractor> fieldExtractors;
@@ -86,7 +95,7 @@ class PageModelExtractor {
                 regexPattern = ".*";
             }
             fieldExtractor = new FieldExtractor(field,
-                    new RegexSelector(regexPattern), FieldExtractor.Source.Url, extractByUrl.notNull(),
+                    new RegexSelector(regexPattern), new Url(), extractByUrl.notNull(),
                     extractByUrl.multi() || List.class.isAssignableFrom(field.getType()));
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
@@ -112,7 +121,7 @@ class PageModelExtractor {
                 default:
                     selector = new AndSelector(ExtractorUtils.getSelectors(extractBies));
             }
-            fieldExtractor = new FieldExtractor(field, selector, comboExtract.source() == ComboExtract.Source.RawHtml ? FieldExtractor.Source.RawHtml : FieldExtractor.Source.Html,
+            fieldExtractor = new FieldExtractor(field, selector, comboExtract.source() == ComboExtract.Source.RawHtml ? new RawHtml() : new SelectedHtml(),
                     comboExtract.notNull(), comboExtract.multi() || List.class.isAssignableFrom(field.getType()));
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
@@ -127,26 +136,23 @@ class PageModelExtractor {
         ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
         if (extractBy != null) {
             Selector selector = ExtractorUtils.getSelector(extractBy);
-            ExtractBy.Source source0 = extractBy.source();
-            if (extractBy.type()== ExtractBy.Type.JsonPath){
-                source0 = RawText;
-            }
-            FieldExtractor.Source source = null;
-            switch (source0){
+            ExtractBy.Source extractSource = extractBy.source();
+            if (extractBy.type()== ExtractBy.Type.JsonPath)
+                extractSource = RawText;
+            Source source = null;
+            switch (extractSource) {
                 case RawText:
-                    source = FieldExtractor.Source.RawText;
+                    source = new RawText();
                     break;
                 case RawHtml:
-                    source = FieldExtractor.Source.RawHtml;
+                    source = new RawHtml();
                     break;
                 case SelectedHtml:
-                    source =FieldExtractor.Source.Html;
+                    source = new SelectedHtml();
                     break;
                 default:
-                    source =FieldExtractor.Source.Html;
-
+                    source = new SelectedHtml();
             }
-
             fieldExtractor = new FieldExtractor(field, selector, source,
                     extractBy.notNull(), List.class.isAssignableFrom(field.getType()));
             fieldExtractor.setSetterMethod(getSetterMethod(clazz, field));
@@ -193,7 +199,7 @@ class PageModelExtractor {
         annotation = clazz.getAnnotation(ExtractBy.class);
         if (annotation != null) {
             ExtractBy extractBy = (ExtractBy) annotation;
-            objectExtractor = new Extractor(new XpathSelector(extractBy.value()), Extractor.Source.Html, extractBy.notNull(), extractBy.multi());
+            objectExtractor = new Extractor(new XpathSelector(extractBy.value()), new SelectedHtml(), extractBy.notNull(), extractBy.multi());
         }
     }
 
@@ -233,135 +239,15 @@ class PageModelExtractor {
         try {
             o = clazz.newInstance();
             for (FieldExtractor fieldExtractor : fieldExtractors) {
-                if (fieldExtractor.isMulti()) {
-                    List<String> value;
-                    switch (fieldExtractor.getSource()) {
-                        case RawHtml:
-                            value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
-                            break;
-                        case Html:
-                            if (isRaw) {
-                                value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
-                            } else {
-                                value = fieldExtractor.getSelector().selectList(html);
-                            }
-                            break;
-                        case Url:
-                            value = fieldExtractor.getSelector().selectList(page.getUrl().toString());
-                            break;
-                        case RawText:
-                            value = fieldExtractor.getSelector().selectList(page.getRawText());
-                            break;
-                        default:
-                            value = fieldExtractor.getSelector().selectList(html);
-                    }
-                    if ((value == null || value.size() == 0) && fieldExtractor.isNotNull()) {
-                        return null;
-                    }
-                    if (fieldExtractor.getObjectFormatter() != null) {
-                        List<Object> converted = convert(value, fieldExtractor.getObjectFormatter());
-                        setField(o, fieldExtractor, converted);
-                    } else {
-                        setField(o, fieldExtractor, value);
-                    }
-                } else {
-                    String value;
-                    switch (fieldExtractor.getSource()) {
-                        case RawHtml:
-                            value = page.getHtml().selectDocument(fieldExtractor.getSelector());
-                            break;
-                        case Html:
-                            if (isRaw) {
-                                value = page.getHtml().selectDocument(fieldExtractor.getSelector());
-                            } else {
-                                value = fieldExtractor.getSelector().select(html);
-                            }
-                            break;
-                        case Url:
-                            value = fieldExtractor.getSelector().select(page.getUrl().toString());
-                            break;
-                        case RawText:
-                            value = fieldExtractor.getSelector().select(page.getRawText());
-                            break;
-                        default:
-                            value = fieldExtractor.getSelector().select(html);
-                    }
-                    if (value == null && fieldExtractor.isNotNull()) {
-                        return null;
-                    }
-                    if (fieldExtractor.getObjectFormatter() != null) {
-                        Object converted = convert(value, fieldExtractor.getObjectFormatter());
-                        if (converted == null && fieldExtractor.isNotNull()) {
-                            return null;
-                        }
-                        setField(o, fieldExtractor, converted);
-                    } else {
-                        setField(o, fieldExtractor, value);
-                    }
-                }
+                PageField field = SourceTextExtractor.getText(page, html, isRaw, fieldExtractor);
+                if (!field.operation(o, fieldExtractor, logger))
+                    return null;
             }
-            if (AfterExtractor.class.isAssignableFrom(clazz)) {
+            if (AfterExtractor.class.isAssignableFrom(clazz))
                 ((AfterExtractor) o).afterProcess(page);
-            }
-        } catch (InstantiationException e) {
-            logger.error("extract fail", e);
-        } catch (IllegalAccessException e) {
-            logger.error("extract fail", e);
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             logger.error("extract fail", e);
         }
         return o;
-    }
-
-    private Object convert(String value, ObjectFormatter objectFormatter) {
-        try {
-            Object format = objectFormatter.format(value);
-            logger.debug("String {} is converted to {}", value, format);
-            return format;
-        } catch (Exception e) {
-            logger.error("convert " + value + " to " + objectFormatter.clazz() + " error!", e);
-        }
-        return null;
-    }
-
-    private List<Object> convert(List<String> values, ObjectFormatter objectFormatter) {
-        List<Object> objects = new ArrayList<Object>();
-        for (String value : values) {
-            Object converted = convert(value, objectFormatter);
-            if (converted != null) {
-                objects.add(converted);
-            }
-        }
-        return objects;
-    }
-
-    private void setField(Object o, FieldExtractor fieldExtractor, Object value) throws IllegalAccessException, InvocationTargetException {
-        if (value == null) {
-            return;
-        }
-        if (fieldExtractor.getSetterMethod() != null) {
-            fieldExtractor.getSetterMethod().invoke(o, value);
-        }
-        fieldExtractor.getField().set(o, value);
-    }
-
-    Class getClazz() {
-        return clazz;
-    }
-
-    List<Pattern> getTargetUrlPatterns() {
-        return targetUrlPatterns;
-    }
-
-    List<Pattern> getHelpUrlPatterns() {
-        return helpUrlPatterns;
-    }
-
-    Selector getTargetUrlRegionSelector() {
-        return targetUrlRegionSelector;
-    }
-
-    Selector getHelpUrlRegionSelector() {
-        return helpUrlRegionSelector;
     }
 }

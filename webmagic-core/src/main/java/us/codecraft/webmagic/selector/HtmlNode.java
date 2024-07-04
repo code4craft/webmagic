@@ -26,7 +26,6 @@ public class HtmlNode extends AbstractSelectable {
         return elements;
     }
 
-    @Override
     public Selectable smartContent() {
         SmartContentSelector smartContentSelector = Selectors.smartContent();
         return select(smartContentSelector, getSourceTexts());

@@ -8,19 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpHost;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author yxssfxwzy@sina.com May 30, 2014
- * 
+ *
  */
-public class ProxyTest {
+class ProxyTest {
 
     private static List<String[]> httpProxyList = new ArrayList<String[]>();
 
-    @BeforeClass
-    public static void before() {
+    @BeforeAll
+    static void before() {
         // String[] source = { "0.0.0.1:0", "0.0.0.2:0", "0.0.0.3:0",
         // "0.0.0.4:0" };
         String[] source = { "::0.0.0.1:0", "::0.0.0.2:0", "::0.0.0.3:0", "::0.0.0.4:0" };
@@ -48,7 +48,7 @@ public class ProxyTest {
     }
 
     @Test
-    public void testCreate() {
+    void testCreate() {
         Proxy proxy = Proxy.create(URI.create("//127.0.0.1:8080"));
         assertNull(proxy.getScheme());
         assertNull(proxy.getUsername());
@@ -86,7 +86,15 @@ public class ProxyTest {
     }
 
     @Test
-    public void testToString() {
+    void testEqualsHashCode() {
+        var proxy0 = new Proxy("::1", 1080);
+        var proxy1 = new Proxy("::1", 1080);
+        assertEquals(proxy0, proxy1);
+        assertEquals(proxy0.hashCode(), proxy1.hashCode());
+    }
+
+    @Test
+    void testToString() {
         assertEquals("//127.0.0.1:8080", new Proxy("127.0.0.1", 8080).toString());
         assertEquals("http://127.0.0.1:8080", new Proxy("127.0.0.1", 8080, "http").toString());
         assertEquals("//username:password@127.0.0.1:8080", new Proxy("127.0.0.1", 8080, "username", "password").toString());

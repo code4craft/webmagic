@@ -13,7 +13,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author code4crafter@gmail.com
- * @date 14-4-5
  */
 public class ConfigurablePageProcessorTest {
 
