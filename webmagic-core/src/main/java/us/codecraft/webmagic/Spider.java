@@ -187,7 +187,7 @@ public class Spider implements Runnable, Task {
      */
     public Spider setScheduler(Scheduler updateScheduler) {
         checkIfRunning();
-        SpiderScheduler oldScheduler = this.scheduler;
+        Scheduler oldScheduler = scheduler.getScheduler();
         scheduler.setScheduler(updateScheduler);
         if (oldScheduler != null) {
             Request request;
@@ -458,7 +458,6 @@ public class Spider implements Runnable, Task {
             logger.info("page status code error, page {} , code: {}", request.getUrl(), page.getStatusCode());
         }
         sleep(site.getSleepTime());
-        return;
     }
 
     private void onDownloaderFail(Request request) {
