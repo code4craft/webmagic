@@ -938,6 +938,7 @@ public class MockGithubDownloader implements Downloader{
         Page page = new Page();
         page.setRawText(html);
         page.setStatusCode(200);
+        page.setDownloadSuccess(true);
         page.setRequest(new Request("https://github.com/code4craft/webmagic"));
         page.setUrl(new PlainText("https://github.com/code4craft/webmagic"));
         return page;

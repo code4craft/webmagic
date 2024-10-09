@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Json;
 import us.codecraft.webmagic.selector.Selectable;
-import us.codecraft.webmagic.utils.HttpConstant;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.util.ArrayList;
@@ -43,9 +42,9 @@ public class Page {
 
     private Map<String,List<String>> headers;
 
-    private int statusCode = HttpConstant.StatusCode.CODE_200;
+    private int statusCode;
 
-    private boolean downloadSuccess = true;
+    private boolean downloadSuccess;
 
     private byte[] bytes;
 
