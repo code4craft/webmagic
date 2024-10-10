@@ -79,6 +79,7 @@ public class Page {
         Page page = new Page();
         page.setRequest(request);
         page.setDownloadSuccess(false);
+        page.setStatusCode(1000);
         return page;
     }
 
