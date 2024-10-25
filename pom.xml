@@ -12,7 +12,7 @@
         <version>2.2.1</version>
     </parent>
     <groupId>us.codecraft</groupId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>pom</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
