@@ -50,7 +50,7 @@ WebMagic use slf4j with slf4j-log4j12 implementation. If you customized your slf
 
 ### First crawler:
 
-Write a class implements PageProcessor. For example, I wrote a crawler of github repository infomation.
+Write a class implements PageProcessor. For example, I wrote a crawler of github repository information.
 
 ```java
 public class GithubRepoPageProcessor implements PageProcessor {
@@ -112,7 +112,7 @@ public class GithubRepo {
 
 Documents: [http://webmagic.io/docs/](http://webmagic.io/docs/)
 
-The architecture of webmagic (refered to [Scrapy](http://scrapy.org/))
+The architecture of webmagic (referred to [Scrapy](http://scrapy.org/))
 
 ![image](http://code4craft.github.io/images/posts/webmagic.png)
 
