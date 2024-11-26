@@ -52,7 +52,42 @@ public class Page {
 
     private String charset;
 
+    /**
+     * Returns a {@link Page} with {@link #downloadSuccess} is {@code true},
+     * and {@link #request} is specified.
+     *
+     * @param request the request.
+     * @since 1.0.2
+     */
+    public static Page ofSuccess(Request request) {
+        return new Page(request, true);
+    }
+
+    /**
+     * Returns a {@link Page} with {@link #downloadSuccess} is {@code true},
+     * and {@link #request} is specified.
+     *
+     * @param request the request.
+     * @since 1.0.2
+     */
+    public static Page ofFailure(Request request) {
+        return new Page(request, false);
+    }
+
     public Page() {
+    }
+
+    /**
+     * Constructs a {@link Page} with {@link #request}
+     * and {@link #downloadSuccess} specified.
+     *
+     * @param request the request.
+     * @param downloadSuccess the download success flag.
+     * @since 1.0.2
+     */
+    private Page(Request request, boolean downloadSuccess) {
+        this.request = request;
+        this.downloadSuccess = downloadSuccess;
     }
 
     /**
@@ -73,7 +108,9 @@ public class Page {
      * @param request the {@link Request}.
      * @return the page.
      * @since 0.10.0
+     * @deprecated Use {@link #ofFailure(Request)} instead.
      */
+    @Deprecated(since = "1.0.2", forRemoval = true)
     public static Page fail(Request request){
         Page page = new Page();
         page.setRequest(request);

@@ -76,13 +76,14 @@ public class HttpClientDownloader extends AbstractDownloader {
         CloseableHttpClient httpClient = getHttpClient(task.getSite());
         Proxy proxy = proxyProvider != null ? proxyProvider.getProxy(request, task) : null;
         HttpClientRequestContext requestContext = httpUriRequestConverter.convert(request, task.getSite(), proxy);
-        Page page = Page.fail(request);
+        Page page = null;
         try {
             httpResponse = httpClient.execute(requestContext.getHttpUriRequest(), requestContext.getHttpClientContext());
             page = handleResponse(request, request.getCharset() != null ? request.getCharset() : task.getSite().getCharset(), httpResponse, task);
             onSuccess(page, task);
             return page;
         } catch (IOException e) {
+            page = Page.ofFailure(request);
             onError(page, task, e);
             return page;
         } finally {
@@ -105,7 +106,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         HttpEntity entity = httpResponse.getEntity();
         byte[] bytes = entity != null ? IOUtils.toByteArray(entity.getContent()) : new byte[0];
         String contentType = entity != null && entity.getContentType() != null ? entity.getContentType().getValue() : null;
-        Page page = new Page();
+        Page page = Page.ofSuccess(request);
         page.setBytes(bytes);
         if (!request.isBinaryContent()) {
             if (charset == null) {
@@ -117,7 +118,6 @@ public class HttpClientDownloader extends AbstractDownloader {
         page.setUrl(new PlainText(request.getUrl()));
         page.setRequest(request);
         page.setStatusCode(httpResponse.getStatusLine().getStatusCode());
-        page.setDownloadSuccess(true);
         if (responseHeader) {
             page.setHeaders(HttpClientUtils.convertHeaders(httpResponse.getAllHeaders()));
         }
