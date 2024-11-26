@@ -76,13 +76,14 @@ public class HttpClientDownloader extends AbstractDownloader {
         CloseableHttpClient httpClient = getHttpClient(task.getSite());
         Proxy proxy = proxyProvider != null ? proxyProvider.getProxy(request, task) : null;
         HttpClientRequestContext requestContext = httpUriRequestConverter.convert(request, task.getSite(), proxy);
-        Page page = Page.ofFailure(request);
+        Page page = null;
         try {
             httpResponse = httpClient.execute(requestContext.getHttpUriRequest(), requestContext.getHttpClientContext());
             page = handleResponse(request, request.getCharset() != null ? request.getCharset() : task.getSite().getCharset(), httpResponse, task);
             onSuccess(page, task);
             return page;
         } catch (IOException e) {
+            page = Page.ofFailure(request);
             onError(page, task, e);
             return page;
         } finally {
