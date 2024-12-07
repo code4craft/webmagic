@@ -14,7 +14,7 @@
 
     <artifactId>webmagic-scripts</artifactId>
     <properties>
-        <kotlin.version>1.6.0</kotlin.version>
+        <kotlin.version>2.1.0</kotlin.version>
     </properties>
 
     <dependencies>
