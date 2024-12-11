@@ -16,7 +16,13 @@ import java.util.List;
 @Experimental
 public class SmartContentSelector implements Selector {
 
+    private int threshold = 86;
+
     public SmartContentSelector() {
+    }
+
+    public SmartContentSelector(int threshold) {
+        this.threshold = threshold;
     }
 
     @Override
@@ -29,7 +35,6 @@ public class SmartContentSelector implements Selector {
         html = html.replaceAll("(?is)<.*?>", "");
         List<String> lines;
         int blocksWidth =3;
-        int threshold =86;
         int start;
         int end;
         StringBuilder text = new StringBuilder();
