@@ -31,6 +31,11 @@ public class HtmlNode extends AbstractSelectable {
         return select(smartContentSelector, getSourceTexts());
     }
 
+    public Selectable smartContent(int threshold) {
+        SmartContentSelector smartContentSelector = Selectors.smartContent(threshold);
+        return select(smartContentSelector, getSourceTexts());
+    }
+
     @Override
     public Selectable links() {
         return selectElements(new LinksSelector());
