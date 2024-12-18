@@ -6,6 +6,7 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.selector.PlainText;
+import us.codecraft.webmagic.utils.HttpConstant;
 
 import java.io.*;
 
@@ -96,7 +97,7 @@ public class PhantomJSDownloader extends AbstractDownloader {
                 page.setRawText(content);
                 page.setUrl(new PlainText(request.getUrl()));
                 page.setRequest(request);
-                page.setStatusCode(200);
+                page.setStatusCode(HttpConstant.StatusCode.CODE_200);
             }
             onSuccess(page, task);
         } catch (Exception e) {
