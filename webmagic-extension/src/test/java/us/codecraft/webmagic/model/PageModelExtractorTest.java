@@ -31,7 +31,7 @@ public class PageModelExtractorTest {
 
     public static class ModelDate {
 
-        @Formatter(value = "yyyyMMdd", formatter = DateFormatter.class)
+        //@Formatter(value = "yyyyMMdd", formatter = DateFormatter.class)
         @ExtractBy(value = "//div[@class='date']/text()", notNull = true)
         private Date date;
 
@@ -53,7 +53,7 @@ public class PageModelExtractorTest {
 
     public static class ModelIntList {
 
-        @Formatter(subClazz = Integer.class)
+        //@Formatter(subClazz = Integer.class)
         @ExtractBy("//li[@class='numbers']/text()")
         private List<Integer> numbers;
 
@@ -61,7 +61,7 @@ public class PageModelExtractorTest {
 
     public static class ModelDateList {
 
-        @Formatter(subClazz = Date.class, value = "yyyyMMdd")
+        ///@Formatter(subClazz = Date.class, value = "yyyyMMdd")
         @ExtractBy("//li[@class='dates']/text()")
         private List<Date> dates;
 
@@ -69,7 +69,7 @@ public class PageModelExtractorTest {
 
     public static class ModelCustomList {
 
-        @Formatter(subClazz = Date.class, value = "yyyyMMdd",formatter = DateFormatter.class)
+        //@Formatter(subClazz = Date.class, value = "yyyyMMdd",formatter = DateFormatter.class)
         @ExtractBy("//li[@class='dates']/text()")
         private List<Date> dates;
 
