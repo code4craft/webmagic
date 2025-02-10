@@ -8,13 +8,13 @@
     <parent>
         <groupId>us.codecraft</groupId>
         <artifactId>webmagic</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>webmagic-scripts</artifactId>
     <properties>
-        <kotlin.version>1.6.0</kotlin.version>
+        <kotlin.version>2.1.0</kotlin.version>
     </properties>
 
     <dependencies>
