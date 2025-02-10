@@ -36,7 +36,7 @@ import java.util.Map;
  */
 public class HttpClientGenerator {
 
-    private transient Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private PoolingHttpClientConnectionManager connectionManager;
 

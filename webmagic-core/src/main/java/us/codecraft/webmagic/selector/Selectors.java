@@ -20,6 +20,10 @@ public abstract class Selectors {
         return new SmartContentSelector();
     }
 
+    public static SmartContentSelector smartContent(int threshold) {
+        return new SmartContentSelector(threshold);
+    }
+
     public static CssSelector $(String expr) {
         return new CssSelector(expr);
     }

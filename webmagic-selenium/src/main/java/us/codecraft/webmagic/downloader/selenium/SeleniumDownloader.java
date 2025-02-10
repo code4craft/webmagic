@@ -14,9 +14,11 @@ import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.downloader.AbstractDownloader;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.PlainText;
+import us.codecraft.webmagic.utils.HttpConstant;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.net.http.HttpRequest;
 import java.util.Map;
 
 /**
@@ -111,6 +113,7 @@ public class SeleniumDownloader extends AbstractDownloader implements Closeable 
             page.setHtml(new Html(content, request.getUrl()));
             page.setUrl(new PlainText(request.getUrl()));
             page.setRequest(request);
+            page.setStatusCode(HttpConstant.StatusCode.CODE_200);
             onSuccess(page, task);
         } catch (Exception e) {
             logger.warn("download page {} error", request.getUrl(), e);
