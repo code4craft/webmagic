@@ -10,6 +10,7 @@
         <groupId>org.oxerr</groupId>
         <artifactId>oxerr-parent</artifactId>
         <version>2.2.1</version>
+        <relativePath /> <!-- lookup parent from repository -->
     </parent>
     <groupId>us.codecraft</groupId>
     <version>1.0.4-SNAPSHOT</version>
