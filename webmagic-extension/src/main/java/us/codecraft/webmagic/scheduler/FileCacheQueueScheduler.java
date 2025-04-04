@@ -125,7 +125,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
                 }
             }
             if (lastLine != null) {
-                cursor.set(NumberUtils.toInt(line));
+                cursor.set(NumberUtils.toInt(lastLine));
             }
         }
     }
