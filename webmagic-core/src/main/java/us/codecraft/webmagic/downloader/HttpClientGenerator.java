@@ -146,12 +146,14 @@ public class HttpClientGenerator {
         for (Map.Entry<String, String> cookieEntry : site.getCookies().entrySet()) {
             BasicClientCookie cookie = new BasicClientCookie(cookieEntry.getKey(), cookieEntry.getValue());
             cookie.setDomain(site.getDomain());
+            cookie.setAttribute(BasicClientCookie.DOMAIN_ATTR, site.getDomain());
             cookieStore.addCookie(cookie);
         }
         for (Map.Entry<String, Map<String, String>> domainEntry : site.getAllCookies().entrySet()) {
             for (Map.Entry<String, String> cookieEntry : domainEntry.getValue().entrySet()) {
                 BasicClientCookie cookie = new BasicClientCookie(cookieEntry.getKey(), cookieEntry.getValue());
                 cookie.setDomain(domainEntry.getKey());
+                cookie.setAttribute(BasicClientCookie.DOMAIN_ATTR, domainEntry.getKey());
                 cookieStore.addCookie(cookie);
             }
         }
