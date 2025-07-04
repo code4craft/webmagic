@@ -32,7 +32,7 @@
         <httpclient.version>4.5.13</httpclient.version>
         <httpcore.version>4.4.15</httpcore.version>
         <jedis.version>3.7.1</jedis.version>
-        <jruby.version>9.3.9.0</jruby.version>
+        <jruby.version>9.4.12.1</jruby.version>
         <json-path.version>2.9.0</json-path.version>
         <junit.version>5.10.2</junit.version>
         <junit.platform.version>1.10.2</junit.platform.version>
