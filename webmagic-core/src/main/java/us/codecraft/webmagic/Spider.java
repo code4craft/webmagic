@@ -447,7 +447,15 @@ public class Spider implements Runnable, Task {
 
     private void onDownloadSuccess(Request request, Page page) {
         if (site.getAcceptStatCode().contains(page.getStatusCode())){
-            pageProcessor.process(page);
+
+            try {
+                //Object result = pageProcessor.getClass().getMethod(request.getCallback(), page.getClass()).invoke(pageProcessor, page);
+                pageProcessor.getClass().getMethod(request.getCallback(), page.getClass()).invoke(pageProcessor, page);
+            } catch (Throwable e) {
+                logger.error("page process error", e);
+                return;
+            }
+//            pageProcessor.process(page);
             extractAndAddRequests(page, spawnUrl);
             if (!page.getResultItems().isSkip()) {
                 for (Pipeline pipeline : pipelines) {

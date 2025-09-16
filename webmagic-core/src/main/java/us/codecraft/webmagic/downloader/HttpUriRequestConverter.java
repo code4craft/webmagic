@@ -72,7 +72,9 @@ public class HttpUriRequestConverter {
             requestConfigBuilder.setConnectionRequestTimeout(site.getTimeOut())
                     .setSocketTimeout(site.getTimeOut())
                     .setConnectTimeout(site.getTimeOut())
-                    .setCookieSpec(CookieSpecs.STANDARD);
+                    .setCookieSpec(CookieSpecs.STANDARD)
+                    // 解决某种类型网站重定向出现错误，测试url ： CircularRedirectsAllowed http://detail.tmall.com/item.htm?id=39569173073&
+                    .setCircularRedirectsAllowed(true);
         }
 
         if (proxy != null) {
