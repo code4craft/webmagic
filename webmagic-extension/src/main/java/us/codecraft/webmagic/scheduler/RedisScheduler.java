@@ -140,4 +140,19 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
             return size.intValue();
         }
     }
+
+    /**
+     * clean all current task redis queue
+     * @param task current task
+     */
+    public void flush(Task task) {
+        Jedis jedis = pool.getResource();
+        try {
+            jedis.del(getSetKey(task));
+            jedis.del(getQueueKey(task));
+            jedis.del(getItemKey(task));
+        } finally {
+            pool.returnResource(jedis);
+        }
+    }
 }
