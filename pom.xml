@@ -32,7 +32,7 @@
         <httpcore.version>4.4.15</httpcore.version>
         <jedis.version>3.7.1</jedis.version>
         <jruby.version>9.4.13.0</jruby.version>
-        <json-path.version>2.9.0</json-path.version>
+        <json-path.version>2.10.0</json-path.version>
         <junit.version>5.10.2</junit.version>
         <junit.platform.version>1.10.2</junit.platform.version>
         <jython.version>2.7.3</jython.version>
