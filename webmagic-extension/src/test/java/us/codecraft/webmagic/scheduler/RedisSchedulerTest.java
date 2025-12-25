@@ -15,16 +15,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RedisSchedulerTest {
 
     private RedisScheduler redisScheduler;
+    private Task task;
 
     @Before
     public void setUp() {
         redisScheduler = new RedisScheduler("localhost");
-    }
 
-    @Ignore("environment depended")
-    @Test
-    public void test() {
-        Task task = new Task() {
+        task = new Task() {
             @Override
             public String getUUID() {
                 return "1";
@@ -35,11 +32,32 @@ public class RedisSchedulerTest {
                 return null;
             }
         };
+    }
+
+    @Ignore("environment depended")
+    @Test
+    public void test() {
         Request request = new Request("http://www.ibm.com/developerworks/cn/java/j-javadev2-22/");
         request.putExtra("1","2");
         redisScheduler.push(request, task);
         Request poll = redisScheduler.poll(task);
         assertThat(poll).isEqualTo(request);
+
+    }
+
+    @Ignore("environment depended")
+    @Test
+    public void testFlush() {
+        Request request = new Request("http://www.baidu.com");
+        request.putExtra("1","2");
+        redisScheduler.push(request, task);
+        int totalRequestsCount = redisScheduler.getTotalRequestsCount(task);
+        assertThat(totalRequestsCount).isGreaterThan(0);
+        redisScheduler.flush(task);
+        totalRequestsCount = redisScheduler.getTotalRequestsCount(task);
+        assertThat(totalRequestsCount).isEqualTo(0);
+        int leftRequestsCount = redisScheduler.getLeftRequestsCount(task);
+        assertThat(leftRequestsCount).isEqualTo(0);
 
     }
 }
