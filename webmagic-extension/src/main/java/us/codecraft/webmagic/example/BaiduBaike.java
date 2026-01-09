@@ -37,7 +37,7 @@ public class BaiduBaike{
         //multidownload
         List<String> list = new ArrayList<String>();
         list.add(String.format(urlTemplate,"风力发电"));
-        list.add(String.format(urlTemplate,"太阳能"));
+       // list.add(String.format(urlTemplate,"太阳能"));
         list.add(String.format(urlTemplate,"地热发电"));
         list.add(String.format(urlTemplate,"地热发电"));
         List<BaiduBaike> resultItemses = ooSpider.<BaiduBaike>getAll(list);

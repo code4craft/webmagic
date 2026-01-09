@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.pipeline;
 
+import net.jcip.annotations.ThreadSafe;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,9 @@ import java.util.Map;
  * @author code4crafter@gmail.com <br>
  * @since 0.1.0
  */
-public class FilePipeline extends FilePersistentBase implements Pipeline {
+@ThreadSafe
+public class    FilePipeline extends FilePersistentBase implements Pipeline {
+
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
