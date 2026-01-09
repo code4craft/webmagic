@@ -455,6 +455,7 @@ public class Spider implements Runnable, Task {
                 }
             }
         } else {
+            onDownloaderFail(request);
             logger.info("page status code error, page {} , code: {}", request.getUrl(), page.getStatusCode());
         }
         sleep(site.getSleepTime());
