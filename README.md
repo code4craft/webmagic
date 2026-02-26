@@ -6,6 +6,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/us.codecraft/webmagic-parent/badge.svg?subject=Maven%20Central)](https://maven-badges.herokuapp.com/maven-central/us.codecraft/webmagic-parent/)
 [![License](https://img.shields.io/badge/License-Apache%20License%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Build Status](https://travis-ci.org/code4craft/webmagic.png?branch=master)](https://travis-ci.org/code4craft/webmagic)
+[![Maintainability](https://cloud.quality-gate.com/dashboard/api/badge?projectName=code4craft_webmagic&branchName=master)](https://cloud.quality-gate.com/dashboard/branches/68353#overview)
 
 >A scalable crawler framework. It covers the whole lifecycle of crawler: downloading, url management, content extraction and persistent. It can simplify the development of a  specific crawler.
 
